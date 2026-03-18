@@ -3,103 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME ACADEMY | Login</title>
+    <title>ENET SUPREME ACADEMY | Home</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
-        :root { --navy-blue: #0A192F; --brand-green: #10B981; --text-main: #333333; --background: #F8F9FA; --white: #FFFFFF; --border: #E2E8F0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; }
-        .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase; }
-        .auth-logo span { color: var(--brand-green); }
-        .auth-card { background: var(--white); max-width: 450px; width: 100%; padding: 3rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
-        .btn-primary { width: 100%; background-color: var(--brand-green); color: white; border: none; padding: 0.8rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-        .btn-primary:hover { background-color: #059669; }
-        #auth-error { color: #DC2626; margin-bottom: 1rem; font-size: 0.9rem; text-align: center; font-weight: bold; padding: 0.5rem; }
+        /* === GLOBAL BRANDING STYLES === */
+        :root {
+            --navy-blue: #0A192F;
+            --navy-light: #112240;
+            --brand-green: #10B981;
+            --green-hover: #059669;
+            --text-main: #333333;
+            --text-gray: #475467;
+            --light-gray: #EAECF0;
+            --background: #F8F9FA;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+        /* === GLOBAL STICKY HEADER === */
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; }
+        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo span { color: var(--brand-green); }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--brand-green); }
+
+        .cart-btn { background-color: transparent; color: var(--brand-green); border: 2px solid var(--brand-green); padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .cart-btn:hover { background-color: var(--brand-green); color: var(--white); }
+
+        /* === BALANCED HERO SECTION === */
+        .hero-container { max-width: 1300px; margin: 0 auto; padding: 5rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; min-height: 85vh; }
+        @media (max-width: 950px) { .hero-container { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; text-align: center; gap: 2rem; } }
+
+        .hero-content { display: flex; flex-direction: column; gap: 1.5rem; }
+        @media (max-width: 950px) { .hero-content { align-items: center; } }
+
+        .trust-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--brand-green); font-weight: 600; font-size: 0.95rem; background: #e6f8f1; padding: 0.4rem 1.2rem; border-radius: 50px; width: fit-content; }
+        .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--navy-blue); }
+        .hero-title span { color: var(--brand-green); }
+        @media (max-width: 950px) { .hero-title { font-size: 2.8rem; } }
+        .hero-description { font-size: 1.2rem; color: var(--text-gray); line-height: 1.6; max-width: 90%; }
+
+        .cta-group { display: flex; gap: 1rem; margin-top: 1rem; }
+        @media (max-width: 480px) { .cta-group { flex-direction: column; width: 100%; } }
+        .btn { padding: 1rem 2rem; border-radius: 8px; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; transition: all 0.3s ease; }
+        .btn-primary { background-color: var(--brand-green); color: var(--white); border: 2px solid var(--brand-green); }
+        .btn-primary:hover { background-color: var(--green-hover); border-color: var(--green-hover); }
+        .btn-secondary { background-color: transparent; color: var(--navy-blue); border: 2px solid var(--light-gray); }
+        .btn-secondary:hover { background-color: #f9fafb; border-color: #d0d5dd; }
+
+        .feature-ticks { display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
+        @media (max-width: 950px) { .feature-ticks { justify-content: center; } }
+        .tick-item { display: flex; align-items: center; gap: 0.5rem; color: var(--text-gray); font-size: 1rem; font-weight: 500; }
+        .tick-item svg { width: 20px; height: 20px; color: var(--brand-green); }
+
+        .hero-visuals { position: relative; width: 100%; height: 600px; display: flex; justify-content: center; align-items: center; }
+        .blob-bg { position: absolute; width: 85%; height: 85%; background-color: var(--brand-green); opacity: 0.15; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; z-index: 1; transform: rotate(-5deg); }
+        .main-image { position: relative; z-index: 2; width: 90%; height: auto; max-height: 650px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: contain; background-color: white; padding: 2rem; }
+        @media (max-width: 950px) { .hero-visuals { height: auto; padding: 2rem 0; } .blob-bg { display: none; } .main-image { width: 100%; } }
+
+        /* === ACADEMY TRACKS STOREFRONT === */
+        .store-section { background-color: var(--white); padding: 6rem 1.5rem; border-top: 1px solid var(--light-gray); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-title { color: var(--navy-blue); margin-bottom: 3rem; text-align: center; font-size: 2.5rem; }
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
+        .course-card { background: var(--background); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+        .course-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .course-img { width: 100%; height: 220px; background-color: var(--navy-light); object-fit: cover; border-bottom: 4px solid var(--brand-green); }
+        .course-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+        .course-title { font-size: 1.25rem; margin-bottom: 1rem; color: var(--navy-blue); line-height: 1.4; flex: 1; }
+        .course-price { font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; }
+        .purchase-btn { width: 100%; background-color: var(--brand-green); color: var(--white); border: none; padding: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.3s; }
+        .purchase-btn:hover { background-color: var(--green-hover); }
+
+        /* === GLOBAL FOOTER === */
+        footer { background-color: var(--navy-blue); color: var(--text-gray); padding: 4rem 1.5rem; border-top: 2px solid var(--navy-light); }
+        .footer-logo { color: var(--brand-green); font-size: 1.3rem; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
 <body>
-    <div class="auth-logo">ENET SUPREME <span>ACADEMY</span></div>
-    <section class="auth-card">
-        <h2 style="color: var(--navy-blue); text-align: center; margin-bottom: 2rem;">Gateway Portal</h2>
-        
-        <div id="auth-error"></div>
-        
-        <form id="login-form">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" required placeholder="your@email.com">
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+            <div class="nav-links">
+                <a href="index.html" style="color: var(--brand-green); font-weight: bold;">Home</a>
+                <a href="blog.html">Read Blog</a>
+                <a href="#shop">Academy Tracks</a>
+                <a href="login.html">Log In / Academy</a>
+                <button class="cart-btn" id="cart-toggle" onclick="window.location.href='checkout.html'">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    ₦<span id="cart-total">0.00</span> 
+                    (<span id="cart-count">0</span>)
+                </button>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
+        </nav>
+    </header>
+
+    <section class="hero-container">
+        <div class="hero-content">
+            <div class="trust-badge">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Trusted Learning Academy
             </div>
-            <button type="submit" class="btn-primary" id="login-btn">Log In</button>
-        </form>
+
+            <h1 class="hero-title">
+                Master Tech Skills. <br>
+                <span>Advance Your Career.</span>
+            </h1>
+
+            <p class="hero-description">
+                The ultimate digital platform for your online learning. Access premium video courses, practical workshops, and real-world tools all in one place.
+            </p>
+
+            <div class="cta-group">
+                <a href="#shop" class="btn btn-primary">
+                    Explore Academy Tracks
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+                <a href="blog.html" class="btn btn-secondary">Read Our Blog</a>
+            </div>
+
+            <div class="feature-ticks">
+                <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Practical Workshops</div>
+                <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Lifetime Access</div>
+                <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> Expert Mentorship</div>
+            </div>
+        </div>
+
+        <div class="hero-visuals">
+            <div class="blob-bg"></div>
+            <img src="student1.png" alt="Students learning tech skills" class="main-image">
+        </div>
     </section>
 
-    <script>
-        // Your actual Supabase URL and Legacy Anon Key
-        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
-        
-        const errorDiv = document.getElementById('auth-error');
-        const loginBtn = document.getElementById('login-btn');
-        let supabase;
+    <section class="store-section" id="shop">
+        <div class="container">
+            <h2 class="section-title">Academy Tracks</h2>
+            <div class="course-grid" id="course-container"></div>
+        </div>
+    </section>
 
-        try {
-            supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-        } catch (err) {
-            errorDiv.innerText = "System Error: Invalid Supabase Key. Please check your code.";
-            console.error(err);
+    <footer>
+        <div class="container">
+            <div class="footer-logo">ENET SUPREME ACADEMY</div>
+            <p style="margin-top: 1rem;">microsoftportharcourt@gmail.com</p>
+            <p style="margin-top: 1rem; color: #abb2bf; font-size: 0.9rem;">Suite 58 Georgewill/Clifford Plaza Choba Junction, Port Harcourt, Rivers State, Nigeria.</p>
+        </div>
+    </footer>
+
+    <script>
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        // Correct Anonymous Key
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let cart = [];
+        let cartTotal = 0;
+
+        const dummyCourses = [
+            { id: 1, title: "High Converting Meta Ads Workshop", price: 10000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Meta+Ads+Workshop" },
+            { id: 2, title: "Data Analytics Bootcamp", price: 25000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Data+Analytics" },
+            { id: 3, title: "Online Marketing Masterclass", price: 30000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Online+Marketing" },
+            { id: 4, title: "Web Design & Development Track", price: 15000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Web+Design" },
+            { id: 5, title: "Graphics Design Essentials", price: 12000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Graphics+Design" },
+            { id: 6, title: "Online Course Creation Framework", price: 25000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Course+Creation" }
+        ];
+
+        function renderCourses() {
+            const container = document.getElementById('course-container');
+            if(!container) return;
+            container.innerHTML = '';
+            dummyCourses.forEach(course => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.innerHTML = `
+                    <img src="${course.img}" alt="${course.title}" class="course-img">
+                    <div class="course-content">
+                        <h3 class="course-title">${course.title}</h3>
+                        <div class="course-price">₦${course.price.toLocaleString()}</div>
+                        <button class="purchase-btn" onclick="addToCart(${course.id}, ${course.price}, event)">Join Track</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
-        const loginForm = document.getElementById('login-form');
+        window.addToCart = function(id, price, event) {
+            cart.push(id);
+            cartTotal += price;
+            updateCartUI();
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "Added to Cart!";
+            btn.style.backgroundColor = "var(--navy-blue)";
+            setTimeout(() => { btn.innerText = originalText; btn.style.backgroundColor = ""; }, 1000);
+        }
 
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            errorDiv.innerText = 'Authenticating...';
-            errorDiv.style.color = '#10B981'; 
-            loginBtn.disabled = true;
+        function updateCartUI() {
+            const cartTotalElement = document.getElementById('cart-total');
+            const cartCountElement = document.getElementById('cart-count');
+            if(cartTotalElement) cartTotalElement.innerText = cartTotal.toLocaleString();
+            if(cartCountElement) cartCountElement.innerText = cart.length;
+        }
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                // 1. Authenticate
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                
-                if (error) throw error; 
-
-                // 2. Fetch Role
-                const userId = data.user.id;
-                const { data: profile, error: profileError } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', userId)
-                    .single();
-
-                if (profileError || !profile) {
-                    throw new Error("Profile record not found. Please contact support.");
-                }
-
-                // 3. Redirect based on role
-                const role = profile.role;
-                if (role === 'student') window.location.href = "student-dashboard.html";
-                else if (role === 'teacher') window.location.href = "teacher-dashboard.html";
-                else if (role === 'admin') window.location.href = "admin-dashboard.html";
-                else throw new Error("Valid role not assigned.");
-
-            } catch (err) {
-                errorDiv.style.color = '#DC2626'; 
-                errorDiv.innerText = err.message;
-                if(supabase) await supabase.auth.signOut(); 
-            } finally {
-                loginBtn.disabled = false;
-            }
-        });
+        document.addEventListener('DOMContentLoaded', renderCourses);
     </script>
 </body>
 </html>
