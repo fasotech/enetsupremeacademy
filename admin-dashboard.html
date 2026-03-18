@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME ACADEMY | Admin</title>
+    <title>ENET SUPREME ACADEMY | Admin Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --navy-blue: #0A192F; --brand-green: #10B981; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
@@ -16,64 +16,110 @@
         .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; }
         h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #EAECF0; }
+        .stat-card { background: white; padding: 2rem; border-radius: 8px; border-bottom: 4px solid #EAECF0; text-align: center; }
         .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-green); margin: 0.5rem 0; }
         .stat-card .stat-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; font-weight: 500; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
         th { background-color: #f1f5f9; }
-        .action-link { color: var(--brand-green); text-decoration: none; font-weight: bold; cursor: pointer; }
+        .btn-approve { background-color: var(--brand-green); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-approve:hover { background-color: #059669; }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">ENET SUPREME <span>ACADEMY</span> | Admin</div>
+        <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
         <button onclick="handleLogout()" style="background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer;">Log Out</button>
     </header>
 
     <main class="main-container">
+        <section class="card" style="border-left: 5px solid #F59E0B;">
+            <h2>Action Required: Pending Account Approvals</h2>
+            <p style="color: var(--text-gray); margin-bottom: 1rem;">These users have registered and are waiting for you to approve their access to the portal.</p>
+            <table>
+                <thead><tr><th>Name</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
+                <tbody id="pending-users-list">
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Loading pending registrations...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
         <h2>Academy Overview Statistics</h2>
         <div class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number">215</div></div>
+            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number">0</div></div>
             <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number">6</div></div>
-            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number">12</div></div>
+            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number">0</div></div>
         </div>
-
-        <section class="card">
-            <h2>Track Performance Results Overview</h2>
-            <table id="performance-table">
-                <thead><tr><th>Academy Track Title</th><th>Avg. Mark (%)</th><th>Submissions Mark Pending</th><th>Action</th></tr></thead>
-                <tbody>
-                    <tr><td>Data Analytics Bootcamp</td><td style="font-weight: bold; color: var(--brand-green);">76.5%</td><td style="font-weight: bold; color: #DC2626;">5</td><td><a href="#" class="action-link">Full Report</a></td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section class="card">
-            <h2>Instructor Schedule Administration</h2>
-            <table id="schedules-table">
-                <thead><tr><th>Instructor Name</th><th>Assigned Track</th><th>DAY Assigned</th><th>TIME Slot</th><th>Admin</th></tr></thead>
-                <tbody>
-                    <tr><td>Raphael Aniekan Umore</td><td>Meta Ads Workshop</td><td style="font-weight: bold;">Monday / Wednesday</td><td>10:00 AM - 12:00 PM</td><td><a href="#" class="action-link" onclick="alert('Admin scheduling Raphael updated')">Edit Schedule</a></td></tr>
-                    <tr><td>Adiela Sam-Ogide</td><td>Data Analytics Bootcamp</td><td style="font-weight: bold;">Tuesday / Thursday</td><td>9:00 AM - 11:00 AM</td><td><a href="#" class="action-link">Edit Schedule</a></td></tr>
-                </tbody>
-            </table>
-        </section>
     </main>
 
     <script>
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'sb_publishable_ANuu6mHR75vfpRy28doPgQ_3FPFaur2';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         async function checkSession() {
             const { data: { session }, error } = await supabase.auth.getSession();
-            if (!session) window.location.href = "login.html";
+            if (!session) { window.location.href = "login.html"; return; }
+            
+            // Security: Ensure user is actually an admin
+            const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+            if(profile.role !== 'admin') window.location.href = "login.html";
+            else fetchPendingUsers();
         }
+
         async function handleLogout() {
             await supabase.auth.signOut();
             window.location.href = "login.html";
         }
+
+        // FETCH PENDING USERS
+        async function fetchPendingUsers() {
+            const list = document.getElementById('pending-users-list');
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('status', 'pending')
+                .order('created_at', { ascending: false });
+
+            if (error) { list.innerHTML = `<tr><td colspan="4">Error loading users.</td></tr>`; return; }
+            if (data.length === 0) { list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #10B981; font-weight:bold;">No pending approvals! You are all caught up.</td></tr>`; return; }
+
+            list.innerHTML = '';
+            data.forEach(user => {
+                const date = new Date(user.created_at).toLocaleDateString();
+                const name = (user.first_name || 'New') + ' ' + (user.last_name || 'User');
+                
+                list.innerHTML += `
+                    <tr id="row-${user.id}">
+                        <td style="font-weight: bold;">${name}</td>
+                        <td style="text-transform: capitalize;">${user.role}</td>
+                        <td>${date}</td>
+                        <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // APPROVE USER FUNCTION
+        async function approveUser(userId) {
+            const btn = document.querySelector(`#row-${userId} button`);
+            btn.innerText = "Approving...";
+            btn.disabled = true;
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ status: 'approved' })
+                .eq('id', userId);
+
+            if (error) {
+                alert("Failed to approve user.");
+                btn.innerText = "Approve Access";
+                btn.disabled = false;
+            } else {
+                document.getElementById(`row-${userId}`).style.display = 'none'; // Hide row on success
+            }
+        }
+
         checkSession();
     </script>
 </body>

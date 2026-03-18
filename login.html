@@ -3,74 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME ACADEMY | Login</title>
+    <title>ENET SUPREME ACADEMY | Portal Access</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --navy-blue: #0A192F; --brand-green: #10B981; --text-main: #333333; --background: #F8F9FA; --white: #FFFFFF; --border: #E2E8F0; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; }
-        .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase; }
+        .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase; text-align: center; }
         .auth-logo span { color: var(--brand-green); }
-        .auth-card { background: var(--white); max-width: 450px; width: 100%; padding: 3rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
-        .btn-primary { width: 100%; background-color: var(--brand-green); color: white; border: none; padding: 0.8rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        .auth-card { background: var(--white); max-width: 450px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        .toggle-container { display: flex; margin-bottom: 2rem; border-bottom: 2px solid var(--border); }
+        .toggle-btn { flex: 1; text-align: center; padding: 1rem; font-weight: bold; cursor: pointer; color: #a0aec0; transition: 0.3s; }
+        .toggle-btn.active { color: var(--brand-green); border-bottom: 3px solid var(--brand-green); margin-bottom: -2px; }
+        
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.9rem;}
+        input, select { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
+        .btn-primary { width: 100%; background-color: var(--brand-green); color: white; border: none; padding: 1rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
         .btn-primary:hover { background-color: #059669; }
-        #auth-error { color: #DC2626; margin-bottom: 1rem; font-size: 0.9rem; text-align: center; }
+        
+        #auth-message { margin-bottom: 1rem; font-size: 0.9rem; text-align: center; font-weight: bold; padding: 0.8rem; border-radius: 4px; display: none; }
+        #register-form { display: none; }
     </style>
 </head>
 <body>
-    <div class="auth-logo">ENET SUPREME <span>ACADEMY</span></div>
+    <div class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></div>
+    
     <section class="auth-card">
-        <h2 style="color: var(--navy-blue); text-align: center; margin-bottom: 2rem;">Gateway Portal</h2>
-        <div id="auth-error"></div>
+        <div class="toggle-container">
+            <div class="toggle-btn active" id="tab-login" onclick="switchTab('login')">Log In</div>
+            <div class="toggle-btn" id="tab-register" onclick="switchTab('register')">Create Account</div>
+        </div>
+        
+        <div id="auth-message"></div>
+        
         <form id="login-form">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" required placeholder="your@email.com">
+            <div class="form-group"><label>Email Address</label><input type="email" id="login-email" required></div>
+            <div class="form-group"><label>Password</label><input type="password" id="login-password" required></div>
+            <button type="submit" class="btn-primary" id="login-btn">Secure Log In</button>
+        </form>
+
+        <form id="register-form">
+            <div style="display: flex; gap: 1rem;">
+                <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
+                <div class="form-group" style="flex: 1;"><label>Last Name</label><input type="text" id="reg-last" required></div>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
+                <label>I am applying as a:</label>
+                <select id="reg-role" required>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher / Instructor</option>
+                </select>
             </div>
-            <button type="submit" class="btn-primary">Log In</button>
+            <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" required></div>
+            <div class="form-group"><label>Create Password</label><input type="password" id="reg-password" required minlength="6"></div>
+            <button type="submit" class="btn-primary" id="reg-btn">Submit Application</button>
         </form>
     </section>
 
     <script>
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'sb_publishable_ANuu6mHR75vfpRy28doPgQ_3FPFaur2';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const msgDiv = document.getElementById('auth-message');
 
-        const loginForm = document.getElementById('login-form');
-        const errorDiv = document.getElementById('auth-error');
+        function switchTab(tab) {
+            msgDiv.style.display = 'none';
+            document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+            document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+        }
 
-        loginForm.addEventListener('submit', async (e) => {
+        function showMessage(text, isError) {
+            msgDiv.style.display = 'block';
+            msgDiv.style.backgroundColor = isError ? '#fee2e2' : '#e6f8f1';
+            msgDiv.style.color = isError ? '#DC2626' : '#10B981';
+            msgDiv.innerText = text;
+        }
+
+        // LOGIN SUBMIT
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            errorDiv.innerText = '';
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            document.getElementById('login-btn').disabled = true;
+            showMessage('Authenticating...', false);
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            
-            if (error) {
-                errorDiv.innerText = error.message;
-            } else {
-                const userId = data.user.id;
-                const { data: profile, error: profileError } = await supabase.from('profiles').select('role').eq('id', userId).single();
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: document.getElementById('login-email').value,
+                    password: document.getElementById('login-password').value
+                });
+                if (error) throw new Error(error.message);
 
-                if (profileError || !profile) {
-                    errorDiv.innerText = "Fatal error: Profile record not found.";
+                const { data: profile, error: profileError } = await supabase.from('profiles').select('role, status').eq('id', data.user.id).single();
+                if (profileError || !profile) throw new Error("Profile not found.");
+
+                // BLOCK PENDING USERS
+                if (profile.role !== 'admin' && profile.status === 'pending') {
                     await supabase.auth.signOut();
-                    return;
+                    throw new Error("Your account is pending Admin approval.");
                 }
 
-                const role = profile.role;
-                if (role === 'student') window.location.href = "student-dashboard.html";
-                else if (role === 'teacher') window.location.href = "teacher-dashboard.html";
-                else if (role === 'admin') window.location.href = "admin-dashboard.html";
-                else { errorDiv.innerText = "Fatal error: Valid role not assigned."; await supabase.auth.signOut(); }
+                showMessage('Success! Redirecting...', false);
+                if (profile.role === 'admin') window.location.href = "admin-dashboard.html";
+                else if (profile.role === 'teacher') window.location.href = "teacher-dashboard.html";
+                else window.location.href = "student-dashboard.html";
+
+            } catch (err) {
+                showMessage("Error: " + err.message, true);
+            } finally {
+                document.getElementById('login-btn').disabled = false;
+            }
+        });
+
+        // REGISTER SUBMIT
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            document.getElementById('reg-btn').disabled = true;
+            showMessage('Submitting application...', false);
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: document.getElementById('reg-email').value,
+                    password: document.getElementById('reg-password').value,
+                    options: {
+                        data: {
+                            first_name: document.getElementById('reg-first').value,
+                            last_name: document.getElementById('reg-last').value,
+                            requested_role: document.getElementById('reg-role').value
+                        }
+                    }
+                });
+
+                if (error) throw new Error(error.message);
+                showMessage("Application successful! An Admin will review your account shortly.", false);
+                document.getElementById('register-form').reset();
+
+            } catch (err) {
+                showMessage("Error: " + err.message, true);
+            } finally {
+                document.getElementById('reg-btn').disabled = false;
             }
         });
     </script>
