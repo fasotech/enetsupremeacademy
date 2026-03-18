@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENET SUPREME ACADEMY | Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --navy-blue: #0A192F; --brand-green: #10B981; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--background); color: var(--navy-blue); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; text-transform: uppercase; }
+        .logo span { color: var(--brand-green); }
+        .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #EAECF0; }
+        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-green); margin: 0.5rem 0; }
+        .stat-card .stat-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; font-weight: 500; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
+        th { background-color: #f1f5f9; }
+        .action-link { color: var(--brand-green); text-decoration: none; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ENET SUPREME <span>ACADEMY</span> | Admin</div>
+        <button onclick="handleLogout()" style="background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer;">Log Out</button>
+    </header>
+
+    <main class="main-container">
+        <h2>Academy Overview Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number">215</div></div>
+            <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number">6</div></div>
+            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number">12</div></div>
+        </div>
+
+        <section class="card">
+            <h2>Track Performance Results Overview</h2>
+            <table id="performance-table">
+                <thead><tr><th>Academy Track Title</th><th>Avg. Mark (%)</th><th>Submissions Mark Pending</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td>Data Analytics Bootcamp</td><td style="font-weight: bold; color: var(--brand-green);">76.5%</td><td style="font-weight: bold; color: #DC2626;">5</td><td><a href="#" class="action-link">Full Report</a></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>Instructor Schedule Administration</h2>
+            <table id="schedules-table">
+                <thead><tr><th>Instructor Name</th><th>Assigned Track</th><th>DAY Assigned</th><th>TIME Slot</th><th>Admin</th></tr></thead>
+                <tbody>
+                    <tr><td>Raphael Aniekan Umore</td><td>Meta Ads Workshop</td><td style="font-weight: bold;">Monday / Wednesday</td><td>10:00 AM - 12:00 PM</td><td><a href="#" class="action-link" onclick="alert('Admin scheduling Raphael updated')">Edit Schedule</a></td></tr>
+                    <tr><td>Adiela Sam-Ogide</td><td>Data Analytics Bootcamp</td><td style="font-weight: bold;">Tuesday / Thursday</td><td>9:00 AM - 11:00 AM</td><td><a href="#" class="action-link">Edit Schedule</a></td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const supabaseKey = 'sb_publishable_ANuu6mHR75vfpRy28doPgQ_3FPFaur2';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function checkSession() {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (!session) window.location.href = "login.html";
+        }
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            window.location.href = "login.html";
+        }
+        checkSession();
+    </script>
+</body>
+</html>
