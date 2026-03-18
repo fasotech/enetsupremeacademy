@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENET SUPREME ACADEMY | Student</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --navy-blue: #0A192F; --brand-green: #10B981; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--background); color: var(--navy-blue); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; text-transform: uppercase; }
+        .logo span { color: var(--brand-green); }
+        .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
+        .dashboard-list { list-style: none; }
+        .dashboard-list li { padding: 1rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .action-link { color: var(--brand-green); text-decoration: none; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
+        th { background-color: #f1f5f9; }
+        .deadline-past { color: #DC2626; font-weight: bold; }
+        .deadline-active { color: #abb2bf; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ENET SUPREME <span>ACADEMY</span> | Student</div>
+        <button onclick="handleLogout()" style="background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer;">Log Out</button>
+    </header>
+
+    <main class="main-container">
+        <section class="card">
+            <h2>My Enrolled Academy Tracks</h2>
+            <ul class="dashboard-list" id="courses-list">
+                <li><span>Data Analytics Bootcamp</span> <a href="#" class="action-link">Access Materials</a></li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Pending Assignments Portal</h2>
+            <table id="assignments-table">
+                <thead><tr><th>Assignment Title</th><th>Associated Track</th><th>Deadline (WAT)</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td>Meta Ads Campaign Plan</td><td>Digital Marketing Masterclass</td><td><span class="deadline-past">Mar 15, 2026 (CLOSED)</span></td><td><a href="#" class="action-link" style="color: #abb2bf;">(Deadline Past)</a></td></tr>
+                    <tr><td>Final SQL Query Project</td><td>Data Analytics Bootcamp</td><td><span class="deadline-active">Mar 25, 2026 (ACTIVE)</span></td><td><a href="#" class="action-link">Submit Work</a></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>My Performance Results</h2>
+            <table id="results-table">
+                <thead><tr><th>Track</th><th>Assignment</th><th>Result/Mark (%)</th><th>Feedback</th></tr></thead>
+                <tbody>
+                    <tr><td>Digital Marketing</td><td>Meta Ads Campaign Plan</td><td style="font-weight: bold; color: var(--brand-green); font-size: 1.2rem;">88%</td><td>Great integration of strategy. Review targeting.</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const supabaseKey = 'sb_publishable_ANuu6mHR75vfpRy28doPgQ_3FPFaur2';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function checkSession() {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (!session) window.location.href = "login.html";
+        }
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            window.location.href = "login.html";
+        }
+        checkSession();
+    </script>
+</body>
+</html>
