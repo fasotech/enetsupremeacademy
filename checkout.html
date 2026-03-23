@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENET SUPREME ACADEMY | Secure Checkout</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    <style>
+        /* === ENET SUPREME BRANDING STYLES === */
+        :root { 
+            --navy-blue: #2C1E85; 
+            --brand-red: #DA251D; 
+            --red-hover: #B81D15; 
+            --background: #F8F9FA; 
+            --white: #FFFFFF; 
+            --border: #E2E8F0; 
+            --text-main: #333333; 
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; }
+        
+        .header-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase; text-align: center; }
+        .header-logo span { color: var(--brand-red); }
+        
+        .checkout-container { background: var(--white); max-width: 600px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--navy-blue); }
+        h2 { color: var(--navy-blue); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        
+        /* Cart Styles */
+        .cart-item { display: flex; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--border); font-size: 1.05rem; }
+        .cart-total { display: flex; justify-content: space-between; padding: 1.5rem 0; font-size: 1.3rem; font-weight: 800; color: var(--navy-blue); }
+        .cart-total span:last-child { color: var(--brand-red); }
+        
+        /* Form Styles */
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.9rem;}
+        input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; background-color: #f8fafc; }
+        input[readonly] { color: #64748b; cursor: not-allowed; }
+        
+        .btn-pay { width: 100%; background-color: var(--brand-red); color: white; border: none; padding: 1.2rem; border-radius: 4px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-pay:hover { background-color: var(--red-hover); }
+        .btn-pay:disabled { background-color: #cbd5e1; cursor: not-allowed; }
+
+        #system-message { text-align: center; padding: 1rem; margin-bottom: 1rem; font-weight: bold; border-radius: 4px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header-logo">ENET SUPREME <br><span>ACADEMY</span></div>
+
+    <div class="checkout-container" id="checkout-box">
+        <div id="system-message"></div>
+
+        <h2>Order Summary</h2>
+        <div id="cart-items-container">
+            </div>
+        
+        <div class="cart-total">
+            <span>Total Amount:</span>
+            <span id="display-total">₦0.00</span>
+        </div>
+
+        <h2 style="margin-top: 2rem;">Student Details</h2>
+        <form id="payment-form">
+            <div class="form-group">
+                <label>Registered Email (Auto-filled)</label>
+                <input type="email" id="user-email" readonly required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="user-phone" placeholder="e.g. 08012345678" required>
+            </div>
+            <button type="submit" class="btn-pay" id="pay-btn">Proceed to Payment</button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="index.html" style="color: var(--navy-blue); font-weight: bold; text-decoration: none;">← Back to Academy Tracks</a>
+        </div>
+    </div>
+
+    <script>
+        // 1. INITIALIZE SUPABASE
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let currentUser = null;
+        let cart = [];
+        let cartTotal = 0;
+
+        const msgDiv = document.getElementById('system-message');
+        const payBtn = document.getElementById('pay-btn');
+
+        function showMessage(text, isError) {
+            msgDiv.style.display = 'block';
+            msgDiv.style.backgroundColor = isError ? '#fee2e2' : '#E0E7FF';
+            msgDiv.style.color = isError ? '#DC2626' : '#2C1E85';
+            msgDiv.innerText = text;
+        }
+
+        // 2. CHECK SECURITY & LOAD CART
+        async function initializeCheckout() {
+            // Check if user is logged in
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (!session) {
+                alert("You must be logged into your student account to purchase courses.");
+                window.location.href = "login.html";
+                return;
+            }
+            
+            currentUser = session.user;
+            document.getElementById('user-email').value = currentUser.email;
+
+            // Load Cart from browser memory
+            const savedCart = localStorage.getItem('enet_cart');
+            const savedTotal = localStorage.getItem('enet_cart_total');
+            
+            if (!savedCart || JSON.parse(savedCart).length === 0) {
+                document.getElementById('cart-items-container').innerHTML = "<p style='text-align:center; color:#666;'>Your cart is empty.</p>";
+                payBtn.disabled = true;
+                return;
+            }
+
+            cart = JSON.parse(savedCart);
+            cartTotal = Number(savedTotal);
+
+            // Render Cart Items
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            cart.forEach(item => {
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.title}</span>
+                        <span style="font-weight:bold;">₦${Number(item.price).toLocaleString()}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('display-total').innerText = `₦${cartTotal.toLocaleString()}`;
+        }
+
+        // 3. PAYSTACK INTEGRATION
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if(cartTotal <= 0) return;
+            payBtn.innerText = "Processing...";
+            payBtn.disabled = true;
+
+            const email = document.getElementById('user-email').value;
+            const phone = document.getElementById('user-phone').value;
+
+            // === REPLACE THIS WITH YOUR REAL PAYSTACK TEST/PUBLIC KEY ===
+            // Go to your Paystack Dashboard -> Settings -> API Keys & Webhooks to get this!
+            const paystackPublicKey = 'pk_test_YOUR_PAYSTACK_KEY_HERE'; 
+            
+            let handler = PaystackPop.setup({
+                key: paystackPublicKey, 
+                email: email,
+                amount: cartTotal * 100, // Paystack requires amount in kobo
+                currency: 'NGN',
+                ref: 'ENET_' + Math.floor((Math.random() * 1000000000) + 1),
+                metadata: {
+                    custom_fields: [
+                        { display_name: "Phone Number", variable_name: "phone_number", value: phone }
+                    ]
+                },
+                callback: async function(response) {
+                    // PAYMENT SUCCESSFUL! Now save to Supabase Database
+                    showMessage('Payment Successful! Enrolling you in courses...', false);
+                    
+                    const enrollments = cart.map(item => ({
+                        student_id: currentUser.id,
+                        course_id: item.id,
+                        status: 'enrolled'
+                    }));
+
+                    const { error } = await supabase.from('enrollments').upsert(enrollments);
+                    
+                    if (error) {
+                        showMessage('Payment received, but error saving to portal. Contact Admin.', true);
+                    } else {
+                        // Clear cart and redirect
+                        localStorage.removeItem('enet_cart');
+                        localStorage.removeItem('enet_cart_total');
+                        alert("Enrollment Successful! Redirecting to your Dashboard.");
+                        window.location.href = "student-dashboard.html";
+                    }
+                },
+                onClose: function() {
+                    payBtn.innerText = "Proceed to Payment";
+                    payBtn.disabled = false;
+                    showMessage('Transaction cancelled.', true);
+                }
+            });
+
+            handler.openIframe();
+        });
+
+        // Start process when page loads
+        document.addEventListener('DOMContentLoaded', initializeCheckout);
+    </script>
+</body>
+</html>
