@@ -19,9 +19,10 @@
         input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
         .btn-primary { width: 100%; background-color: var(--brand-red); color: white; border: none; padding: 1rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
         .btn-primary:hover { background-color: var(--red-hover); }
+        .btn-primary:disabled { background-color: #a0aec0; cursor: not-allowed; }
         
         #auth-message { margin-bottom: 1rem; font-size: 0.9rem; text-align: center; font-weight: bold; padding: 0.8rem; border-radius: 4px; display: none; }
-        .register-link { display: block; text-align: center; margin-top: 1.5rem; color: var(--text-gray); text-decoration: none; font-size: 0.9rem; }
+        .register-link { display: block; text-align: center; margin-top: 1.5rem; color: #666; text-decoration: none; font-size: 0.9rem; }
         .register-link span { color: var(--brand-red); font-weight: bold; }
     </style>
 </head>
@@ -33,7 +34,7 @@
         
         <div id="auth-message"></div>
         
-        <form id="login-form">
+        <form id="login-form" onsubmit="event.preventDefault(); attemptLogin(); return false;">
             <div class="form-group"><label>Email Address</label><input type="email" id="login-email" required placeholder="your@email.com"></div>
             <div class="form-group"><label>Password</label><input type="password" id="login-password" required></div>
             <button type="submit" class="btn-primary" id="login-btn">Secure Log In</button>
@@ -43,38 +44,51 @@
     </section>
 
     <script>
-        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-        const msgDiv = document.getElementById('auth-message');
-
         function showMessage(text, isError) {
+            const msgDiv = document.getElementById('auth-message');
             msgDiv.style.display = 'block';
             msgDiv.style.backgroundColor = isError ? '#fee2e2' : '#E0E7FF';
             msgDiv.style.color = isError ? '#DC2626' : '#2C1E85';
             msgDiv.innerText = text;
         }
 
-        document.getElementById('login-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            document.getElementById('login-btn').disabled = true;
-            showMessage('Authenticating...', false);
+        async function attemptLogin() {
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true;
+            showMessage('Authenticating securely...', false);
 
             try {
+                // Failsafe: Check if the Supabase library loaded properly
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error("Cannot connect to the database. Please check your internet connection or disable adblockers.");
+                }
+
+                // Initialize Supabase ONLY when the button is clicked
+                const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                // 1. Check Credentials
                 const { data, error } = await supabase.auth.signInWithPassword({
-                    email: document.getElementById('login-email').value,
-                    password: document.getElementById('login-password').value
+                    email: email,
+                    password: password
                 });
                 if (error) throw new Error(error.message);
 
+                // 2. Fetch Role
                 const { data: profile, error: profileError } = await supabase.from('profiles').select('role, status').eq('id', data.user.id).single();
-                if (profileError || !profile) throw new Error("Profile not found.");
+                if (profileError || !profile) throw new Error("Profile not found in database.");
 
+                // 3. Security Block
                 if (profile.role !== 'admin' && profile.status === 'pending') {
                     await supabase.auth.signOut();
                     throw new Error("Your account is pending Admin approval. Please check back later.");
                 }
 
+                // 4. Success Routing
                 showMessage('Success! Redirecting...', false);
                 if (profile.role === 'admin') window.location.href = "admin-dashboard.html";
                 else if (profile.role === 'teacher') window.location.href = "teacher-dashboard.html";
@@ -82,11 +96,15 @@
 
             } catch (err) {
                 showMessage("Error: " + err.message, true);
-                await supabase.auth.signOut();
+                // Safe Sign Out if it partially fails
+                if (typeof window.supabase !== 'undefined') {
+                    const tempSupa = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
+                    await tempSupa.auth.signOut();
+                }
             } finally {
-                document.getElementById('login-btn').disabled = false;
+                btn.disabled = false;
             }
-        });
+        }
     </script>
 </body>
 </html>
