@@ -32,7 +32,7 @@
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
-        <a href="#" onclick="forceLogout(event)" class="logout-link" id="logoutBtn">Log Out</a>
+        <a onclick="forceLogout()" class="logout-link" id="logoutBtn">Log Out</a>
     </header>
 
     <main class="main-container">
@@ -67,27 +67,24 @@
     </main>
 
     <script>
-        // 1. SUPABASE INITIALIZATION
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 2. THE ULTIMATE KILL SWITCH
-        window.forceLogout = async function(e) {
-            if (e) e.preventDefault();
-            document.getElementById('logoutBtn').innerText = "Logging out...";
+        // BULLETPROOF LOGOUT: Redirects straight to index.html (Home Page)
+        window.forceLogout = async function() {
+            document.getElementById('logoutBtn').innerText = "Wait...";
             try {
                 await supabase.auth.signOut();
             } catch (err) {
-                console.error("Logout error, forcing local wipe:", err);
+                console.error(err);
             } finally {
                 localStorage.clear();
                 sessionStorage.clear();
-                window.location.href = 'login.html';
+                window.location.href = 'index.html'; // Set to Home Page
             }
         };
 
-        // 3. SECURITY CHECK
         async function checkSession() {
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
@@ -99,22 +96,18 @@
                     window.location.href = "login.html"; 
                     return; 
                 }
-                
                 fetchDashboardData();
             } catch (err) { 
                 console.error(err); 
-                document.getElementById('pending-users-list').innerHTML = `<tr><td colspan="4" style="color: red; text-align: center; font-weight: bold;">Session Error: Please Log Out and Log Back In.</td></tr>`;
             }
         }
 
-        // 4. FETCH USERS
         async function fetchDashboardData() {
             const pendingList = document.getElementById('pending-users-list');
             const allList = document.getElementById('all-users-list');
 
             try {
                 const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-                
                 if (error) throw error;
 
                 let pendingHTML = '';
@@ -157,35 +150,26 @@
                 document.getElementById('stat-teachers').innerText = teacherCount;
 
             } catch (err) {
-                pendingList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error: ${err.message} <br> Make sure you ran the SQL Fix Script!</td></tr>`;
-                allList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
+                pendingList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
             }
         }
 
-        // 5. ADMIN ACTIONS
         window.approveUser = async function(userId) {
             const btn = document.querySelector(`#pend-${userId} button`);
             btn.innerText = "Approving..."; btn.disabled = true;
-            
             const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            
-            if (error) {
-                alert("Failed to approve user: " + error.message);
-                btn.innerText = "Approve Access"; btn.disabled = false;
-            } else {
-                fetchDashboardData(); // Refresh instantly
-            }
+            if (error) { alert("Failed to approve user"); btn.disabled = false; } 
+            else { fetchDashboardData(); }
         }
 
         window.makeAdmin = async function(userId, name) {
-            if(confirm(`Are you sure you want to make ${name} an Admin? They will have full access to this dashboard.`)) {
+            if(confirm(`Are you sure you want to make ${name} an Admin?`)) {
                 await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
                 alert(`${name} is now an Admin!`);
                 fetchDashboardData();
             }
         }
 
-        // Start App
         checkSession();
     </script>
 </body>

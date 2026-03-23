@@ -29,7 +29,7 @@
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ACADEMY</span> | Teacher</div>
-        <a href="logout.html" class="logout-link">Log Out</a>
+        <a onclick="forceLogout()" class="logout-link" id="logoutBtn">Log Out</a>
     </header>
 
     <main class="main-container">
@@ -42,27 +42,6 @@
                 </tbody>
             </table>
         </section>
-
-        <section class="card">
-            <h2>Curriculum & Assignment Administration</h2>
-            <table id="assignments-admin-table">
-                <thead><tr><th>Assignment Title</th><th>Deadline (WAT)</th><th>Total Submissions</th><th>Status</th><th>Administration</th></tr></thead>
-                <tbody>
-                    <tr><td>SQL Final Query Project</td><td>Mar 25, 2026</td><td>1 / 15</td><td style="color: var(--brand-red); font-weight: bold;">ACTIVE</td><td><a href="#" class="action-link" style="color: #DC2626;" onclick="alert('Assignment SQL Query Project DEACTIVATED by Teacher')">Deactivate Brief</a></td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section class="card">
-            <h2>Add New Assignment BRIEF</h2>
-            <form onsubmit="event.preventDefault(); alert('Assignment created successfully!')">
-                <label>Associated Track</label><select required><option value="1">Digital Marketing</option><option value="2">Data Analytics</option></select>
-                <label>Assignment Title</label><input type="text" placeholder="E.g., SQL Data Cleaning" required>
-                <label>DEADLINE DATE (WAT)</label><input type="date" required>
-                <label>Assignment Brief</label><textarea placeholder="Outline requirements here..." required></textarea>
-                <button type="submit" class="btn-submit">Publish BRIEF & Activate</button>
-            </form>
-        </section>
     </main>
 
     <script>
@@ -70,14 +49,20 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+        window.forceLogout = async function() {
+            document.getElementById('logoutBtn').innerText = "Wait...";
+            try { await supabase.auth.signOut(); } catch (err) {}
+            finally {
+                localStorage.clear(); sessionStorage.clear();
+                window.location.href = 'index.html'; // Set to Home Page
+            }
+        };
+
         async function checkSession() {
             const { data: { session }, error } = await supabase.auth.getSession();
             if (!session) window.location.href = "login.html";
         }
-        function openMarkingModal(studentName) {
-            const grade = prompt(`Assign Percentage Mark for ${studentName} (%):`);
-            if (grade) alert(`MARK of ${grade}% UPDATED to results for ${studentName}`);
-        }
+        
         checkSession();
     </script>
 </body>

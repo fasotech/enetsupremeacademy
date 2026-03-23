@@ -21,8 +21,6 @@
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
         th { background-color: #E0E7FF; color: var(--navy-blue); }
-        .deadline-past { color: #DC2626; font-weight: bold; }
-        .deadline-active { color: var(--accent-blue); font-weight: bold; }
         .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
         .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
     </style>
@@ -30,7 +28,7 @@
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ACADEMY</span> | Student</div>
-        <a href="logout.html" class="logout-link">Log Out</a>
+        <a onclick="forceLogout()" class="logout-link" id="logoutBtn">Log Out</a>
     </header>
 
     <main class="main-container">
@@ -40,27 +38,6 @@
                 <li><span>Data Analytics Bootcamp</span> <a href="#" class="action-link">Access Materials</a></li>
             </ul>
         </section>
-
-        <section class="card">
-            <h2>Pending Assignments Portal</h2>
-            <table id="assignments-table">
-                <thead><tr><th>Assignment Title</th><th>Associated Track</th><th>Deadline (WAT)</th><th>Action</th></tr></thead>
-                <tbody>
-                    <tr><td>Meta Ads Campaign Plan</td><td>Digital Marketing Masterclass</td><td><span class="deadline-past">Mar 15, 2026 (CLOSED)</span></td><td><a href="#" class="action-link" style="color: #abb2bf;">(Deadline Past)</a></td></tr>
-                    <tr><td>Final SQL Query Project</td><td>Data Analytics Bootcamp</td><td><span class="deadline-active">Mar 25, 2026 (ACTIVE)</span></td><td><a href="#" class="action-link">Submit Work</a></td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section class="card">
-            <h2>My Performance Results</h2>
-            <table id="results-table">
-                <thead><tr><th>Track</th><th>Assignment</th><th>Result/Mark (%)</th><th>Feedback</th></tr></thead>
-                <tbody>
-                    <tr><td>Digital Marketing</td><td>Meta Ads Campaign Plan</td><td style="font-weight: bold; color: var(--brand-red); font-size: 1.2rem;">88%</td><td>Great integration of strategy. Review targeting.</td></tr>
-                </tbody>
-            </table>
-        </section>
     </main>
 
     <script>
@@ -68,10 +45,20 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+        window.forceLogout = async function() {
+            document.getElementById('logoutBtn').innerText = "Wait...";
+            try { await supabase.auth.signOut(); } catch (err) {}
+            finally {
+                localStorage.clear(); sessionStorage.clear();
+                window.location.href = 'index.html'; // Set to Home Page
+            }
+        };
+
         async function checkSession() {
             const { data: { session }, error } = await supabase.auth.getSession();
             if (!session) window.location.href = "login.html";
         }
+        
         checkSession();
     </script>
 </body>
