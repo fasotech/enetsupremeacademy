@@ -32,7 +32,7 @@
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
-        <a href="logout.html" class="logout-link">Log Out</a>
+        <a href="#" id="logoutBtn" class="logout-link">Log Out</a>
     </header>
 
     <main class="main-container">
@@ -134,7 +134,7 @@
             const btn = document.querySelector(`#pend-${userId} button`);
             btn.innerText = "Approving..."; btn.disabled = true;
             await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            fetchDashboardData(); // Refresh everything instantly
+            fetchDashboardData(); 
         }
 
         async function makeAdmin(userId, name) {
@@ -144,6 +144,19 @@
                 fetchDashboardData();
             }
         }
+
+        // SPRINGDRILL LOGOUT LOGIC
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            document.getElementById('logoutBtn').innerText = "Wait...";
+            try {
+                await supabase.auth.signOut();
+                localStorage.clear();
+                window.location.href = 'login.html';
+            } catch (err) {
+                window.location.href = 'login.html';
+            }
+        });
 
         checkSession();
     </script>
