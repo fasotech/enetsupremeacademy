@@ -23,12 +23,14 @@
         th { background-color: #E0E7FF; color: var(--navy-blue); }
         .deadline-past { color: #DC2626; font-weight: bold; }
         .deadline-active { color: var(--accent-blue); font-weight: bold; }
+        .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
+        .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ACADEMY</span> | Student</div>
-        <button onclick="handleLogout()" style="background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer;">Log Out</button>
+        <a href="logout.html" class="logout-link">Log Out</a>
     </header>
 
     <main class="main-container">
@@ -69,10 +71,6 @@
         async function checkSession() {
             const { data: { session }, error } = await supabase.auth.getSession();
             if (!session) window.location.href = "login.html";
-        }
-        async function handleLogout() {
-            await supabase.auth.signOut();
-            window.location.href = "login.html";
         }
         checkSession();
     </script>
