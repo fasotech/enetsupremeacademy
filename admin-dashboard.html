@@ -15,11 +15,16 @@
         .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
         .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 4px solid var(--navy-blue); }
         h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 2rem; border-radius: 8px; border-bottom: 4px solid #EAECF0; text-align: center; }
+        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-red); margin: 0.5rem 0; }
+        .stat-card .stat-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; font-weight: 500; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
         th { background-color: #E0E7FF; color: var(--navy-blue); }
-        .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-approve:hover { background-color: var(--red-hover); }
+        .btn-active { background-color: #10B981; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: bold; cursor: default; }
         
         /* Fixed Logout Button */
         .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
@@ -42,6 +47,23 @@
                 </tbody>
             </table>
         </section>
+
+        <h2>Academy Overview Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number" id="stat-students">0</div></div>
+            <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number" id="stat-tracks">6</div></div>
+            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number" id="stat-teachers">0</div></div>
+        </div>
+
+        <section class="card">
+            <h2>User Management & Roles</h2>
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Management</th></tr></thead>
+                <tbody id="all-users-list">
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
+                </tbody>
+            </table>
+        </section>
     </main>
 
     <script>
@@ -59,42 +81,79 @@
 
         async function fetchDashboardData() {
             const pendingList = document.getElementById('pending-users-list');
+            const allList = document.getElementById('all-users-list');
+            const statStudents = document.getElementById('stat-students');
+            const statTeachers = document.getElementById('stat-teachers');
+
             try {
-                // Fetch all profiles
+                // Fetch all profiles from the database
                 const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
 
                 let pendingHTML = '';
+                let allHTML = '';
+                let studentCount = 0;
+                let teacherCount = 0;
 
-                data.forEach(user => {
-                    if (user.status === 'pending') {
-                        const date = new Date(user.created_at).toLocaleDateString();
-                        pendingHTML += `<tr id="row-${user.id}">
-                            <td style="font-weight: bold;">${user.first_name} ${user.last_name}</td>
-                            <td>${user.email || 'N/A'}</td>
-                            <td style="text-transform: capitalize;">${user.role}</td>
-                            <td>${date}</td>
-                            <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve</button></td>
-                        </tr>`;
-                    }
-                });
+                // Sort the data into pending and approved lists
+                if (data && data.length > 0) {
+                    data.forEach(user => {
+                        const fullName = `${user.first_name || 'User'} ${user.last_name || ''}`;
+                        const date = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
+                        const email = user.email || 'N/A';
+                        const role = user.role || 'student';
 
-                pendingList.innerHTML = pendingHTML || `<tr><td colspan="5" style="text-align: center; font-weight:bold; color: #10B981;">No pending approvals!</td></tr>`;
+                        if (user.status === 'pending') {
+                            pendingHTML += `<tr id="row-${user.id}">
+                                <td style="font-weight: bold;">${fullName}</td>
+                                <td>${email}</td>
+                                <td style="text-transform: capitalize;">${role}</td>
+                                <td>${date}</td>
+                                <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve</button></td>
+                            </tr>`;
+                        } else if (user.status === 'approved') {
+                            if (role === 'student') studentCount++;
+                            if (role === 'teacher') teacherCount++;
+                            
+                            allHTML += `<tr>
+                                <td style="font-weight: bold;">${fullName}</td>
+                                <td>${email}</td>
+                                <td style="text-transform: capitalize;">${role}</td>
+                                <td style="color: #10B981; font-weight: bold;">Approved</td>
+                                <td><button class="btn-active">Active</button></td>
+                            </tr>`;
+                        }
+                    });
+                }
+
+                // Update the UI safely
+                if (pendingList) pendingList.innerHTML = pendingHTML || `<tr><td colspan="5" style="text-align: center; font-weight:bold; color: #10B981;">No pending approvals!</td></tr>`;
+                if (allList) allList.innerHTML = allHTML || `<tr><td colspan="5" style="text-align: center; color: var(--text-gray);">No approved users yet.</td></tr>`;
+                
+                if (statStudents) statStudents.innerText = studentCount;
+                if (statTeachers) statTeachers.innerText = teacherCount;
 
             } catch (err) {
-                pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
+                if (pendingList) pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
             }
         }
 
+        // APPROVE USER FUNCTION
         window.approveUser = async function(userId) {
             const btn = document.querySelector(`#row-${userId} button`);
-            btn.innerText = "Approving..."; btn.disabled = true;
+            if (btn) { btn.innerText = "Approving..."; btn.disabled = true; }
+            
             const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            if (error) { alert("Failed to approve user"); btn.disabled = false; btn.innerText = "Approve"; } 
-            else { fetchDashboardData(); }
+            
+            if (error) { 
+                alert("Failed to approve user: " + error.message); 
+                if (btn) { btn.disabled = false; btn.innerText = "Approve"; }
+            } else { 
+                fetchDashboardData(); // Refresh the lists instantly
+            }
         }
 
-        // Initialize directly
+        // Initialize dashboard directly
         fetchDashboardData();
     </script>
 </body>
