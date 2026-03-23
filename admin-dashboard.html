@@ -24,9 +24,7 @@
         th { background-color: #E0E7FF; color: var(--navy-blue); }
         .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-approve:hover { background-color: var(--red-hover); }
-        .btn-active { background-color: #10B981; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: bold; cursor: default; }
         
-        /* Fixed Logout Button */
         .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
         .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
     </style>
@@ -34,7 +32,7 @@
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
-        <button type="button" class="logout-link" onclick="executeLogout()">Log Out</button>
+        <button id="logoutBtn" class="logout-link">Log Out</button>
     </header>
 
     <main class="main-container">
@@ -43,7 +41,7 @@
             <table>
                 <thead><tr><th>Name</th><th>Email</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
                 <tbody id="pending-users-list">
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Connecting to database...</td></tr>
                 </tbody>
             </table>
         </section>
@@ -60,101 +58,118 @@
             <table>
                 <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Management</th></tr></thead>
                 <tbody id="all-users-list">
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Connecting to database...</td></tr>
                 </tbody>
             </table>
         </section>
     </main>
 
     <script>
+        // 1. Database Connection
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // BULLETPROOF LOGOUT
-        window.executeLogout = async function() {
-            try { await supabase.auth.signOut(); } catch (err) {}
-            localStorage.clear();
-            sessionStorage.clear();
-            window.location.href = 'index.html'; // Immediately drops to Home Page
-        };
-
-        async function fetchDashboardData() {
+        // 2. The Core Function
+        async function loadAdminDashboard() {
             const pendingList = document.getElementById('pending-users-list');
             const allList = document.getElementById('all-users-list');
-            const statStudents = document.getElementById('stat-students');
-            const statTeachers = document.getElementById('stat-teachers');
 
             try {
-                // Fetch all profiles from the database
+                // Fetch profiles securely
                 const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
+
+                // If Supabase blocks us, print the EXACT reason in bright red
+                if (error) {
+                    pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center; font-weight: bold;">Supabase Error: ${error.message} <br> (Please ensure ROW LEVEL SECURITY is disabled in SQL)</td></tr>`;
+                    allList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Failed to load.</td></tr>`;
+                    return;
+                }
+
+                // If the table is empty
+                if (!data || data.length === 0) {
+                    pendingList.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #10B981; font-weight:bold;">No user accounts found in the system.</td></tr>`;
+                    allList.innerHTML = `<tr><td colspan="5" style="text-align: center;">No users registered yet.</td></tr>`;
+                    return;
+                }
 
                 let pendingHTML = '';
                 let allHTML = '';
                 let studentCount = 0;
                 let teacherCount = 0;
 
-                // Sort the data into pending and approved lists
-                if (data && data.length > 0) {
-                    data.forEach(user => {
-                        const fullName = `${user.first_name || 'User'} ${user.last_name || ''}`;
-                        const date = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
-                        const email = user.email || 'N/A';
-                        const role = user.role || 'student';
+                data.forEach(user => {
+                    const name = `${user.first_name || 'User'} ${user.last_name || ''}`;
+                    const email = user.email || 'N/A';
+                    const role = user.role || 'student';
+                    const date = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown';
 
-                        if (user.status === 'pending') {
-                            pendingHTML += `<tr id="row-${user.id}">
-                                <td style="font-weight: bold;">${fullName}</td>
-                                <td>${email}</td>
-                                <td style="text-transform: capitalize;">${role}</td>
-                                <td>${date}</td>
-                                <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve</button></td>
-                            </tr>`;
-                        } else if (user.status === 'approved') {
-                            if (role === 'student') studentCount++;
-                            if (role === 'teacher') teacherCount++;
-                            
-                            allHTML += `<tr>
-                                <td style="font-weight: bold;">${fullName}</td>
-                                <td>${email}</td>
-                                <td style="text-transform: capitalize;">${role}</td>
-                                <td style="color: #10B981; font-weight: bold;">Approved</td>
-                                <td><button class="btn-active">Active</button></td>
-                            </tr>`;
-                        }
-                    });
-                }
+                    if (user.status === 'pending') {
+                        pendingHTML += `<tr>
+                            <td style="font-weight: bold;">${name}</td>
+                            <td>${email}</td>
+                            <td style="text-transform: capitalize;">${role}</td>
+                            <td>${date}</td>
+                            <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
+                        </tr>`;
+                    } else if (user.status === 'approved') {
+                        if (role === 'student') studentCount++;
+                        if (role === 'teacher') teacherCount++;
 
-                // Update the UI safely
-                if (pendingList) pendingList.innerHTML = pendingHTML || `<tr><td colspan="5" style="text-align: center; font-weight:bold; color: #10B981;">No pending approvals!</td></tr>`;
-                if (allList) allList.innerHTML = allHTML || `<tr><td colspan="5" style="text-align: center; color: var(--text-gray);">No approved users yet.</td></tr>`;
-                
-                if (statStudents) statStudents.innerText = studentCount;
-                if (statTeachers) statTeachers.innerText = teacherCount;
+                        let adminBtn = role !== 'admin' 
+                            ? `<button onclick="makeAdmin('${user.id}')" style="background-color: var(--navy-blue); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Make Admin</button>`
+                            : `<span style="color: var(--brand-red); font-weight: bold;">Master Admin</span>`;
+
+                        allHTML += `<tr>
+                            <td style="font-weight: bold;">${name}</td>
+                            <td>${email}</td>
+                            <td style="text-transform: capitalize;">${role}</td>
+                            <td style="color: #10B981; font-weight: bold;">Approved</td>
+                            <td>${adminBtn}</td>
+                        </tr>`;
+                    }
+                });
+
+                // Update Tables
+                pendingList.innerHTML = pendingHTML || `<tr><td colspan="5" style="text-align: center; font-weight:bold; color: #10B981;">No pending approvals! All caught up.</td></tr>`;
+                allList.innerHTML = allHTML || `<tr><td colspan="5" style="text-align: center; color: #666;">No approved users yet.</td></tr>`;
+
+                // Update Live Stats
+                document.getElementById('stat-students').innerText = studentCount;
+                document.getElementById('stat-teachers').innerText = teacherCount;
 
             } catch (err) {
-                if (pendingList) pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
+                // If the code crashes, print it in red
+                pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center; font-weight: bold;">Code Crash: ${err.message}</td></tr>`;
             }
         }
 
-        // APPROVE USER FUNCTION
+        // 3. Approval Logic
         window.approveUser = async function(userId) {
-            const btn = document.querySelector(`#row-${userId} button`);
-            if (btn) { btn.innerText = "Approving..."; btn.disabled = true; }
-            
             const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            
-            if (error) { 
-                alert("Failed to approve user: " + error.message); 
-                if (btn) { btn.disabled = false; btn.innerText = "Approve"; }
-            } else { 
-                fetchDashboardData(); // Refresh the lists instantly
+            if (error) alert("Approval Failed: " + error.message);
+            else loadAdminDashboard(); // Refresh page instantly
+        }
+
+        window.makeAdmin = async function(userId) {
+            if(confirm("Are you sure you want to make this user an Admin?")) {
+                const { error } = await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
+                if (error) alert("Upgrade Failed: " + error.message);
+                else loadAdminDashboard();
             }
         }
 
-        // Initialize dashboard directly
-        fetchDashboardData();
+        // 4. Secure Logout Logic (Redirects strictly to index.html)
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            document.getElementById('logoutBtn').innerText = "Logging out...";
+            try { await supabase.auth.signOut(); } catch (err) {}
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'index.html'; 
+        });
+
+        // 5. The Trigger (waits for HTML to be fully built before running)
+        document.addEventListener('DOMContentLoaded', loadAdminDashboard);
     </script>
 </body>
 </html>
