@@ -42,7 +42,7 @@
             <table>
                 <thead><tr><th>Name</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
                 <tbody id="pending-users-list">
-                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Loading...</td></tr>
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
                 </tbody>
             </table>
         </section>
@@ -60,7 +60,7 @@
             <table>
                 <thead><tr><th>Name</th><th>Current Role</th><th>Status</th><th>Management</th></tr></thead>
                 <tbody id="all-users-list">
-                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Loading...</td></tr>
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
                 </tbody>
             </table>
         </section>
@@ -84,12 +84,18 @@
         }
 
         async function fetchDashboardData() {
-            const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-            if (error) return alert("Database error: Ensure you ran the SQL script!");
-
             const pendingList = document.getElementById('pending-users-list');
             const allList = document.getElementById('all-users-list');
+
+            const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
             
+            if (error) {
+                // Print the exact error to the screen so we can fix it
+                pendingList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error: ${error.message} <br> Ensure you ran the SQL script!</td></tr>`;
+                allList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error: ${error.message}</td></tr>`;
+                return;
+            }
+
             let pendingHTML = '';
             let allHTML = '';
             let studentCount = 0;
@@ -133,8 +139,15 @@
         async function approveUser(userId) {
             const btn = document.querySelector(`#pend-${userId} button`);
             btn.innerText = "Approving..."; btn.disabled = true;
-            await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            fetchDashboardData(); 
+            
+            const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
+            
+            if (error) {
+                alert("Failed to approve user: " + error.message);
+                btn.innerText = "Approve Access"; btn.disabled = false;
+            } else {
+                fetchDashboardData(); // Refresh instantly
+            }
         }
 
         async function makeAdmin(userId, name) {
@@ -145,7 +158,6 @@
             }
         }
 
-        // SPRINGDRILL LOGOUT LOGIC
         document.getElementById('logoutBtn').addEventListener('click', async (e) => {
             e.preventDefault();
             document.getElementById('logoutBtn').innerText = "Wait...";

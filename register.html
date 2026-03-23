@@ -81,21 +81,30 @@
             btn.innerText = "Processing...";
 
             try {
+                // 1. Create the user in Auth system
                 const { data, error } = await supabase.auth.signUp({
                     email: document.getElementById('reg-email').value,
-                    password: document.getElementById('reg-password').value,
-                    options: {
-                        data: {
-                            first_name: document.getElementById('reg-first').value,
-                            last_name: document.getElementById('reg-last').value,
-                            requested_role: document.getElementById('reg-role').value
-                        }
-                    }
+                    password: document.getElementById('reg-password').value
                 });
 
                 if (error) throw new Error(error.message);
 
-                // Hide the form and show the massive success screen
+                // 2. BULLETPROOF FIX: Manually inject the profile into the database immediately
+                if (data && data.user) {
+                    const { error: profileError } = await supabase.from('profiles').upsert([
+                        {
+                            id: data.user.id,
+                            first_name: document.getElementById('reg-first').value,
+                            last_name: document.getElementById('reg-last').value,
+                            role: document.getElementById('reg-role').value,
+                            status: 'pending'
+                        }
+                    ]);
+
+                    if (profileError) throw new Error("Account created, but profile saving failed: " + profileError.message);
+                }
+
+                // 3. Show Success Screen
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
 
