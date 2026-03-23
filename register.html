@@ -33,7 +33,7 @@
         
         <div id="form-container">
             <h2>Submit Application</h2>
-            <form id="register-form">
+            <form id="register-form" onsubmit="processRegistration(event)">
                 <div style="display: flex; gap: 1rem;">
                     <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
                     <div class="form-group" style="flex: 1;"><label>Last Name</label><input type="text" id="reg-last" required></div>
@@ -68,29 +68,39 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        document.getElementById('register-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        // This function is triggered directly from the HTML form
+        window.processRegistration = async function(e) {
+            e.preventDefault(); // Absolutely ensures the browser does not reload
+            
             const btn = document.getElementById('reg-btn');
             btn.disabled = true;
             btn.innerText = "Processing...";
 
             try {
+                const firstName = document.getElementById('reg-first').value;
+                const lastName = document.getElementById('reg-last').value;
+                const role = document.getElementById('reg-role').value;
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
+
                 // 1. Create Auth Account
                 const { data, error } = await supabase.auth.signUp({
-                    email: document.getElementById('reg-email').value,
-                    password: document.getElementById('reg-password').value
+                    email: email,
+                    password: password
                 });
                 if (error) throw error;
 
-                // 2. Force Data into Admin Dashboard Database
+                // 2. Force Data into Admin Dashboard Database instantly
                 if (data && data.user) {
-                    await supabase.from('profiles').upsert([{
+                    const { error: dbError } = await supabase.from('profiles').upsert([{
                         id: data.user.id,
-                        first_name: document.getElementById('reg-first').value,
-                        last_name: document.getElementById('reg-last').value,
-                        role: document.getElementById('reg-role').value,
+                        first_name: firstName,
+                        last_name: lastName,
+                        role: role,
                         status: 'pending'
                     }]);
+
+                    if (dbError) throw new Error("Saved to Auth, but failed to reach Admin Dashboard: " + dbError.message);
                 }
 
                 // 3. Show Success Screen
@@ -102,7 +112,7 @@
                 btn.disabled = false;
                 btn.innerText = "Submit Application";
             }
-        });
+        };
     </script>
 </body>
 </html>
