@@ -18,7 +18,7 @@
 
     <div class="spinner"></div>
     <h2>Logging you out securely...</h2>
-    <p>Please wait a moment.</p>
+    <p>Returning you to the home page.</p>
 
     <script>
         // 1. Initialize Supabase
@@ -26,23 +26,27 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+        // FAILSAFE: Force redirect to Homepage after 2 seconds no matter what!
+        setTimeout(() => {
+            window.location.replace("index.html");
+        }, 2000);
+
         // 2. Execute the Kill Switch
         async function secureLogout() {
             try {
+                // Wipe any saved carts or temporary data from the browser FIRST
+                localStorage.clear();
+                sessionStorage.clear();
+
                 // Tell Supabase to kill the session
                 await supabase.auth.signOut();
                 
-                // Wipe any saved carts or temporary data from the browser
-                localStorage.clear();
-                sessionStorage.clear();
-                
-                // Redirect to login page
-                window.location.replace("login.html");
+                // Redirect to home page
+                window.location.replace("index.html");
             } catch (err) {
                 console.error("Logout Error:", err);
-                // Even if Supabase fails, force them to the login page
-                localStorage.clear();
-                window.location.replace("login.html");
+                // Even if Supabase fails, force them to the home page immediately
+                window.location.replace("index.html");
             }
         }
 
