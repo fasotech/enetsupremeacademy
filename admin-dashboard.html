@@ -48,9 +48,9 @@
 
         <h2>Academy Overview Statistics</h2>
         <div class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number">0</div></div>
-            <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number">6</div></div>
-            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number">0</div></div>
+            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number" id="stat-students">0</div></div>
+            <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number" id="stat-tracks">6</div></div>
+            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number" id="stat-teachers">0</div></div>
         </div>
     </main>
 
@@ -60,39 +60,70 @@
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         async function checkSession() {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            if (!session) { window.location.href = "login.html"; return; }
-            
-            const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
-            if(profile.role !== 'admin') window.location.href = "login.html";
-            else fetchPendingUsers();
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (!session) { window.location.href = "login.html"; return; }
+                
+                const { data: profile, error: profileError } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+                
+                if (profileError || !profile || profile.role !== 'admin') {
+                    window.location.href = "login.html";
+                    return;
+                }
+                
+                // If Admin, fetch data!
+                fetchPendingUsers();
+                fetchLiveStats();
+            } catch (err) {
+                console.error("Session check failed", err);
+            }
         }
 
         async function fetchPendingUsers() {
             const list = document.getElementById('pending-users-list');
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('status', 'pending')
-                .order('created_at', { ascending: false });
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: false });
 
-            if (error) { list.innerHTML = `<tr><td colspan="4">Error loading users.</td></tr>`; return; }
-            if (data.length === 0) { list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #2C1E85; font-weight:bold;">No pending approvals! You are all caught up.</td></tr>`; return; }
+                if (error) throw error;
 
-            list.innerHTML = '';
-            data.forEach(user => {
-                const date = new Date(user.created_at).toLocaleDateString();
-                const name = (user.first_name || 'New') + ' ' + (user.last_name || 'User');
+                if (!data || data.length === 0) { 
+                    list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--navy-blue); font-weight:bold;">No pending approvals! You are all caught up.</td></tr>`; 
+                    return; 
+                }
+
+                list.innerHTML = '';
+                data.forEach(user => {
+                    const date = new Date(user.created_at).toLocaleDateString();
+                    const name = (user.first_name || 'New') + ' ' + (user.last_name || 'User');
+                    
+                    list.innerHTML += `
+                        <tr id="row-${user.id}">
+                            <td style="font-weight: bold;">${name}</td>
+                            <td style="text-transform: capitalize;">${user.role}</td>
+                            <td>${date}</td>
+                            <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red; font-weight:bold;">Error fetching users: ${err.message}. Ensure you ran the SQL script!</td></tr>`;
+            }
+        }
+
+        async function fetchLiveStats() {
+            try {
+                const { count: studentCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'student').eq('status', 'approved');
+                const { count: teacherCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'teacher').eq('status', 'approved');
                 
-                list.innerHTML += `
-                    <tr id="row-${user.id}">
-                        <td style="font-weight: bold;">${name}</td>
-                        <td style="text-transform: capitalize;">${user.role}</td>
-                        <td>${date}</td>
-                        <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
-                    </tr>
-                `;
-            });
+                if(studentCount !== null) document.getElementById('stat-students').innerText = studentCount;
+                if(teacherCount !== null) document.getElementById('stat-teachers').innerText = teacherCount;
+            } catch (err) {
+                console.error("Failed to load stats", err);
+            }
         }
 
         async function approveUser(userId) {
@@ -108,6 +139,7 @@
                 btn.disabled = false;
             } else {
                 document.getElementById(`row-${userId}`).style.display = 'none';
+                fetchLiveStats(); // Update the student/teacher counts instantly
             }
         }
 
