@@ -4,171 +4,738 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENET SUPREME ACADEMY | Admin Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
     <style>
-        :root { --navy-blue: #2C1E85; --brand-red: #DA251D; --red-hover: #B81D15; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--background); color: var(--navy-blue); min-height: 100vh; display: flex; flex-direction: column; }
-        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--brand-red); }
-        .logo { font-weight: bold; text-transform: uppercase; }
-        .logo span { color: var(--brand-red); }
-        .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 4px solid var(--navy-blue); }
-        h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 2rem; border-radius: 8px; border-bottom: 4px solid #EAECF0; text-align: center; }
-        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-red); margin: 0.5rem 0; }
-        .stat-card .stat-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; font-weight: 500; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
-        th { background-color: #E0E7FF; color: var(--navy-blue); }
-        .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-approve:hover { background-color: var(--red-hover); }
-        .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
-        .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
+        :root {
+            --bg: #07080F;
+            --surface: #0E1018;
+            --surface2: #13151F;
+            --surface3: #1A1D2E;
+            --border: rgba(255,255,255,0.07);
+            --border-bright: rgba(255,255,255,0.13);
+            --text: #F0F0FF;
+            --text-muted: #7B7D9A;
+            --text-dim: #3E4060;
+            --accent: #4F3FFF;
+            --red: #DA251D;
+            --green: #1BD496;
+            --amber: #F59E0B;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(79,63,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(79,63,255,0.025) 1px, transparent 1px);
+            background-size: 44px 44px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed; left:0; top:0; bottom:0; width:230px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 1.5rem 1.25rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800; font-size: 0.95rem;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--text); line-height: 1.2;
+        }
+        .brand span { color: var(--red); }
+        .badge-admin {
+            display: inline-block; margin-top: 0.4rem;
+            font-size: 0.6rem; font-weight: 500;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--accent); background: rgba(79,63,255,0.1);
+            border: 1px solid rgba(79,63,255,0.22);
+            padding: 2px 8px; border-radius: 20px;
+        }
+        .nav-label {
+            font-size: 0.6rem; font-weight: 500;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 1rem 1.25rem 0.35rem;
+        }
+        .nav-item {
+            display: flex; align-items: center; gap: 0.65rem;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.83rem; color: var(--text-muted);
+            border-left: 2px solid transparent;
+            cursor: pointer; text-decoration: none;
+            transition: all 0.15s;
+        }
+        .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+        .nav-item.active { color: var(--text); background: rgba(79,63,255,0.09); border-left-color: var(--accent); }
+        .nav-item svg { flex-shrink: 0; opacity: 0.6; }
+        .nav-item.active svg { opacity: 1; }
+        .nav-badge {
+            margin-left: auto; font-size: 0.62rem; font-weight: 600;
+            background: var(--red); color: #fff;
+            border-radius: 20px; padding: 1px 7px; min-width: 18px; text-align: center;
+        }
+        .sidebar-foot {
+            margin-top: auto;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+        .admin-pill {
+            display: flex; align-items: center; gap: 0.65rem;
+            background: var(--surface3); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0.55rem 0.7rem;
+        }
+        .admin-av {
+            width: 30px; height: 30px; border-radius: 7px;
+            background: linear-gradient(135deg,var(--accent),var(--red));
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif; font-weight: 700;
+            font-size: 0.7rem; color: #fff; flex-shrink: 0;
+        }
+        .admin-nm { font-size: 0.78rem; font-weight: 500; color: var(--text); }
+        .admin-rl { font-size: 0.62rem; color: var(--accent); font-weight: 500; }
+
+        /* MAIN */
+        .main-wrap {
+            margin-left: 230px; flex: 1;
+            display: flex; flex-direction: column;
+            position: relative; z-index: 1;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            position: sticky; top:0; height: 58px;
+            background: rgba(7,8,15,0.88);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 1.75rem; z-index: 50;
+        }
+        .topbar-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.95rem; font-weight: 700; color: var(--text);
+        }
+        .topbar-title span { color: var(--text-muted); font-weight: 400; }
+        .topbar-right { display: flex; align-items: center; gap: 0.65rem; }
+        .topbar-clock {
+            font-size: 0.72rem; color: var(--text-muted);
+            background: var(--surface2); border: 1px solid var(--border);
+            padding: 3px 11px; border-radius: 20px; font-variant-numeric: tabular-nums;
+        }
+        #logoutBtn {
+            display: flex; align-items: center; gap: 5px;
+            background: rgba(218,37,29,0.09); color: #FF6B6B;
+            border: 1px solid rgba(218,37,29,0.25);
+            padding: 5px 13px; border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem; font-weight: 500;
+            cursor: pointer; transition: all 0.18s;
+        }
+        #logoutBtn:hover { background: rgba(218,37,29,0.18); border-color: rgba(218,37,29,0.45); }
+
+        /* CONTENT */
+        .content { padding: 1.75rem; flex: 1; }
+
+        /* STATS */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 1rem; margin-bottom: 1.75rem;
+        }
+        .stat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 1.2rem 1.35rem;
+            position: relative; overflow: hidden;
+            transition: border-color 0.2s;
+            animation: fadeUp 0.35s ease both;
+        }
+        .stat-card:nth-child(1){animation-delay:0.04s}
+        .stat-card:nth-child(2){animation-delay:0.08s}
+        .stat-card:nth-child(3){animation-delay:0.12s}
+        .stat-card:nth-child(4){animation-delay:0.16s}
+        .stat-card::after {
+            content:''; position:absolute; top:0; left:0; right:0; height:2px;
+            background: var(--c, var(--accent));
+        }
+        .stat-card.c-red   { --c: var(--red); }
+        .stat-card.c-amber { --c: var(--amber); }
+        .stat-card.c-green { --c: var(--green); }
+        .stat-card.c-acc   { --c: var(--accent); }
+        .stat-card:hover { border-color: var(--border-bright); }
+        .stat-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.65rem; }
+        .stat-ico {
+            width:34px; height:34px; border-radius:8px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+        }
+        .stat-tag {
+            font-size:0.65rem; font-weight:500; padding:2px 8px; border-radius:20px;
+        }
+        .stat-tag.up  { background:rgba(27,212,150,0.1); color:var(--green); }
+        .stat-tag.neu { background:rgba(245,158,11,0.09); color:var(--amber); }
+        .stat-num {
+            font-family:'Syne', sans-serif; font-size:2.1rem;
+            font-weight:800; color:var(--text); line-height:1; margin-bottom:0.25rem;
+        }
+        .stat-lbl { font-size:0.72rem; color:var(--text-muted); }
+
+        /* PANELS */
+        .panel {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; margin-bottom: 1.5rem; overflow: hidden;
+            animation: fadeUp 0.35s ease both; animation-delay: 0.2s;
+        }
+        .panel-head {
+            display:flex; align-items:center; justify-content:space-between;
+            padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border);
+        }
+        .panel-title-g { display:flex; align-items:center; gap:0.65rem; }
+        .panel-dot {
+            width:7px; height:7px; border-radius:50%;
+            background: var(--pd, var(--accent));
+            box-shadow: 0 0 8px var(--pd, var(--accent));
+        }
+        .panel.pend { --pd: var(--amber); }
+        .panel.users { --pd: var(--accent); }
+        .panel-ttl { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; }
+        .panel-cnt {
+            font-size:0.65rem; font-weight:600;
+            background:rgba(255,255,255,0.06); color:var(--text-muted);
+            border:1px solid var(--border); padding:2px 8px; border-radius:20px;
+        }
+        .panel-sub { font-size:0.72rem; color:var(--text-dim); }
+        .search-wrap {
+            display:flex; align-items:center; gap:0.4rem;
+            background:var(--surface2); border:1px solid var(--border);
+            border-radius:8px; padding:0.35rem 0.65rem;
+        }
+        .search-wrap input {
+            background:none; border:none; outline:none;
+            color:var(--text); font-family:'DM Sans',sans-serif;
+            font-size:0.78rem; width:150px;
+        }
+        .search-wrap input::placeholder { color:var(--text-dim); }
+
+        /* TABS */
+        .tab-bar {
+            display:flex; gap:0.2rem;
+            padding:0.65rem 1.5rem; border-bottom:1px solid var(--border);
+            background:var(--surface2);
+        }
+        .tab-btn {
+            font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:500;
+            padding:0.3rem 0.85rem; border-radius:7px;
+            border:1px solid transparent; cursor:pointer;
+            color:var(--text-muted); background:none; transition:all 0.15s;
+        }
+        .tab-btn:hover { color:var(--text); background:rgba(255,255,255,0.04); }
+        .tab-btn.active { color:var(--text); background:rgba(79,63,255,0.11); border-color:rgba(79,63,255,0.22); }
+
+        /* TABLE */
+        .data-tbl { width:100%; border-collapse:collapse; }
+        .data-tbl thead tr { border-bottom:1px solid var(--border); }
+        .data-tbl th {
+            text-align:left; padding:0.7rem 1.5rem;
+            font-size:0.65rem; font-weight:500;
+            letter-spacing:0.09em; text-transform:uppercase;
+            color:var(--text-dim);
+        }
+        .data-tbl tbody tr { border-bottom:1px solid var(--border); transition:background 0.13s; }
+        .data-tbl tbody tr:last-child { border-bottom:none; }
+        .data-tbl tbody tr:hover { background:rgba(255,255,255,0.02); }
+        .data-tbl td { padding:0.9rem 1.5rem; font-size:0.83rem; color:var(--text-muted); vertical-align:middle; }
+
+        .user-cell { display:flex; align-items:center; gap:0.65rem; }
+        .uav {
+            width:32px; height:32px; border-radius:8px;
+            display:flex; align-items:center; justify-content:center;
+            font-family:'Syne',sans-serif; font-weight:700;
+            font-size:0.7rem; color:#fff; flex-shrink:0;
+        }
+        .uname { font-size:0.84rem; font-weight:500; color:var(--text); }
+        .uid { font-size:0.66rem; color:var(--text-dim); margin-top:1px; }
+
+        .role-badge {
+            display:inline-flex; align-items:center; gap:4px;
+            font-size:0.67rem; font-weight:500; letter-spacing:0.04em;
+            padding:3px 9px; border-radius:20px;
+        }
+        .role-badge.student { background:rgba(79,63,255,0.1); color:#8B7FFF; border:1px solid rgba(79,63,255,0.18); }
+        .role-badge.teacher { background:rgba(245,158,11,0.09); color:#F9C957; border:1px solid rgba(245,158,11,0.18); }
+        .role-badge.admin   { background:rgba(27,212,150,0.09); color:#1BD496; border:1px solid rgba(27,212,150,0.18); }
+
+        .status-badge {
+            display:inline-flex; align-items:center; gap:5px;
+            font-size:0.68rem; font-weight:500; padding:3px 9px; border-radius:20px;
+        }
+        .status-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+        .status-badge.active   { background:rgba(27,212,150,0.09); color:var(--green); border:1px solid rgba(27,212,150,0.18); }
+        .status-badge.pending  { background:rgba(245,158,11,0.09); color:var(--amber); border:1px solid rgba(245,158,11,0.18); }
+        .status-badge.inactive { background:rgba(255,255,255,0.04); color:var(--text-dim); border:1px solid var(--border); }
+
+        .actions { display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; }
+        .btn {
+            display:inline-flex; align-items:center; gap:4px;
+            font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:500;
+            padding:4px 11px; border-radius:7px; border:1px solid transparent;
+            cursor:pointer; transition:all 0.16s; white-space:nowrap;
+        }
+        .btn-approve  { background:rgba(27,212,150,0.09); color:var(--green); border-color:rgba(27,212,150,0.22); }
+        .btn-approve:hover { background:rgba(27,212,150,0.2); }
+        .btn-danger   { background:rgba(218,37,29,0.07); color:#FF6B6B; border-color:rgba(218,37,29,0.2); }
+        .btn-danger:hover  { background:rgba(218,37,29,0.18); }
+        .btn-admin    { background:rgba(27,212,150,0.07); color:var(--green); border-color:rgba(27,212,150,0.18); }
+        .btn-admin:hover   { background:rgba(27,212,150,0.16); }
+        .btn-unadmin  { background:rgba(245,158,11,0.07); color:var(--amber); border-color:rgba(245,158,11,0.18); }
+        .btn-unadmin:hover { background:rgba(245,158,11,0.16); }
+        .btn-deact    { background:rgba(255,255,255,0.04); color:var(--text-dim); border-color:var(--border); }
+        .btn-deact:hover   { background:rgba(218,37,29,0.07); color:#FF6B6B; border-color:rgba(218,37,29,0.2); }
+        .btn-activate { background:rgba(79,63,255,0.08); color:#8B7FFF; border-color:rgba(79,63,255,0.2); }
+        .btn-activate:hover { background:rgba(79,63,255,0.18); }
+
+        .master-tag {
+            display:inline-flex; align-items:center; gap:4px;
+            font-size:0.67rem; font-weight:600; color:var(--green);
+            background:rgba(27,212,150,0.07); border:1px solid rgba(27,212,150,0.18);
+            padding:4px 10px; border-radius:7px;
+        }
+
+        /* EMPTY / ERROR */
+        .empty-cell { padding:2.5rem; text-align:center; }
+        .empty-ico  { font-size:1.6rem; margin-bottom:0.5rem; opacity:0.35; }
+        .empty-ttl  { font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:600; color:var(--text-muted); margin-bottom:0.3rem; }
+        .empty-sub  { font-size:0.75rem; color:var(--text-dim); }
+        .err-cell   { background:rgba(218,37,29,0.05); padding:1.25rem 1.5rem; color:#FF6B6B; font-size:0.8rem; line-height:1.6; border-top:1px solid rgba(218,37,29,0.12); }
+
+        /* ANIMS */
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse  { 0%,100%{opacity:0.35} 50%{opacity:0.7} }
+        .loading-row td { animation: pulse 1.4s ease-in-out infinite; }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
-        <button id="logoutBtn" class="logout-link">Log Out</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="brand">ENET <span>SUPREME</span></div>
+        <div class="badge-admin">Admin Console</div>
+    </div>
+
+    <div class="nav-label">Overview</div>
+    <a class="nav-item active" href="#">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+    </a>
+    <a class="nav-item" href="#" onclick="switchTab('students');return false;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Students
+    </a>
+    <a class="nav-item" href="#" onclick="switchTab('teachers');return false;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        Teachers
+    </a>
+
+    <div class="nav-label">Management</div>
+    <a class="nav-item" href="#" onclick="switchTab('admins');return false;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Admins
+    </a>
+    <a class="nav-item" href="#" id="nav-pending">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Pending Approvals
+        <span class="nav-badge" id="nav-pcount">0</span>
+    </a>
+
+    <div class="nav-label">Academy</div>
+    <a class="nav-item" href="#">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Tracks (6)
+    </a>
+    <a class="nav-item" href="#">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+    </a>
+
+    <div class="sidebar-foot">
+        <div class="admin-pill">
+            <div class="admin-av">SA</div>
+            <div>
+                <div class="admin-nm">Super Admin</div>
+                <div class="admin-rl">Master Admin</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <header class="topbar">
+        <div class="topbar-title">Dashboard <span>/ Overview</span></div>
+        <div class="topbar-right">
+            <div class="topbar-clock" id="clock">--:-- --</div>
+            <button id="logoutBtn">
+                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Log Out
+            </button>
+        </div>
     </header>
 
-    <main class="main-container">
-        <section class="card" style="border-left: 5px solid #F59E0B; border-top: none;">
-            <h2>Action Required: Pending Account Approvals</h2>
-            <table>
-                <thead><tr><th>Name</th><th>Email</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
-                <tbody id="pending-users-list">
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Loading...</td></tr>
-                </tbody>
-            </table>
-        </section>
+    <main class="content">
 
-        <h2>Academy Overview Statistics</h2>
+        <!-- Stats -->
         <div class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total Active Students</div><div class="stat-number" id="stat-students">0</div></div>
-            <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number" id="stat-tracks">6</div></div>
-            <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number" id="stat-teachers">0</div></div>
+            <div class="stat-card c-red">
+                <div class="stat-top"><div class="stat-ico">👩‍🎓</div><span class="stat-tag neu">Enrolled</span></div>
+                <div class="stat-num" id="stat-students">—</div>
+                <div class="stat-lbl">Total Students</div>
+            </div>
+            <div class="stat-card c-amber">
+                <div class="stat-top"><div class="stat-ico">👨‍🏫</div><span class="stat-tag neu">Active</span></div>
+                <div class="stat-num" id="stat-teachers">—</div>
+                <div class="stat-lbl">Total Teachers</div>
+            </div>
+            <div class="stat-card c-acc">
+                <div class="stat-top"><div class="stat-ico">📚</div><span class="stat-tag up">Live</span></div>
+                <div class="stat-num" id="stat-tracks">6</div>
+                <div class="stat-lbl">Academy Tracks</div>
+            </div>
+            <div class="stat-card c-green">
+                <div class="stat-top"><div class="stat-ico">⏳</div><span class="stat-tag neu">Review</span></div>
+                <div class="stat-num" id="stat-pending">—</div>
+                <div class="stat-lbl">Pending Approvals</div>
+            </div>
         </div>
 
-        <section class="card">
-            <h2>User Management & Roles</h2>
-            <table>
-                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Management</th></tr></thead>
-                <tbody id="all-users-list">
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Loading...</td></tr>
+        <!-- Pending Panel -->
+        <div class="panel pend">
+            <div class="panel-head">
+                <div class="panel-title-g">
+                    <div class="panel-dot"></div>
+                    <div class="panel-ttl">Pending Approvals</div>
+                    <span class="panel-cnt" id="pend-badge">0</span>
+                </div>
+                <div class="panel-sub">New registrations awaiting admin review</div>
+            </div>
+            <table class="data-tbl">
+                <thead>
+                    <tr>
+                        <th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="pending-users-list">
+                    <tr class="loading-row">
+                        <td colspan="5" class="empty-cell">
+                            <div class="empty-ico">⏳</div>
+                            <div class="empty-ttl">Connecting to database...</div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-        </section>
+        </div>
+
+        <!-- Users Panel -->
+        <div class="panel users">
+            <div class="panel-head">
+                <div class="panel-title-g">
+                    <div class="panel-dot"></div>
+                    <div class="panel-ttl">User Management</div>
+                    <span class="panel-cnt" id="users-badge">0</span>
+                </div>
+                <div class="search-wrap">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="search-input" placeholder="Search users..." oninput="filterUsers()">
+                </div>
+            </div>
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All Users</button>
+                <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
+                <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
+                <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
+            </div>
+            <table class="data-tbl">
+                <thead>
+                    <tr>
+                        <th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="all-users-list">
+                    <tr class="loading-row">
+                        <td colspan="6" class="empty-cell">
+                            <div class="empty-ico">⏳</div>
+                            <div class="empty-ttl">Connecting to database...</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </main>
+</div>
 
-    <!-- STEP 1: Supabase CDN loads first -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+window.addEventListener('load', function () {
 
-    <!-- STEP 2: All logic wrapped in window.onload — guarantees both DOM + Supabase are ready -->
-    <script>
-        window.addEventListener('load', function () {
+    // Clock
+    function tick() {
+        document.getElementById('clock').textContent =
+            new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    }
+    tick(); setInterval(tick, 1000);
 
-            // 1. Database Connection
-            const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // Supabase
+    const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-            // 2. The Core Function
-            async function loadAdminDashboard() {
-                const pendingList = document.getElementById('pending-users-list');
-                const allList = document.getElementById('all-users-list');
+    // Helpers
+    const GRADS = [
+        'linear-gradient(135deg,#4F3FFF,#8B7FFF)',
+        'linear-gradient(135deg,#DA251D,#FF8A80)',
+        'linear-gradient(135deg,#1BD496,#0F6E56)',
+        'linear-gradient(135deg,#F59E0B,#D97706)',
+        'linear-gradient(135deg,#8B5CF6,#6D28D9)',
+        'linear-gradient(135deg,#0EA5E9,#0369A1)',
+    ];
+    function grad(str) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
+        return GRADS[Math.abs(h) % GRADS.length];
+    }
+    function inits(f, l) { return ((f||'U')[0]+(l||'?')[0]).toUpperCase(); }
+    function fmtDate(d) {
+        if (!d) return '—';
+        return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    }
 
-                try {
-                    const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+    let allData = [];
+    let curTab = 'all';
 
-                    if (error) {
-                        pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center; font-weight: bold;">Supabase Error: ${error.message}<br>(Check that Row Level Security allows anon reads, or disable RLS in Supabase SQL editor)</td></tr>`;
-                        allList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Failed to load.</td></tr>`;
-                        return;
-                    }
+    // Core load
+    async function loadAdminDashboard() {
+        try {
+            const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
 
-                    if (!data || data.length === 0) {
-                        pendingList.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #10B981; font-weight:bold;">No user accounts found in the system.</td></tr>`;
-                        allList.innerHTML = `<tr><td colspan="5" style="text-align: center;">No users registered yet.</td></tr>`;
-                        return;
-                    }
-
-                    let pendingHTML = '';
-                    let allHTML = '';
-                    let studentCount = 0;
-                    let teacherCount = 0;
-
-                    data.forEach(user => {
-                        const name = `${user.first_name || 'User'} ${user.last_name || ''}`;
-                        const email = user.email || 'N/A';
-                        const role = user.role || 'student';
-                        const date = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown';
-
-                        if (user.status === 'pending') {
-                            pendingHTML += `<tr>
-                                <td style="font-weight: bold;">${name}</td>
-                                <td>${email}</td>
-                                <td style="text-transform: capitalize;">${role}</td>
-                                <td>${date}</td>
-                                <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
-                            </tr>`;
-                        } else if (user.status === 'approved') {
-                            if (role === 'student') studentCount++;
-                            if (role === 'teacher') teacherCount++;
-
-                            let adminBtn = role !== 'admin'
-                                ? `<button onclick="makeAdmin('${user.id}')" style="background-color: var(--navy-blue); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Make Admin</button>`
-                                : `<span style="color: var(--brand-red); font-weight: bold;">Master Admin</span>`;
-
-                            allHTML += `<tr>
-                                <td style="font-weight: bold;">${name}</td>
-                                <td>${email}</td>
-                                <td style="text-transform: capitalize;">${role}</td>
-                                <td style="color: #10B981; font-weight: bold;">Approved</td>
-                                <td>${adminBtn}</td>
-                            </tr>`;
-                        }
-                    });
-
-                    pendingList.innerHTML = pendingHTML || `<tr><td colspan="5" style="text-align: center; font-weight:bold; color: #10B981;">No pending approvals! All caught up.</td></tr>`;
-                    allList.innerHTML = allHTML || `<tr><td colspan="5" style="text-align: center; color: #666;">No approved users yet.</td></tr>`;
-
-                    document.getElementById('stat-students').innerText = studentCount;
-                    document.getElementById('stat-teachers').innerText = teacherCount;
-
-                } catch (err) {
-                    document.getElementById('pending-users-list').innerHTML = `<tr><td colspan="5" style="color: red; text-align: center; font-weight: bold;">Code Crash: ${err.message}</td></tr>`;
-                }
+            if (error) {
+                document.getElementById('pending-users-list').innerHTML =
+                    `<tr><td colspan="5"><div class="err-cell"><strong>Supabase Error:</strong> ${error.message}<br>
+                    <span style="opacity:0.7">Ensure Row Level Security allows anon reads, or disable RLS in Supabase SQL editor.</span></div></td></tr>`;
+                document.getElementById('all-users-list').innerHTML =
+                    `<tr><td colspan="6"><div class="err-cell">Failed to load users.</div></td></tr>`;
+                return;
             }
 
-            // 3. Approval Logic
-            window.approveUser = async function(userId) {
-                const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-                if (error) alert("Approval Failed: " + error.message);
-                else loadAdminDashboard();
+            if (!data || data.length === 0) {
+                document.getElementById('pending-users-list').innerHTML = emptyRow('No pending approvals', 'All registrations are processed.', 5);
+                document.getElementById('all-users-list').innerHTML = emptyRow('No users yet', 'Registered users will appear here.', 6);
+                setStats(0,0,0);
+                return;
             }
 
-            window.makeAdmin = async function(userId) {
-                if (confirm("Are you sure you want to make this user an Admin?")) {
-                    const { error } = await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
-                    if (error) alert("Upgrade Failed: " + error.message);
-                    else loadAdminDashboard();
-                }
+            allData = data;
+            render(data);
+
+        } catch (err) {
+            document.getElementById('pending-users-list').innerHTML =
+                `<tr><td colspan="5"><div class="err-cell"><strong>Code Error:</strong> ${err.message}</div></td></tr>`;
+        }
+    }
+
+    function render(data) {
+        let pendHTML = '';
+        let sc = 0, tc = 0, pc = 0;
+
+        data.forEach(u => {
+            if (u.status === 'pending') pc++;
+            if (u.status === 'approved') {
+                const r = u.role || 'student';
+                if (r === 'student') sc++;
+                if (r === 'teacher') tc++;
             }
-
-            // 4. Logout — wired here so the button element is guaranteed to exist
-            document.getElementById('logoutBtn').addEventListener('click', async () => {
-                document.getElementById('logoutBtn').innerText = "Logging out...";
-                try { await supabase.auth.signOut(); } catch (err) {}
-                localStorage.clear();
-                sessionStorage.clear();
-                window.location.href = 'index.html';
-            });
-
-            // 5. Run dashboard load
-            loadAdminDashboard();
         });
-    </script>
+
+        // Pending rows
+        data.filter(u => u.status === 'pending').forEach(u => {
+            const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim();
+            const role = u.role || 'student';
+            pendHTML += `<tr>
+                <td><div class="user-cell">
+                    <div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
+                    <div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div>
+                </div></td>
+                <td>${u.email||'N/A'}</td>
+                <td><span class="role-badge ${role}">${role}</span></td>
+                <td style="color:var(--text-dim);font-size:0.78rem">${fmtDate(u.created_at)}</td>
+                <td><div class="actions">
+                    <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
+                    <button class="btn btn-danger"  onclick="rejectUser('${u.id}')">✕ Reject</button>
+                </div></td>
+            </tr>`;
+        });
+
+        document.getElementById('pending-users-list').innerHTML = pendHTML || emptyRow('All caught up!', 'No pending approvals right now.', 5, '✅');
+        document.getElementById('pend-badge').textContent = pc;
+        document.getElementById('nav-pcount').textContent = pc;
+        setStats(sc, tc, pc);
+        renderUsers(data, curTab);
+    }
+
+    function renderUsers(data, tab) {
+        const q = (document.getElementById('search-input').value||'').toLowerCase();
+        let rows = data.filter(u => u.status === 'approved' || u.status === 'inactive');
+
+        if (tab === 'students') rows = rows.filter(u => (u.role||'student') === 'student');
+        else if (tab === 'teachers') rows = rows.filter(u => (u.role||'student') === 'teacher');
+        else if (tab === 'admins') rows = rows.filter(u => (u.role||'student') === 'admin');
+
+        if (q) rows = rows.filter(u => {
+            const nm = `${u.first_name||''} ${u.last_name||''}`.toLowerCase();
+            return nm.includes(q) || (u.email||'').toLowerCase().includes(q);
+        });
+
+        document.getElementById('users-badge').textContent = rows.length;
+
+        if (!rows.length) {
+            document.getElementById('all-users-list').innerHTML = emptyRow('No users found', 'Try a different filter or search.', 6, '🔍');
+            return;
+        }
+
+        let html = '';
+        rows.forEach(u => {
+            const nm   = `${u.first_name||'User'} ${u.last_name||''}`.trim();
+            const role = u.role || 'student';
+            const isAdmin    = role === 'admin';
+            const isInactive = u.status === 'inactive';
+
+            let btns = '';
+            if (isAdmin) {
+                btns = `<span class="master-tag">★ Master Admin</span>
+                    <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Remove Admin</button>`;
+            } else {
+                btns = `<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Make Admin</button>`;
+                btns += isInactive
+                    ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
+                    : `<button class="btn btn-deact"   onclick="toggleUserStatus('${u.id}','inactive')">⏸ Deactivate</button>`;
+            }
+
+            html += `<tr>
+                <td><div class="user-cell">
+                    <div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(0.8);opacity:0.5':''}">${inits(u.first_name,u.last_name)}</div>
+                    <div>
+                        <div class="uname" style="${isInactive?'color:var(--text-dim)':''}">${nm}</div>
+                        <div class="uid">#${(u.id||'').slice(0,8)}</div>
+                    </div>
+                </div></td>
+                <td>${u.email||'N/A'}</td>
+                <td><span class="role-badge ${role}">${role}</span></td>
+                <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Inactive':'Active'}</span></td>
+                <td style="color:var(--text-dim);font-size:0.78rem">${fmtDate(u.created_at)}</td>
+                <td><div class="actions">${btns}</div></td>
+            </tr>`;
+        });
+
+        document.getElementById('all-users-list').innerHTML = html;
+    }
+
+    function setStats(s, t, p) {
+        document.getElementById('stat-students').textContent = s;
+        document.getElementById('stat-teachers').textContent = t;
+        document.getElementById('stat-pending').textContent  = p;
+    }
+
+    function emptyRow(title, sub, cols, ico) {
+        return `<tr><td colspan="${cols}"><div class="empty-cell">
+            <div class="empty-ico">${ico||'📭'}</div>
+            <div class="empty-ttl">${title}</div>
+            <div class="empty-sub">${sub}</div>
+        </div></td></tr>`;
+    }
+
+    // Tab switching
+    window.switchTab = function(tab) {
+        curTab = tab;
+        ['all','students','teachers','admins'].forEach(t => {
+            const el = document.getElementById('tab-'+t);
+            if (el) el.classList.toggle('active', t === tab);
+        });
+        renderUsers(allData, tab);
+        document.querySelector('.panel.users').scrollIntoView({behavior:'smooth',block:'start'});
+    };
+
+    window.filterUsers = function() { renderUsers(allData, curTab); };
+
+    // Actions — values and functions untouched
+    window.approveUser = async function(userId) {
+        const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
+        if (error) alert("Approval Failed: " + error.message);
+        else loadAdminDashboard();
+    };
+
+    window.rejectUser = async function(userId) {
+        if (confirm("Reject and remove this registration?")) {
+            const { error } = await supabase.from('profiles').delete().eq('id', userId);
+            if (error) alert("Rejection Failed: " + error.message);
+            else loadAdminDashboard();
+        }
+    };
+
+    window.makeAdmin = async function(userId) {
+        if (confirm("Are you sure you want to make this user an Admin?")) {
+            const { error } = await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
+            if (error) alert("Upgrade Failed: " + error.message);
+            else loadAdminDashboard();
+        }
+    };
+
+    window.removeAdmin = async function(userId) {
+        if (confirm("Remove admin privileges? This user will revert to student.")) {
+            const { error } = await supabase.from('profiles').update({ role: 'student' }).eq('id', userId);
+            if (error) alert("Failed: " + error.message);
+            else loadAdminDashboard();
+        }
+    };
+
+    window.toggleUserStatus = async function(userId, newStatus) {
+        const label = newStatus === 'inactive' ? 'deactivate' : 're-activate';
+        if (confirm(`Are you sure you want to ${label} this account?`)) {
+            const { error } = await supabase.from('profiles').update({ status: newStatus }).eq('id', userId);
+            if (error) alert("Status Update Failed: " + error.message);
+            else loadAdminDashboard();
+        }
+    };
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        document.getElementById('logoutBtn').innerHTML = '⏳ Logging out...';
+        try { await supabase.auth.signOut(); } catch (err) {}
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'index.html';
+    });
+
+    loadAdminDashboard();
+});
+</script>
 </body>
 </html>
