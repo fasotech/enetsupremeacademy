@@ -12,22 +12,18 @@
         .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; text-transform: uppercase; text-align: center; }
         .auth-logo span { color: var(--brand-red); }
         .auth-card { background: var(--white); max-width: 500px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--navy-blue); }
-        
         h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.9rem;}
         input, select { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
         .btn-primary { width: 100%; background-color: var(--brand-red); color: white; border: none; padding: 1rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
         .btn-primary:hover { background-color: var(--red-hover); }
-        
         .login-link { display: block; text-align: center; margin-top: 1.5rem; color: #666; text-decoration: none; font-size: 0.9rem; }
         .login-link span { color: var(--brand-red); font-weight: bold; }
 
-        /* Massive Success Message UI */
+        /* The Success Screen */
         #success-screen { display: none; text-align: center; padding: 2rem 0; }
-        #success-screen svg { width: 80px; height: 80px; color: #10B981; margin-bottom: 1rem; }
         #success-screen h3 { color: var(--navy-blue); font-size: 1.8rem; margin-bottom: 1rem; }
-        #success-screen p { color: #475467; line-height: 1.6; font-size: 1.1rem; margin-bottom: 2rem; }
     </style>
 </head>
 <body>
@@ -37,8 +33,6 @@
         
         <div id="form-container">
             <h2>Submit Application</h2>
-            <p style="text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem; color: #666;">Fill out the form below. Your account will be reviewed by an Administrator.</p>
-            
             <form id="register-form">
                 <div style="display: flex; gap: 1rem;">
                     <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
@@ -51,19 +45,19 @@
                         <option value="teacher">Teacher / Instructor</option>
                     </select>
                 </div>
-                <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" required placeholder="your@email.com"></div>
-                <div class="form-group"><label>Create Password</label><input type="password" id="reg-password" required minlength="6" placeholder="Minimum 6 characters"></div>
-                
+                <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" required></div>
+                <div class="form-group"><label>Create Password</label><input type="password" id="reg-password" required minlength="6"></div>
                 <button type="submit" class="btn-primary" id="reg-btn">Submit Application</button>
             </form>
             <a href="login.html" class="login-link">Already have an approved account? <span>Log In here</span></a>
         </div>
 
         <div id="success-screen">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <h3>Application Received!</h3>
-            <p>Your account has been successfully created, but it is currently <strong>locked</strong> pending security review.</p>
-            <p style="font-weight: bold; color: var(--brand-red);">Please wait for an Administrator to approve your access before attempting to log in.</p>
+            <p>Your account has been successfully created.</p>
+            <p style="font-weight: bold; color: var(--brand-red); padding: 1rem; border: 2px solid var(--brand-red); border-radius: 8px; margin: 1.5rem 0;">
+                Please wait for an Administrator to approve your access before attempting to log in.
+            </p>
             <button onclick="window.location.href='index.html'" class="btn-primary" style="background-color: var(--navy-blue);">Return to Homepage</button>
         </div>
 
@@ -81,43 +75,25 @@
             btn.innerText = "Processing...";
 
             try {
-                const firstName = document.getElementById('reg-first').value;
-                const lastName = document.getElementById('reg-last').value;
-                const role = document.getElementById('reg-role').value;
-                const email = document.getElementById('reg-email').value;
-                const password = document.getElementById('reg-password').value;
-
-                // 1. Create the user in Auth system
+                // 1. Create Auth Account
                 const { data, error } = await supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            first_name: firstName,
-                            last_name: lastName,
-                            requested_role: role
-                        }
-                    }
+                    email: document.getElementById('reg-email').value,
+                    password: document.getElementById('reg-password').value
                 });
+                if (error) throw error;
 
-                if (error) throw new Error(error.message);
-
-                // 2. Inject profile into the Admin Dashboard immediately
+                // 2. Force Data into Admin Dashboard Database
                 if (data && data.user) {
-                    const { error: profileError } = await supabase.from('profiles').upsert([
-                        {
-                            id: data.user.id,
-                            first_name: firstName,
-                            last_name: lastName,
-                            role: role,
-                            status: 'pending'
-                        }
-                    ]);
-
-                    if (profileError) throw new Error("Account created, but profile saving failed: " + profileError.message);
+                    await supabase.from('profiles').upsert([{
+                        id: data.user.id,
+                        first_name: document.getElementById('reg-first').value,
+                        last_name: document.getElementById('reg-last').value,
+                        role: document.getElementById('reg-role').value,
+                        status: 'pending'
+                    }]);
                 }
 
-                // 3. Show Success Screen to User
+                // 3. Show Success Screen
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
 
