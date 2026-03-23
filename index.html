@@ -8,12 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* === GLOBAL BRANDING STYLES === */
+        /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --navy-blue: #0A192F;
-            --navy-light: #112240;
-            --brand-green: #10B981;
-            --green-hover: #059669;
+            --navy-blue: #2C1E85;     /* Supreme Indigo */
+            --navy-light: #3a28ad;    /* Lighter Indigo for hover */
+            --brand-red: #DA251D;     /* Action Red */
+            --red-hover: #B81D15;     /* Darker Action Red */
+            --accent-blue: #2DAAE1;   /* Sky Blue from Logo */
             --text-main: #333333;
             --text-gray: #475467;
             --light-gray: #EAECF0;
@@ -25,16 +26,16 @@
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
         /* === GLOBAL STICKY HEADER === */
-        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-red); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; }
         .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--brand-green); }
+        .logo span { color: var(--brand-red); }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--brand-green); }
+        .nav-links a:hover { color: var(--accent-blue); }
 
-        .cart-btn { background-color: transparent; color: var(--brand-green); border: 2px solid var(--brand-green); padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; }
-        .cart-btn:hover { background-color: var(--brand-green); color: var(--white); }
+        .cart-btn { background-color: transparent; color: var(--white); border: 2px solid var(--white); padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .cart-btn:hover { background-color: var(--brand-red); border-color: var(--brand-red); color: var(--white); }
 
         /* === BALANCED HERO SECTION === */
         .hero-container { max-width: 1300px; margin: 0 auto; padding: 5rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; min-height: 85vh; }
@@ -43,28 +44,28 @@
         .hero-content { display: flex; flex-direction: column; gap: 1.5rem; }
         @media (max-width: 950px) { .hero-content { align-items: center; } }
 
-        .trust-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--brand-green); font-weight: 600; font-size: 0.95rem; background: #e6f8f1; padding: 0.4rem 1.2rem; border-radius: 50px; width: fit-content; }
+        .trust-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--navy-blue); font-weight: 600; font-size: 0.95rem; background: #E0E7FF; padding: 0.4rem 1.2rem; border-radius: 50px; width: fit-content; }
         .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--navy-blue); }
-        .hero-title span { color: var(--brand-green); }
+        .hero-title span { color: var(--brand-red); }
         @media (max-width: 950px) { .hero-title { font-size: 2.8rem; } }
         .hero-description { font-size: 1.2rem; color: var(--text-gray); line-height: 1.6; max-width: 90%; }
 
         .cta-group { display: flex; gap: 1rem; margin-top: 1rem; }
         @media (max-width: 480px) { .cta-group { flex-direction: column; width: 100%; } }
         .btn { padding: 1rem 2rem; border-radius: 8px; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; transition: all 0.3s ease; }
-        .btn-primary { background-color: var(--brand-green); color: var(--white); border: 2px solid var(--brand-green); }
-        .btn-primary:hover { background-color: var(--green-hover); border-color: var(--green-hover); }
+        .btn-primary { background-color: var(--brand-red); color: var(--white); border: 2px solid var(--brand-red); }
+        .btn-primary:hover { background-color: var(--red-hover); border-color: var(--red-hover); }
         .btn-secondary { background-color: transparent; color: var(--navy-blue); border: 2px solid var(--light-gray); }
         .btn-secondary:hover { background-color: #f9fafb; border-color: #d0d5dd; }
 
         .feature-ticks { display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
         @media (max-width: 950px) { .feature-ticks { justify-content: center; } }
         .tick-item { display: flex; align-items: center; gap: 0.5rem; color: var(--text-gray); font-size: 1rem; font-weight: 500; }
-        .tick-item svg { width: 20px; height: 20px; color: var(--brand-green); }
+        .tick-item svg { width: 20px; height: 20px; color: var(--brand-red); }
 
         .hero-visuals { position: relative; width: 100%; height: 600px; display: flex; justify-content: center; align-items: center; }
-        .blob-bg { position: absolute; width: 85%; height: 85%; background-color: var(--brand-green); opacity: 0.15; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; z-index: 1; transform: rotate(-5deg); }
-        .main-image { position: relative; z-index: 2; width: 90%; height: auto; max-height: 650px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: contain; background-color: white; padding: 2rem; }
+        .blob-bg { position: absolute; width: 85%; height: 85%; background-color: var(--accent-blue); opacity: 0.15; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; z-index: 1; transform: rotate(-5deg); }
+        .main-image { position: relative; z-index: 2; width: 90%; height: auto; max-height: 650px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: contain; background-color: white; padding: 2rem; border-bottom: 5px solid var(--navy-blue); }
         @media (max-width: 950px) { .hero-visuals { height: auto; padding: 2rem 0; } .blob-bg { display: none; } .main-image { width: 100%; } }
 
         /* === ACADEMY TRACKS STOREFRONT === */
@@ -72,18 +73,19 @@
         .container { max-width: 1200px; margin: 0 auto; }
         .section-title { color: var(--navy-blue); margin-bottom: 3rem; text-align: center; font-size: 2.5rem; }
         .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem; }
-        .course-card { background: var(--background); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
-        .course-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .course-img { width: 100%; height: 220px; background-color: var(--navy-light); object-fit: cover; border-bottom: 4px solid var(--brand-green); }
+        .course-card { background: var(--background); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; border-top: 4px solid var(--accent-blue); }
+        .course-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top-color: var(--brand-red); }
+        .course-img { width: 100%; height: 220px; background-color: var(--navy-blue); object-fit: cover; }
         .course-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
-        .course-title { font-size: 1.25rem; margin-bottom: 1rem; color: var(--navy-blue); line-height: 1.4; flex: 1; }
-        .course-price { font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; }
-        .purchase-btn { width: 100%; background-color: var(--brand-green); color: var(--white); border: none; padding: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.3s; }
-        .purchase-btn:hover { background-color: var(--green-hover); }
+        .course-title { font-size: 1.25rem; margin-bottom: 1rem; color: var(--navy-blue); line-height: 1.4; flex: 1; font-weight: bold; }
+        .course-price { font-size: 1.35rem; font-weight: 800; color: var(--brand-red); margin-bottom: 1.5rem; }
+        .purchase-btn { width: 100%; background-color: var(--navy-blue); color: var(--white); border: none; padding: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.3s; }
+        .purchase-btn:hover { background-color: var(--brand-red); }
 
         /* === GLOBAL FOOTER === */
-        footer { background-color: var(--navy-blue); color: var(--text-gray); padding: 4rem 1.5rem; border-top: 2px solid var(--navy-light); }
-        .footer-logo { color: var(--brand-green); font-size: 1.3rem; font-weight: bold; text-transform: uppercase; }
+        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-red); }
+        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        .footer-logo span { color: var(--brand-red); }
     </style>
 </head>
 <body>
@@ -92,7 +94,7 @@
         <nav>
             <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
             <div class="nav-links">
-                <a href="index.html" style="color: var(--brand-green); font-weight: bold;">Home</a>
+                <a href="index.html" style="color: var(--accent-blue); font-weight: bold;">Home</a>
                 <a href="blog.html">Read Blog</a>
                 <a href="#shop">Academy Tracks</a>
                 <a href="login.html">Log In / Academy</a>
@@ -138,7 +140,7 @@
 
         <div class="hero-visuals">
             <div class="blob-bg"></div>
-            <img src="student1.png" alt="Students learning tech skills" class="main-image">
+            <img src="student1.jpg" alt="Students learning tech skills" class="main-image">
         </div>
     </section>
 
@@ -151,15 +153,14 @@
 
     <footer>
         <div class="container">
-            <div class="footer-logo">ENET SUPREME ACADEMY</div>
-            <p style="margin-top: 1rem;">microsoftportharcourt@gmail.com</p>
-            <p style="margin-top: 1rem; color: #abb2bf; font-size: 0.9rem;">Suite 58 Georgewill/Clifford Plaza Choba Junction, Port Harcourt, Rivers State, Nigeria.</p>
+            <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+            <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+            <p style="margin-top: 1rem; color: #cbd5e1; font-size: 0.9rem;">Suite 58 Georgewill/Clifford Plaza Choba Junction, Port Harcourt, Rivers State, Nigeria.</p>
         </div>
     </footer>
 
     <script>
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        // Correct Anonymous Key
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -167,12 +168,12 @@
         let cartTotal = 0;
 
         const dummyCourses = [
-            { id: 1, title: "High Converting Meta Ads Workshop", price: 10000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Meta+Ads+Workshop" },
-            { id: 2, title: "Data Analytics Bootcamp", price: 25000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Data+Analytics" },
-            { id: 3, title: "Online Marketing Masterclass", price: 30000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Online+Marketing" },
-            { id: 4, title: "Web Design & Development Track", price: 15000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Web+Design" },
-            { id: 5, title: "Graphics Design Essentials", price: 12000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Graphics+Design" },
-            { id: 6, title: "Online Course Creation Framework", price: 25000, img: "https://via.placeholder.com/320x220/0A192F/10B981?text=Course+Creation" }
+            { id: 1, title: "High Converting Meta Ads Workshop", price: 10000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Meta+Ads+Workshop" },
+            { id: 2, title: "Data Analytics Bootcamp", price: 25000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Data+Analytics" },
+            { id: 3, title: "Online Marketing Masterclass", price: 30000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Online+Marketing" },
+            { id: 4, title: "Web Design & Development Track", price: 15000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Web+Design" },
+            { id: 5, title: "Graphics Design Essentials", price: 12000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Graphics+Design" },
+            { id: 6, title: "Online Course Creation Framework", price: 25000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Course+Creation" }
         ];
 
         function renderCourses() {
@@ -201,7 +202,7 @@
             const btn = event.target;
             const originalText = btn.innerText;
             btn.innerText = "Added to Cart!";
-            btn.style.backgroundColor = "var(--navy-blue)";
+            btn.style.backgroundColor = "var(--brand-red)";
             setTimeout(() => { btn.innerText = originalText; btn.style.backgroundColor = ""; }, 1000);
         }
 

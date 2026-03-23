@@ -6,24 +6,24 @@
     <title>ENET SUPREME ACADEMY | Admin Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --navy-blue: #0A192F; --brand-green: #10B981; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
+        :root { --navy-blue: #2C1E85; --brand-red: #DA251D; --red-hover: #B81D15; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--background); color: var(--navy-blue); min-height: 100vh; display: flex; flex-direction: column; }
-        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; }
+        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--brand-red); }
         .logo { font-weight: bold; text-transform: uppercase; }
-        .logo span { color: var(--brand-green); }
+        .logo span { color: var(--brand-red); }
         .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 4px solid var(--navy-blue); }
         h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
         .stat-card { background: white; padding: 2rem; border-radius: 8px; border-bottom: 4px solid #EAECF0; text-align: center; }
-        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-green); margin: 0.5rem 0; }
+        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-red); margin: 0.5rem 0; }
         .stat-card .stat-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; font-weight: 500; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
-        th { background-color: #f1f5f9; }
-        .btn-approve { background-color: var(--brand-green); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-approve:hover { background-color: #059669; }
+        th { background-color: #E0E7FF; color: var(--navy-blue); }
+        .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-approve:hover { background-color: var(--red-hover); }
     </style>
 </head>
 <body>
@@ -33,7 +33,7 @@
     </header>
 
     <main class="main-container">
-        <section class="card" style="border-left: 5px solid #F59E0B;">
+        <section class="card" style="border-left: 5px solid #F59E0B; border-top: none;">
             <h2>Action Required: Pending Account Approvals</h2>
             <p style="color: var(--text-gray); margin-bottom: 1rem;">These users have registered and are waiting for you to approve their access to the portal.</p>
             <table>
@@ -61,7 +61,6 @@
             const { data: { session }, error } = await supabase.auth.getSession();
             if (!session) { window.location.href = "login.html"; return; }
             
-            // Security: Ensure user is actually an admin
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
             if(profile.role !== 'admin') window.location.href = "login.html";
             else fetchPendingUsers();
@@ -72,7 +71,6 @@
             window.location.href = "login.html";
         }
 
-        // FETCH PENDING USERS
         async function fetchPendingUsers() {
             const list = document.getElementById('pending-users-list');
             const { data, error } = await supabase
@@ -82,7 +80,7 @@
                 .order('created_at', { ascending: false });
 
             if (error) { list.innerHTML = `<tr><td colspan="4">Error loading users.</td></tr>`; return; }
-            if (data.length === 0) { list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #10B981; font-weight:bold;">No pending approvals! You are all caught up.</td></tr>`; return; }
+            if (data.length === 0) { list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #2C1E85; font-weight:bold;">No pending approvals! You are all caught up.</td></tr>`; return; }
 
             list.innerHTML = '';
             data.forEach(user => {
@@ -100,23 +98,19 @@
             });
         }
 
-        // APPROVE USER FUNCTION
         async function approveUser(userId) {
             const btn = document.querySelector(`#row-${userId} button`);
             btn.innerText = "Approving...";
             btn.disabled = true;
 
-            const { error } = await supabase
-                .from('profiles')
-                .update({ status: 'approved' })
-                .eq('id', userId);
+            const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
 
             if (error) {
                 alert("Failed to approve user.");
                 btn.innerText = "Approve Access";
                 btn.disabled = false;
             } else {
-                document.getElementById(`row-${userId}`).style.display = 'none'; // Hide row on success
+                document.getElementById(`row-${userId}`).style.display = 'none';
             }
         }
 

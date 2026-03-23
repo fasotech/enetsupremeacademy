@@ -3,218 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enet-supreme Tech Hub | Blog</title>
+    <title>ENET SUPREME ACADEMY | Blog</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         /* === GLOBAL STYLES === */
         :root {
-            --navy-blue: #0A192F;
-            --brand-green: #10B981;
+            --navy-blue: #2C1E85;
+            --brand-red: #DA251D;
+            --accent-blue: #2DAAE1;
             --text-main: #333333;
             --text-light: #666666;
             --background: #F8F9FA;
             --white: #FFFFFF;
             --border: #E2E8F0;
-            --link-blue: #0284c7;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--background);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
         /* === NAVIGATION === */
-        header {
-            background-color: var(--navy-blue);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            color: var(--brand-green);
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--brand-green);
-        }
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-red); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; }
+        .logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo span { color: var(--brand-red); }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent-blue); }
 
         /* === BLOG LAYOUT === */
-        .container {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
-            flex: 1;
-            display: grid;
-            grid-template-columns: 2fr 1fr; /* 66% Main, 33% Sidebar */
-            gap: 4rem;
-        }
-
-        @media (max-width: 800px) {
-            .container {
-                grid-template-columns: 1fr; /* Stack on mobile */
-                gap: 2rem;
-            }
-        }
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; }
+        @media (max-width: 800px) { .container { grid-template-columns: 1fr; gap: 2rem; } }
 
         /* === MAIN ARTICLE AREA === */
-        .blog-main {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .post-title {
-            font-size: 2.2rem;
-            color: var(--brand-green); /* Matching your yellow/gold text in the screenshot to the brand color */
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-        }
-
-        .post-meta {
-            color: var(--link-blue);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .post-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-main);
-        }
-
-        .post-content p {
-            margin-bottom: 1.5rem;
-        }
-
-        .post-content h3, .post-content h4 {
-            color: var(--navy-blue);
-            margin: 2rem 0 1rem 0;
-        }
+        .blog-main { background: var(--white); padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--navy-blue); }
+        .post-title { font-size: 2.2rem; color: var(--brand-red); margin-bottom: 0.5rem; line-height: 1.3; }
+        .post-meta { color: var(--accent-blue); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .post-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-main); }
+        .post-content p { margin-bottom: 1.5rem; }
+        .post-content h3, .post-content h4 { color: var(--navy-blue); margin: 2rem 0 1rem 0; }
 
         /* === SIDEBAR === */
-        .blog-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-        }
+        .blog-sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
+        .widget { background: var(--white); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--accent-blue); }
+        .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; }
 
-        .widget {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
+        .search-box { display: flex; width: 100%; }
+        .search-box input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px 0 0 4px; font-size: 1rem; outline: none; }
+        .search-box input:focus { border-color: var(--brand-red); }
+        .search-box button { background: var(--background); border: 1px solid var(--border); border-left: none; padding: 0.8rem 1rem; border-radius: 0 4px 4px 0; cursor: pointer; color: var(--text-main); }
 
-        .widget-title {
-            font-size: 1.3rem;
-            color: var(--text-main);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        /* Search Bar */
-        .search-box {
-            display: flex;
-            width: 100%;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 4px 0 0 4px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .search-box input:focus {
-            border-color: var(--brand-green);
-        }
-
-        .search-box button {
-            background: var(--background);
-            border: 1px solid var(--border);
-            border-left: none;
-            padding: 0.8rem 1rem;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            color: var(--text-main);
-        }
-
-        /* Sidebar Lists */
-        .sidebar-list {
-            list-style: none;
-        }
-
-        .sidebar-list li {
-            margin-bottom: 1.2rem;
-            line-height: 1.5;
-        }
-
-        .sidebar-list a {
-            color: var(--link-blue);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .sidebar-list a:hover {
-            color: var(--navy-blue);
-            text-decoration: underline;
-        }
+        .sidebar-list { list-style: none; }
+        .sidebar-list li { margin-bottom: 1.2rem; line-height: 1.5; }
+        .sidebar-list a { color: var(--navy-blue); text-decoration: none; transition: color 0.2s; }
+        .sidebar-list a:hover { color: var(--brand-red); text-decoration: underline; }
     </style>
 </head>
 <body>
 
     <header>
         <nav>
-            <a href="index.html" class="logo">Enet-supreme Tech Hub</a>
+            <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
-                <a href="blog.html" style="color: var(--brand-green);">Read Blog</a>
-                <a href="index.html">Buy Courses</a>
+                <a href="blog.html" style="color: var(--accent-blue); font-weight: bold;">Read Blog</a>
+                <a href="index.html#shop">Buy Courses</a>
                 <a href="login.html">My Account</a>
             </div>
         </nav>
@@ -227,7 +81,6 @@
         </article>
 
         <aside class="blog-sidebar">
-            
             <div class="widget">
                 <form class="search-box" onsubmit="event.preventDefault(); alert('Search functionality coming soon!');">
                     <input type="text" placeholder="Search ...">
@@ -238,34 +91,20 @@
             <div class="widget">
                 <h3 class="widget-title">Recent Posts</h3>
                 <ul class="sidebar-list" id="recent-posts-list">
-                    <li><a href="#">Let The Market See The Problem And The Differentiation, They Can Relate And Key In</a></li>
-                    <li><a href="#">How To Sell To Someone In A Conversation, Within 5 Minutes</a></li>
+                    <li><a href="#">Let The Market See The Problem And The Differentiation</a></li>
+                    <li><a href="#">How To Sell To Someone In A Conversation</a></li>
                     <li><a href="#">The Business That You Call Side-Gig</a></li>
-                    <li><a href="#">Principles About Making Money</a></li>
                 </ul>
             </div>
-
-            <div class="widget">
-                <h3 class="widget-title">Archives</h3>
-                <ul class="sidebar-list">
-                    <li><a href="#">March 2026</a></li>
-                    <li><a href="#">February 2026</a></li>
-                    <li><a href="#">January 2026</a></li>
-                    <li><a href="#">December 2025</a></li>
-                </ul>
-            </div>
-
         </aside>
 
     </main>
 
     <script>
-        // 1. SUPABASE INITIALIZATION
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'sb_publishable_ANuu6mHR75vfpRy28doPgQ_3FPFaur2';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 2. DUMMY DATA (Fallback based on your screenshot)
         const dummyArticle = {
             title: "Business Lessons From Local Businesses Around Us",
             author: "Admin",
@@ -276,32 +115,19 @@
                 <p>We may not be attentive to picking up those lessons, so let me help you.</p>
                 <p><strong>1. Lessons from the Suya Man</strong> – You approach the Suya man to buy Suya. You are standing in front of him; so he is sure of the intent to buy. He however wants to increase your level of trust and spending; so he cuts a small piece, dips it in pepper and hands you to eat. He offers value ahead so that he earns your trust.</p>
                 <p><strong>Summary</strong> – Once the customer has approached you, give value ahead to earn his trust and increase the spend value.</p>
-                <p><strong>2. Lessons from the Corn Seller</strong> – You stop on the expressway to buy corn. They run to your car. "Oga, buy pear - all for 1000". They do not even offer you 100 Naira or 200 Naira pear. They offer you 1000 worth of pear in a bowl...</p>
             `
         };
 
-        // 3. FETCH & RENDER POST
         async function fetchLatestPost() {
-            const articleContainer = document.getElementById('article-container');
-            
             try {
-                // Attempt to fetch the newest post from your Supabase database
-                const { data, error } = await supabase
-                    .from('blog_posts')
-                    .select('*')
-                    .order('published_at', { ascending: false })
-                    .limit(1)
-                    .single();
+                const { data, error } = await supabase.from('blog_posts').select('*').order('published_at', { ascending: false }).limit(1).single();
 
                 if (data) {
-                    // If a post exists in the database, render it
                     renderArticle(data.title, 'Admin', data.category || 'General', new Date(data.published_at).toLocaleDateString(), data.content);
                 } else {
-                    // If database is empty, render the dummy data
                     renderArticle(dummyArticle.title, dummyArticle.author, dummyArticle.category, dummyArticle.date, dummyArticle.content);
                 }
             } catch (err) {
-                console.error("Error fetching post, loading fallback.", err);
                 renderArticle(dummyArticle.title, dummyArticle.author, dummyArticle.category, dummyArticle.date, dummyArticle.content);
             }
         }
@@ -317,7 +143,6 @@
             `;
         }
 
-        // Initialize page
         document.addEventListener('DOMContentLoaded', fetchLatestPost);
     </script>
 </body>
