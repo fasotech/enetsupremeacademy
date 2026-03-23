@@ -167,43 +167,71 @@
         let cart = [];
         let cartTotal = 0;
 
-        const dummyCourses = [
-            { id: 1, title: "High Converting Meta Ads Workshop", price: 10000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Meta+Ads+Workshop" },
-            { id: 2, title: "Data Analytics Bootcamp", price: 25000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Data+Analytics" },
-            { id: 3, title: "Online Marketing Masterclass", price: 30000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Online+Marketing" },
-            { id: 4, title: "Web Design & Development Track", price: 15000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Web+Design" },
-            { id: 5, title: "Graphics Design Essentials", price: 12000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Graphics+Design" },
-            { id: 6, title: "Online Course Creation Framework", price: 25000, img: "https://via.placeholder.com/320x220/2C1E85/FFFFFF?text=Course+Creation" }
-        ];
-
-        function renderCourses() {
+        // Fetch courses directly from Supabase
+        async function renderCourses() {
             const container = document.getElementById('course-container');
             if(!container) return;
-            container.innerHTML = '';
-            dummyCourses.forEach(course => {
-                const card = document.createElement('div');
-                card.className = 'course-card';
-                card.innerHTML = `
-                    <img src="${course.img}" alt="${course.title}" class="course-img">
-                    <div class="course-content">
-                        <h3 class="course-title">${course.title}</h3>
-                        <div class="course-price">₦${course.price.toLocaleString()}</div>
-                        <button class="purchase-btn" onclick="addToCart(${course.id}, ${course.price}, event)">Join Track</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            
+            // Show a loading message while fetching
+            container.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1 / -1; color: var(--navy-blue); font-weight: bold;">Loading Academy Tracks...</p>';
+
+            try {
+                // Pull all data from the 'courses' table
+                const { data: courses, error } = await supabase
+                    .from('courses')
+                    .select('*')
+                    .order('id', { ascending: true });
+
+                if (error) throw error;
+
+                container.innerHTML = ''; // Clear loading message
+
+                if (courses.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1 / -1;">No tracks available at the moment.</p>';
+                    return;
+                }
+
+                // Loop through database results and create a card for each
+                courses.forEach(course => {
+                    const card = document.createElement('div');
+                    card.className = 'course-card';
+                    card.innerHTML = `
+                        <img src="${course.image_url}" alt="${course.title}" class="course-img">
+                        <div class="course-content">
+                            <h3 class="course-title">${course.title}</h3>
+                            <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.4;">${course.description}</p>
+                            <div class="course-price">₦${Number(course.price).toLocaleString()}</div>
+                            <button class="purchase-btn" onclick="addToCart(${course.id}, ${course.price}, '${course.title}', event)">Join Track</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Database Error:", err.message);
+                container.innerHTML = '<p style="text-align:center; width:100%; color: var(--brand-red); grid-column: 1 / -1;">Failed to load courses. Please check your connection.</p>';
+            }
         }
 
-        window.addToCart = function(id, price, event) {
-            cart.push(id);
-            cartTotal += price;
+        window.addToCart = function(id, price, title, event) {
+            // Save to cart array
+            cart.push({ id, price, title });
+            cartTotal += Number(price);
+            
+            // Save cart to browser memory so checkout.html can read it later
+            localStorage.setItem('enet_cart', JSON.stringify(cart));
+            localStorage.setItem('enet_cart_total', cartTotal);
+
             updateCartUI();
+            
             const btn = event.target;
             const originalText = btn.innerText;
             btn.innerText = "Added to Cart!";
             btn.style.backgroundColor = "var(--brand-red)";
-            setTimeout(() => { btn.innerText = originalText; btn.style.backgroundColor = ""; }, 1000);
+            
+            setTimeout(() => { 
+                btn.innerText = originalText; 
+                btn.style.backgroundColor = ""; 
+            }, 1000);
         }
 
         function updateCartUI() {
@@ -213,7 +241,17 @@
             if(cartCountElement) cartCountElement.innerText = cart.length;
         }
 
-        document.addEventListener('DOMContentLoaded', renderCourses);
+        // Check if there is already a cart in memory when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedCart = localStorage.getItem('enet_cart');
+            const savedTotal = localStorage.getItem('enet_cart_total');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                cartTotal = Number(savedTotal);
+                updateCartUI();
+            }
+            renderCourses();
+        });
     </script>
 </body>
 </html>
