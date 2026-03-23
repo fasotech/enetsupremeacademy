@@ -18,6 +18,7 @@
         input, select { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
         .btn-primary { width: 100%; background-color: var(--brand-red); color: white; border: none; padding: 1rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
         .btn-primary:hover { background-color: var(--red-hover); }
+        .btn-primary:disabled { background-color: #cbd5e1; cursor: not-allowed; }
         .login-link { display: block; text-align: center; margin-top: 1.5rem; color: #666; text-decoration: none; font-size: 0.9rem; }
         .login-link span { color: var(--brand-red); font-weight: bold; }
         #success-screen { display: none; text-align: center; padding: 2rem 0; }
@@ -30,7 +31,8 @@
     <section class="auth-card">
         <div id="form-container">
             <h2>Submit Application</h2>
-            <form id="register-form" onsubmit="event.preventDefault(); submitRegistration();">
+            
+            <form id="register-form">
                 <div style="display: flex; gap: 1rem;">
                     <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
                     <div class="form-group" style="flex: 1;"><label>Last Name</label><input type="text" id="reg-last" required></div>
@@ -46,6 +48,7 @@
                 <div class="form-group"><label>Create Password</label><input type="password" id="reg-password" required minlength="6"></div>
                 <button type="submit" class="btn-primary" id="reg-btn">Submit Application</button>
             </form>
+
             <a href="login.html" class="login-link">Already have an approved account? <span>Log In here</span></a>
         </div>
 
@@ -60,53 +63,68 @@
     </section>
 
     <script>
+        // 1. Initialize Supabase
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        window.submitRegistration = async function() {
-            const btn = document.getElementById('reg-btn');
-            btn.disabled = true;
-            btn.innerText = "Processing...";
+        // 2. Attach the Event Listener directly to the form
+        const registerForm = document.getElementById('register-form');
+        const regBtn = document.getElementById('reg-btn');
+
+        registerForm.addEventListener('submit', async function(e) {
+            // This firmly blocks the page reload and the '?' in the URL
+            e.preventDefault(); 
+            
+            // Immediate visual feedback so we know the button is alive
+            regBtn.disabled = true;
+            regBtn.innerText = "Processing... Please wait";
 
             try {
+                // Grab the values
                 const firstName = document.getElementById('reg-first').value;
                 const lastName = document.getElementById('reg-last').value;
                 const role = document.getElementById('reg-role').value;
                 const email = document.getElementById('reg-email').value;
                 const password = document.getElementById('reg-password').value;
 
-                // 1. Create Auth Account
-                const { data, error } = await supabase.auth.signUp({
+                // Step A: Create Auth Account
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password
                 });
                 
-                if (error) throw error;
+                // If Auth fails (e.g., email already exists), throw error to the catch block
+                if (authError) throw authError;
 
-                // 2. Inject directly into profiles table instantly
-                if (data && data.user) {
-                    const { error: dbError } = await supabase.from('profiles').insert([{
-                        id: data.user.id,
+                // Step B: Inject directly into profiles table instantly
+                if (authData && authData.user) {
+                    const { error: dbError } = await supabaseClient.from('profiles').insert([{
+                        id: authData.user.id,
                         first_name: firstName,
                         last_name: lastName,
                         email: email,
                         role: role,
                         status: 'pending'
                     }]);
-                    if (dbError) throw dbError;
+                    
+                    // If DB insertion fails, throw error to the catch block
+                    if (dbError) throw new Error("Database Error: " + dbError.message);
                 }
 
-                // 3. Show Success Screen
+                // Step C: If everything succeeded, show Success Screen
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
 
             } catch (err) {
-                alert("Registration Error: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "Submit Application";
+                // If ANYTHING fails, this popup will tell us exactly why.
+                alert("Registration Failed: " + err.message);
+                
+                // Reset the button so the user can try again
+                regBtn.disabled = false;
+                regBtn.innerText = "Submit Application";
             }
-        };
+        });
     </script>
 </body>
 </html>
