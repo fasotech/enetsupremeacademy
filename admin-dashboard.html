@@ -20,23 +20,25 @@
         th { background-color: #E0E7FF; color: var(--navy-blue); }
         .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .btn-approve:hover { background-color: var(--red-hover); }
-        .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; }
+        
+        /* Fixed Logout Button */
+        .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
         .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
-        <button onclick="forceLogout()" id="logoutBtn" class="logout-link">Log Out</button>
+        <button type="button" class="logout-link" onclick="executeLogout()">Log Out</button>
     </header>
 
     <main class="main-container">
         <section class="card" style="border-left: 5px solid #F59E0B; border-top: none;">
             <h2>Action Required: Pending Account Approvals</h2>
             <table>
-                <thead><tr><th>Name</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
+                <thead><tr><th>Name</th><th>Email</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
                 <tbody id="pending-users-list">
-                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
                 </tbody>
             </table>
         </section>
@@ -48,44 +50,39 @@
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // BULLETPROOF LOGOUT
-        window.forceLogout = async function() {
-            document.getElementById('logoutBtn').innerText = "Logging out...";
-            try { await supabase.auth.signOut(); } catch (err) {} 
+        window.executeLogout = async function() {
+            try { await supabase.auth.signOut(); } catch (err) {}
             localStorage.clear();
             sessionStorage.clear();
-            window.location.href = 'index.html'; // Redirects straight to Home
+            window.location.href = 'index.html'; // Immediately drops to Home Page
         };
-
-        async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { window.location.href = "login.html"; return; }
-            fetchDashboardData();
-        }
 
         async function fetchDashboardData() {
             const pendingList = document.getElementById('pending-users-list');
             try {
-                const { data, error } = await supabase.from('profiles').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+                // Fetch all profiles
+                const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
 
-                if (data.length === 0) {
-                    pendingList.innerHTML = `<tr><td colspan="4" style="text-align: center; font-weight:bold;">No pending approvals!</td></tr>`;
-                    return;
-                }
+                let pendingHTML = '';
 
-                let html = '';
                 data.forEach(user => {
-                    const date = new Date(user.created_at).toLocaleDateString();
-                    html += `<tr id="row-${user.id}">
-                        <td style="font-weight: bold;">${user.first_name} ${user.last_name}</td>
-                        <td style="text-transform: capitalize;">${user.role}</td>
-                        <td>${date}</td>
-                        <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve</button></td>
-                    </tr>`;
+                    if (user.status === 'pending') {
+                        const date = new Date(user.created_at).toLocaleDateString();
+                        pendingHTML += `<tr id="row-${user.id}">
+                            <td style="font-weight: bold;">${user.first_name} ${user.last_name}</td>
+                            <td>${user.email || 'N/A'}</td>
+                            <td style="text-transform: capitalize;">${user.role}</td>
+                            <td>${date}</td>
+                            <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve</button></td>
+                        </tr>`;
+                    }
                 });
-                pendingList.innerHTML = html;
+
+                pendingList.innerHTML = pendingHTML || `<tr><td colspan="5" style="text-align: center; font-weight:bold; color: #10B981;">No pending approvals!</td></tr>`;
+
             } catch (err) {
-                pendingList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error. Make sure you ran the SQL script!</td></tr>`;
+                pendingList.innerHTML = `<tr><td colspan="5" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
             }
         }
 
@@ -93,11 +90,12 @@
             const btn = document.querySelector(`#row-${userId} button`);
             btn.innerText = "Approving..."; btn.disabled = true;
             const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            if (error) { alert("Failed to approve user."); btn.disabled = false; } 
+            if (error) { alert("Failed to approve user"); btn.disabled = false; btn.innerText = "Approve"; } 
             else { fetchDashboardData(); }
         }
 
-        checkSession();
+        // Initialize directly
+        fetchDashboardData();
     </script>
 </body>
 </html>

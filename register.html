@@ -20,8 +20,6 @@
         .btn-primary:hover { background-color: var(--red-hover); }
         .login-link { display: block; text-align: center; margin-top: 1.5rem; color: #666; text-decoration: none; font-size: 0.9rem; }
         .login-link span { color: var(--brand-red); font-weight: bold; }
-
-        /* The Success Screen */
         #success-screen { display: none; text-align: center; padding: 2rem 0; }
         #success-screen h3 { color: var(--navy-blue); font-size: 1.8rem; margin-bottom: 1rem; }
     </style>
@@ -30,10 +28,9 @@
     <div class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></div>
     
     <section class="auth-card">
-        
         <div id="form-container">
             <h2>Submit Application</h2>
-            <form id="register-form" onsubmit="processRegistration(event)">
+            <form id="register-form" onsubmit="event.preventDefault(); submitRegistration();">
                 <div style="display: flex; gap: 1rem;">
                     <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
                     <div class="form-group" style="flex: 1;"><label>Last Name</label><input type="text" id="reg-last" required></div>
@@ -58,9 +55,8 @@
             <p style="font-weight: bold; color: var(--brand-red); padding: 1rem; border: 2px solid var(--brand-red); border-radius: 8px; margin: 1.5rem 0;">
                 Please wait for an Administrator to approve your access before attempting to log in.
             </p>
-            <button onclick="window.location.href='index.html'" class="btn-primary" style="background-color: var(--navy-blue);">Return to Homepage</button>
+            <button type="button" onclick="window.location.href='index.html'" class="btn-primary" style="background-color: var(--navy-blue);">Return to Homepage</button>
         </div>
-
     </section>
 
     <script>
@@ -68,10 +64,7 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // This function is triggered directly from the HTML form
-        window.processRegistration = async function(e) {
-            e.preventDefault(); // Absolutely ensures the browser does not reload
-            
+        window.submitRegistration = async function() {
             const btn = document.getElementById('reg-btn');
             btn.disabled = true;
             btn.innerText = "Processing...";
@@ -88,19 +81,20 @@
                     email: email,
                     password: password
                 });
+                
                 if (error) throw error;
 
-                // 2. Force Data into Admin Dashboard Database instantly
+                // 2. Inject directly into profiles table instantly
                 if (data && data.user) {
-                    const { error: dbError } = await supabase.from('profiles').upsert([{
+                    const { error: dbError } = await supabase.from('profiles').insert([{
                         id: data.user.id,
                         first_name: firstName,
                         last_name: lastName,
+                        email: email,
                         role: role,
                         status: 'pending'
                     }]);
-
-                    if (dbError) throw new Error("Saved to Auth, but failed to reach Admin Dashboard: " + dbError.message);
+                    if (dbError) throw dbError;
                 }
 
                 // 3. Show Success Screen
