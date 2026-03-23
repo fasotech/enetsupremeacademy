@@ -6,39 +6,40 @@
     <title>ENET SUPREME ACADEMY | Admin Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --navy-blue: #2C1E85; --brand-red: #DA251D; --red-hover: #B81D15; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
+        :root { --navy-blue: #0A192F; --brand-green: #10B981; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--background); color: var(--navy-blue); min-height: 100vh; display: flex; flex-direction: column; }
-        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--brand-red); }
+        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: bold; text-transform: uppercase; }
-        .logo span { color: var(--brand-red); }
+        .logo span { color: var(--brand-green); }
         .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 4px solid var(--navy-blue); }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; }
         h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
         .stat-card { background: white; padding: 2rem; border-radius: 8px; border-bottom: 4px solid #EAECF0; text-align: center; }
-        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-red); margin: 0.5rem 0; }
+        .stat-card .stat-number { font-size: 3rem; font-weight: 800; color: var(--brand-green); margin: 0.5rem 0; }
         .stat-card .stat-label { color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase; font-weight: 500; }
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
-        th { background-color: #E0E7FF; color: var(--navy-blue); }
-        .btn-approve { background-color: var(--brand-red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-approve:hover { background-color: var(--red-hover); }
-        .btn-admin { background-color: var(--navy-blue); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; cursor: pointer; }
-        .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
-        .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
+        th { background-color: #f1f5f9; }
+        .btn-approve { background-color: var(--brand-green); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-approve:hover { background-color: #059669; }
+        
+        /* Enhanced Logout Button Styles */
+        .logout-btn { background-color: transparent; color: white; border: 2px solid #ef4444; padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .logout-btn:hover { background-color: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">ENET SUPREME <span>ADMIN</span> HUB</div>
-        <a onclick="forceLogout()" class="logout-link" id="logoutBtn">Log Out</a>
+        <button onclick="forceLogout()" class="logout-btn" id="logoutBtn">Log Out</button>
     </header>
 
     <main class="main-container">
-        <section class="card" style="border-left: 5px solid #F59E0B; border-top: none;">
+        <section class="card" style="border-left: 5px solid #F59E0B;">
             <h2>Action Required: Pending Account Approvals</h2>
-            <p style="color: var(--text-gray); margin-bottom: 1rem;">These users have registered and are waiting for you to approve their access.</p>
+            <p style="color: var(--text-gray); margin-bottom: 1rem;">These users have registered and are waiting for you to approve their access to the portal.</p>
             <table>
                 <thead><tr><th>Name</th><th>Requested Role</th><th>Signup Date</th><th>Action</th></tr></thead>
                 <tbody id="pending-users-list">
@@ -53,17 +54,6 @@
             <div class="stat-card"><div class="stat-label">Total Academy Tracks</div><div class="stat-number" id="stat-tracks">6</div></div>
             <div class="stat-card"><div class="stat-label">Instructor / Teacher Count</div><div class="stat-number" id="stat-teachers">0</div></div>
         </div>
-
-        <section class="card">
-            <h2>User Management & Roles</h2>
-            <p style="color: var(--text-gray); margin-bottom: 1rem;">View all approved members. You can elevate staff to temporary Admins here.</p>
-            <table>
-                <thead><tr><th>Name</th><th>Current Role</th><th>Status</th><th>Management</th></tr></thead>
-                <tbody id="all-users-list">
-                    <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Fetching accounts...</td></tr>
-                </tbody>
-            </table>
-        </section>
     </main>
 
     <script>
@@ -73,7 +63,9 @@
 
         // BULLETPROOF LOGOUT: Redirects straight to index.html (Home Page)
         window.forceLogout = async function() {
-            document.getElementById('logoutBtn').innerText = "Wait...";
+            const btn = document.getElementById('logoutBtn');
+            btn.innerText = "Wait...";
+            btn.disabled = true;
             try {
                 await supabase.auth.signOut();
             } catch (err) {
@@ -81,7 +73,7 @@
             } finally {
                 localStorage.clear();
                 sessionStorage.clear();
-                window.location.href = 'index.html'; // Set to Home Page
+                window.location.href = 'index.html'; // Takes users back to home page
             }
         };
 
@@ -90,83 +82,74 @@
                 const { data: { session }, error } = await supabase.auth.getSession();
                 if (!session) { window.location.href = "login.html"; return; }
                 
-                const { data: profile, error: profileErr } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+                const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+                if(!profile || profile.role !== 'admin') { window.location.href = "login.html"; return; }
                 
-                if (profileErr || !profile || profile.role !== 'admin') { 
-                    window.location.href = "login.html"; 
-                    return; 
-                }
                 fetchDashboardData();
-            } catch (err) { 
-                console.error(err); 
+            } catch (err) {
+                console.error(err);
             }
         }
 
         async function fetchDashboardData() {
-            const pendingList = document.getElementById('pending-users-list');
-            const allList = document.getElementById('all-users-list');
-
+            const list = document.getElementById('pending-users-list');
             try {
                 const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+                
                 if (error) throw error;
 
                 let pendingHTML = '';
-                let allHTML = '';
                 let studentCount = 0;
                 let teacherCount = 0;
 
                 data.forEach(user => {
-                    const name = (user.first_name || 'User') + ' ' + (user.last_name || '');
                     const date = new Date(user.created_at).toLocaleDateString();
-
+                    const name = (user.first_name || 'New') + ' ' + (user.last_name || 'User');
+                    
                     if (user.status === 'pending') {
-                        pendingHTML += `<tr id="pend-${user.id}">
-                            <td style="font-weight: bold;">${name}</td>
-                            <td style="text-transform: capitalize;">${user.role}</td>
-                            <td>${date}</td>
-                            <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
-                        </tr>`;
-                    } else {
+                        pendingHTML += `
+                            <tr id="row-${user.id}">
+                                <td style="font-weight: bold;">${name}</td>
+                                <td style="text-transform: capitalize;">${user.role}</td>
+                                <td>${date}</td>
+                                <td><button class="btn-approve" onclick="approveUser('${user.id}')">Approve Access</button></td>
+                            </tr>
+                        `;
+                    } else if (user.status === 'approved') {
                         if (user.role === 'student') studentCount++;
                         if (user.role === 'teacher') teacherCount++;
-                        
-                        let adminBtn = user.role !== 'admin' 
-                            ? `<button class="btn-admin" onclick="makeAdmin('${user.id}', '${name}')">Make Admin</button>` 
-                            : `<span style="color:var(--brand-red); font-weight:bold;">Master Admin</span>`;
-
-                        allHTML += `<tr>
-                            <td style="font-weight: bold;">${name}</td>
-                            <td style="text-transform: capitalize;">${user.role}</td>
-                            <td style="color: green; font-weight:bold;">Approved</td>
-                            <td>${adminBtn}</td>
-                        </tr>`;
                     }
                 });
 
-                pendingList.innerHTML = pendingHTML || `<tr><td colspan="4" style="text-align: center; color: var(--navy-blue); font-weight:bold;">No pending approvals!</td></tr>`;
-                allList.innerHTML = allHTML || `<tr><td colspan="4" style="text-align: center;">No approved users found.</td></tr>`;
-                
+                if(pendingHTML === '') {
+                    list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #10B981; font-weight:bold;">No pending approvals! You are all caught up.</td></tr>`;
+                } else {
+                    list.innerHTML = pendingHTML;
+                }
+
+                // Update the stats numbers dynamically
                 document.getElementById('stat-students').innerText = studentCount;
                 document.getElementById('stat-teachers').innerText = teacherCount;
 
             } catch (err) {
-                pendingList.innerHTML = `<tr><td colspan="4" style="color: red; text-align: center;">Database Error: ${err.message}</td></tr>`;
+                list.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red;">Error loading data. Make sure SQL script was run.</td></tr>`;
             }
         }
 
         window.approveUser = async function(userId) {
-            const btn = document.querySelector(`#pend-${userId} button`);
-            btn.innerText = "Approving..."; btn.disabled = true;
-            const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-            if (error) { alert("Failed to approve user"); btn.disabled = false; } 
-            else { fetchDashboardData(); }
-        }
+            const btn = document.querySelector(`#row-${userId} button`);
+            btn.innerText = "Approving...";
+            btn.disabled = true;
 
-        window.makeAdmin = async function(userId, name) {
-            if(confirm(`Are you sure you want to make ${name} an Admin?`)) {
-                await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
-                alert(`${name} is now an Admin!`);
-                fetchDashboardData();
+            const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
+
+            if (error) {
+                alert("Failed to approve user.");
+                btn.innerText = "Approve Access";
+                btn.disabled = false;
+            } else {
+                document.getElementById(`row-${userId}`).style.display = 'none'; 
+                fetchDashboardData(); // Recalculate stats instantly
             }
         }
 
