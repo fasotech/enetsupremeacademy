@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME | Community Hub</title>
+    <title>ENET SUPREME ACADEMY | Community Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -85,10 +85,12 @@
         .right-sidebar { display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: 100px;}
         .sidebar-widget { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 4px 20px var(--shadow-color); }
         .sidebar-widget h4 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        
         .blog-list { list-style: none; }
         .blog-list li { margin-bottom: 0.8rem; }
         .blog-list a { color: var(--text-dark); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
         .blog-list a:hover { color: var(--royal-blue); text-decoration: underline; }
+        
         .bday-item { display: flex; align-items: center; gap: 12px; }
         .bday-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--yellow), var(--orange)); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Poppins', sans-serif; }
         .bday-item p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
@@ -235,7 +237,7 @@
 <body>
 
 <header>
-    <a href="index.html" class="logo">ENET <span>SUPREME</span></a>
+    <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
     <div class="header-right">
         <button class="icon-btn" onclick="cycleTheme()" title="Switch Theme"><span id="theme-icon">💻</span></button>
         <div id="auth-controls"></div>
@@ -391,7 +393,7 @@ window.addEventListener('load', async () => {
     }
     currentUser = session.user;
     await loadUserProfile();
-    loadDynamicAds(); // Load ads on startup
+    loadDynamicAds();
 });
 
 async function loadUserProfile() {
@@ -407,7 +409,6 @@ async function loadUserProfile() {
     const role = profile.role || 'student';
     const avatar = profile.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=random';
 
-    // FIX: CORRECTLY ROUTE TO THE ACTUAL FILE NAME FOR STUDENTS
     let dashboardLink = 'student-dashboard.html';
     if (role === 'admin') dashboardLink = 'admin-dashboard.html';
     if (role === 'teacher') dashboardLink = 'teacher.html';
@@ -428,10 +429,9 @@ async function loadUserProfile() {
     fetchFeed();
 }
 
-// LOAD ADS
 async function loadDynamicAds() {
     const { data: ads, error } = await sb.from('ads').select('*');
-    if (error) { console.error("Error loading ads:", error); return; }
+    if (error) return;
     if (ads && ads.length > 0) {
         ads.forEach(ad => {
             const targetContainer = document.getElementById(`ad-slot-${ad.slot_id}`);
@@ -450,7 +450,6 @@ async function loadDynamicAds() {
     }
 }
 
-// IMAGE UPLOAD HANDLING
 function handleImageSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -470,7 +469,6 @@ function removeImage() {
     document.getElementById('image-preview-wrap').style.display = 'none';
 }
 
-// PROFILE SETTINGS LOGIC
 function openSettings() {
     if (!currentProfile) return;
     document.getElementById('set-first').value = currentProfile.first_name || '';
@@ -520,7 +518,6 @@ async function saveSettings() {
     btn.disabled = false; btn.textContent = 'Save Changes';
 }
 
-// ── LIKE SYSTEM ──
 async function toggleLike(id, type) {
     const table = type === 'post' ? 'posts' : 'comments';
     try {
@@ -544,8 +541,6 @@ async function toggleLike(id, type) {
     }
 }
 
-
-// ── POST & COMMENT LOGIC ──
 async function createPost() {
     const text = document.getElementById('post-text').value.trim();
     if (!text && !selectedFile) { showToast('Write something or attach an image', 'error'); return; }
