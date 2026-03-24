@@ -313,6 +313,13 @@
             background:rgba(27,212,150,0.07); border:1px solid rgba(27,212,150,0.18);
             padding:4px 10px; border-radius:7px;
         }
+        
+        .system-owner-tag {
+            display:inline-flex; align-items:center; gap:4px;
+            font-size:0.67rem; font-weight:700; color:#8B7FFF;
+            background:rgba(79,63,255,0.1); border:1px solid rgba(79,63,255,0.25);
+            padding:4px 10px; border-radius:7px;
+        }
 
         /* EMPTY / ERROR */
         .empty-cell { padding:2.5rem; text-align:center; }
@@ -627,11 +634,20 @@ window.addEventListener('load', function () {
             const role = u.role || 'student';
             const isAdmin    = role === 'admin';
             const isInactive = u.status === 'inactive';
+            
+            // SECURITY CHECK: Is this the protected System Owner?
+            const isSystemOwner = (u.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com';
 
             let btns = '';
+            
             if (isAdmin) {
-                btns = `<span class="master-tag">★ Master Admin</span>
-                    <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Remove Admin</button>`;
+                if (isSystemOwner) {
+                    // UI PROTECTION: Hide remove/deactivate buttons completely
+                    btns = `<span class="system-owner-tag">👑 System Owner</span>`;
+                } else {
+                    btns = `<span class="master-tag">★ Master Admin</span>
+                        <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Remove Admin</button>`;
+                }
             } else {
                 btns = `<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Make Admin</button>`;
                 btns += isInactive
@@ -693,6 +709,13 @@ window.addEventListener('load', function () {
     };
 
     window.rejectUser = async function(userId) {
+        // LOGIC PROTECTION: Stop deletion of System Owner just in case they somehow end up in the pending list
+        const user = allData.find(u => u.id === userId);
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
+            alert("Security Alert: The System Owner account cannot be deleted.");
+            return;
+        }
+
         if (confirm("Reject and remove this registration?")) {
             const { error } = await supabase.from('profiles').delete().eq('id', userId);
             if (error) alert("Rejection Failed: " + error.message);
@@ -709,6 +732,13 @@ window.addEventListener('load', function () {
     };
 
     window.removeAdmin = async function(userId) {
+        // LOGIC PROTECTION: Stop demotion of System Owner
+        const user = allData.find(u => u.id === userId);
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
+            alert("Security Alert: The primary System Owner account cannot be demoted or modified.");
+            return;
+        }
+
         if (confirm("Remove admin privileges? This user will revert to student.")) {
             const { error } = await supabase.from('profiles').update({ role: 'student' }).eq('id', userId);
             if (error) alert("Failed: " + error.message);
@@ -717,6 +747,13 @@ window.addEventListener('load', function () {
     };
 
     window.toggleUserStatus = async function(userId, newStatus) {
+        // LOGIC PROTECTION: Stop deactivation of System Owner
+        const user = allData.find(u => u.id === userId);
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') {
+            alert("Security Alert: The primary System Owner account cannot be deactivated.");
+            return;
+        }
+
         const label = newStatus === 'inactive' ? 'deactivate' : 're-activate';
         if (confirm(`Are you sure you want to ${label} this account?`)) {
             const { error } = await supabase.from('profiles').update({ status: newStatus }).eq('id', userId);
