@@ -20,14 +20,14 @@
         :root {
             --orange: #FF7A00; --yellow: #FFC107; --danger: #EE5D50; --success: #05CD99;
             --royal-blue: #2441EA; --bg-light: #F4F7FE; --surface: #FFFFFF;
-            --surface-hover: rgba(36, 65, 234, 0.04); --border: #E9EDF7;
+            --surface-hover: rgba(36, 65, 234, 0.04); --border: #E9EDF7; --border-bright: #D1D9EB;
             --text-dark: #2B3674; --text-muted: #A3AED0; --text-gray: #707EAE; 
             --topbar-bg: rgba(244, 247, 254, 0.9); --shadow-color: rgba(17, 38, 146, 0.05);
         }
 
         [data-theme="dark"] {
             --royal-blue: #4F3FFF; --bg-light: #07080F; --surface: #13151F;
-            --surface-hover: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.08);
+            --surface-hover: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.08); --border-bright: rgba(255, 255, 255, 0.15);
             --text-dark: #F0F0FF; --text-muted: #7B7D9A; --text-gray: #A0AEC0; 
             --topbar-bg: rgba(7, 8, 15, 0.9); --shadow-color: rgba(0, 0, 0, 0.4);
         }
@@ -163,7 +163,7 @@
         .act-text p strong { font-weight: 700; }
         .act-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; display: block; }
 
-        /* ── NEW: AD MANAGEMENT STYLES ── */
+        /* AD MANAGEMENT STYLES */
         .ads-management-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 1rem 2rem 2rem; }
         .ad-slot-form { background: var(--bg-light); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem; }
         .ad-slot-form h4 { color: var(--text-dark); margin-bottom: 0.5rem; font-family: 'Poppins'; }
@@ -176,7 +176,11 @@
         @keyframes pulse  { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
         .loading-row td { animation: pulse 1.5s ease-in-out infinite; }
 
-        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr; } .ads-management-grid { grid-template-columns: 1fr; } }
+        /* ── MOBILE RESPONSIVE FIXES ── */
+        @media (max-width: 1200px) { 
+            .dashboard-grid { grid-template-columns: 1fr; } 
+            .ads-management-grid { grid-template-columns: 1fr; } 
+        }
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
@@ -188,7 +192,16 @@
             .welcome-text h1 { font-size: 1.4rem; }
             .welcome-text p { display: none; }
         }
-        @media (max-width: 576px) { .stats-grid { grid-template-columns: 1fr; } .topbar { flex-wrap: wrap; gap: 1rem; } .search-wrap { width: 100%; order: 3; } }
+        @media (max-width: 576px) { 
+            .stats-grid { grid-template-columns: 1fr; } 
+            
+            /* Enhanced Topbar for Mobile */
+            .topbar { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem; }
+            .topbar-right { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+            .search-wrap { width: 100%; order: 3; margin-top: 5px; }
+            
+            .ads-management-grid { padding: 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -208,10 +221,10 @@
     <a class="nav-item active" href="admin-dashboard.html">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard
     </a>
-    <a class="nav-item" href="#" onclick="switchTab('students'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); return false;">
+    <a class="nav-item" href="#" onclick="switchTab('students'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Students
     </a>
-    <a class="nav-item" href="#" onclick="switchTab('teachers'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); return false;">
+    <a class="nav-item" href="#" onclick="switchTab('teachers'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Teachers
     </a>
     <a class="nav-item" href="community.html">
@@ -219,13 +232,13 @@
     </a>
 
     <div class="nav-label">Management</div>
-    <a class="nav-item" href="#" onclick="switchTab('admins'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); return false;">
+    <a class="nav-item" href="#" onclick="switchTab('admins'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Admins
     </a>
-    <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});return false;">
+    <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pending <span class="nav-badge" id="nav-pcount">0</span>
     </a>
-    <a class="nav-item" href="#" onclick="document.getElementById('ad-management-section').scrollIntoView({behavior:'smooth'});return false;">
+    <a class="nav-item" href="#" onclick="document.getElementById('ad-management-section').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Manage Ads
     </a>
 
@@ -391,7 +404,8 @@ window.addEventListener('load', function () {
 
     async function loadAdminDashboard() {
         try {
-            const { data, error } = await window.supabase.from('profiles').select('*').order('created_at', { ascending: false });
+            // OPTIMIZED QUERY: Fetching only what is strictly needed for the table view
+            const { data, error } = await window.supabase.from('profiles').select('id, first_name, last_name, email, role, status, created_at').order('created_at', { ascending: false }).limit(500);
             if (error) throw error;
             if (!data || data.length === 0) {
                 document.getElementById('pending-users-list').innerHTML = emptyRow('No pending approvals', '', 5);
@@ -504,7 +518,6 @@ window.addEventListener('load', function () {
 
     loadAdminDashboard();
     
-    // NEW: Load existing ads
     async function loadExistingAds() {
         const { data: ads, error } = await window.supabase.from('ads').select('*').order('slot_id');
         if (ads) {
@@ -518,7 +531,6 @@ window.addEventListener('load', function () {
     loadExistingAds();
 });
 
-// NEW: Ad Image Preview
 window.previewAdImage = function(event, slot) {
     const input = event.target;
     const preview = document.getElementById(`preview-${slot}`);
@@ -529,7 +541,6 @@ window.previewAdImage = function(event, slot) {
     }
 }
 
-// NEW: Save Ad to Supabase
 window.saveAd = async function(slotId) {
     const fileInput = document.querySelector(`#slot-${slotId} .ad-image-input`);
     const adCopy = document.getElementById(`copy-${slotId}`).value;
@@ -542,7 +553,6 @@ window.saveAd = async function(slotId) {
         const ext = file.name.split('.').pop();
         const fileName = `ad_slot_${slotId}_${Date.now()}.${ext}`; 
         
-        // Note: Using community_images bucket as it exists. Create 'ads' folder inside it conceptually
         const { data, error } = await window.supabase.storage.from('community_images').upload(fileName, file, { upsert: true });
         if (error) { alert("Image upload failed: " + error.message + "\nEnsure you have an RLS policy allowing inserts to community_images."); return; }
         
