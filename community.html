@@ -79,153 +79,233 @@
             transition: all 0.2s;
         }
         .nav-link:hover { color: var(--text); border-color: var(--border-bright); background: var(--surface2); }
-        .nav-link.logout { color: #FF6B6B; border-color: rgba(218,37,29,0.25); }
-        .nav-link.logout:hover { background: rgba(218,37,29,0.1); border-color: rgba(218,37,29,0.4); }
 
-        /* ── AUTH GATE (logged-out view) ── */
-        #auth-gate {
-            display: none;
-            flex: 1;
-            align-items: center; justify-content: center;
-            padding: 3rem 1.5rem;
-        }
-        #auth-gate.visible { display: flex; }
-
-        .gate-card {
-            background: var(--surface); border: 1px solid var(--border-bright);
-            border-radius: 24px; padding: 3rem 2.5rem;
-            max-width: 460px; width: 100%;
-            text-align: center;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(79,63,255,0.08);
-            animation: gateIn 0.5s cubic-bezier(0.16,1,0.3,1);
-        }
-        @keyframes gateIn { from { opacity:0; transform: scale(0.96) translateY(16px); } to { opacity:1; transform: scale(1) translateY(0); } }
-        .gate-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-        .gate-card h2 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; }
-        .gate-card h2 span { color: #2DAAE1; }
-        .gate-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1.75rem; }
-
-        .gate-features { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; text-align: left; }
-        .gate-feat { display: flex; align-items: center; gap: 0.7rem; color: rgba(255,255,255,0.75); font-size: 0.9rem; }
-        .feat-dot { width: 8px; height: 8px; border-radius: 50%; background: #2DAAE1; flex-shrink: 0; }
-
-        .btn-gate {
-            display: block; width: 100%; padding: 1rem; border-radius: 12px;
-            font-size: 1rem; font-weight: 700; cursor: pointer;
-            text-decoration: none; text-align: center; transition: all 0.2s; border: none;
-        }
-        .btn-gate-primary {
-            background: linear-gradient(135deg, var(--red), #B81D15);
-            color: white; margin-bottom: 0.75rem;
-            box-shadow: 0 4px 16px rgba(218,37,29,0.35);
-        }
-        .btn-gate-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(218,37,29,0.5); }
-        .btn-gate-secondary {
-            background: var(--surface2); color: var(--text-muted);
-            border: 1px solid var(--border-bright) !important;
-        }
-        .btn-gate-secondary:hover { background: var(--surface3); color: var(--text); }
-
-        /* ── COMMUNITY FEED (logged-in view) ── */
-        #community-app { display: none; flex: 1; flex-direction: column; }
-        #community-app.visible { display: flex; }
-
+        /* ── LAYOUT ── */
         .page-wrap { max-width: 680px; margin: 2.5rem auto; padding: 0 1rem; width: 100%; flex: 1; }
 
-        /* Page header */
+        /* ── PAGE HEADER ── */
         .feed-header { margin-bottom: 2rem; }
-        .feed-header h1 { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); line-height: 1; }
+        .feed-header h1 {
+            font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
+            letter-spacing: -0.02em; color: var(--text); line-height: 1;
+        }
         .feed-header p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem; }
-        .live-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(27,212,150,0.1); border: 1px solid rgba(27,212,150,0.2); color: var(--green); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 50px; margin-bottom: 1rem; }
+        .live-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(27,212,150,0.1); border: 1px solid rgba(27,212,150,0.2);
+            color: var(--green); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; padding: 3px 10px; border-radius: 50px;
+            margin-bottom: 1rem;
+        }
         .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 1.5s infinite; }
         @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
 
-        /* Create post */
+        /* ── CREATE POST ── */
         .create-post {
-            background: var(--surface); border: 1px solid var(--border-bright);
-            border-radius: 20px; padding: 1.5rem; margin-bottom: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border-bright);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
             box-shadow: 0 4px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(79,63,255,0.05);
             transition: border-color 0.3s;
         }
         .create-post:focus-within { border-color: rgba(79,63,255,0.4); box-shadow: 0 4px 30px rgba(0,0,0,0.3), 0 0 0 3px rgba(79,63,255,0.08); }
+
         .composer-top { display: flex; gap: 12px; align-items: flex-start; }
-        .composer-avatar { width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; background: linear-gradient(135deg, var(--accent), var(--red)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: white; }
+        .composer-avatar {
+            width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--accent), var(--red));
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: white;
+        }
+
         .composer-area { flex: 1; }
-        .composer-area textarea { width: 100%; background: transparent; border: none; color: var(--text); font-size: 0.95rem; resize: none; outline: none; line-height: 1.6; min-height: 80px; font-family: 'DM Sans', sans-serif; }
+        .composer-area textarea {
+            width: 100%; background: transparent; border: none;
+            color: var(--text); font-size: 0.95rem; resize: none;
+            outline: none; line-height: 1.6; min-height: 80px;
+            font-family: 'DM Sans', sans-serif;
+        }
         .composer-area textarea::placeholder { color: var(--text-dim); }
 
+        /* Image preview */
         #image-preview-wrap { margin-top: 0.75rem; position: relative; display: none; }
         #image-preview-wrap img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
-        #remove-image-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        #remove-image-btn {
+            position: absolute; top: 8px; right: 8px;
+            background: rgba(0,0,0,0.7); color: white; border: none;
+            width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+            font-size: 1rem; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
         #remove-image-btn:hover { background: var(--red); }
 
-        .composer-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-        .attach-btn { display: flex; align-items: center; gap: 8px; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+        .composer-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 1rem; padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .attach-btn {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface2); color: var(--text-muted);
+            border: 1px solid var(--border); border-radius: 10px;
+            padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+        }
         .attach-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border-bright); }
         .attach-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 100px; }
-        .post-btn { background: linear-gradient(135deg, var(--accent), #6B3FFF); color: white; border: none; padding: 0.6rem 1.6rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.88rem; transition: all 0.2s; letter-spacing: 0.02em; box-shadow: 0 4px 15px rgba(79,63,255,0.3); }
+
+        .post-btn {
+            background: linear-gradient(135deg, var(--accent), #6B3FFF);
+            color: white; border: none;
+            padding: 0.6rem 1.6rem; border-radius: 10px;
+            font-weight: 700; cursor: pointer; font-size: 0.88rem;
+            transition: all 0.2s; letter-spacing: 0.02em;
+            box-shadow: 0 4px 15px rgba(79,63,255,0.3);
+        }
         .post-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,63,255,0.45); }
+        .post-btn:active { transform: translateY(0); }
         .post-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Feed */
+        /* ── FEED ── */
         .feed { display: flex; flex-direction: column; gap: 1.25rem; }
-        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1); transition: border-color 0.2s; }
+
+        /* ── POST CARD ── */
+        .post-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1);
+            transition: border-color 0.2s;
+        }
         .post-card:hover { border-color: var(--border-bright); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .post-body { padding: 1.25rem 1.25rem 1rem; }
+
         .post-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
         .post-author { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; background: linear-gradient(135deg, var(--accent), var(--red)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: white; }
+
+        .avatar {
+            width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--accent), var(--red));
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: white;
+        }
         .avatar.admin-av { background: linear-gradient(135deg, #FF3F3F, #FF8F00); }
         .avatar.teacher-av { background: linear-gradient(135deg, #00C896, #0088FF); }
         .avatar.student-av { background: linear-gradient(135deg, var(--accent), #9B3FFF); }
+
         .author-info h4 { font-size: 0.92rem; font-weight: 700; color: var(--text); }
         .author-info span { font-size: 0.75rem; color: var(--text-muted); }
-        .role-badge { font-size: 0.6rem; padding: 2px 7px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-left: 6px; vertical-align: middle; }
+
+        .role-badge {
+            font-size: 0.6rem; padding: 2px 7px; border-radius: 4px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+            margin-left: 6px; vertical-align: middle;
+        }
         .role-badge.admin { background: rgba(255,63,63,0.15); color: #FF6B6B; }
         .role-badge.teacher { background: rgba(0,200,150,0.15); color: #00C896; }
         .role-badge.student { background: rgba(79,63,255,0.15); color: #8B7FFF; }
         .role-badge.member { background: rgba(255,255,255,0.07); color: var(--text-dim); }
 
-        .post-text { font-size: 0.95rem; line-height: 1.65; color: var(--text); margin-bottom: 1rem; white-space: pre-wrap; word-break: break-word; }
+        .post-text {
+            font-size: 0.95rem; line-height: 1.65; color: var(--text);
+            margin-bottom: 1rem; white-space: pre-wrap; word-break: break-word;
+        }
+
         .post-img { width: 100%; max-height: 420px; object-fit: cover; border-top: 1px solid var(--border); }
 
-        /* Comments */
-        .post-footer { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
-        .comments-toggle { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; cursor: pointer; padding: 0.75rem 0; transition: color 0.2s; user-select: none; }
+        /* ── COMMENT SECTION ── */
+        .post-footer {
+            padding: 0 1.25rem 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .comments-toggle {
+            display: flex; align-items: center; gap: 6px;
+            color: var(--text-muted); font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; padding: 0.75rem 0;
+            transition: color 0.2s; user-select: none;
+        }
         .comments-toggle:hover { color: var(--text); }
         .comments-toggle svg { transition: transform 0.3s; }
         .comments-toggle.open svg { transform: rotate(180deg); }
+
         .comments-wrap { display: none; }
         .comments-wrap.visible { display: block; }
+
         .comments-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
+
         .comment-item { display: flex; gap: 10px; }
-        .c-avatar { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); font-family: 'Syne', sans-serif; }
-        .c-bubble { background: var(--surface2); border: 1px solid var(--border); padding: 0.65rem 0.9rem; border-radius: 12px; flex: 1; }
+        .c-avatar {
+            width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+            background: var(--surface3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 800; color: var(--text-muted);
+            font-family: 'Syne', sans-serif;
+        }
+        .c-bubble {
+            background: var(--surface2); border: 1px solid var(--border);
+            padding: 0.65rem 0.9rem; border-radius: 12px; flex: 1;
+        }
         .c-bubble h5 { font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
         .c-bubble p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
         .c-bubble .c-time { font-size: 0.68rem; color: var(--text-dim); margin-top: 4px; }
+
         .reply-box { display: flex; gap: 8px; align-items: center; }
-        .reply-box input { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 0.6rem 1rem; font-size: 0.83rem; outline: none; font-family: 'DM Sans', sans-serif; transition: border-color 0.2s; }
+        .reply-box input {
+            flex: 1; background: var(--surface2); border: 1px solid var(--border);
+            color: var(--text); border-radius: 10px; padding: 0.6rem 1rem;
+            font-size: 0.83rem; outline: none; font-family: 'DM Sans', sans-serif;
+            transition: border-color 0.2s;
+        }
         .reply-box input:focus { border-color: rgba(79,63,255,0.5); }
         .reply-box input::placeholder { color: var(--text-dim); }
-        .reply-btn { background: var(--surface3); color: var(--text); border: 1px solid var(--border-bright); padding: 0.55rem 1rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.78rem; transition: all 0.2s; white-space: nowrap; }
+        .reply-btn {
+            background: var(--surface3); color: var(--text); border: 1px solid var(--border-bright);
+            padding: 0.55rem 1rem; border-radius: 10px; font-weight: 700; cursor: pointer;
+            font-size: 0.78rem; transition: all 0.2s; white-space: nowrap;
+        }
         .reply-btn:hover { background: var(--accent); border-color: var(--accent); }
 
-        /* States */
-        .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); font-size: 0.9rem; }
+        /* ── STATES ── */
+        .empty-state {
+            text-align: center; padding: 4rem 2rem;
+            color: var(--text-muted); font-size: 0.9rem;
+        }
         .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
-        .skeleton { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; animation: shimmer 1.5s infinite; }
-        .sk-line { height: 12px; border-radius: 6px; background: var(--surface3); margin-bottom: 10px; }
-        @keyframes shimmer { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* Pending state card */
-        .pending-card { background: var(--surface); border: 1px solid rgba(245,158,11,0.3); border-radius: 20px; padding: 2.5rem; max-width: 420px; width: 100%; text-align: center; margin: auto; }
-        .pending-card h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--amber); margin: 1rem 0 0.5rem; }
-        .pending-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .skeleton {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 20px; padding: 1.5rem;
+            animation: shimmer 1.5s infinite;
+        }
+        .sk-line {
+            height: 12px; border-radius: 6px; background: var(--surface3);
+            margin-bottom: 10px;
+        }
+        @keyframes shimmer {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
 
-        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface); border: 1px solid var(--border-bright); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; z-index: 9999; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); box-shadow: 0 8px 30px rgba(0,0,0,0.4); pointer-events: none; }
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--surface); border: 1px solid var(--border-bright);
+            color: var(--text); padding: 0.75rem 1.5rem; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 600; z-index: 9999;
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            pointer-events: none;
+        }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.success { border-color: rgba(27,212,150,0.4); }
         .toast.error { border-color: rgba(218,37,29,0.4); }
@@ -233,97 +313,83 @@
 </head>
 <body>
 
-<!-- HEADER — adapts based on auth state -->
 <header>
     <a href="index.html" class="logo">ENET <span>SUPREME</span></a>
-    <div class="header-right" id="header-right">
-        <!-- Populated by JS based on auth state -->
-        <a href="login.html?redirect=community.html" class="nav-link">Log In</a>
+    <div class="header-right">
+        <div class="user-pill" id="user-pill">
+            <div class="mini-avatar" id="header-avatar">?</div>
+            <span id="header-name">Loading...</span>
+        </div>
+        <a href="#" class="nav-link" id="dash-link">Dashboard</a>
     </div>
 </header>
 
-<!-- ══ AUTH GATE — shown to logged-out visitors ══ -->
-<section id="auth-gate">
-    <div class="gate-card">
-        <div class="gate-icon">🏛️</div>
-        <h2>Join the <span>Community</span></h2>
-        <p>Connect with students, teachers, and mentors in the ENET Supreme learning community. Share wins, ask questions, and grow together.</p>
-        <div class="gate-features">
-            <div class="gate-feat"><span class="feat-dot"></span>Post updates and share resources</div>
-            <div class="gate-feat"><span class="feat-dot"></span>Ask questions and get answers from teachers</div>
-            <div class="gate-feat"><span class="feat-dot"></span>Celebrate achievements with your classmates</div>
-            <div class="gate-feat"><span class="feat-dot"></span>Get announcements directly from admins</div>
-        </div>
-        <a href="login.html?redirect=community.html" class="btn-gate btn-gate-primary">🔑 Log In to Access Community</a>
-        <a href="login.html?redirect=community.html&signup=true" class="btn-gate btn-gate-secondary">✨ Create a Free Account</a>
+<div class="page-wrap">
+
+    <div class="feed-header">
+        <div class="live-badge"><div class="live-dot"></div> Live Feed</div>
+        <h1>Community Hub</h1>
+        <p>Share knowledge, ask questions, and grow together.</p>
     </div>
-</section>
 
-<!-- ══ COMMUNITY APP — shown to approved logged-in users ══ -->
-<div id="community-app">
-    <div class="page-wrap">
-
-        <div class="feed-header">
-            <div class="live-badge"><div class="live-dot"></div> Live Feed</div>
-            <h1>Community Hub</h1>
-            <p>Share knowledge, ask questions, and grow together.</p>
-        </div>
-
-        <!-- CREATE POST -->
-        <div class="create-post">
-            <div class="composer-top">
-                <div class="composer-avatar" id="composer-avatar">?</div>
-                <div class="composer-area">
-                    <textarea id="post-text" placeholder="Share something with the community…" rows="3"></textarea>
-                    <div id="image-preview-wrap">
-                        <img id="image-preview" src="" alt="Preview">
-                        <button id="remove-image-btn" onclick="removeImage()" title="Remove image">✕</button>
-                    </div>
+    <!-- CREATE POST -->
+    <div class="create-post">
+        <div class="composer-top">
+            <div class="composer-avatar" id="composer-avatar">?</div>
+            <div class="composer-area">
+                <textarea id="post-text" placeholder="Share something with the community…" rows="3"></textarea>
+                <div id="image-preview-wrap">
+                    <img id="image-preview" src="" alt="Preview">
+                    <button id="remove-image-btn" onclick="removeImage()" title="Remove image">✕</button>
                 </div>
             </div>
-            <div class="composer-footer">
-                <label class="attach-btn">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Photo
-                    <input type="file" id="post-image-upload" accept="image/*" onchange="handleImageSelect(event)">
-                </label>
-                <button class="post-btn" id="submit-btn" onclick="createPost()">Post to Feed</button>
-            </div>
         </div>
-
-        <!-- FEED -->
-        <div class="feed" id="feed">
-            <div class="skeleton" id="sk1">
-                <div class="sk-line" style="width:40%; height:14px; margin-bottom:16px;"></div>
-                <div class="sk-line" style="width:100%;"></div>
-                <div class="sk-line" style="width:85%;"></div>
-                <div class="sk-line" style="width:60%;"></div>
-            </div>
-            <div class="skeleton" id="sk2">
-                <div class="sk-line" style="width:35%; height:14px; margin-bottom:16px;"></div>
-                <div class="sk-line" style="width:100%;"></div>
-                <div class="sk-line" style="width:70%;"></div>
-            </div>
+        <div class="composer-footer">
+            <label class="attach-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Photo
+                <input type="file" id="post-image-upload" accept="image/*" onchange="handleImageSelect(event)">
+            </label>
+            <button class="post-btn" id="submit-btn" onclick="createPost()">
+                Post to Feed
+            </button>
         </div>
-
     </div>
+
+    <!-- FEED -->
+    <div class="feed" id="feed">
+        <!-- Skeleton loaders -->
+        <div class="skeleton" id="sk1">
+            <div class="sk-line" style="width:40%; height:14px; margin-bottom:16px;"></div>
+            <div class="sk-line" style="width:100%;"></div>
+            <div class="sk-line" style="width:85%;"></div>
+            <div class="sk-line" style="width:60%;"></div>
+        </div>
+        <div class="skeleton" id="sk2">
+            <div class="sk-line" style="width:35%; height:14px; margin-bottom:16px;"></div>
+            <div class="sk-line" style="width:100%;"></div>
+            <div class="sk-line" style="width:70%;"></div>
+        </div>
+    </div>
+
 </div>
 
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
 /* ══════════════════════════════════════════════
-   CONFIG — values unchanged
+   CONFIG
 ══════════════════════════════════════════════ */
-const SUPABASE_URL    = 'https://lskwzcvexyxjncttvimf.supabase.co';
-const SUPABASE_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-const STORAGE_BUCKET  = 'community_images';  // change if your bucket name differs
+const SUPABASE_URL = 'https://lskwzcvexyxjncttvimf.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+const STORAGE_BUCKET = 'community_images'; // ← Change if your bucket name differs
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let currentUser    = null;
+let currentUser = null;
 let currentProfile = null;
-let selectedFile   = null;
+let selectedFile = null;
 
 /* ══════════════════════════════════════════════
    TOAST
@@ -339,15 +405,17 @@ function showToast(msg, type = 'success') {
    TIME FORMAT
 ══════════════════════════════════════════════ */
 function timeAgo(dateStr) {
-    const diff = Math.floor((new Date() - new Date(dateStr)) / 1000);
-    if (diff < 60)    return 'just now';
-    if (diff < 3600)  return Math.floor(diff / 60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const now = new Date();
+    const d = new Date(dateStr);
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 /* ══════════════════════════════════════════════
-   ESCAPE HTML
+   ESCAPE HTML — prevent XSS
 ══════════════════════════════════════════════ */
 function esc(str) {
     const d = document.createElement('div');
@@ -356,7 +424,7 @@ function esc(str) {
 }
 
 /* ══════════════════════════════════════════════
-   IMAGE HANDLING
+   IMAGE SELECT / PREVIEW / REMOVE
 ══════════════════════════════════════════════ */
 function handleImageSelect(e) {
     const file = e.target.files[0];
@@ -370,6 +438,7 @@ function handleImageSelect(e) {
     };
     reader.readAsDataURL(file);
 }
+
 function removeImage() {
     selectedFile = null;
     document.getElementById('post-image-upload').value = '';
@@ -378,99 +447,56 @@ function removeImage() {
 }
 
 /* ══════════════════════════════════════════════
-   INIT — THE KEY FIX IS HERE
-   Instead of immediately redirecting to login.html,
-   we show the auth gate so users can see what they're
-   signing in to, with proper redirect links.
+   INIT
 ══════════════════════════════════════════════ */
 window.addEventListener('load', async () => {
     const { data: { session } } = await sb.auth.getSession();
-
-    if (!session) {
-        // Not logged in — show the gate, don't hard-redirect
-        document.getElementById('auth-gate').classList.add('visible');
-        // Update header to show login link
-        document.getElementById('header-right').innerHTML = `
-            <a href="login.html?redirect=community.html" class="nav-link">Log In</a>`;
-        return;
-    }
+    if (!session) { window.location.href = 'login.html'; return; }
 
     currentUser = session.user;
 
-    // Fetch profile
+    // Load profile
     const { data: profile } = await sb.from('profiles')
-        .select('first_name, last_name, role, status')
+        .select('first_name, last_name, role')
         .eq('id', currentUser.id)
         .single();
 
     currentProfile = profile;
 
-    // Pending approval — show a friendly message instead of the feed
-    if (!profile || profile.status === 'pending') {
-        document.getElementById('community-app').classList.add('visible');
-        document.getElementById('community-app').querySelector('.page-wrap').innerHTML = `
-            <div class="pending-card">
-                <div style="font-size:2.5rem">⏳</div>
-                <h2>Account Pending</h2>
-                <p>Your registration is awaiting admin approval. You'll have full community access once approved. Check back soon!</p>
-                <a href="index.html" style="display:inline-block;margin-top:1.5rem;color:#2DAAE1;text-decoration:none;font-weight:600;">← Back to Home</a>
-            </div>`;
-        // Update header
-        document.getElementById('header-right').innerHTML = `
-            <div class="user-pill">
-                <div class="mini-avatar">?</div>
-                <span>Pending Approval</span>
-            </div>
-            <a href="#" class="nav-link logout" onclick="doLogout();return false;">Log Out</a>`;
-        return;
+    if (profile) {
+        const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || currentUser.email;
+        const initials = name.charAt(0).toUpperCase();
+        const role = profile.role || 'member';
+
+        document.getElementById('header-avatar').textContent = initials;
+        document.getElementById('header-name').textContent = name;
+        document.getElementById('composer-avatar').textContent = initials;
+        document.getElementById('composer-avatar').className = `composer-avatar ${role}-av`;
+
+        const dashLink = document.getElementById('dash-link');
+        if (role === 'admin') dashLink.href = 'admin-dashboard.html';
+        else if (role === 'teacher') dashLink.href = 'teacher-dashboard.html';
+        else dashLink.href = 'student-dashboard.html';
     }
-
-    // ── APPROVED USER — show the full community feed ──
-    const name     = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || currentUser.email;
-    const initials = name.charAt(0).toUpperCase();
-    const role     = profile.role || 'member';
-
-    // Update header
-    document.getElementById('header-right').innerHTML = `
-        <div class="user-pill">
-            <div class="mini-avatar">${esc(initials)}</div>
-            <span>${esc(name)}</span>
-        </div>
-        <a href="${role === 'admin' ? 'admin.html' : role === 'teacher' ? 'teacher.html' : 'index.html'}" class="nav-link">Dashboard</a>
-        <a href="#" class="nav-link logout" onclick="doLogout();return false;">Log Out</a>`;
-
-    // Update composer
-    document.getElementById('composer-avatar').textContent = initials;
-    document.getElementById('composer-avatar').className = `composer-avatar ${role}-av`;
-
-    // Show feed
-    document.getElementById('community-app').classList.add('visible');
 
     await fetchFeed();
     subscribeRealtime();
 });
 
 /* ══════════════════════════════════════════════
-   LOGOUT
-══════════════════════════════════════════════ */
-async function doLogout() {
-    try { await sb.auth.signOut(); } catch (e) {}
-    localStorage.clear(); sessionStorage.clear();
-    window.location.href = 'index.html';
-}
-
-/* ══════════════════════════════════════════════
-   CREATE POST — unchanged logic
+   CREATE POST
 ══════════════════════════════════════════════ */
 async function createPost() {
     const text = document.getElementById('post-text').value.trim();
     if (!text && !selectedFile) { showToast('Write something or attach an image', 'error'); return; }
 
     const btn = document.getElementById('submit-btn');
-    btn.disabled = true; btn.textContent = 'Posting…';
+    btn.disabled = true;
+    btn.textContent = 'Posting…';
 
     try {
         let imageUrl = null;
+
         if (selectedFile) {
             const ext = selectedFile.name.split('.').pop();
             const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
@@ -490,23 +516,26 @@ async function createPost() {
         document.getElementById('post-text').value = '';
         removeImage();
         showToast('Posted successfully!');
+        // Realtime will auto-refresh; also force it for immediate feel
         await fetchFeed();
 
     } catch (err) {
         showToast(err.message, 'error');
         console.error(err);
     } finally {
-        btn.disabled = false; btn.textContent = 'Post to Feed';
+        btn.disabled = false;
+        btn.textContent = 'Post to Feed';
     }
 }
 
 /* ══════════════════════════════════════════════
-   FETCH FEED — unchanged logic
+   FETCH FEED
 ══════════════════════════════════════════════ */
 async function fetchFeed() {
     const feed = document.getElementById('feed');
 
     try {
+        // Fetch posts + author profiles
         const { data: posts, error: pErr } = await sb
             .from('posts')
             .select('*, profiles(first_name, last_name, role)')
@@ -514,6 +543,7 @@ async function fetchFeed() {
             .limit(50);
         if (pErr) throw pErr;
 
+        // Fetch all comments + author profiles
         const { data: comments, error: cErr } = await sb
             .from('comments')
             .select('*, profiles(first_name, last_name)')
@@ -540,10 +570,11 @@ async function fetchFeed() {
 }
 
 /* ══════════════════════════════════════════════
-   RENDER POST CARD — unchanged logic
+   RENDER SINGLE POST CARD
 ══════════════════════════════════════════════ */
 function renderPostCard(post, allComments) {
     const feed = document.getElementById('feed');
+
     const name = `${post.profiles?.first_name || 'User'} ${post.profiles?.last_name || ''}`.trim();
     const role = post.profiles?.role || 'member';
     const initials = name.charAt(0).toUpperCase();
@@ -553,6 +584,7 @@ function renderPostCard(post, allComments) {
     card.className = 'post-card';
     card.dataset.postId = post.id;
 
+    // Build comments HTML
     let commentsHTML = '';
     postComments.forEach(c => {
         const cName = `${c.profiles?.first_name || 'User'} ${c.profiles?.last_name || ''}`.trim();
@@ -592,10 +624,16 @@ function renderPostCard(post, allComments) {
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
             <div class="comments-wrap" id="comments-${post.id}">
-                <div class="comments-list" id="comments-list-${post.id}">${commentsHTML}</div>
+                <div class="comments-list" id="comments-list-${post.id}">
+                    ${commentsHTML}
+                </div>
                 <div class="reply-box">
-                    <input type="text" id="reply-input-${post.id}" placeholder="Write a reply…"
-                        onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();addComment('${post.id}')}">
+                    <input
+                        type="text"
+                        id="reply-input-${post.id}"
+                        placeholder="Write a reply…"
+                        onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();addComment('${post.id}')}"
+                    >
                     <button class="reply-btn" onclick="addComment('${post.id}')">Send</button>
                 </div>
             </div>
@@ -605,21 +643,22 @@ function renderPostCard(post, allComments) {
 }
 
 /* ══════════════════════════════════════════════
-   TOGGLE COMMENTS — unchanged
+   TOGGLE COMMENTS
 ══════════════════════════════════════════════ */
 function toggleComments(postId) {
-    const wrap   = document.getElementById(`comments-${postId}`);
+    const wrap = document.getElementById(`comments-${postId}`);
     const toggle = wrap.previousElementSibling;
     const isVisible = wrap.classList.toggle('visible');
     toggle.classList.toggle('open', isVisible);
     if (isVisible) {
+        // Focus reply input
         const inp = document.getElementById(`reply-input-${postId}`);
         if (inp) setTimeout(() => inp.focus(), 50);
     }
 }
 
 /* ══════════════════════════════════════════════
-   ADD COMMENT — unchanged logic
+   ADD COMMENT
 ══════════════════════════════════════════════ */
 async function addComment(postId) {
     const input = document.getElementById(`reply-input-${postId}`);
@@ -628,14 +667,18 @@ async function addComment(postId) {
     if (!content) return;
 
     const btn = input.nextElementSibling;
-    input.disabled = true; btn.disabled = true;
+    input.disabled = true;
+    btn.disabled = true;
 
     try {
         const { error } = await sb.from('comments').insert([{
-            post_id: postId, user_id: currentUser.id, content
+            post_id: postId,
+            user_id: currentUser.id,
+            content
         }]);
         if (error) throw error;
 
+        // Optimistic: append the comment immediately
         const name = `${currentProfile?.first_name || 'You'} ${currentProfile?.last_name || ''}`.trim();
         const list = document.getElementById(`comments-list-${postId}`);
         if (list) {
@@ -651,22 +694,42 @@ async function addComment(postId) {
             list.appendChild(div);
         }
         input.value = '';
+
+        // Update reply count label
+        const toggle = document.querySelector(`[data-post-id="${postId}"] .comments-toggle`);
+        if (toggle) {
+            const svg1 = toggle.querySelector('svg:first-child');
+            const svg2 = toggle.querySelector('svg:last-child');
+            const currentCount = list ? list.querySelectorAll('.comment-item').length : 1;
+            toggle.innerHTML = '';
+            toggle.appendChild(svg1);
+            toggle.append(` ${currentCount === 1 ? '1 reply' : currentCount + ' replies'} `);
+            toggle.appendChild(svg2);
+            toggle.classList.add('open');
+        }
+
     } catch (err) {
         showToast(err.message, 'error');
         console.error(err);
     } finally {
-        input.disabled = false; btn.disabled = false;
+        input.disabled = false;
+        btn.disabled = false;
         input.focus();
     }
 }
 
 /* ══════════════════════════════════════════════
-   REALTIME SUBSCRIPTION — unchanged
+   REALTIME SUBSCRIPTION
+   Refreshes feed when any new post or comment lands
 ══════════════════════════════════════════════ */
 function subscribeRealtime() {
     sb.channel('community')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' },    () => fetchFeed())
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, () => fetchFeed())
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, () => {
+            fetchFeed();
+        })
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, () => {
+            fetchFeed();
+        })
         .subscribe();
 }
 </script>
