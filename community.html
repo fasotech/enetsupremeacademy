@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENET SUPREME | Community Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg: #07080F; --surface: #0E1018; --surface2: #13151F; --surface3: #1A1D2E;
+            --border: rgba(255,255,255,0.07); --border-bright: rgba(255,255,255,0.13);
+            --text: #F0F0FF; --text-muted: #7B7D9A; --text-dim: #3E4060;
+            --accent: #4F3FFF; --red: #DA251D; --green: #1BD496; --amber: #F59E0B;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(79,63,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(79,63,255,0.025) 1px, transparent 1px);
+            background-size: 44px 44px; pointer-events: none; z-index: -1;
+        }
+
+        /* Header */
+        header { background: rgba(7,8,15,0.88); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
+        .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); }
+        .logo span { color: var(--red); }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-left: 1.5rem; transition: 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Main Container */
+        .container { max-width: 680px; margin: 2rem auto; padding: 0 1rem; width: 100%; flex: 1; }
+
+        /* Create Post Card */
+        .create-post { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .create-post textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 1rem; font-size: 0.95rem; resize: none; outline: none; transition: 0.2s; min-height: 100px; }
+        .create-post textarea:focus { border-color: var(--accent); }
+        
+        .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+        .file-upload { position: relative; overflow: hidden; display: inline-block; cursor: pointer; }
+        .file-upload input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        .btn-upload { background: var(--surface3); color: var(--text-muted); padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--border); transition: 0.2s; display: flex; align-items: center; gap: 8px;}
+        .btn-upload:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+        #file-name-display { font-size: 0.75rem; color: var(--green); margin-left: 10px; font-weight: 600;}
+        
+        .btn-post { background: var(--accent); color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .btn-post:hover { background: #3c2de8; }
+        .btn-post:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Feed Posts */
+        .feed-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; animation: fadeUp 0.4s ease; }
+        
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+        .avatar { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--red)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: bold; font-size: 1rem; color: white; }
+        .post-meta h4 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 2px;}
+        .post-meta span { font-size: 0.75rem; color: var(--text-muted); }
+        .role-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); margin-left: 6px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+
+        .post-content { font-size: 0.95rem; line-height: 1.6; color: var(--text); margin-bottom: 1rem; word-wrap: break-word; }
+        .post-image { width: 100%; border-radius: 10px; margin-bottom: 1rem; border: 1px solid var(--border); }
+
+        /* Comments Section */
+        .comments-section { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 0.5rem; }
+        .comment { display: flex; gap: 10px; margin-bottom: 1rem; }
+        .comment-avatar { width: 28px; height: 28px; border-radius: 6px; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: var(--text-muted); flex-shrink: 0;}
+        .comment-body { background: var(--surface2); padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border); flex: 1; }
+        .comment-body h5 { font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .comment-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
+        .add-comment { display: flex; gap: 10px; margin-top: 1rem; }
+        .add-comment input { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.85rem; outline: none; }
+        .add-comment input:focus { border-color: var(--text-muted); }
+        .add-comment button { background: var(--surface3); color: var(--text); border: 1px solid var(--border); padding: 0 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
+        .add-comment button:hover { background: rgba(255,255,255,0.1); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .loader { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">ENET <span>SUPREME</span></div>
+        <div class="nav-links">
+            <a href="login.html" id="dash-link">Dashboard</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="create-post">
+            <textarea id="post-text" placeholder="Share knowledge, ask a question, or start a discussion..."></textarea>
+            <div class="post-actions">
+                <div class="file-upload">
+                    <div class="btn-upload">📷 Attach Photo</div>
+                    <input type="file" id="post-image-upload" accept="image/*" onchange="showFileName()">
+                </div>
+                <span id="file-name-display"></span>
+                <button class="btn-post" id="submit-post-btn" onclick="createPost()">Post to Feed</button>
+            </div>
+        </div>
+
+        <div class="feed-container" id="feed">
+            <div class="loader">Fetching community activity...</div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let currentUser = null;
+
+        // Display selected file name
+        function showFileName() {
+            const input = document.getElementById('post-image-upload');
+            const display = document.getElementById('file-name-display');
+            if (input.files.length > 0) { display.innerText = "✓ " + input.files[0].name; } 
+            else { display.innerText = ""; }
+        }
+
+        // Init App
+        window.addEventListener('load', async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { window.location.href = "login.html"; return; }
+            currentUser = session.user;
+            
+            // Fix dashboard link based on role
+            const { data: profile } = await supabase.from('profiles').select('role').eq('id', currentUser.id).single();
+            if(profile) {
+                const dashLink = document.getElementById('dash-link');
+                if(profile.role === 'admin') dashLink.href = 'admin-dashboard.html';
+                else if(profile.role === 'teacher') dashLink.href = 'teacher-dashboard.html';
+                else dashLink.href = 'student-dashboard.html';
+            }
+
+            fetchFeed();
+        });
+
+        // Create a Post
+        async function createPost() {
+            const text = document.getElementById('post-text').value.trim();
+            const fileInput = document.getElementById('post-image-upload');
+            const btn = document.getElementById('submit-post-btn');
+
+            if (!text && fileInput.files.length === 0) return alert("Please write something or attach an image.");
+
+            btn.disabled = true;
+            btn.innerText = "Posting...";
+
+            try {
+                let imageUrl = null;
+
+                // Handle Image Upload to Storage Bucket
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+                    
+                    const { error: uploadError } = await supabase.storage.from('community_images').upload(fileName, file);
+                    if (uploadError) throw new Error("Image Upload Failed: " + uploadError.message);
+
+                    const { data: pubData } = supabase.storage.from('community_images').getPublicUrl(fileName);
+                    imageUrl = pubData.publicUrl;
+                }
+
+                // Insert into Database
+                const { error: postError } = await supabase.from('posts').insert([{
+                    user_id: currentUser.id,
+                    content: text,
+                    image_url: imageUrl
+                }]);
+
+                if (postError) throw postError;
+
+                // Reset Form
+                document.getElementById('post-text').value = '';
+                fileInput.value = '';
+                document.getElementById('file-name-display').innerText = '';
+                
+                fetchFeed(); // Refresh Feed
+
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Post to Feed";
+            }
+        }
+
+        // Fetch and Render Feed
+        async function fetchFeed() {
+            const feedContainer = document.getElementById('feed');
+            try {
+                // Fetch Posts joined with Profiles
+                const { data: posts, error } = await supabase
+                    .from('posts')
+                    .select(`*, profiles(first_name, last_name, role)`)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!posts || posts.length === 0) {
+                    feedContainer.innerHTML = '<div class="loader">No posts yet. Be the first to start a conversation!</div>';
+                    return;
+                }
+
+                // Fetch all comments joined with profiles
+                const { data: comments } = await supabase
+                    .from('comments')
+                    .select(`*, profiles(first_name, last_name)`)
+                    .order('created_at', { ascending: true });
+
+                let html = '';
+
+                posts.forEach(post => {
+                    const authorName = `${post.profiles?.first_name || 'User'} ${post.profiles?.last_name || ''}`;
+                    const initials = authorName.charAt(0).toUpperCase();
+                    const time = new Date(post.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    const role = post.profiles?.role || 'Member';
+
+                    let imageHtml = post.image_url ? `<img src="${post.image_url}" class="post-image" alt="Post Image">` : '';
+
+                    // Filter comments for this post
+                    let commentsHtml = '';
+                    const postComments = comments ? comments.filter(c => c.post_id === post.id) : [];
+                    postComments.forEach(c => {
+                        const cName = `${c.profiles?.first_name || 'User'} ${c.profiles?.last_name || ''}`;
+                        commentsHtml += `
+                            <div class="comment">
+                                <div class="comment-avatar">${cName.charAt(0)}</div>
+                                <div class="comment-body">
+                                    <h5>${cName}</h5>
+                                    <p>${c.content}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                        <div class="post-card">
+                            <div class="post-header">
+                                <div class="avatar">${initials}</div>
+                                <div class="post-meta">
+                                    <h4>${authorName} <span class="role-tag">${role}</span></h4>
+                                    <span>${time}</span>
+                                </div>
+                            </div>
+                            <div class="post-content">${post.content}</div>
+                            ${imageHtml}
+                            
+                            <div class="comments-section">
+                                <div id="comments-list-${post.id}">
+                                    ${commentsHtml}
+                                </div>
+                                <div class="add-comment">
+                                    <input type="text" id="comment-input-${post.id}" placeholder="Write a reply..." onkeypress="handleEnter(event, '${post.id}')">
+                                    <button onclick="addComment('${post.id}')">Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                feedContainer.innerHTML = html;
+
+            } catch (err) {
+                feedContainer.innerHTML = `<div class="loader" style="color:var(--red);">Error loading feed: ${err.message}</div>`;
+            }
+        }
+
+        // Allow pressing "Enter" to submit comment
+        function handleEnter(e, postId) {
+            if (e.key === 'Enter') addComment(postId);
+        }
+
+        // Add a Comment
+        async function addComment(postId) {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const content = input.value.trim();
+            if (!content) return;
+
+            input.disabled = true;
+
+            try {
+                const { error } = await supabase.from('comments').insert([{
+                    post_id: postId,
+                    user_id: currentUser.id,
+                    content: content
+                }]);
+
+                if (error) throw error;
+                fetchFeed(); // Refresh to show new comment
+
+            } catch (err) {
+                alert("Failed to post comment: " + err.message);
+                input.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
