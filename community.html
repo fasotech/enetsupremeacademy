@@ -64,6 +64,7 @@
         .gate-card h2 span { color: var(--royal-blue); }
         .btn-gate { display: block; width: 100%; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; border: none; }
         .btn-gate-primary { background: var(--royal-blue); color: white; margin-bottom: 0.75rem; box-shadow: 0 4px 15px rgba(36, 65, 234, 0.3); }
+        .btn-gate-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(36, 65, 234, 0.4); }
         .btn-gate-secondary { background: var(--surface); color: var(--text-dark); border: 1px solid var(--border-bright) !important; }
         .btn-gate-secondary:hover { background: var(--bg-light); color: var(--royal-blue); }
 
@@ -84,15 +85,25 @@
         .right-sidebar { display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: 100px;}
         .sidebar-widget { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 4px 20px var(--shadow-color); }
         .sidebar-widget h4 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        
         .blog-list { list-style: none; }
         .blog-list li { margin-bottom: 0.8rem; }
         .blog-list a { color: var(--text-dark); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
         .blog-list a:hover { color: var(--royal-blue); text-decoration: underline; }
+        
         .bday-item { display: flex; align-items: center; gap: 12px; }
         .bday-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--yellow), var(--orange)); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Poppins', sans-serif; }
         .bday-item p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
         .bday-item p strong { color: var(--text-dark); font-weight: 700; }
-        .ad-placeholder { background: var(--input-bg); border: 1px dashed var(--text-muted); border-radius: 8px; height: 250px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; text-align: center; }
+        
+        /* Ad Styles */
+        .ad-placeholder { background: var(--input-bg); border: 1px dashed var(--text-muted); border-radius: 8px; height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 1rem; }
+        .active-ad-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; transition: all 0.2s; margin-bottom: 1rem; }
+        .active-ad-card:hover { transform: scale(1.02); }
+        .ad-img-container { position: relative; width: 100%; max-height: 200px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); background: var(--input-bg); }
+        .ad-img-container img { width: 100%; height: auto; object-fit: cover; display: block; }
+        .ad-sponsored-tag { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.65rem; font-weight: bold; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+        .active-ad-card p { font-size: 0.85rem; color: var(--text-dark); line-height: 1.4; font-weight: 500;}
 
         /* ── CREATE POST ── */
         .create-post { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px var(--shadow-color); transition: border-color 0.3s; }
@@ -153,7 +164,6 @@
         .c-bubble h5 { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; gap: 10px;}
         .c-text-content { font-size: 0.9rem; color: var(--text-dark); line-height: 1.4; word-break: break-word; }
         
-        /* Floating Like Badge on Comment Bubble */
         .c-like-badge {
             position: absolute; bottom: -8px; right: -5px;
             background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
@@ -161,7 +171,6 @@
             display: flex; align-items: center; gap: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* Subtle text links under comment bubble */
         .c-actions { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-left: 0.8rem; margin-top: 0.2rem; display: flex; gap: 0.8rem; align-items: center; }
         .c-actions span { cursor: pointer; transition: color 0.2s; }
         .c-actions span:hover { color: var(--text-dark); text-decoration: underline; }
@@ -170,7 +179,6 @@
         .action-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-family: 'DM Sans'; font-weight: 600; font-size: 0.75rem;}
         .action-btn:hover { color: var(--royal-blue); }
 
-        /* FACEBOOK STYLE REPLY BOX */
         .reply-box { display: flex; gap: 10px; align-items: center; padding-top: 0.5rem; }
         .reply-input-wrap {
             flex: 1; display: flex; align-items: center; 
@@ -190,7 +198,6 @@
         }
         .reply-send-btn:hover { transform: scale(1.15); }
 
-        /* INLINE EDITING STYLES */
         .edit-textarea {
             width: 100%; min-height: 60px; padding: 0.5rem; border-radius: 8px;
             background: var(--input-bg); border: 1px solid var(--royal-blue);
@@ -289,6 +296,13 @@
             </div>
 
             <div class="sidebar-widget">
+                <h4>Sponsored</h4>
+                <div id="ad-slot-1" class="ad-placeholder">Google Ads Space 1</div>
+                <div id="ad-slot-2" class="ad-placeholder">Google Ads Space 2</div>
+                <div id="ad-slot-3" class="ad-placeholder">Google Ads Space 3</div>
+            </div>
+
+            <div class="sidebar-widget">
                 <h4>Upcoming Birthdays 🎁</h4>
                 <div class="bday-item">
                     <div class="bday-av">SO</div>
@@ -297,13 +311,6 @@
                 <div class="bday-item" style="margin-top: 10px;">
                     <div class="bday-av">EN</div>
                     <p><strong>Emmanuel Nwangwa</strong> has a birthday today.</p>
-                </div>
-            </div>
-
-            <div class="sidebar-widget">
-                <h4>Sponsored</h4>
-                <div class="ad-placeholder">
-                    Google Ads Space <br> (Optimized Banner)
                 </div>
             </div>
         </div>
@@ -386,6 +393,7 @@ window.addEventListener('load', async () => {
     }
     currentUser = session.user;
     await loadUserProfile();
+    loadDynamicAds(); // Load ads on startup
 });
 
 async function loadUserProfile() {
@@ -419,6 +427,28 @@ async function loadUserProfile() {
     
     document.getElementById('community-app').classList.add('visible');
     fetchFeed();
+}
+
+// LOAD ADS
+async function loadDynamicAds() {
+    const { data: ads, error } = await sb.from('ads').select('*');
+    if (error) { console.error("Error loading ads:", error); return; }
+    if (ads && ads.length > 0) {
+        ads.forEach(ad => {
+            const targetContainer = document.getElementById(`ad-slot-${ad.slot_id}`);
+            if (targetContainer) {
+                targetContainer.outerHTML = `
+                    <a href="${ad.advertiser_link}" target="_blank" class="active-ad-card">
+                        <div class="ad-img-container">
+                            <img src="${ad.image_url}" alt="Sponsored Ad">
+                            <span class="ad-sponsored-tag">Sponsored</span>
+                        </div>
+                        <p>${esc(ad.ads_copy)}</p>
+                    </a>
+                `;
+            }
+        });
+    }
 }
 
 // IMAGE UPLOAD HANDLING
@@ -494,17 +524,14 @@ async function saveSettings() {
 // ── LIKE SYSTEM ──
 async function toggleLike(id, type) {
     const table = type === 'post' ? 'posts' : 'comments';
-    
     try {
         const { data, error } = await sb.from(table).select('likes').eq('id', id).single();
         if (error) throw error;
 
         let likes = data.likes || [];
         if (likes.includes(currentUser.id)) {
-            // Unlike
             likes = likes.filter(userId => userId !== currentUser.id);
         } else {
-            // Like
             likes.push(currentUser.id);
         }
 
@@ -517,7 +544,6 @@ async function toggleLike(id, type) {
         console.error(err);
     }
 }
-
 
 // ── POST & COMMENT LOGIC ──
 async function createPost() {
@@ -581,7 +607,6 @@ async function fetchFeed() {
             const isCLiked = cLikes.includes(currentUser?.id);
             const cLikeCount = cLikes.length;
             
-            // ── TRUE FACEBOOK COMMENT BUBBLE ──
             cHtml += `
             <div class="comment-item">
                 <img class="c-avatar" src="${cAvatar}">
@@ -655,7 +680,6 @@ async function fetchFeed() {
     });
 }
 
-// ── FACEBOOK AUTO-SCROLL/TAGGING FEATURE ──
 window.focusReply = function(postId, name = '') {
     const input = document.getElementById(`reply-${postId}`);
     if (input) {
@@ -672,7 +696,6 @@ async function addComment(postId) {
     fetchFeed();
 }
 
-// ── INLINE EDITING ──
 window.enableEdit = function(id, type = 'post') {
     const textDiv = document.getElementById(type === 'post' ? `p-text-${id}` : `c-text-${id}`);
     if (textDiv.querySelector('.edit-textarea')) return;
