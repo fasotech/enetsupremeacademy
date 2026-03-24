@@ -3,340 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME ACADEMY | Admin Hub</title>
+    <title>ENET SUPREME ACADEMY | Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #07080F;
-            --surface: #0E1018;
-            --surface2: #13151F;
-            --surface3: #1A1D2E;
-            --border: rgba(255,255,255,0.07);
-            --border-bright: rgba(255,255,255,0.13);
-            --text: #F0F0FF;
-            --text-muted: #7B7D9A;
-            --text-dim: #3E4060;
-            --accent: #4F3FFF;
-            --red: #DA251D;
-            --green: #1BD496;
-            --amber: #F59E0B;
+            /* Brand Colors */
+            --royal-blue: #2441EA;
+            --royal-dark: #1A2C99;
+            --orange: #FF7A00;
+            --yellow: #FFC107;
+            --white: #FFFFFF;
+            
+            /* UI Colors */
+            --bg-light: #F4F7FE; /* Soft dashboard background */
+            --surface: #FFFFFF;
+            --border: #E9EDF7;
+            --text-dark: #2B3674; /* Primary headings */
+            --text-muted: #A3AED0; /* Icons and secondary text */
+            --text-gray: #707EAE; /* Standard text */
+            --danger: #EE5D50;
+            --success: #05CD99;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: var(--bg);
-            color: var(--text);
+            background: var(--bg-light);
+            color: var(--text-gray);
             font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
             display: flex;
             overflow-x: hidden;
         }
-        body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background-image: linear-gradient(rgba(79,63,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(79,63,255,0.025) 1px, transparent 1px);
-            background-size: 44px 44px;
-            pointer-events: none; z-index: 0;
-        }
 
-        /* SIDEBAR */
+        /* ── SIDEBAR ── */
         .sidebar {
-            position: fixed; left:0; top:0; bottom:0; width:230px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
+            position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+            background: var(--white);
             display: flex; flex-direction: column;
             z-index: 100;
+            box-shadow: 4px 0 24px rgba(17, 38, 146, 0.03);
+            border-right: 1px solid var(--border);
         }
         .sidebar-logo {
-            padding: 1.5rem 1.25rem 1.25rem;
-            border-bottom: 1px solid var(--border);
+            padding: 2.5rem 2rem 1.5rem;
         }
         .brand {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800; font-size: 0.95rem;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            color: var(--text); line-height: 1.2;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800; font-size: 1.25rem;
+            letter-spacing: -0.02em; text-transform: uppercase;
+            color: var(--royal-blue); line-height: 1.2;
         }
-        .brand span { color: var(--red); }
+        .brand span { color: var(--orange); }
         .badge-admin {
             display: inline-block; margin-top: 0.4rem;
-            font-size: 0.6rem; font-weight: 500;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--accent); background: rgba(79,63,255,0.1);
-            border: 1px solid rgba(79,63,255,0.22);
-            padding: 2px 8px; border-radius: 20px;
+            font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-muted);
         }
+
         .nav-label {
-            font-size: 0.6rem; font-weight: 500;
-            letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--text-dim);
-            padding: 1rem 1.25rem 0.35rem;
+            font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 1.5rem 2rem 0.5rem;
         }
         .nav-item {
-            display: flex; align-items: center; gap: 0.65rem;
-            padding: 0.6rem 1.25rem;
-            font-size: 0.83rem; color: var(--text-muted);
-            border-left: 2px solid transparent;
+            display: flex; align-items: center; gap: 0.85rem;
+            padding: 0.85rem 2rem; margin: 0.2rem 1rem;
+            font-size: 0.95rem; font-weight: 500; color: var(--text-gray);
+            border-radius: 12px;
             cursor: pointer; text-decoration: none;
-            transition: all 0.15s;
+            transition: all 0.2s ease;
         }
-        .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
-        .nav-item.active { color: var(--text); background: rgba(79,63,255,0.09); border-left-color: var(--accent); }
-        .nav-item svg { flex-shrink: 0; opacity: 0.6; }
+        .nav-item:hover { color: var(--royal-blue); background: rgba(36, 65, 234, 0.04); }
+        .nav-item.active { 
+            color: var(--royal-blue); font-weight: 700;
+            background: rgba(36, 65, 234, 0.08); 
+        }
+        .nav-item svg { flex-shrink: 0; width: 20px; height: 20px; color: inherit; opacity: 0.8; }
         .nav-item.active svg { opacity: 1; }
+        
         .nav-badge {
-            margin-left: auto; font-size: 0.62rem; font-weight: 600;
-            background: var(--red); color: #fff;
-            border-radius: 20px; padding: 1px 7px; min-width: 18px; text-align: center;
+            margin-left: auto; font-size: 0.7rem; font-weight: 700;
+            background: var(--orange); color: var(--white);
+            border-radius: 20px; padding: 2px 8px; min-width: 22px; text-align: center;
         }
-        .sidebar-foot {
-            margin-top: auto;
-            padding: 1rem 1.25rem;
-            border-top: 1px solid var(--border);
-        }
-        .admin-pill {
-            display: flex; align-items: center; gap: 0.65rem;
-            background: var(--surface3); border: 1px solid var(--border);
-            border-radius: 10px; padding: 0.55rem 0.7rem;
-        }
-        .admin-av {
-            width: 30px; height: 30px; border-radius: 7px;
-            background: linear-gradient(135deg,var(--accent),var(--red));
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Syne', sans-serif; font-weight: 700;
-            font-size: 0.7rem; color: #fff; flex-shrink: 0;
-        }
-        .admin-nm { font-size: 0.78rem; font-weight: 500; color: var(--text); }
-        .admin-rl { font-size: 0.62rem; color: var(--accent); font-weight: 500; }
 
-        /* MAIN */
+        .sidebar-foot {
+            margin-top: auto; padding: 1.5rem 1.5rem 2rem;
+        }
+        .logout-btn {
+            display: flex; align-items: center; gap: 0.75rem; width: 100%;
+            background: var(--bg-light); color: var(--text-gray);
+            border: 1px solid var(--border); padding: 0.85rem 1.25rem;
+            border-radius: 12px; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .logout-btn:hover { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
+
+        /* ── MAIN CONTENT ── */
         .main-wrap {
-            margin-left: 230px; flex: 1;
+            margin-left: 260px; flex: 1;
             display: flex; flex-direction: column;
             position: relative; z-index: 1;
         }
 
         /* TOPBAR */
         .topbar {
-            position: sticky; top:0; height: 58px;
-            background: rgba(7,8,15,0.88);
-            backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center;
-            justify-content: space-between;
-            padding: 0 1.75rem; z-index: 50;
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(244, 247, 254, 0.9);
+            backdrop-filter: blur(12px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.5rem 2.5rem;
         }
-        .topbar-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 0.95rem; font-weight: 700; color: var(--text);
+        .welcome-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem; font-weight: 700; color: var(--text-dark);
+            letter-spacing: -0.02em; margin-bottom: 0.2rem;
         }
-        .topbar-title span { color: var(--text-muted); font-weight: 400; }
-        .topbar-right { display: flex; align-items: center; gap: 0.65rem; }
-        .topbar-clock {
-            font-size: 0.72rem; color: var(--text-muted);
-            background: var(--surface2); border: 1px solid var(--border);
-            padding: 3px 11px; border-radius: 20px; font-variant-numeric: tabular-nums;
-        }
-        #logoutBtn {
-            display: flex; align-items: center; gap: 5px;
-            background: rgba(218,37,29,0.09); color: #FF6B6B;
-            border: 1px solid rgba(218,37,29,0.25);
-            padding: 5px 13px; border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.78rem; font-weight: 500;
-            cursor: pointer; transition: all 0.18s;
-        }
-        #logoutBtn:hover { background: rgba(218,37,29,0.18); border-color: rgba(218,37,29,0.45); }
-
-        /* CONTENT */
-        .content { padding: 1.75rem; flex: 1; }
-
-        /* STATS */
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(4,1fr);
-            gap: 1rem; margin-bottom: 1.75rem;
-        }
-        .stat-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 14px; padding: 1.2rem 1.35rem;
-            position: relative; overflow: hidden;
-            transition: border-color 0.2s;
-            animation: fadeUp 0.35s ease both;
-        }
-        .stat-card:nth-child(1){animation-delay:0.04s}
-        .stat-card:nth-child(2){animation-delay:0.08s}
-        .stat-card:nth-child(3){animation-delay:0.12s}
-        .stat-card:nth-child(4){animation-delay:0.16s}
-        .stat-card::after {
-            content:''; position:absolute; top:0; left:0; right:0; height:2px;
-            background: var(--c, var(--accent));
-        }
-        .stat-card.c-red   { --c: var(--red); }
-        .stat-card.c-amber { --c: var(--amber); }
-        .stat-card.c-green { --c: var(--green); }
-        .stat-card.c-acc   { --c: var(--accent); }
-        .stat-card:hover { border-color: var(--border-bright); }
-        .stat-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.65rem; }
-        .stat-ico {
-            width:34px; height:34px; border-radius:8px;
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-            display:flex; align-items:center; justify-content:center; font-size:0.95rem;
-        }
-        .stat-tag {
-            font-size:0.65rem; font-weight:500; padding:2px 8px; border-radius:20px;
-        }
-        .stat-tag.up  { background:rgba(27,212,150,0.1); color:var(--green); }
-        .stat-tag.neu { background:rgba(245,158,11,0.09); color:var(--amber); }
-        .stat-num {
-            font-family:'Syne', sans-serif; font-size:2.1rem;
-            font-weight:800; color:var(--text); line-height:1; margin-bottom:0.25rem;
-        }
-        .stat-lbl { font-size:0.72rem; color:var(--text-muted); }
-
-        /* PANELS */
-        .panel {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 16px; margin-bottom: 1.5rem; overflow: hidden;
-            animation: fadeUp 0.35s ease both; animation-delay: 0.2s;
-        }
-        .panel-head {
-            display:flex; align-items:center; justify-content:space-between;
-            padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border);
-        }
-        .panel-title-g { display:flex; align-items:center; gap:0.65rem; }
-        .panel-dot {
-            width:7px; height:7px; border-radius:50%;
-            background: var(--pd, var(--accent));
-            box-shadow: 0 0 8px var(--pd, var(--accent));
-        }
-        .panel.pend { --pd: var(--amber); }
-        .panel.users { --pd: var(--accent); }
-        .panel-ttl { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; }
-        .panel-cnt {
-            font-size:0.65rem; font-weight:600;
-            background:rgba(255,255,255,0.06); color:var(--text-muted);
-            border:1px solid var(--border); padding:2px 8px; border-radius:20px;
-        }
-        .panel-sub { font-size:0.72rem; color:var(--text-dim); }
+        .welcome-text p { font-size: 0.9rem; color: var(--text-gray); }
+        
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
         .search-wrap {
-            display:flex; align-items:center; gap:0.4rem;
-            background:var(--surface2); border:1px solid var(--border);
-            border-radius:8px; padding:0.35rem 0.65rem;
+            display: flex; align-items: center; gap: 0.5rem;
+            background: var(--white); border-radius: 50px;
+            padding: 0.6rem 1.2rem; box-shadow: 0 4px 15px rgba(17, 38, 146, 0.03);
+            border: 1px solid var(--border); width: 250px;
         }
         .search-wrap input {
-            background:none; border:none; outline:none;
-            color:var(--text); font-family:'DM Sans',sans-serif;
-            font-size:0.78rem; width:150px;
+            background: none; border: none; outline: none;
+            color: var(--text-dark); font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem; width: 100%;
         }
-        .search-wrap input::placeholder { color:var(--text-dim); }
+        .search-wrap input::placeholder { color: var(--text-muted); }
+
+        /* CONTENT PADDING */
+        .content { padding: 0 2.5rem 2.5rem; flex: 1; }
+
+        /* ── STATS CARDS ── */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem; margin-bottom: 2rem;
+        }
+        .stat-card {
+            border-radius: 20px; padding: 1.75rem;
+            position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(17, 38, 146, 0.05);
+            animation: fadeUp 0.4s ease both;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .stat-card:nth-child(1) { animation-delay: 0.05s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.15s; }
+        .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+        /* Applying Brand Colors to Stats */
+        .stat-card.brand-blue { background: var(--royal-blue); color: var(--white); }
+        .stat-card.brand-orange { background: var(--orange); color: var(--white); }
+        .stat-card.brand-yellow { background: var(--yellow); color: var(--text-dark); }
+        .stat-card.brand-white { background: var(--white); color: var(--royal-blue); border: 1px solid var(--border); }
+
+        .stat-lbl { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 0.5rem; }
+        .stat-card.brand-white .stat-lbl { color: var(--text-gray); }
+        .stat-num {
+            font-family: 'Poppins', sans-serif; font-size: 2.25rem;
+            font-weight: 700; line-height: 1; margin-bottom: 0.25rem;
+        }
+        .stat-card.brand-white .stat-num { color: var(--text-dark); }
+
+        /* ── PANELS & TABLES ── */
+        .panel {
+            background: var(--surface);
+            border-radius: 24px; margin-bottom: 2rem; overflow: hidden;
+            box-shadow: 0 10px 40px rgba(17, 38, 146, 0.04);
+            animation: fadeUp 0.4s ease both; animation-delay: 0.25s;
+        }
+        .panel-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.75rem 2rem 1rem;
+        }
+        .panel-title {
+            font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark);
+        }
+        .panel-cnt {
+            font-size: 0.75rem; font-weight: 700;
+            background: var(--bg-light); color: var(--royal-blue);
+            padding: 4px 10px; border-radius: 20px; margin-left: 10px;
+            vertical-align: middle;
+        }
 
         /* TABS */
         .tab-bar {
-            display:flex; gap:0.2rem;
-            padding:0.65rem 1.5rem; border-bottom:1px solid var(--border);
-            background:var(--surface2);
+            display: flex; gap: 0.5rem;
+            padding: 0 2rem 1.5rem;
         }
         .tab-btn {
-            font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:500;
-            padding:0.3rem 0.85rem; border-radius:7px;
-            border:1px solid transparent; cursor:pointer;
-            color:var(--text-muted); background:none; transition:all 0.15s;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+            padding: 0.5rem 1.25rem; border-radius: 50px;
+            border: 1px solid var(--border); cursor: pointer;
+            color: var(--text-gray); background: var(--white); transition: all 0.2s;
         }
-        .tab-btn:hover { color:var(--text); background:rgba(255,255,255,0.04); }
-        .tab-btn.active { color:var(--text); background:rgba(79,63,255,0.11); border-color:rgba(79,63,255,0.22); }
+        .tab-btn:hover { border-color: var(--text-muted); color: var(--text-dark); }
+        .tab-btn.active { 
+            color: var(--royal-blue); background: rgba(36, 65, 234, 0.05); 
+            border-color: rgba(36, 65, 234, 0.2); 
+        }
 
         /* TABLE */
-        .data-tbl { width:100%; border-collapse:collapse; }
-        .data-tbl thead tr { border-bottom:1px solid var(--border); }
+        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; }
         .data-tbl th {
-            text-align:left; padding:0.7rem 1.5rem;
-            font-size:0.65rem; font-weight:500;
-            letter-spacing:0.09em; text-transform:uppercase;
-            color:var(--text-dim);
+            padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600;
+            letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted);
+            border-bottom: 1px solid var(--border); background: rgba(244, 247, 254, 0.3);
         }
-        .data-tbl tbody tr { border-bottom:1px solid var(--border); transition:background 0.13s; }
-        .data-tbl tbody tr:last-child { border-bottom:none; }
-        .data-tbl tbody tr:hover { background:rgba(255,255,255,0.02); }
-        .data-tbl td { padding:0.9rem 1.5rem; font-size:0.83rem; color:var(--text-muted); vertical-align:middle; }
+        .data-tbl td { 
+            padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); 
+            border-bottom: 1px solid var(--border); vertical-align: middle; 
+        }
+        .data-tbl tbody tr { transition: background 0.2s; }
+        .data-tbl tbody tr:hover { background: rgba(244, 247, 254, 0.5); }
+        .data-tbl tbody tr:last-child td { border-bottom: none; }
 
-        .user-cell { display:flex; align-items:center; gap:0.65rem; }
+        .user-cell { display: flex; align-items: center; gap: 1rem; }
         .uav {
-            width:32px; height:32px; border-radius:8px;
-            display:flex; align-items:center; justify-content:center;
-            font-family:'Syne',sans-serif; font-weight:700;
-            font-size:0.7rem; color:#fff; flex-shrink:0;
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            font-size: 1rem; color: #fff; flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .uname { font-size:0.84rem; font-weight:500; color:var(--text); }
-        .uid { font-size:0.66rem; color:var(--text-dim); margin-top:1px; }
+        .uname { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
+        .uid { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 
         .role-badge {
-            display:inline-flex; align-items:center; gap:4px;
-            font-size:0.67rem; font-weight:500; letter-spacing:0.04em;
-            padding:3px 9px; border-radius:20px;
+            display: inline-flex; align-items: center;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+            padding: 4px 10px; border-radius: 6px;
         }
-        .role-badge.student { background:rgba(79,63,255,0.1); color:#8B7FFF; border:1px solid rgba(79,63,255,0.18); }
-        .role-badge.teacher { background:rgba(245,158,11,0.09); color:#F9C957; border:1px solid rgba(245,158,11,0.18); }
-        .role-badge.admin   { background:rgba(27,212,150,0.09); color:#1BD496; border:1px solid rgba(27,212,150,0.18); }
+        .role-badge.student { background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); }
+        .role-badge.teacher { background: rgba(255, 122, 0, 0.1); color: var(--orange); }
+        .role-badge.admin   { background: rgba(5, 205, 153, 0.1); color: var(--success); }
 
         .status-badge {
-            display:inline-flex; align-items:center; gap:5px;
-            font-size:0.68rem; font-weight:500; padding:3px 9px; border-radius:20px;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.75rem; font-weight: 600;
         }
-        .status-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
-        .status-badge.active   { background:rgba(27,212,150,0.09); color:var(--green); border:1px solid rgba(27,212,150,0.18); }
-        .status-badge.pending  { background:rgba(245,158,11,0.09); color:var(--amber); border:1px solid rgba(245,158,11,0.18); }
-        .status-badge.inactive { background:rgba(255,255,255,0.04); color:var(--text-dim); border:1px solid var(--border); }
+        .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .status-badge.active   { color: var(--success); }
+        .status-badge.pending  { color: var(--orange); }
+        .status-badge.inactive { color: var(--text-muted); }
 
-        .actions { display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; }
+        /* BUTTONS */
+        .actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
         .btn {
-            display:inline-flex; align-items:center; gap:4px;
-            font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:500;
-            padding:4px 11px; border-radius:7px; border:1px solid transparent;
-            cursor:pointer; transition:all 0.16s; white-space:nowrap;
+            display: inline-flex; align-items: center; gap: 4px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+            padding: 6px 12px; border-radius: 8px; border: 1px solid transparent;
+            cursor: pointer; transition: all 0.2s; white-space: nowrap;
         }
-        .btn-approve  { background:rgba(27,212,150,0.09); color:var(--green); border-color:rgba(27,212,150,0.22); }
-        .btn-approve:hover { background:rgba(27,212,150,0.2); }
-        .btn-danger   { background:rgba(218,37,29,0.07); color:#FF6B6B; border-color:rgba(218,37,29,0.2); }
-        .btn-danger:hover  { background:rgba(218,37,29,0.18); }
-        .btn-admin    { background:rgba(27,212,150,0.07); color:var(--green); border-color:rgba(27,212,150,0.18); }
-        .btn-admin:hover   { background:rgba(27,212,150,0.16); }
-        .btn-unadmin  { background:rgba(245,158,11,0.07); color:var(--amber); border-color:rgba(245,158,11,0.18); }
-        .btn-unadmin:hover { background:rgba(245,158,11,0.16); }
-        .btn-deact    { background:rgba(255,255,255,0.04); color:var(--text-dim); border-color:var(--border); }
-        .btn-deact:hover   { background:rgba(218,37,29,0.07); color:#FF6B6B; border-color:rgba(218,37,29,0.2); }
-        .btn-activate { background:rgba(79,63,255,0.08); color:#8B7FFF; border-color:rgba(79,63,255,0.2); }
-        .btn-activate:hover { background:rgba(79,63,255,0.18); }
+        .btn-approve  { background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2); }
+        .btn-approve:hover { background: var(--success); color: white; }
+        .btn-danger   { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
+        .btn-danger:hover  { background: var(--danger); color: white; }
+        .btn-admin    { background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); border-color: rgba(36, 65, 234, 0.2); }
+        .btn-admin:hover   { background: var(--royal-blue); color: white; }
+        .btn-unadmin  { background: rgba(255, 122, 0, 0.1); color: var(--orange); border-color: rgba(255, 122, 0, 0.2); }
+        .btn-unadmin:hover { background: var(--orange); color: white; }
+        .btn-deact    { background: var(--bg-light); color: var(--text-gray); border-color: var(--border); }
+        .btn-deact:hover   { background: var(--danger); color: white; border-color: var(--danger); }
+        .btn-activate { background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2); }
+        .btn-activate:hover { background: var(--success); color: white; }
 
+        /* Security Badges */
         .master-tag {
-            display:inline-flex; align-items:center; gap:4px;
-            font-size:0.67rem; font-weight:600; color:var(--green);
-            background:rgba(27,212,150,0.07); border:1px solid rgba(27,212,150,0.18);
-            padding:4px 10px; border-radius:7px;
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 0.75rem; font-weight: 700; color: var(--success);
+            background: rgba(5, 205, 153, 0.1); border: 1px solid rgba(5, 205, 153, 0.2);
+            padding: 6px 12px; border-radius: 8px;
         }
         
         .system-owner-tag {
-            display:inline-flex; align-items:center; gap:4px;
-            font-size:0.67rem; font-weight:700; color:#8B7FFF;
-            background:rgba(79,63,255,0.1); border:1px solid rgba(79,63,255,0.25);
-            padding:4px 10px; border-radius:7px;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.75rem; font-weight: 700; color: var(--royal-blue);
+            background: rgba(36, 65, 234, 0.08); border: 1px solid rgba(36, 65, 234, 0.2);
+            padding: 6px 12px; border-radius: 8px;
         }
 
-        /* EMPTY / ERROR */
-        .empty-cell { padding:2.5rem; text-align:center; }
-        .empty-ico  { font-size:1.6rem; margin-bottom:0.5rem; opacity:0.35; }
-        .empty-ttl  { font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:600; color:var(--text-muted); margin-bottom:0.3rem; }
-        .empty-sub  { font-size:0.75rem; color:var(--text-dim); }
-        .err-cell   { background:rgba(218,37,29,0.05); padding:1.25rem 1.5rem; color:#FF6B6B; font-size:0.8rem; line-height:1.6; border-top:1px solid rgba(218,37,29,0.12); }
+        /* EMPTY / ERROR STATES */
+        .empty-cell { padding: 4rem 2rem; text-align: center; }
+        .empty-ico  { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3; }
+        .empty-ttl  { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem; }
+        .empty-sub  { font-size: 0.85rem; color: var(--text-gray); }
+        .err-cell   { background: rgba(238, 93, 80, 0.05); padding: 1.5rem; color: var(--danger); font-size: 0.9rem; line-height: 1.6; border-radius: 12px; margin: 1rem; border: 1px solid rgba(238, 93, 80, 0.2); }
 
-        /* ANIMS */
-        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulse  { 0%,100%{opacity:0.35} 50%{opacity:0.7} }
-        .loading-row td { animation: pulse 1.4s ease-in-out infinite; }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar{width:5px}
-        ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+        @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse  { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+        .loading-row td { animation: pulse 1.5s ease-in-out infinite; }
     </style>
 </head>
 <body>
@@ -344,106 +307,89 @@
 <aside class="sidebar">
     <div class="sidebar-logo">
         <div class="brand">ENET <span>SUPREME</span></div>
-        <div class="badge-admin">Admin Console</div>
+        <div class="badge-admin">Admin Dashboard</div>
     </div>
 
-    <div class="nav-label">Overview</div>
+    <div class="nav-label">Main Menu</div>
     <a class="nav-item active" href="admin-dashboard.html">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Dashboard
     </a>
     <a class="nav-item" href="#" onclick="switchTab('students');return false;">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Students
     </a>
     <a class="nav-item" href="#" onclick="switchTab('teachers');return false;">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
         Teachers
     </a>
 
     <a class="nav-item" href="community.html">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
         Community Hub
     </a>
 
     <div class="nav-label">Management</div>
     <a class="nav-item" href="#" onclick="switchTab('admins');return false;">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Admins
     </a>
-    <a class="nav-item" href="#" id="nav-pending">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Pending Approvals
         <span class="nav-badge" id="nav-pcount">0</span>
     </a>
 
-    <div class="nav-label">Academy</div>
-    <a class="nav-item" href="#">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        Tracks (6)
-    </a>
-    <a class="nav-item" href="#">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Analytics
-    </a>
-
     <div class="sidebar-foot">
-        <div class="admin-pill">
-            <div class="admin-av">SA</div>
-            <div>
-                <div class="admin-nm">Super Admin</div>
-                <div class="admin-rl">Master Admin</div>
-            </div>
-        </div>
+        <button class="logout-btn" id="logoutBtn">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
+        </button>
     </div>
 </aside>
 
 <div class="main-wrap">
 
     <header class="topbar">
-        <div class="topbar-title">Dashboard <span>/ Overview</span></div>
+        <div class="welcome-text">
+            <h1>Welcome back, Admin!</h1>
+            <p>Here's what's happening in your academy today.</p>
+        </div>
         <div class="topbar-right">
-            <div class="topbar-clock" id="clock">--:-- --</div>
-            <button id="logoutBtn">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                Log Out
-            </button>
+            <div class="search-wrap">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="search-input" placeholder="Search users, emails..." oninput="filterUsers()">
+            </div>
         </div>
     </header>
 
     <main class="content">
 
         <div class="stats-grid">
-            <div class="stat-card c-red">
-                <div class="stat-top"><div class="stat-ico">👩‍🎓</div><span class="stat-tag neu">Enrolled</span></div>
-                <div class="stat-num" id="stat-students">—</div>
+            <div class="stat-card brand-blue">
                 <div class="stat-lbl">Total Students</div>
+                <div class="stat-num" id="stat-students">—</div>
             </div>
-            <div class="stat-card c-amber">
-                <div class="stat-top"><div class="stat-ico">👨‍🏫</div><span class="stat-tag neu">Active</span></div>
+            <div class="stat-card brand-orange">
+                <div class="stat-lbl">Active Teachers</div>
                 <div class="stat-num" id="stat-teachers">—</div>
-                <div class="stat-lbl">Total Teachers</div>
             </div>
-            <div class="stat-card c-acc">
-                <div class="stat-top"><div class="stat-ico">📚</div><span class="stat-tag up">Live</span></div>
-                <div class="stat-num" id="stat-tracks">6</div>
+            <div class="stat-card brand-yellow">
                 <div class="stat-lbl">Academy Tracks</div>
+                <div class="stat-num" id="stat-tracks">6</div>
             </div>
-            <div class="stat-card c-green">
-                <div class="stat-top"><div class="stat-ico">⏳</div><span class="stat-tag neu">Review</span></div>
+            <div class="stat-card brand-white">
+                <div class="stat-lbl">Pending Reviews</div>
                 <div class="stat-num" id="stat-pending">—</div>
-                <div class="stat-lbl">Pending Approvals</div>
             </div>
         </div>
 
         <div class="panel pend">
             <div class="panel-head">
-                <div class="panel-title-g">
-                    <div class="panel-dot"></div>
-                    <div class="panel-ttl">Pending Approvals</div>
+                <div class="panel-title">
+                    Pending Approvals
                     <span class="panel-cnt" id="pend-badge">0</span>
                 </div>
-                <div class="panel-sub">New registrations awaiting admin review</div>
             </div>
             <table class="data-tbl">
                 <thead>
@@ -464,14 +410,9 @@
 
         <div class="panel users">
             <div class="panel-head">
-                <div class="panel-title-g">
-                    <div class="panel-dot"></div>
-                    <div class="panel-ttl">User Management</div>
+                <div class="panel-title">
+                    User Management
                     <span class="panel-cnt" id="users-badge">0</span>
-                </div>
-                <div class="search-wrap">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--text-dim);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="search-input" placeholder="Search users..." oninput="filterUsers()">
                 </div>
             </div>
             <div class="tab-bar">
@@ -504,26 +445,18 @@
 <script>
 window.addEventListener('load', function () {
 
-    // Clock
-    function tick() {
-        document.getElementById('clock').textContent =
-            new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    }
-    tick(); setInterval(tick, 1000);
-
-    // Supabase
+    // Supabase Configuration
     const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     // Helpers
     const GRADS = [
-        'linear-gradient(135deg,#4F3FFF,#8B7FFF)',
-        'linear-gradient(135deg,#DA251D,#FF8A80)',
-        'linear-gradient(135deg,#1BD496,#0F6E56)',
-        'linear-gradient(135deg,#F59E0B,#D97706)',
-        'linear-gradient(135deg,#8B5CF6,#6D28D9)',
-        'linear-gradient(135deg,#0EA5E9,#0369A1)',
+        'linear-gradient(135deg, #2441EA, #5C75FF)', /* Royal Blue */
+        'linear-gradient(135deg, #FF7A00, #FFB067)', /* Orange */
+        'linear-gradient(135deg, #05CD99, #43E8BA)', /* Green */
+        'linear-gradient(135deg, #FFC107, #FFE37E)', /* Yellow */
+        'linear-gradient(135deg, #8B5CF6, #B496F9)', /* Purple */
     ];
     function grad(str) {
         let h = 0;
@@ -546,8 +479,7 @@ window.addEventListener('load', function () {
 
             if (error) {
                 document.getElementById('pending-users-list').innerHTML =
-                    `<tr><td colspan="5"><div class="err-cell"><strong>Supabase Error:</strong> ${error.message}<br>
-                    <span style="opacity:0.7">Ensure Row Level Security allows anon reads, or disable RLS in Supabase SQL editor.</span></div></td></tr>`;
+                    `<tr><td colspan="5"><div class="err-cell"><strong>Database Error:</strong> ${error.message}</div></td></tr>`;
                 document.getElementById('all-users-list').innerHTML =
                     `<tr><td colspan="6"><div class="err-cell">Failed to load users.</div></td></tr>`;
                 return;
@@ -593,7 +525,7 @@ window.addEventListener('load', function () {
                 </div></td>
                 <td>${u.email||'N/A'}</td>
                 <td><span class="role-badge ${role}">${role}</span></td>
-                <td style="color:var(--text-dim);font-size:0.78rem">${fmtDate(u.created_at)}</td>
+                <td>${fmtDate(u.created_at)}</td>
                 <td><div class="actions">
                     <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
                     <button class="btn btn-danger"  onclick="rejectUser('${u.id}')">✕ Reject</button>
@@ -646,27 +578,27 @@ window.addEventListener('load', function () {
                     btns = `<span class="system-owner-tag">👑 System Owner</span>`;
                 } else {
                     btns = `<span class="master-tag">★ Master Admin</span>
-                        <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Remove Admin</button>`;
+                        <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
                 }
             } else {
                 btns = `<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Make Admin</button>`;
                 btns += isInactive
                     ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
-                    : `<button class="btn btn-deact"   onclick="toggleUserStatus('${u.id}','inactive')">⏸ Deactivate</button>`;
+                    : `<button class="btn btn-deact"   onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
             }
 
             html += `<tr>
                 <td><div class="user-cell">
-                    <div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(0.8);opacity:0.5':''}">${inits(u.first_name,u.last_name)}</div>
+                    <div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:0.6':''}">${inits(u.first_name,u.last_name)}</div>
                     <div>
-                        <div class="uname" style="${isInactive?'color:var(--text-dim)':''}">${nm}</div>
+                        <div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div>
                         <div class="uid">#${(u.id||'').slice(0,8)}</div>
                     </div>
                 </div></td>
                 <td>${u.email||'N/A'}</td>
                 <td><span class="role-badge ${role}">${role}</span></td>
-                <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Inactive':'Active'}</span></td>
-                <td style="color:var(--text-dim);font-size:0.78rem">${fmtDate(u.created_at)}</td>
+                <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td>
+                <td>${fmtDate(u.created_at)}</td>
                 <td><div class="actions">${btns}</div></td>
             </tr>`;
         });
@@ -696,7 +628,6 @@ window.addEventListener('load', function () {
             if (el) el.classList.toggle('active', t === tab);
         });
         renderUsers(allData, tab);
-        document.querySelector('.panel.users').scrollIntoView({behavior:'smooth',block:'start'});
     };
 
     window.filterUsers = function() { renderUsers(allData, curTab); };
@@ -709,7 +640,7 @@ window.addEventListener('load', function () {
     };
 
     window.rejectUser = async function(userId) {
-        // LOGIC PROTECTION: Stop deletion of System Owner just in case they somehow end up in the pending list
+        // LOGIC PROTECTION: Just in case
         const user = allData.find(u => u.id === userId);
         if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
             alert("Security Alert: The System Owner account cannot be deleted.");
@@ -732,10 +663,10 @@ window.addEventListener('load', function () {
     };
 
     window.removeAdmin = async function(userId) {
-        // LOGIC PROTECTION: Stop demotion of System Owner
+        // LOGIC PROTECTION
         const user = allData.find(u => u.id === userId);
         if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
-            alert("Security Alert: The primary System Owner account cannot be demoted or modified.");
+            alert("Security Alert: The primary System Owner account cannot be demoted.");
             return;
         }
 
@@ -747,14 +678,14 @@ window.addEventListener('load', function () {
     };
 
     window.toggleUserStatus = async function(userId, newStatus) {
-        // LOGIC PROTECTION: Stop deactivation of System Owner
+        // LOGIC PROTECTION
         const user = allData.find(u => u.id === userId);
         if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') {
-            alert("Security Alert: The primary System Owner account cannot be deactivated.");
+            alert("Security Alert: The primary System Owner account cannot be suspended.");
             return;
         }
 
-        const label = newStatus === 'inactive' ? 'deactivate' : 're-activate';
+        const label = newStatus === 'inactive' ? 'suspend' : 're-activate';
         if (confirm(`Are you sure you want to ${label} this account?`)) {
             const { error } = await supabase.from('profiles').update({ status: newStatus }).eq('id', userId);
             if (error) alert("Status Update Failed: " + error.message);
