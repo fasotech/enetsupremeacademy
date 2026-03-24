@@ -85,12 +85,10 @@
         .right-sidebar { display: flex; flex-direction: column; gap: 1.5rem; position: sticky; top: 100px;}
         .sidebar-widget { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 4px 20px var(--shadow-color); }
         .sidebar-widget h4 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        
         .blog-list { list-style: none; }
         .blog-list li { margin-bottom: 0.8rem; }
         .blog-list a { color: var(--text-dark); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
         .blog-list a:hover { color: var(--royal-blue); text-decoration: underline; }
-        
         .bday-item { display: flex; align-items: center; gap: 12px; }
         .bday-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--yellow), var(--orange)); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Poppins', sans-serif; }
         .bday-item p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
@@ -409,7 +407,8 @@ async function loadUserProfile() {
     const role = profile.role || 'student';
     const avatar = profile.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=random';
 
-    let dashboardLink = 'student.html';
+    // FIX: CORRECTLY ROUTE TO THE ACTUAL FILE NAME FOR STUDENTS
+    let dashboardLink = 'student-dashboard.html';
     if (role === 'admin') dashboardLink = 'admin-dashboard.html';
     if (role === 'teacher') dashboardLink = 'teacher.html';
 
@@ -544,6 +543,7 @@ async function toggleLike(id, type) {
         console.error(err);
     }
 }
+
 
 // ── POST & COMMENT LOGIC ──
 async function createPost() {
