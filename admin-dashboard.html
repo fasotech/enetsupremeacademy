@@ -1,156 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENET SUPREME ACADEMY | Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        const savedTheme = localStorage.getItem('enet_theme') || 'system';
+        if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    </script>
+
     <style>
         :root {
-            /* Brand Colors */
-            --royal-blue: #2441EA;
-            --royal-dark: #1A2C99;
+            /* Immutable Brand Colors */
             --orange: #FF7A00;
             --yellow: #FFC107;
-            --white: #FFFFFF;
-            
-            /* UI Colors */
-            --bg-light: #F4F7FE; /* Soft dashboard background */
-            --surface: #FFFFFF;
-            --border: #E9EDF7;
-            --text-dark: #2B3674; /* Primary headings */
-            --text-muted: #A3AED0; /* Icons and secondary text */
-            --text-gray: #707EAE; /* Standard text */
             --danger: #EE5D50;
             --success: #05CD99;
+            
+            /* Light Theme (Default) */
+            --royal-blue: #2441EA;
+            --bg-light: #F4F7FE; 
+            --surface: #FFFFFF;
+            --surface-hover: rgba(36, 65, 234, 0.04);
+            --border: #E9EDF7;
+            --text-dark: #2B3674; 
+            --text-muted: #A3AED0; 
+            --text-gray: #707EAE; 
+            --topbar-bg: rgba(244, 247, 254, 0.9);
+            --shadow-color: rgba(17, 38, 146, 0.05);
+        }
+
+        /* Dark Theme Overrides */
+        [data-theme="dark"] {
+            --royal-blue: #4F3FFF; /* Adjusted for better dark contrast */
+            --bg-light: #07080F; 
+            --surface: #13151F;
+            --surface-hover: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-dark: #F0F0FF; 
+            --text-muted: #7B7D9A; 
+            --text-gray: #A0AEC0; 
+            --topbar-bg: rgba(7, 8, 15, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: var(--bg-light);
-            color: var(--text-gray);
+            background: var(--bg-light); color: var(--text-gray);
             font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            overflow-x: hidden;
+            min-height: 100vh; display: flex; overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        /* ── MOBILE OVERLAY ── */
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(17, 38, 146, 0.4); backdrop-filter: blur(4px);
+            z-index: 90; opacity: 0; transition: opacity 0.3s;
+        }
+        .sidebar-overlay.show { display: block; opacity: 1; }
 
         /* ── SIDEBAR ── */
         .sidebar {
             position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
-            background: var(--white);
-            display: flex; flex-direction: column;
-            z-index: 100;
-            box-shadow: 4px 0 24px rgba(17, 38, 146, 0.03);
-            border-right: 1px solid var(--border);
+            background: var(--surface); display: flex; flex-direction: column;
+            z-index: 100; box-shadow: 4px 0 24px var(--shadow-color);
+            border-right: 1px solid var(--border); transition: transform 0.3s ease, background-color 0.3s ease;
         }
-        .sidebar-logo {
-            padding: 2.5rem 2rem 1.5rem;
-        }
+        .sidebar-logo { padding: 2.5rem 2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
         .brand {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800; font-size: 1.25rem;
-            letter-spacing: -0.02em; text-transform: uppercase;
-            color: var(--royal-blue); line-height: 1.2;
+            font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.25rem;
+            letter-spacing: -0.02em; text-transform: uppercase; color: var(--royal-blue); line-height: 1.2;
         }
         .brand span { color: var(--orange); }
         .badge-admin {
-            display: inline-block; margin-top: 0.4rem;
-            font-size: 0.65rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--text-muted);
+            display: inline-block; margin-top: 0.4rem; font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
         }
+        .close-sidebar { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
 
         .nav-label {
-            font-size: 0.7rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 1.5rem 2rem 0.5rem;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-muted); padding: 1.5rem 2rem 0.5rem;
         }
         .nav-item {
             display: flex; align-items: center; gap: 0.85rem;
             padding: 0.85rem 2rem; margin: 0.2rem 1rem;
             font-size: 0.95rem; font-weight: 500; color: var(--text-gray);
-            border-radius: 12px;
-            cursor: pointer; text-decoration: none;
-            transition: all 0.2s ease;
+            border-radius: 12px; cursor: pointer; text-decoration: none; transition: all 0.2s ease;
         }
-        .nav-item:hover { color: var(--royal-blue); background: rgba(36, 65, 234, 0.04); }
-        .nav-item.active { 
-            color: var(--royal-blue); font-weight: 700;
-            background: rgba(36, 65, 234, 0.08); 
-        }
+        .nav-item:hover { color: var(--royal-blue); background: var(--surface-hover); }
+        .nav-item.active { color: var(--royal-blue); font-weight: 700; background: var(--surface-hover); border-left: 3px solid var(--royal-blue); }
         .nav-item svg { flex-shrink: 0; width: 20px; height: 20px; color: inherit; opacity: 0.8; }
         .nav-item.active svg { opacity: 1; }
         
         .nav-badge {
             margin-left: auto; font-size: 0.7rem; font-weight: 700;
-            background: var(--orange); color: var(--white);
+            background: var(--orange); color: #fff;
             border-radius: 20px; padding: 2px 8px; min-width: 22px; text-align: center;
         }
 
-        .sidebar-foot {
-            margin-top: auto; padding: 1.5rem 1.5rem 2rem;
-        }
+        .sidebar-foot { margin-top: auto; padding: 1.5rem 1.5rem 2rem; }
         .logout-btn {
             display: flex; align-items: center; gap: 0.75rem; width: 100%;
-            background: var(--bg-light); color: var(--text-gray);
-            border: 1px solid var(--border); padding: 0.85rem 1.25rem;
-            border-radius: 12px; font-weight: 600; font-size: 0.9rem;
+            background: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border);
+            padding: 0.85rem 1.25rem; border-radius: 12px; font-weight: 600; font-size: 0.9rem;
             cursor: pointer; transition: all 0.2s;
         }
         .logout-btn:hover { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
 
         /* ── MAIN CONTENT ── */
         .main-wrap {
-            margin-left: 260px; flex: 1;
-            display: flex; flex-direction: column;
-            position: relative; z-index: 1;
+            margin-left: 260px; flex: 1; display: flex; flex-direction: column;
+            position: relative; z-index: 1; transition: margin-left 0.3s ease;
         }
 
         /* TOPBAR */
         .topbar {
-            position: sticky; top: 0; z-index: 50;
-            background: rgba(244, 247, 254, 0.9);
-            backdrop-filter: blur(12px);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1.5rem 2.5rem;
+            position: sticky; top: 0; z-index: 50; background: var(--topbar-bg); backdrop-filter: blur(12px);
+            display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+        .mobile-toggle {
+            display: none; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; width: 40px; height: 40px; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--royal-blue); box-shadow: 0 2px 10px var(--shadow-color);
         }
         .welcome-text h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.75rem; font-weight: 700; color: var(--text-dark);
-            letter-spacing: -0.02em; margin-bottom: 0.2rem;
+            font-family: 'Poppins', sans-serif; font-size: 1.75rem; font-weight: 700;
+            color: var(--text-dark); letter-spacing: -0.02em; margin-bottom: 0.2rem;
         }
         .welcome-text p { font-size: 0.9rem; color: var(--text-gray); }
         
         .topbar-right { display: flex; align-items: center; gap: 1rem; }
         .search-wrap {
-            display: flex; align-items: center; gap: 0.5rem;
-            background: var(--white); border-radius: 50px;
-            padding: 0.6rem 1.2rem; box-shadow: 0 4px 15px rgba(17, 38, 146, 0.03);
+            display: flex; align-items: center; gap: 0.5rem; background: var(--surface);
+            border-radius: 50px; padding: 0.6rem 1.2rem; box-shadow: 0 4px 15px var(--shadow-color);
             border: 1px solid var(--border); width: 250px;
         }
         .search-wrap input {
-            background: none; border: none; outline: none;
-            color: var(--text-dark); font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem; width: 100%;
+            background: none; border: none; outline: none; color: var(--text-dark);
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem; width: 100%;
         }
         .search-wrap input::placeholder { color: var(--text-muted); }
 
-        /* CONTENT PADDING */
+        /* THEME & NOTIFICATION BELLS */
+        .icon-btn {
+            position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            width: 44px; height: 44px; border-radius: 50%; background: var(--surface);
+            border: 1px solid var(--border); transition: 0.2s; color: var(--text-muted);
+            box-shadow: 0 4px 15px var(--shadow-color); font-size: 1.1rem;
+        }
+        .icon-btn:hover { background: var(--bg-light); color: var(--royal-blue); transform: translateY(-2px); }
+        .bell-badge {
+            position: absolute; top: -2px; right: -2px; background: var(--danger);
+            color: #fff; font-size: 0.6rem; font-weight: 700; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
         .content { padding: 0 2.5rem 2.5rem; flex: 1; }
 
         /* ── STATS CARDS ── */
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem; margin-bottom: 2rem;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
         .stat-card {
-            border-radius: 20px; padding: 1.75rem;
-            position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(17, 38, 146, 0.05);
-            animation: fadeUp 0.4s ease both;
+            border-radius: 20px; padding: 1.75rem; position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-color); animation: fadeUp 0.4s ease both;
             display: flex; flex-direction: column; justify-content: space-between;
         }
         .stat-card:nth-child(1) { animation-delay: 0.05s; }
@@ -158,156 +181,136 @@
         .stat-card:nth-child(3) { animation-delay: 0.15s; }
         .stat-card:nth-child(4) { animation-delay: 0.2s; }
 
-        /* Applying Brand Colors to Stats */
-        .stat-card.brand-blue { background: var(--royal-blue); color: var(--white); }
-        .stat-card.brand-orange { background: var(--orange); color: var(--white); }
-        .stat-card.brand-yellow { background: var(--yellow); color: var(--text-dark); }
-        .stat-card.brand-white { background: var(--white); color: var(--royal-blue); border: 1px solid var(--border); }
+        .stat-card.brand-blue { background: var(--royal-blue); color: #fff; }
+        .stat-card.brand-orange { background: var(--orange); color: #fff; }
+        .stat-card.brand-yellow { background: var(--yellow); color: #111; }
+        .stat-card.brand-surface { background: var(--surface); color: var(--royal-blue); border: 1px solid var(--border); }
 
         .stat-lbl { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 0.5rem; }
-        .stat-card.brand-white .stat-lbl { color: var(--text-gray); }
-        .stat-num {
-            font-family: 'Poppins', sans-serif; font-size: 2.25rem;
-            font-weight: 700; line-height: 1; margin-bottom: 0.25rem;
-        }
-        .stat-card.brand-white .stat-num { color: var(--text-dark); }
+        .stat-card.brand-surface .stat-lbl { color: var(--text-gray); }
+        .stat-num { font-family: 'Poppins', sans-serif; font-size: 2.25rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+        .stat-card.brand-surface .stat-num { color: var(--text-dark); }
+
+        /* ── DASHBOARD BOTTOM LAYOUT ── */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
 
         /* ── PANELS & TABLES ── */
         .panel {
-            background: var(--surface);
-            border-radius: 24px; margin-bottom: 2rem; overflow: hidden;
-            box-shadow: 0 10px 40px rgba(17, 38, 146, 0.04);
-            animation: fadeUp 0.4s ease both; animation-delay: 0.25s;
+            background: var(--surface); border-radius: 24px; margin-bottom: 2rem; overflow: hidden;
+            box-shadow: 0 10px 40px var(--shadow-color); animation: fadeUp 0.4s ease both; animation-delay: 0.25s;
+            transition: background-color 0.3s ease;
         }
-        .panel-head {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1.75rem 2rem 1rem;
-        }
-        .panel-title {
-            font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark);
-        }
+        .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem 1rem; }
+        .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
         .panel-cnt {
-            font-size: 0.75rem; font-weight: 700;
-            background: var(--bg-light); color: var(--royal-blue);
-            padding: 4px 10px; border-radius: 20px; margin-left: 10px;
-            vertical-align: middle;
+            font-size: 0.75rem; font-weight: 700; background: var(--bg-light); color: var(--royal-blue);
+            padding: 4px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; border: 1px solid var(--border);
         }
 
-        /* TABS */
-        .tab-bar {
-            display: flex; gap: 0.5rem;
-            padding: 0 2rem 1.5rem;
-        }
+        .tab-bar { display: flex; gap: 0.5rem; padding: 0 2rem 1.5rem; overflow-x: auto; white-space: nowrap; }
+        .tab-bar::-webkit-scrollbar { display: none; }
         .tab-btn {
-            font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
-            padding: 0.5rem 1.25rem; border-radius: 50px;
-            border: 1px solid var(--border); cursor: pointer;
-            color: var(--text-gray); background: var(--white); transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 0.5rem 1.25rem;
+            border-radius: 50px; border: 1px solid var(--border); cursor: pointer; color: var(--text-gray);
+            background: var(--surface); transition: all 0.2s;
         }
         .tab-btn:hover { border-color: var(--text-muted); color: var(--text-dark); }
-        .tab-btn.active { 
-            color: var(--royal-blue); background: rgba(36, 65, 234, 0.05); 
-            border-color: rgba(36, 65, 234, 0.2); 
-        }
+        .tab-btn.active { color: var(--royal-blue); background: var(--surface-hover); border-color: var(--royal-blue); }
 
-        /* TABLE */
-        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
         .data-tbl th {
-            padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600;
-            letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted);
-            border-bottom: 1px solid var(--border); background: rgba(244, 247, 254, 0.3);
+            padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light);
         }
-        .data-tbl td { 
-            padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); 
-            border-bottom: 1px solid var(--border); vertical-align: middle; 
-        }
-        .data-tbl tbody tr { transition: background 0.2s; }
-        .data-tbl tbody tr:hover { background: rgba(244, 247, 254, 0.5); }
-        .data-tbl tbody tr:last-child td { border-bottom: none; }
+        .data-tbl td { padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .data-tbl tbody tr:hover { background: var(--bg-light); }
 
         .user-cell { display: flex; align-items: center; gap: 1rem; }
         .uav {
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Poppins', sans-serif; font-weight: 700;
-            font-size: 1rem; color: #fff; flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .uname { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
         .uid { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 
-        .role-badge {
-            display: inline-flex; align-items: center;
-            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-            padding: 4px 10px; border-radius: 6px;
-        }
+        .role-badge { display: inline-flex; align-items: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
         .role-badge.student { background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); }
         .role-badge.teacher { background: rgba(255, 122, 0, 0.1); color: var(--orange); }
         .role-badge.admin   { background: rgba(5, 205, 153, 0.1); color: var(--success); }
 
-        .status-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 0.75rem; font-weight: 600;
-        }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; }
         .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
         .status-badge.active   { color: var(--success); }
         .status-badge.pending  { color: var(--orange); }
         .status-badge.inactive { color: var(--text-muted); }
 
-        /* BUTTONS */
         .actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-        .btn {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
-            padding: 6px 12px; border-radius: 8px; border: 1px solid transparent;
-            cursor: pointer; transition: all 0.2s; white-space: nowrap;
-        }
+        .btn { display: inline-flex; align-items: center; gap: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
         .btn-approve  { background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2); }
-        .btn-approve:hover { background: var(--success); color: white; }
+        .btn-approve:hover { background: var(--success); color: #fff; }
         .btn-danger   { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
-        .btn-danger:hover  { background: var(--danger); color: white; }
+        .btn-danger:hover  { background: var(--danger); color: #fff; }
         .btn-admin    { background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); border-color: rgba(36, 65, 234, 0.2); }
-        .btn-admin:hover   { background: var(--royal-blue); color: white; }
+        .btn-admin:hover   { background: var(--royal-blue); color: #fff; }
         .btn-unadmin  { background: rgba(255, 122, 0, 0.1); color: var(--orange); border-color: rgba(255, 122, 0, 0.2); }
-        .btn-unadmin:hover { background: var(--orange); color: white; }
+        .btn-unadmin:hover { background: var(--orange); color: #fff; }
         .btn-deact    { background: var(--bg-light); color: var(--text-gray); border-color: var(--border); }
-        .btn-deact:hover   { background: var(--danger); color: white; border-color: var(--danger); }
+        .btn-deact:hover   { background: var(--danger); color: #fff; border-color: var(--danger); }
         .btn-activate { background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2); }
-        .btn-activate:hover { background: var(--success); color: white; }
+        .btn-activate:hover { background: var(--success); color: #fff; }
 
-        /* Security Badges */
-        .master-tag {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 0.75rem; font-weight: 700; color: var(--success);
-            background: rgba(5, 205, 153, 0.1); border: 1px solid rgba(5, 205, 153, 0.2);
-            padding: 6px 12px; border-radius: 8px;
-        }
-        
-        .system-owner-tag {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 0.75rem; font-weight: 700; color: var(--royal-blue);
-            background: rgba(36, 65, 234, 0.08); border: 1px solid rgba(36, 65, 234, 0.2);
-            padding: 6px 12px; border-radius: 8px;
-        }
+        .master-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.1); border: 1px solid rgba(5, 205, 153, 0.2); padding: 6px 12px; border-radius: 8px; }
+        .system-owner-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; color: var(--royal-blue); background: var(--surface-hover); border: 1px solid rgba(36, 65, 234, 0.2); padding: 6px 12px; border-radius: 8px; }
 
-        /* EMPTY / ERROR STATES */
         .empty-cell { padding: 4rem 2rem; text-align: center; }
         .empty-ico  { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3; }
         .empty-ttl  { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem; }
         .empty-sub  { font-size: 0.85rem; color: var(--text-gray); }
-        .err-cell   { background: rgba(238, 93, 80, 0.05); padding: 1.5rem; color: var(--danger); font-size: 0.9rem; line-height: 1.6; border-radius: 12px; margin: 1rem; border: 1px solid rgba(238, 93, 80, 0.2); }
+
+        /* ── RECENT ACTIVITIES PANEL ── */
+        .activity-list { padding: 0 2rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .activity-item { display: flex; align-items: flex-start; gap: 1rem; }
+        .act-av { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; flex-shrink: 0; font-size: 0.85rem; }
+        .act-text p { font-size: 0.85rem; color: var(--text-dark); line-height: 1.4; }
+        .act-text p strong { font-weight: 700; }
+        .act-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; display: block; }
 
         @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
         @keyframes pulse  { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
         .loading-row td { animation: pulse 1.5s ease-in-out infinite; }
+
+        /* ── MOBILE RESPONSIVE CSS ── */
+        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrap { margin-left: 0; }
+            .mobile-toggle { display: flex; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .topbar { padding: 1rem 1.5rem; }
+            .content { padding: 0 1.5rem 1.5rem; }
+            .welcome-text h1 { font-size: 1.4rem; }
+            .welcome-text p { display: none; }
+        }
+        @media (max-width: 576px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .topbar { flex-wrap: wrap; gap: 1rem; }
+            .search-wrap { width: 100%; order: 3; }
+        }
     </style>
 </head>
 <body>
 
-<aside class="sidebar">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        <div class="brand">ENET <span>SUPREME</span></div>
-        <div class="badge-admin">Admin Dashboard</div>
+        <div>
+            <div class="brand">ENET <span>SUPREME</span></div>
+            <div class="badge-admin">Admin Dashboard</div>
+        </div>
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
     </div>
 
     <div class="nav-label">Main Menu</div>
@@ -336,7 +339,7 @@
     </a>
     <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Pending Approvals
+        Pending
         <span class="nav-badge" id="nav-pcount">0</span>
     </a>
 
@@ -351,14 +354,28 @@
 <div class="main-wrap">
 
     <header class="topbar">
-        <div class="welcome-text">
-            <h1>Welcome back, Admin!</h1>
-            <p>Here's what's happening in your academy today.</p>
+        <div class="topbar-left">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <div class="welcome-text">
+                <h1>Welcome back, Admin!</h1>
+                <p>Here's what's happening in your academy today.</p>
+            </div>
         </div>
         <div class="topbar-right">
             <div class="search-wrap">
                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="search-input" placeholder="Search users, emails..." oninput="filterUsers()">
+                <input type="text" id="search-input" placeholder="Search users..." oninput="filterUsers()">
+            </div>
+            
+            <button class="icon-btn" id="themeToggleBtn" onclick="cycleTheme()" title="Switch Theme">
+                <span id="theme-icon">💻</span>
+            </button>
+            
+            <div class="icon-btn">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <div class="bell-badge" id="bell-badge">0</div>
             </div>
         </div>
     </header>
@@ -378,7 +395,7 @@
                 <div class="stat-lbl">Academy Tracks</div>
                 <div class="stat-num" id="stat-tracks">6</div>
             </div>
-            <div class="stat-card brand-white">
+            <div class="stat-card brand-surface">
                 <div class="stat-lbl">Pending Reviews</div>
                 <div class="stat-num" id="stat-pending">—</div>
             </div>
@@ -386,56 +403,47 @@
 
         <div class="panel pend">
             <div class="panel-head">
-                <div class="panel-title">
-                    Pending Approvals
-                    <span class="panel-cnt" id="pend-badge">0</span>
-                </div>
+                <div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div>
             </div>
-            <table class="data-tbl">
-                <thead>
-                    <tr>
-                        <th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="pending-users-list">
-                    <tr class="loading-row">
-                        <td colspan="5" class="empty-cell">
-                            <div class="empty-ico">⏳</div>
-                            <div class="empty-ttl">Connecting to database...</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="data-tbl">
+                    <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
+                    <tbody id="pending-users-list">
+                        <tr class="loading-row"><td colspan="5" class="empty-cell"><div class="empty-ico">⏳</div><div class="empty-ttl">Loading database...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="panel users">
-            <div class="panel-head">
-                <div class="panel-title">
-                    User Management
-                    <span class="panel-cnt" id="users-badge">0</span>
+        <div class="dashboard-grid">
+            <div class="panel users">
+                <div class="panel-head">
+                    <div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div>
+                </div>
+                <div class="tab-bar">
+                    <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All</button>
+                    <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
+                    <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
+                    <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-tbl">
+                        <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+                        <tbody id="all-users-list">
+                            <tr class="loading-row"><td colspan="6" class="empty-cell"><div class="empty-ico">⏳</div><div class="empty-ttl">Loading database...</div></td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All Users</button>
-                <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
-                <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
-                <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
+
+            <div class="panel activity">
+                <div class="panel-head">
+                    <div class="panel-title">Recent Activity</div>
+                </div>
+                <div class="activity-list" id="recent-activities-list">
+                    <p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin-top:1rem;">Loading activity...</p>
+                </div>
             </div>
-            <table class="data-tbl">
-                <thead>
-                    <tr>
-                        <th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="all-users-list">
-                    <tr class="loading-row">
-                        <td colspan="6" class="empty-cell">
-                            <div class="empty-ico">⏳</div>
-                            <div class="empty-ttl">Connecting to database...</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
 
     </main>
@@ -443,7 +451,46 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ── THEME MANAGER ──
+const themes = ['system', 'light', 'dark'];
+const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
+
+function cycleTheme() {
+    let current = localStorage.getItem('enet_theme') || 'system';
+    let nextIndex = (themes.indexOf(current) + 1) % themes.length;
+    let nextTheme = themes[nextIndex];
+    
+    localStorage.setItem('enet_theme', nextTheme);
+    applyTheme(nextTheme);
+}
+
+function applyTheme(theme) {
+    document.getElementById('theme-icon').textContent = themeIcons[theme];
+    if (theme === 'system') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', theme);
+    }
+}
+
+// Listen for system preference changes live
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (localStorage.getItem('enet_theme') === 'system') {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
+});
+
+// ── MOBILE SIDEBAR TOGGLE ──
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
 window.addEventListener('load', function () {
+    // Set initial theme icon
+    const currentTheme = localStorage.getItem('enet_theme') || 'system';
+    document.getElementById('theme-icon').textContent = themeIcons[currentTheme];
 
     // Supabase Configuration
     const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
@@ -452,21 +499,21 @@ window.addEventListener('load', function () {
 
     // Helpers
     const GRADS = [
-        'linear-gradient(135deg, #2441EA, #5C75FF)', /* Royal Blue */
-        'linear-gradient(135deg, #FF7A00, #FFB067)', /* Orange */
-        'linear-gradient(135deg, #05CD99, #43E8BA)', /* Green */
-        'linear-gradient(135deg, #FFC107, #FFE37E)', /* Yellow */
-        'linear-gradient(135deg, #8B5CF6, #B496F9)', /* Purple */
+        'linear-gradient(135deg, #2441EA, #5C75FF)', 
+        'linear-gradient(135deg, #FF7A00, #FFB067)', 
+        'linear-gradient(135deg, #05CD99, #43E8BA)', 
+        'linear-gradient(135deg, #FFC107, #FFE37E)', 
+        'linear-gradient(135deg, #8B5CF6, #B496F9)', 
     ];
-    function grad(str) {
-        let h = 0;
-        for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
-        return GRADS[Math.abs(h) % GRADS.length];
-    }
+    function grad(str) { let h = 0; for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h); return GRADS[Math.abs(h) % GRADS.length]; }
     function inits(f, l) { return ((f||'U')[0]+(l||'?')[0]).toUpperCase(); }
-    function fmtDate(d) {
-        if (!d) return '—';
-        return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    function fmtDate(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+    function timeAgo(dateStr) {
+        const diff = Math.floor((new Date() - new Date(dateStr)) / 1000);
+        if (diff < 60) return 'just now';
+        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+        return fmtDate(dateStr);
     }
 
     let allData = [];
@@ -476,89 +523,74 @@ window.addEventListener('load', function () {
     async function loadAdminDashboard() {
         try {
             const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-
-            if (error) {
-                document.getElementById('pending-users-list').innerHTML =
-                    `<tr><td colspan="5"><div class="err-cell"><strong>Database Error:</strong> ${error.message}</div></td></tr>`;
-                document.getElementById('all-users-list').innerHTML =
-                    `<tr><td colspan="6"><div class="err-cell">Failed to load users.</div></td></tr>`;
-                return;
-            }
-
+            if (error) throw error;
             if (!data || data.length === 0) {
-                document.getElementById('pending-users-list').innerHTML = emptyRow('No pending approvals', 'All registrations are processed.', 5);
-                document.getElementById('all-users-list').innerHTML = emptyRow('No users yet', 'Registered users will appear here.', 6);
-                setStats(0,0,0);
-                return;
+                document.getElementById('pending-users-list').innerHTML = emptyRow('No pending approvals', '', 5);
+                document.getElementById('all-users-list').innerHTML = emptyRow('No users yet', '', 6);
+                setStats(0,0,0); return;
             }
-
             allData = data;
             render(data);
-
+            renderActivities(data);
         } catch (err) {
-            document.getElementById('pending-users-list').innerHTML =
-                `<tr><td colspan="5"><div class="err-cell"><strong>Code Error:</strong> ${err.message}</div></td></tr>`;
+            console.error(err);
         }
     }
 
     function render(data) {
-        let pendHTML = '';
-        let sc = 0, tc = 0, pc = 0;
-
+        let pendHTML = ''; let sc = 0, tc = 0, pc = 0;
         data.forEach(u => {
             if (u.status === 'pending') pc++;
-            if (u.status === 'approved') {
-                const r = u.role || 'student';
-                if (r === 'student') sc++;
-                if (r === 'teacher') tc++;
-            }
+            if (u.status === 'approved') { const r = u.role || 'student'; if (r === 'student') sc++; if (r === 'teacher') tc++; }
         });
 
-        // Pending rows
         data.filter(u => u.status === 'pending').forEach(u => {
             const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim();
             const role = u.role || 'student';
             pendHTML += `<tr>
-                <td><div class="user-cell">
-                    <div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
-                    <div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div>
-                </div></td>
-                <td>${u.email||'N/A'}</td>
-                <td><span class="role-badge ${role}">${role}</span></td>
-                <td>${fmtDate(u.created_at)}</td>
-                <td><div class="actions">
-                    <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
-                    <button class="btn btn-danger"  onclick="rejectUser('${u.id}')">✕ Reject</button>
-                </div></td>
-            </tr>`;
+                <td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
+                <div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td>
+                <td>${u.email||'N/A'}</td><td><span class="role-badge ${role}">${role}</span></td><td>${fmtDate(u.created_at)}</td>
+                <td><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
+                <button class="btn btn-danger" onclick="rejectUser('${u.id}')">✕ Reject</button></div></td></tr>`;
         });
 
-        document.getElementById('pending-users-list').innerHTML = pendHTML || emptyRow('All caught up!', 'No pending approvals right now.', 5, '✅');
+        document.getElementById('pending-users-list').innerHTML = pendHTML || emptyRow('All caught up!', '', 5, '✅');
         document.getElementById('pend-badge').textContent = pc;
         document.getElementById('nav-pcount').textContent = pc;
+        document.getElementById('bell-badge').textContent = pc; // Update Bell Notification
         setStats(sc, tc, pc);
         renderUsers(data, curTab);
+    }
+
+    function renderActivities(data) {
+        // Show 5 most recent signups
+        const recent = data.slice(0, 5);
+        let html = '';
+        recent.forEach(u => {
+            const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim();
+            html += `
+            <div class="activity-item">
+                <div class="act-av" style="background:${grad(u.id||nm)}">${inits(u.first_name, u.last_name)}</div>
+                <div class="act-text">
+                    <p><strong>${nm}</strong> created a ${u.role || 'student'} account.</p>
+                    <span class="act-time">${timeAgo(u.created_at)}</span>
+                </div>
+            </div>`;
+        });
+        document.getElementById('recent-activities-list').innerHTML = html;
     }
 
     function renderUsers(data, tab) {
         const q = (document.getElementById('search-input').value||'').toLowerCase();
         let rows = data.filter(u => u.status === 'approved' || u.status === 'inactive');
-
         if (tab === 'students') rows = rows.filter(u => (u.role||'student') === 'student');
         else if (tab === 'teachers') rows = rows.filter(u => (u.role||'student') === 'teacher');
         else if (tab === 'admins') rows = rows.filter(u => (u.role||'student') === 'admin');
-
-        if (q) rows = rows.filter(u => {
-            const nm = `${u.first_name||''} ${u.last_name||''}`.toLowerCase();
-            return nm.includes(q) || (u.email||'').toLowerCase().includes(q);
-        });
+        if (q) rows = rows.filter(u => { const nm = `${u.first_name||''} ${u.last_name||''}`.toLowerCase(); return nm.includes(q) || (u.email||'').toLowerCase().includes(q); });
 
         document.getElementById('users-badge').textContent = rows.length;
-
-        if (!rows.length) {
-            document.getElementById('all-users-list').innerHTML = emptyRow('No users found', 'Try a different filter or search.', 6, '🔍');
-            return;
-        }
+        if (!rows.length) { document.getElementById('all-users-list').innerHTML = emptyRow('No users found', '', 6, '🔍'); return; }
 
         let html = '';
         rows.forEach(u => {
@@ -566,43 +598,24 @@ window.addEventListener('load', function () {
             const role = u.role || 'student';
             const isAdmin    = role === 'admin';
             const isInactive = u.status === 'inactive';
-            
-            // SECURITY CHECK: Is this the protected System Owner?
             const isSystemOwner = (u.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com';
 
             let btns = '';
-            
             if (isAdmin) {
-                if (isSystemOwner) {
-                    // UI PROTECTION: Hide remove/deactivate buttons completely
-                    btns = `<span class="system-owner-tag">👑 System Owner</span>`;
-                } else {
-                    btns = `<span class="master-tag">★ Master Admin</span>
-                        <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
-                }
+                if (isSystemOwner) btns = `<span class="system-owner-tag">👑 System Owner</span>`;
+                else btns = `<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
             } else {
                 btns = `<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Make Admin</button>`;
-                btns += isInactive
-                    ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
-                    : `<button class="btn btn-deact"   onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
+                btns += isInactive ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>` : `<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
             }
 
             html += `<tr>
-                <td><div class="user-cell">
-                    <div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:0.6':''}">${inits(u.first_name,u.last_name)}</div>
-                    <div>
-                        <div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div>
-                        <div class="uid">#${(u.id||'').slice(0,8)}</div>
-                    </div>
-                </div></td>
-                <td>${u.email||'N/A'}</td>
-                <td><span class="role-badge ${role}">${role}</span></td>
+                <td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:0.6':''}">${inits(u.first_name,u.last_name)}</div>
+                <div><div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td>
+                <td>${u.email||'N/A'}</td><td><span class="role-badge ${role}">${role}</span></td>
                 <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td>
-                <td>${fmtDate(u.created_at)}</td>
-                <td><div class="actions">${btns}</div></td>
-            </tr>`;
+                <td>${fmtDate(u.created_at)}</td><td><div class="actions">${btns}</div></td></tr>`;
         });
-
         document.getElementById('all-users-list').innerHTML = html;
     }
 
@@ -613,14 +626,9 @@ window.addEventListener('load', function () {
     }
 
     function emptyRow(title, sub, cols, ico) {
-        return `<tr><td colspan="${cols}"><div class="empty-cell">
-            <div class="empty-ico">${ico||'📭'}</div>
-            <div class="empty-ttl">${title}</div>
-            <div class="empty-sub">${sub}</div>
-        </div></td></tr>`;
+        return `<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico||'📭'}</div><div class="empty-ttl">${title}</div><div class="empty-sub">${sub}</div></div></td></tr>`;
     }
 
-    // Tab switching
     window.switchTab = function(tab) {
         curTab = tab;
         ['all','students','teachers','admins'].forEach(t => {
@@ -632,74 +640,35 @@ window.addEventListener('load', function () {
 
     window.filterUsers = function() { renderUsers(allData, curTab); };
 
-    // Actions
     window.approveUser = async function(userId) {
-        const { error } = await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId);
-        if (error) alert("Approval Failed: " + error.message);
-        else loadAdminDashboard();
+        await supabase.from('profiles').update({ status: 'approved' }).eq('id', userId); loadAdminDashboard();
     };
 
     window.rejectUser = async function(userId) {
-        // LOGIC PROTECTION: Just in case
         const user = allData.find(u => u.id === userId);
-        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
-            alert("Security Alert: The System Owner account cannot be deleted.");
-            return;
-        }
-
-        if (confirm("Reject and remove this registration?")) {
-            const { error } = await supabase.from('profiles').delete().eq('id', userId);
-            if (error) alert("Rejection Failed: " + error.message);
-            else loadAdminDashboard();
-        }
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') return;
+        if (confirm("Reject and remove this registration?")) { await supabase.from('profiles').delete().eq('id', userId); loadAdminDashboard(); }
     };
 
     window.makeAdmin = async function(userId) {
-        if (confirm("Are you sure you want to make this user an Admin?")) {
-            const { error } = await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
-            if (error) alert("Upgrade Failed: " + error.message);
-            else loadAdminDashboard();
-        }
+        if (confirm("Make this user an Admin?")) { await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId); loadAdminDashboard(); }
     };
 
     window.removeAdmin = async function(userId) {
-        // LOGIC PROTECTION
         const user = allData.find(u => u.id === userId);
-        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
-            alert("Security Alert: The primary System Owner account cannot be demoted.");
-            return;
-        }
-
-        if (confirm("Remove admin privileges? This user will revert to student.")) {
-            const { error } = await supabase.from('profiles').update({ role: 'student' }).eq('id', userId);
-            if (error) alert("Failed: " + error.message);
-            else loadAdminDashboard();
-        }
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') { alert("System Owner cannot be demoted."); return; }
+        if (confirm("Remove admin privileges?")) { await supabase.from('profiles').update({ role: 'student' }).eq('id', userId); loadAdminDashboard(); }
     };
 
     window.toggleUserStatus = async function(userId, newStatus) {
-        // LOGIC PROTECTION
         const user = allData.find(u => u.id === userId);
-        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') {
-            alert("Security Alert: The primary System Owner account cannot be suspended.");
-            return;
-        }
-
-        const label = newStatus === 'inactive' ? 'suspend' : 're-activate';
-        if (confirm(`Are you sure you want to ${label} this account?`)) {
-            const { error } = await supabase.from('profiles').update({ status: newStatus }).eq('id', userId);
-            if (error) alert("Status Update Failed: " + error.message);
-            else loadAdminDashboard();
-        }
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') return;
+        if (confirm(`Change account status?`)) { await supabase.from('profiles').update({ status: newStatus }).eq('id', userId); loadAdminDashboard(); }
     };
 
-    // Logout
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-        document.getElementById('logoutBtn').innerHTML = '⏳ Logging out...';
         try { await supabase.auth.signOut(); } catch (err) {}
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.href = 'index.html';
+        localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html';
     });
 
     loadAdminDashboard();
