@@ -1,65 +1,432 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME ACADEMY | Student</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>ENET SUPREME ACADEMY | Student Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        const savedTheme = localStorage.getItem('enet_theme') || 'system';
+        if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    </script>
+
     <style>
-        :root { --navy-blue: #2C1E85; --brand-red: #DA251D; --accent-blue: #2DAAE1; --background: #F8F9FA; --border: #E2E8F0; --text-gray: #475467; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--background); color: var(--navy-blue); min-height: 100vh; display: flex; flex-direction: column; }
-        header { background-color: var(--navy-blue); padding: 1rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--brand-red); }
-        .logo { font-weight: bold; text-transform: uppercase; }
-        .logo span { color: var(--brand-red); }
-        .main-container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 4px solid var(--navy-blue); }
-        h2 { margin-bottom: 1.5rem; color: var(--navy-blue); }
-        .dashboard-list { list-style: none; }
-        .dashboard-list li { padding: 1rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .action-link { color: var(--brand-red); text-decoration: none; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--border); }
-        th { background-color: #E0E7FF; color: var(--navy-blue); }
-        .logout-link { background: transparent; color: white; border: 1px solid white; padding: 0.4rem 1rem; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
-        .logout-link:hover { background-color: rgba(255, 255, 255, 0.1); }
+        :root {
+            /* Immutable Brand Colors */
+            --orange: #FF7A00;
+            --yellow: #FFC107;
+            --danger: #EE5D50;
+            --success: #05CD99;
+            
+            /* Light Theme (Default) */
+            --royal-blue: #2441EA;
+            --bg-light: #F4F7FE; 
+            --surface: #FFFFFF;
+            --surface-hover: rgba(36, 65, 234, 0.04);
+            --border: #E9EDF7;
+            --text-dark: #2B3674; 
+            --text-muted: #A3AED0; 
+            --text-gray: #707EAE; 
+            --topbar-bg: rgba(244, 247, 254, 0.9);
+            --shadow-color: rgba(17, 38, 146, 0.05);
+        }
+
+        /* Dark Theme Overrides */
+        [data-theme="dark"] {
+            --royal-blue: #4F3FFF; 
+            --bg-light: #07080F; 
+            --surface: #13151F;
+            --surface-hover: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-dark: #F0F0FF; 
+            --text-muted: #7B7D9A; 
+            --text-gray: #A0AEC0; 
+            --topbar-bg: rgba(7, 8, 15, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg-light); color: var(--text-gray);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh; display: flex; overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ── MOBILE OVERLAY ── */
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(17, 38, 146, 0.4); backdrop-filter: blur(4px);
+            z-index: 90; opacity: 0; transition: opacity 0.3s;
+        }
+        .sidebar-overlay.show { display: block; opacity: 1; }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+            background: var(--surface); display: flex; flex-direction: column;
+            z-index: 100; box-shadow: 4px 0 24px var(--shadow-color);
+            border-right: 1px solid var(--border); transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .sidebar-logo { padding: 2.5rem 2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .brand {
+            font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.25rem;
+            letter-spacing: -0.02em; text-transform: uppercase; color: var(--royal-blue); line-height: 1.2;
+        }
+        .brand span { color: var(--orange); }
+        .badge-student {
+            display: inline-block; margin-top: 0.4rem; font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase; color: var(--royal-blue);
+            background: rgba(36, 65, 234, 0.1); padding: 4px 10px; border-radius: 8px;
+        }
+        .close-sidebar { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+
+        .nav-label {
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-muted); padding: 1.5rem 2rem 0.5rem;
+        }
+        .nav-item {
+            display: flex; align-items: center; gap: 0.85rem;
+            padding: 0.85rem 2rem; margin: 0.2rem 1rem;
+            font-size: 0.95rem; font-weight: 500; color: var(--text-gray);
+            border-radius: 12px; cursor: pointer; text-decoration: none; transition: all 0.2s ease;
+        }
+        .nav-item:hover { color: var(--royal-blue); background: var(--surface-hover); }
+        .nav-item.active { color: var(--royal-blue); font-weight: 700; background: var(--surface-hover); border-left: 3px solid var(--royal-blue); }
+        .nav-item svg { flex-shrink: 0; width: 20px; height: 20px; color: inherit; opacity: 0.8; }
+        .nav-item.active svg { opacity: 1; }
+
+        .sidebar-foot { margin-top: auto; padding: 1.5rem 1.5rem 2rem; }
+        .logout-btn {
+            display: flex; align-items: center; gap: 0.75rem; width: 100%;
+            background: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border);
+            padding: 0.85rem 1.25rem; border-radius: 12px; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .logout-btn:hover { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
+
+        /* ── MAIN CONTENT ── */
+        .main-wrap {
+            margin-left: 260px; flex: 1; display: flex; flex-direction: column;
+            position: relative; z-index: 1; transition: margin-left 0.3s ease;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            position: sticky; top: 0; z-index: 50; background: var(--topbar-bg); backdrop-filter: blur(12px);
+            display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+        .mobile-toggle {
+            display: none; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; width: 40px; height: 40px; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--royal-blue); box-shadow: 0 2px 10px var(--shadow-color);
+        }
+        .welcome-text h1 {
+            font-family: 'Poppins', sans-serif; font-size: 1.75rem; font-weight: 700;
+            color: var(--text-dark); letter-spacing: -0.02em; margin-bottom: 0.2rem;
+        }
+        .welcome-text p { font-size: 0.9rem; color: var(--text-gray); }
+        
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
+
+        /* THEME & NOTIFICATION BELLS */
+        .icon-btn {
+            position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            width: 44px; height: 44px; border-radius: 50%; background: var(--surface);
+            border: 1px solid var(--border); transition: 0.2s; color: var(--text-muted);
+            box-shadow: 0 4px 15px var(--shadow-color); font-size: 1.1rem;
+        }
+        .icon-btn:hover { background: var(--bg-light); color: var(--royal-blue); transform: translateY(-2px); }
+        
+        .bell-badge {
+            position: absolute; top: -2px; right: -2px; background: var(--danger);
+            color: #fff; font-size: 0.6rem; font-weight: 700; width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
+        .content { padding: 0 2.5rem 2.5rem; flex: 1; }
+
+        /* ── STATS CARDS ── */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card {
+            border-radius: 20px; padding: 1.75rem; position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-color); animation: fadeUp 0.4s ease both;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .stat-card.brand-blue { background: var(--royal-blue); color: #fff; }
+        .stat-card.brand-orange { background: var(--orange); color: #fff; }
+        .stat-card.brand-surface { background: var(--surface); color: var(--royal-blue); border: 1px solid var(--border); }
+
+        .stat-lbl { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 0.5rem; }
+        .stat-card.brand-surface .stat-lbl { color: var(--text-gray); }
+        .stat-num { font-family: 'Poppins', sans-serif; font-size: 2.25rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+        .stat-card.brand-surface .stat-num { color: var(--text-dark); }
+
+        /* ── PANELS & TABLES ── */
+        .panel {
+            background: var(--surface); border-radius: 24px; margin-bottom: 2rem; overflow: hidden;
+            box-shadow: 0 10px 40px var(--shadow-color); animation: fadeUp 0.4s ease both; animation-delay: 0.15s;
+            transition: background-color 0.3s ease;
+        }
+        .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem 1rem; }
+        .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
+
+        .table-responsive { width: 100%; overflow-x: auto; }
+        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        .data-tbl th {
+            padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light);
+        }
+        .data-tbl td { padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .data-tbl tbody tr:hover { background: var(--bg-light); }
+
+        .user-cell { display: flex; align-items: center; gap: 1rem; }
+        .uav {
+            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .uname { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
+        .uid { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; }
+        .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .status-badge.active   { color: var(--success); }
+        .status-badge.pending  { color: var(--orange); }
+
+        .btn-admin { 
+            display: inline-flex; align-items: center; gap: 4px; font-family: 'DM Sans', sans-serif; 
+            font-size: 0.8rem; font-weight: 600; padding: 8px 16px; border-radius: 8px; 
+            cursor: pointer; transition: all 0.2s; white-space: nowrap; text-decoration: none;
+            background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); border: 1px solid rgba(36, 65, 234, 0.2); 
+        }
+        .btn-admin:hover { background: var(--royal-blue); color: #fff; }
+
+        .progress-bar-wrap { width: 100%; background: var(--border); border-radius: 10px; height: 6px; margin-bottom: 4px; overflow: hidden; }
+        .progress-fill { background: var(--orange); height: 100%; border-radius: 10px; }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+
+        /* ── MOBILE RESPONSIVE CSS ── */
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrap { margin-left: 0; }
+            .mobile-toggle { display: flex; }
+            .stats-grid { grid-template-columns: repeat(1, 1fr); }
+            .topbar { padding: 1rem 1.5rem; }
+            .content { padding: 0 1.5rem 1.5rem; }
+            .welcome-text h1 { font-size: 1.4rem; }
+            .welcome-text p { display: none; }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">ENET SUPREME <span>ACADEMY</span> | Student</div>
-        <a onclick="forceLogout()" class="logout-link" id="logoutBtn">Log Out</a>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div>
+            <div class="brand">ENET <span>SUPREME</span></div>
+            <div class="badge-student">Student Portal</div>
+        </div>
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+    </div>
+
+    <div class="nav-label">Main Menu</div>
+    <a class="nav-item active" href="student.html">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+    </a>
+    <a class="nav-item" href="#">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        My Courses
+    </a>
+
+    <a class="nav-item" href="community.html">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        Community Hub
+    </a>
+
+    <div class="nav-label">Account</div>
+    <a class="nav-item" href="#">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Profile
+    </a>
+
+    <div class="sidebar-foot">
+        <button class="logout-btn" id="logoutBtn" onclick="forceLogout()">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
+        </button>
+    </div>
+</aside>
+
+<div class="main-wrap">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <div class="welcome-text">
+                <h1 id="welcome-msg">Welcome back!</h1>
+                <p>Ready to continue learning today?</p>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <button class="icon-btn" onclick="cycleTheme()" title="Switch Theme">
+                <span id="theme-icon">💻</span>
+            </button>
+            
+            <div class="icon-btn">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <div class="bell-badge">1</div>
+            </div>
+        </div>
     </header>
 
-    <main class="main-container">
-        <section class="card">
-            <h2>My Enrolled Academy Tracks</h2>
-            <ul class="dashboard-list" id="courses-list">
-                <li><span>Data Analytics Bootcamp</span> <a href="#" class="action-link">Access Materials</a></li>
-            </ul>
-        </section>
+    <main class="content">
+
+        <div class="stats-grid">
+            <div class="stat-card brand-blue">
+                <div class="stat-lbl">Enrolled Tracks</div>
+                <div class="stat-num">1</div>
+            </div>
+            <div class="stat-card brand-orange">
+                <div class="stat-lbl">Courses Completed</div>
+                <div class="stat-num">0</div>
+            </div>
+            <div class="stat-card brand-surface">
+                <div class="stat-lbl">Earned Certificates</div>
+                <div class="stat-num">0</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head">
+                <div class="panel-title">My Learning Tracks</div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-tbl">
+                    <thead><tr><th>Track Name</th><th>Progress</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="courses-list">
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="uav" style="background: linear-gradient(135deg, #2441EA, #5C75FF);">DA</div>
+                                    <div>
+                                        <div class="uname">Data Analytics Bootcamp</div>
+                                        <div class="uid">Core Track</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 200px;">
+                                <div class="progress-bar-wrap">
+                                    <div class="progress-fill" style="width: 15%;"></div>
+                                </div>
+                                <span style="font-size:0.7rem; color:var(--text-muted)">15% Completed</span>
+                            </td>
+                            <td><span class="status-badge active">In Progress</span></td>
+                            <td>
+                                <a href="#" class="btn-admin">Continue Learning</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
+</div>
 
-    <script>
-        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── THEME MANAGER ──
+const themes = ['system', 'light', 'dark'];
+const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
 
-        window.forceLogout = async function() {
-            document.getElementById('logoutBtn').innerText = "Wait...";
-            try { await supabase.auth.signOut(); } catch (err) {}
-            finally {
-                localStorage.clear(); sessionStorage.clear();
-                window.location.href = 'index.html'; // Set to Home Page
-            }
-        };
+function cycleTheme() {
+    let current = localStorage.getItem('enet_theme') || 'system';
+    let nextIndex = (themes.indexOf(current) + 1) % themes.length;
+    let nextTheme = themes[nextIndex];
+    localStorage.setItem('enet_theme', nextTheme);
+    applyTheme(nextTheme);
+}
 
-        async function checkSession() {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            if (!session) window.location.href = "login.html";
-        }
+function applyTheme(theme) {
+    document.getElementById('theme-icon').textContent = themeIcons[theme];
+    if (theme === 'system') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', theme);
+    }
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (localStorage.getItem('enet_theme') === 'system') {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
+});
+
+// ── MOBILE SIDEBAR TOGGLE ──
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+window.addEventListener('load', async function () {
+    // Init Theme
+    const currentTheme = localStorage.getItem('enet_theme') || 'system';
+    document.getElementById('theme-icon').textContent = themeIcons[currentTheme];
+
+    // Supabase Configuration
+    const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    await checkSession();
+});
+
+async function checkSession() {
+    const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+    if (!session) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Fetch user profile to personalize greeting
+    const { data: profile } = await window.supabaseClient
+        .from('profiles')
+        .select('first_name')
+        .eq('id', session.user.id)
+        .single();
         
-        checkSession();
-    </script>
+    if (profile && profile.first_name) {
+        document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
+    }
+}
+
+window.forceLogout = async function() {
+    const btn = document.getElementById('logoutBtn');
+    btn.innerHTML = '⏳ Logging out...';
+    try { await window.supabaseClient.auth.signOut(); } catch (err) {}
+    finally {
+        localStorage.clear(); 
+        sessionStorage.clear();
+        window.location.href = 'index.html'; 
+    }
+};
+</script>
 </body>
 </html>
