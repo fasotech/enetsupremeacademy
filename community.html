@@ -58,11 +58,16 @@
         /* ── AUTH GATE ── */
         #auth-gate { display: none; flex: 1; align-items: center; justify-content: center; padding: 3rem 1.5rem; }
         #auth-gate.visible { display: flex; }
-        .gate-card { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 3rem 2.5rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 20px 50px var(--shadow-color); }
+        .gate-card { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 3rem 2.5rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 20px 50px var(--shadow-color); animation: gateIn 0.5s cubic-bezier(0.16,1,0.3,1); }
+        @keyframes gateIn { from { opacity:0; transform: scale(0.96) translateY(16px); } to { opacity:1; transform: scale(1) translateY(0); } }
+        .gate-icon { font-size: 3.5rem; margin-bottom: 1rem; }
         .gate-card h2 { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
         .gate-card h2 span { color: var(--royal-blue); }
         .btn-gate { display: block; width: 100%; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; border: none; }
-        .btn-gate-primary { background: var(--royal-blue); color: white; margin-bottom: 0.75rem; }
+        .btn-gate-primary { background: var(--royal-blue); color: white; margin-bottom: 0.75rem; box-shadow: 0 4px 15px rgba(36, 65, 234, 0.3); }
+        .btn-gate-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(36, 65, 234, 0.4); }
+        .btn-gate-secondary { background: var(--surface); color: var(--text-dark); border: 1px solid var(--border-bright) !important; }
+        .btn-gate-secondary:hover { background: var(--bg-light); color: var(--royal-blue); }
 
         /* ── COMMUNITY APP & GRID LAYOUT ── */
         #community-app { display: none; flex: 1; padding: 2.5rem 1.5rem; }
@@ -116,7 +121,7 @@
         /* ── FEED & POST CARDS ── */
         .feed { display: flex; flex-direction: column; gap: 1.5rem; }
         .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 2px 10px var(--shadow-color); overflow: hidden; }
-        .post-body { padding: 1.25rem; }
+        .post-body { padding: 1.25rem 1.25rem 0.5rem; }
         .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
         .post-author { display: flex; align-items: center; gap: 10px; }
         .avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; object-fit: cover; border: 1px solid var(--border); }
@@ -124,8 +129,24 @@
         .author-info span { font-size: 0.75rem; color: var(--text-muted); }
         .role-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; margin-left: 6px; background: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border);}
         
-        .post-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-dark); margin-bottom: 1rem; white-space: pre-wrap; word-break: break-word; }
+        .post-text { font-size: 0.95rem; line-height: 1.6; color: var(--text-dark); margin-bottom: 0.5rem; white-space: pre-wrap; word-break: break-word; }
         .post-img { width: 100%; max-height: 500px; object-fit: cover; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);}
+
+        /* ── FACEBOOK ACTION BAR (Like / Comment) ── */
+        .post-action-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            padding: 0.25rem 1rem; margin: 0;
+            background: var(--surface);
+        }
+        .post-action-btn {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: transparent; border: none; color: var(--text-gray); 
+            font-size: 0.9rem; font-weight: 600; padding: 0.6rem; 
+            cursor: pointer; border-radius: 8px; transition: 0.2s; font-family: 'DM Sans', sans-serif;
+        }
+        .post-action-btn:hover { background: var(--surface-hover); }
+        .post-action-btn.liked { color: var(--royal-blue); }
 
         /* ── FACEBOOK-STYLE COMMENTS ── */
         .post-footer { padding: 1rem 1.25rem; }
@@ -142,6 +163,7 @@
         .c-actions { font-size: 0.75rem; font-weight: 700; color: var(--text-gray); margin-left: 0.8rem; margin-top: 0.2rem; display: flex; gap: 0.8rem; align-items: center; }
         .c-actions span { cursor: pointer; transition: color 0.2s; }
         .c-actions span:hover { color: var(--text-dark); text-decoration: underline; }
+        .c-actions span.liked { color: var(--royal-blue); font-weight: 800; text-decoration: none;}
         .c-actions .c-time { font-weight: 500; color: var(--text-muted); cursor: default; }
         .c-actions .c-time:hover { text-decoration: none; }
 
@@ -149,7 +171,7 @@
         .action-btn:hover { color: var(--royal-blue); }
 
         /* FACEBOOK STYLE REPLY BOX */
-        .reply-box { display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--border); padding-top: 1rem; }
+        .reply-box { display: flex; gap: 10px; align-items: center; padding-top: 0.5rem; }
         .reply-input-wrap {
             flex: 1; display: flex; align-items: center; 
             background: var(--input-bg); border: 1px solid var(--border); 
@@ -168,18 +190,37 @@
         }
         .reply-send-btn:hover { transform: scale(1.15); }
 
+        /* INLINE EDITING STYLES */
+        .edit-textarea {
+            width: 100%; min-height: 80px; padding: 0.8rem; border-radius: 10px;
+            background: var(--input-bg); border: 1px solid var(--royal-blue);
+            color: var(--text-dark); font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+            resize: vertical; outline: none; margin-top: 0.5rem; margin-bottom: 0.5rem;
+        }
+        .edit-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
         /* SETTINGS MODAL */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.show { display: flex; }
         .modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s ease; }
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        .modal-title { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
+        .form-group input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1rem; color: var(--text-dark); font-size: 0.95rem; outline: none; }
+        
+        .avatar-upload-wrapper { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .avatar-preview { width: 70px; height: 70px; border-radius: 50%; background: var(--input-bg); border: 2px dashed var(--royal-blue); object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; color: var(--text-muted);}
+        .upload-btn { background: var(--surface-hover); color: var(--royal-blue); border: 1px solid var(--border-bright); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; position: relative; overflow: hidden;}
+        .upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface); border: 1px solid var(--border-bright); color: var(--text-dark); padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 600; z-index: 9999; transition: transform 0.4s; }
         .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-left: 4px solid var(--danger); }
 
         /* ── MOBILE OPTIMIZATION ── */
         @media (max-width: 850px) {
             .community-grid { grid-template-columns: 1fr; }
-            /* On mobile, move the sidebar to the bottom under the feed */
             .right-sidebar { position: static; margin-top: 2rem; }
             header { flex-direction: column; gap: 1rem; padding: 1.2rem; text-align: center; }
             .header-right { width: 100%; justify-content: center; }
@@ -219,7 +260,7 @@
                 <div class="composer-top">
                     <img class="composer-avatar" id="composer-avatar" src="" alt="Avatar">
                     <div class="composer-area">
-                        <textarea id="post-text" placeholder="What's on your mind, student?" rows="2"></textarea>
+                        <textarea id="post-text" placeholder="What's on your mind?" rows="2"></textarea>
                         <div id="image-preview-wrap">
                             <img id="image-preview" src="" alt="Preview">
                             <button id="remove-image-btn" onclick="removeImage()">✕</button>
@@ -337,8 +378,6 @@ function esc(str) { const d = document.createElement('div'); d.textContent = str
 // INITIALIZE
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
-    
-    // Check hash for settings popup (from Dashboard)
     if (window.location.hash === '#openSettings') { setTimeout(openSettings, 1000); }
 
     const { data: { session } } = await sb.auth.getSession();
@@ -364,12 +403,10 @@ async function loadUserProfile() {
     const role = profile.role || 'student';
     const avatar = profile.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=random';
 
-    // DYNAMIC DASHBOARD ROUTING LOGIC
     let dashboardLink = 'student.html';
     if (role === 'admin') dashboardLink = 'admin-dashboard.html';
     if (role === 'teacher') dashboardLink = 'teacher.html';
 
-    // Populate Header
     document.getElementById('auth-controls').innerHTML = `
         <div class="user-pill" onclick="openSettings()" title="Edit Profile">
             <img class="mini-avatar" src="${avatar}">
@@ -456,7 +493,33 @@ async function saveSettings() {
     btn.disabled = false; btn.textContent = 'Save Changes';
 }
 
-// POST & COMMENT LOGIC
+// ── LIKE SYSTEM ──
+async function toggleLike(id, type) {
+    const table = type === 'post' ? 'posts' : 'comments';
+    
+    try {
+        const { data, error } = await sb.from(table).select('likes').eq('id', id).single();
+        if (error) throw error;
+
+        let likes = data.likes || [];
+        if (likes.includes(currentUser.id)) {
+            // Unlike it
+            likes = likes.filter(userId => userId !== currentUser.id);
+        } else {
+            // Like it
+            likes.push(currentUser.id);
+        }
+
+        await sb.from(table).update({ likes }).eq('id', id);
+        fetchFeed(); // Refresh the feed to show the new like count
+    } catch (err) {
+        showToast("Error updating like. Did you run the SQL command?", "error");
+        console.error(err);
+    }
+}
+
+
+// ── POST & COMMENT LOGIC ──
 async function createPost() {
     const text = document.getElementById('post-text').value.trim();
     if (!text && !selectedFile) { showToast('Write something or attach an image', 'error'); return; }
@@ -501,6 +564,12 @@ async function fetchFeed() {
         const name = `${post.profiles?.first_name||''} ${post.profiles?.last_name||''}`.trim() || 'User';
         const role = post.profiles?.role || 'member';
         const avatar = post.profiles?.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=random';
+        
+        // Post Likes configuration
+        const postLikes = post.likes || [];
+        const isPostLiked = postLikes.includes(currentUser?.id);
+        const postLikeCount = postLikes.length;
+
         const postComments = comments.filter(c => c.post_id === post.id);
 
         let cHtml = '';
@@ -509,7 +578,11 @@ async function fetchFeed() {
             const cName = `${c.profiles?.first_name||''} ${c.profiles?.last_name||''}`.trim() || 'User';
             const cAvatar = c.profiles?.avatar_url || 'https://ui-avatars.com/api/?name=' + cName;
             
-            // FACEBOOK STYLE COMMENT ITEM
+            // Comment Likes configuration
+            const cLikes = c.likes || [];
+            const isCLiked = cLikes.includes(currentUser?.id);
+            const cLikeCount = cLikes.length;
+            
             cHtml += `
             <div class="comment-item">
                 <img class="c-avatar" src="${cAvatar}">
@@ -519,7 +592,9 @@ async function fetchFeed() {
                         <div id="c-text-${c.id}" class="c-text-content">${esc(c.content)}</div>
                     </div>
                     <div class="c-actions">
-                        <span>Like</span>
+                        <span class="${isCLiked ? 'liked' : ''}" onclick="toggleLike('${c.id}', 'comment')">
+                            ${isCLiked ? 'Liked' : 'Like'} ${cLikeCount > 0 ? `(${cLikeCount})` : ''}
+                        </span>
                         <span onclick="focusReply('${post.id}', '${esc(cName)}')">Reply</span>
                         <span class="c-time">${timeAgo(c.created_at)}</span>
                     </div>
@@ -543,9 +618,25 @@ async function fetchFeed() {
                 <div class="post-text" id="p-text-${post.id}">${esc(post.content)}</div>
             </div>
             ${post.image_url ? `<img src="${esc(post.image_url)}" class="post-img" alt="Post image" loading="lazy">` : ''}
+            
+            <div class="post-action-bar">
+                <button class="post-action-btn ${isPostLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}', 'post')">
+                    <svg width="20" height="20" fill="${isPostLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    Like ${postLikeCount > 0 ? `(${postLikeCount})` : ''}
+                </button>
+                
+                <button class="post-action-btn" onclick="focusReply('${post.id}')">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    Comment
+                </button>
+            </div>
+
             <div class="post-footer">
                 <div class="comments-list">${cHtml}</div>
-                
                 <div class="reply-box">
                     <img class="c-avatar" src="${myAvatar}" alt="Me">
                     <div class="reply-input-wrap">
@@ -560,12 +651,17 @@ async function fetchFeed() {
     });
 }
 
-// ── FACEBOOK TAGGING FEATURE ──
-window.focusReply = function(postId, name) {
+// ── FACEBOOK AUTO-SCROLL/TAGGING FEATURE ──
+window.focusReply = function(postId, name = '') {
     const input = document.getElementById(`reply-${postId}`);
     if (input) {
-        input.value = `@${name} `;
+        if (name !== '') {
+            input.value = `@${name} `;
+        }
         input.focus();
+        
+        // Smoothly scroll the window down to the input box so they don't have to search for it
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 };
 
