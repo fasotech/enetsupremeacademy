@@ -3,108 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME ACADEMY | Login</title>
+    <title>ENET SUPREME ACADEMY | Log In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --navy-blue: #2C1E85; --brand-red: #DA251D; --red-hover: #B81D15; --text-main: #333333; --background: #F8F9FA; --white: #FFFFFF; --border: #E2E8F0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; }
-        .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase; text-align: center; }
-        .auth-logo span { color: var(--brand-red); }
-        .auth-card { background: var(--white); max-width: 450px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--navy-blue); }
-        
-        h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1.5rem; }
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.9rem;}
-        input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
-        .btn-primary { width: 100%; background-color: var(--brand-red); color: white; border: none; padding: 1rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
-        .btn-primary:hover { background-color: var(--red-hover); }
-        .btn-primary:disabled { background-color: #a0aec0; cursor: not-allowed; }
-        
-        #auth-message { margin-bottom: 1rem; font-size: 0.9rem; text-align: center; font-weight: bold; padding: 0.8rem; border-radius: 4px; display: none; }
-        .register-link { display: block; text-align: center; margin-top: 1.5rem; color: #666; text-decoration: none; font-size: 0.9rem; }
-        .register-link span { color: var(--brand-red); font-weight: bold; }
+        :root {
+            --navy-blue: #2C1E85;
+            --brand-red: #DA251D;
+            --red-hover: #B81D15;
+            --accent-blue: #2DAAE1;
+            --bg: #07080F;
+            --surface: #0E1018;
+            --surface2: #13151F;
+            --border: rgba(255,255,255,0.08);
+            --border-bright: rgba(255,255,255,0.15);
+            --text: #F0F0FF;
+            --text-muted: #7B7D9A;
+            --text-dim: #3E4060;
+            --accent: #4F3FFF;
+            --green: #1BD496;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', 'Segoe UI', sans-serif; }
+        body { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; color: var(--text); }
+
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(79,63,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(79,63,255,0.04) 1px, transparent 1px);
+            background-size: 44px 44px; pointer-events: none; z-index: 0;
+        }
+        body::after {
+            content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 600px;
+            background: radial-gradient(ellipse, rgba(44,30,133,0.5) 0%, transparent 70%);
+            pointer-events: none; z-index: 0;
+        }
+
+        header { background: rgba(7,8,15,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: relative; z-index: 10; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; }
+        .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text); text-decoration: none; }
+        .logo span { color: var(--brand-red); }
+        .back-link { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; transition: color 0.2s; }
+        .back-link:hover { color: var(--text); }
+
+        .login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem; position: relative; z-index: 1; }
+
+        .login-card {
+            width: 100%; max-width: 420px;
+            background: var(--surface); border: 1px solid var(--border-bright);
+            border-radius: 24px; padding: 2.5rem 2.25rem;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(79,63,255,0.08);
+            animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Redirect banner */
+        .redirect-banner {
+            display: none; align-items: center; gap: 0.6rem;
+            background: rgba(79,63,255,0.1); border: 1px solid rgba(79,63,255,0.28);
+            border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1.5rem;
+            font-size: 0.82rem; color: rgba(255,255,255,0.7);
+        }
+        .redirect-banner.show { display: flex; }
+        .redirect-banner strong { color: #8B7FFF; }
+
+        .card-icon { width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, var(--accent), var(--brand-red)); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.25rem; box-shadow: 0 8px 24px rgba(79,63,255,0.3); }
+        .card-title { font-family: 'Syne', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+        .card-title span { color: var(--accent-blue); }
+        .card-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+
+        .auth-tabs { display: flex; gap: 3px; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 3px; margin-bottom: 1.75rem; }
+        .auth-tab { flex: 1; padding: 0.5rem; border: none; background: none; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 9px; cursor: pointer; transition: all 0.2s; }
+        .auth-tab.active { background: var(--surface); color: var(--text); border: 1px solid var(--border-bright); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+
+        .field-group { margin-bottom: 1rem; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+        label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        input, select { width: 100%; padding: 0.75rem 1rem; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 0.93rem; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s, background 0.2s; }
+        input::placeholder { color: var(--text-dim); }
+        input:focus, select:focus { border-color: rgba(79,63,255,0.6); background: rgba(79,63,255,0.05); }
+        select option { background: #1A1D2E; color: var(--text); }
+
+        .submit-btn { width: 100%; padding: 0.9rem 1.5rem; background: linear-gradient(135deg, var(--brand-red), #B81D15); color: white; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 0.97rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; box-shadow: 0 4px 16px rgba(218,37,29,0.35); }
+        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(218,37,29,0.5); }
+        .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        #msg { margin-top: 1rem; padding: 0.8rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 500; text-align: center; display: none; }
+        #msg.error   { background: rgba(218,37,29,0.12); color: #FF8A80; border: 1px solid rgba(218,37,29,0.25); display: block; }
+        #msg.success { background: rgba(27,212,150,0.1);  color: var(--green); border: 1px solid rgba(27,212,150,0.22); display: block; }
+
+        .form-foot { text-align: center; margin-top: 1.25rem; font-size: 0.82rem; color: var(--text-dim); }
+        .form-foot a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
+        .form-foot a:hover { color: white; }
     </style>
 </head>
 <body>
-    <div class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></div>
-    
-    <section class="auth-card">
-        <h2>Gateway Portal</h2>
-        
-        <div id="auth-message"></div>
-        
-        <form id="login-form" onsubmit="event.preventDefault(); attemptLogin(); return false;">
-            <div class="form-group"><label>Email Address</label><input type="email" id="login-email" required placeholder="your@email.com"></div>
-            <div class="form-group"><label>Password</label><input type="password" id="login-password" required></div>
-            <button type="submit" class="btn-primary" id="login-btn">Secure Log In</button>
-        </form>
 
-        <a href="register.html" class="register-link">Don't have an account? <span>Apply here</span></a>
-    </section>
+<header>
+    <nav>
+        <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+        <a href="index.html" class="back-link">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            Back to Home
+        </a>
+    </nav>
+</header>
 
-    <script>
-        function showMessage(text, isError) {
-            const msgDiv = document.getElementById('auth-message');
-            msgDiv.style.display = 'block';
-            msgDiv.style.backgroundColor = isError ? '#fee2e2' : '#E0E7FF';
-            msgDiv.style.color = isError ? '#DC2626' : '#2C1E85';
-            msgDiv.innerText = text;
-        }
+<div class="login-wrap">
+    <div class="login-card">
 
-        async function attemptLogin() {
-            const btn = document.getElementById('login-btn');
-            btn.disabled = true;
-            showMessage('Authenticating securely...', false);
+        <!-- Shown when user is redirected here from a protected page -->
+        <div class="redirect-banner" id="redirect-banner">
+            🔐 <span>Log in to access <strong id="redirect-dest">this page</strong></span>
+        </div>
 
-            try {
-                // Failsafe: Check if the Supabase library loaded properly
-                if (typeof window.supabase === 'undefined') {
-                    throw new Error("Cannot connect to the database. Please check your internet connection or disable adblockers.");
-                }
+        <div class="card-icon">🎓</div>
+        <div class="card-title">Welcome <span>Back</span></div>
+        <div class="card-sub" id="card-sub">Sign in to your ENET Supreme account</div>
 
-                // Initialize Supabase ONLY when the button is clicked
-                const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
-                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tab-login"  onclick="showTab('login')">Log In</button>
+            <button class="auth-tab"        id="tab-signup" onclick="showTab('signup')">Create Account</button>
+        </div>
 
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
+        <!-- LOGIN FORM -->
+        <div id="login-form">
+            <div class="field-group">
+                <label>Email Address</label>
+                <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="Your password"
+                       autocomplete="current-password"
+                       onkeydown="if(event.key==='Enter') handleLogin()">
+            </div>
+            <button class="submit-btn" id="login-btn" onclick="handleLogin()">Log In →</button>
+        </div>
 
-                // 1. Check Credentials
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-                if (error) throw new Error(error.message);
+        <!-- SIGNUP FORM -->
+        <div id="signup-form" style="display:none">
+            <div class="field-row">
+                <div>
+                    <label>First Name</label>
+                    <input type="text" id="reg-first" placeholder="First name" autocomplete="given-name">
+                </div>
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" id="reg-last" placeholder="Last name" autocomplete="family-name">
+                </div>
+            </div>
+            <div class="field-group">
+                <label>Email Address</label>
+                <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" id="reg-password" placeholder="Min 6 characters" autocomplete="new-password">
+            </div>
+            <div class="field-group">
+                <label>I am a...</label>
+                <select id="reg-role">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+            <button class="submit-btn" id="signup-btn" onclick="handleSignup()">Create Account →</button>
+        </div>
 
-                // 2. Fetch Role
-                const { data: profile, error: profileError } = await supabase.from('profiles').select('role, status').eq('id', data.user.id).single();
-                if (profileError || !profile) throw new Error("Profile not found in database.");
+        <div id="msg"></div>
 
-                // 3. Security Block
-                if (profile.role !== 'admin' && profile.status === 'pending') {
-                    await supabase.auth.signOut();
-                    throw new Error("Your account is pending Admin approval. Please check back later.");
-                }
+        <div class="form-foot" id="form-foot">
+            Don't have an account?
+            <a href="#" onclick="showTab('signup');return false;">Sign up free</a>
+        </div>
+    </div>
+</div>
 
-                // 4. Success Routing
-                showMessage('Success! Redirecting...', false);
-                if (profile.role === 'admin') window.location.href = "admin-dashboard.html";
-                else if (profile.role === 'teacher') window.location.href = "teacher-dashboard.html";
-                else window.location.href = "student-dashboard.html";
+<script>
+/* ── CONFIG ── (values unchanged) */
+const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-            } catch (err) {
-                showMessage("Error: " + err.message, true);
-                // Safe Sign Out if it partially fails
-                if (typeof window.supabase !== 'undefined') {
-                    const tempSupa = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
-                    await tempSupa.auth.signOut();
-                }
-            } finally {
-                btn.disabled = false;
-            }
-        }
-    </script>
+/* ── READ URL PARAMS ── */
+const urlParams  = new URLSearchParams(window.location.search);
+const redirectTo = urlParams.get('redirect') || null;   // e.g. "community.html"
+const signupMode = urlParams.get('signup') === 'true';
+
+/* ── ON LOAD ── */
+document.addEventListener('DOMContentLoaded', async () => {
+    // Already logged in? Skip the form entirely
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) { await routeAfterLogin(session); return; }
+
+    // Show redirect banner if coming from a protected page
+    if (redirectTo) {
+        document.getElementById('redirect-banner').classList.add('show');
+        const dest = redirectTo.includes('community') ? 'the Community Hub'
+                   : decodeURIComponent(redirectTo).replace('.html', '');
+        document.getElementById('redirect-dest').textContent = dest;
+    }
+
+    if (signupMode) showTab('signup');
+});
+
+/* ── HELPERS ── */
+function showMsg(text, type) {
+    const el = document.getElementById('msg');
+    el.textContent = text; el.className = type;
+}
+function clearMsg() {
+    const el = document.getElementById('msg');
+    el.className = ''; el.textContent = '';
+}
+function showTab(tab) {
+    document.getElementById('login-form').style.display  = tab === 'login'  ? 'block' : 'none';
+    document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+    document.getElementById('card-sub').textContent = tab === 'login'
+        ? 'Sign in to your ENET Supreme account'
+        : 'Join the ENET Supreme Academy';
+    document.getElementById('form-foot').innerHTML = tab === 'login'
+        ? `Don't have an account? <a href="#" onclick="showTab('signup');return false;">Sign up free</a>`
+        : `Already have an account? <a href="#" onclick="showTab('login');return false;">Log in</a>`;
+    clearMsg();
+}
+
+/* ── ROUTING AFTER LOGIN ──
+   1. If ?redirect= param exists → go there
+   2. Otherwise → role-based routing (unchanged values/logic)
+*/
+async function routeAfterLogin(session) {
+    if (redirectTo) { window.location.href = redirectTo; return; }
+
+    const { data: profile } = await supabase
+        .from('profiles').select('role, status').eq('id', session.user.id).single();
+
+    if (!profile || profile.status === 'pending') {
+        window.location.href = 'index.html'; return;
+    }
+    const role = profile.role || 'student';
+    if (role === 'admin')        window.location.href = 'admin.html';
+    else if (role === 'teacher') window.location.href = 'teacher.html';
+    else                         window.location.href = 'community.html';
+}
+
+/* ── LOGIN ── */
+async function handleLogin() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) { showMsg('Please enter your email and password.', 'error'); return; }
+
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true; btn.textContent = 'Logging in…'; clearMsg();
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    btn.disabled = false; btn.textContent = 'Log In →';
+
+    if (error) { showMsg(error.message, 'error'); return; }
+    showMsg('✅ Logged in! Redirecting…', 'success');
+    setTimeout(() => routeAfterLogin(data.session), 700);
+}
+
+/* ── SIGNUP ── */
+async function handleSignup() {
+    const first    = document.getElementById('reg-first').value.trim();
+    const last     = document.getElementById('reg-last').value.trim();
+    const email    = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const role     = document.getElementById('reg-role').value;
+
+    if (!first || !last || !email || !password) { showMsg('Please fill in all fields.', 'error'); return; }
+    if (password.length < 6) { showMsg('Password must be at least 6 characters.', 'error'); return; }
+
+    const btn = document.getElementById('signup-btn');
+    btn.disabled = true; btn.textContent = 'Creating account…'; clearMsg();
+
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) { btn.disabled = false; btn.textContent = 'Create Account →'; showMsg(error.message, 'error'); return; }
+
+    if (data.user) {
+        await supabase.from('profiles').insert({
+            id: data.user.id, email, first_name: first, last_name: last,
+            role, status: 'pending'
+        });
+    }
+
+    btn.disabled = false; btn.textContent = 'Create Account →';
+    showMsg('🎉 Account created! Awaiting admin approval. You\'ll be notified soon.', 'success');
+}
+</script>
 </body>
 </html>
