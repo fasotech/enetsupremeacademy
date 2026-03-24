@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENET SUPREME | Community Hub</title>
+    <title>ENET SUPREME ACADEMY| Community Forum</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -65,7 +65,9 @@
         .gate-card p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1.75rem; }
         .btn-gate { display: block; width: 100%; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; border: none; }
         .btn-gate-primary { background: var(--royal-blue); color: white; margin-bottom: 0.75rem; box-shadow: 0 4px 15px rgba(36, 65, 234, 0.3); }
+        .btn-gate-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(36, 65, 234, 0.4); }
         .btn-gate-secondary { background: var(--surface); color: var(--text-dark); border: 1px solid var(--border-bright) !important; }
+        .btn-gate-secondary:hover { background: var(--bg-light); color: var(--royal-blue); }
 
         /* COMMUNITY APP */
         #community-app { display: none; flex: 1; flex-direction: column; }
@@ -102,16 +104,26 @@
         .action-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-family: 'DM Sans'; font-weight: 600;}
         .action-btn:hover { color: var(--royal-blue); }
 
+        /* INLINE EDITING STYLES */
+        .edit-textarea {
+            width: 100%; min-height: 80px; padding: 0.8rem; border-radius: 10px;
+            background: var(--input-bg); border: 1px solid var(--royal-blue);
+            color: var(--text-dark); font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+            resize: vertical; outline: none; margin-top: 0.5rem; margin-bottom: 0.5rem;
+        }
+        .edit-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
         /* Comments */
         .post-footer { padding: 0 1.5rem 1.5rem; }
         .comments-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.25rem; }
         .comment-item { display: flex; gap: 12px; }
         .c-avatar { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; background: var(--bg-light); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); object-fit: cover;}
         .c-bubble { background: var(--input-bg); padding: 0.75rem 1rem; border-radius: 12px; flex: 1; }
-        .c-bubble h5 { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; display: flex; justify-content: space-between;}
+        .c-bubble h5 { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; display: flex; justify-content: space-between; align-items: center;}
         .reply-box { display: flex; gap: 10px; align-items: center; }
         .reply-box input { flex: 1; background: var(--input-bg); border: 1px solid var(--border); color: var(--text-dark); border-radius: 10px; padding: 0.7rem 1rem; outline: none; }
-        .reply-btn { background: var(--surface); color: var(--royal-blue); border: 1px solid var(--border-bright); padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .reply-btn { background: var(--surface); color: var(--royal-blue); border: 1px solid var(--border-bright); padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; white-space: nowrap; }
+        .reply-btn:hover { background: var(--royal-blue); color: white; border-color: var(--royal-blue); }
 
         /* SETTINGS MODAL */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
@@ -220,10 +232,28 @@ let currentUser = null;
 let currentProfile = null;
 let newAvatarFile = null;
 
-function showToast(msg) {
+// Object to store original text before edit is saved or canceled
+const originalTexts = {};
+
+function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast show';
+    t.textContent = msg; 
+    t.className = type === 'error' ? 'toast show error' : 'toast show success';
     setTimeout(() => t.className = 'toast', 3000);
+}
+
+function timeAgo(dateStr) {
+    const diff = Math.floor((new Date() - new Date(dateStr)) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
 }
 
 // INITIALIZE
@@ -244,7 +274,10 @@ async function loadUserProfile() {
     const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
     currentProfile = profile;
 
-    if (!profile || profile.status === 'pending') return; // Handled in previous logic
+    if (!profile || profile.status === 'pending') {
+        document.getElementById('auth-controls').innerHTML = `<a href="#" class="nav-link logout" onclick="doLogout()">Log Out</a>`;
+        return;
+    }
 
     const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'User';
     const role = profile.role || 'student';
@@ -315,12 +348,18 @@ async function saveSettings() {
     btn.disabled = false; btn.textContent = 'Save Changes';
 }
 
-// ── POST & COMMENT LOGIC (WITH EDITS) ──
+// ── POST & COMMENT LOGIC (WITH INLINE EDITS) ──
 async function createPost() {
     const text = document.getElementById('post-text').value.trim();
     if (!text) return;
+    
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Posting...';
+    
     await sb.from('posts').insert([{ user_id: currentUser.id, content: text }]);
     document.getElementById('post-text').value = '';
+    
+    btn.disabled = false; btn.textContent = 'Post to Feed';
     fetchFeed();
 }
 
@@ -333,21 +372,26 @@ async function fetchFeed() {
     
     posts.forEach(post => {
         const isMine = post.user_id === currentUser?.id;
-        const name = `${post.profiles?.first_name||''} ${post.profiles?.last_name||''}` || 'User';
+        const name = `${post.profiles?.first_name||''} ${post.profiles?.last_name||''}`.trim() || 'User';
+        const role = post.profiles?.role || 'member';
         const avatar = post.profiles?.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=random';
         const postComments = comments.filter(c => c.post_id === post.id);
 
         let cHtml = '';
         postComments.forEach(c => {
             const cMine = c.user_id === currentUser?.id;
-            const cName = `${c.profiles?.first_name||''} ${c.profiles?.last_name||''}` || 'User';
+            const cName = `${c.profiles?.first_name||''} ${c.profiles?.last_name||''}`.trim() || 'User';
             const cAvatar = c.profiles?.avatar_url || 'https://ui-avatars.com/api/?name=' + cName;
             cHtml += `
             <div class="comment-item">
                 <img class="c-avatar" src="${cAvatar}">
                 <div class="c-bubble">
-                    <h5>${cName} ${cMine ? `<button class="action-btn" onclick="editComment('${c.id}', '${c.content.replace(/'/g, "\\'")}')">✎ Edit</button>` : ''}</h5>
-                    <p id="c-text-${c.id}">${c.content}</p>
+                    <h5>
+                        ${esc(cName)} 
+                        ${cMine ? `<button class="action-btn" onclick="enableEdit('${c.id}', 'comment')">✎ Edit</button>` : ''}
+                    </h5>
+                    <div id="c-text-${c.id}" class="c-text-content">${esc(c.content)}</div>
+                    <div class="c-time">${timeAgo(c.created_at)}</div>
                 </div>
             </div>`;
         });
@@ -357,15 +401,17 @@ async function fetchFeed() {
             <div class="post-body">
                 <div class="post-header">
                     <div class="post-author">
-                        <img class="avatar" src="${avatar}">
+                        <img class="avatar ${role}-av" src="${avatar}">
                         <div class="author-info">
-                            <h4>${name}</h4>
+                            <h4>${esc(name)} <span class="role-badge ${role}">${esc(role)}</span></h4>
+                            <span>${timeAgo(post.created_at)}</span>
                         </div>
                     </div>
-                    ${isMine ? `<div class="action-links"><button class="action-btn" onclick="editPost('${post.id}', '${post.content.replace(/'/g, "\\'")}')">✎ Edit</button></div>` : ''}
+                    ${isMine ? `<div class="action-links"><button class="action-btn" onclick="enableEdit('${post.id}', 'post')">✎ Edit</button></div>` : ''}
                 </div>
-                <div class="post-text" id="p-text-${post.id}">${post.content}</div>
+                <div class="post-text" id="p-text-${post.id}">${esc(post.content)}</div>
             </div>
+            ${post.image_url ? `<img src="${esc(post.image_url)}" class="post-img" alt="Post image" loading="lazy">` : ''}
             <div class="post-footer">
                 <div class="comments-list">${cHtml}</div>
                 <div class="reply-box">
@@ -384,20 +430,53 @@ async function addComment(postId) {
     fetchFeed();
 }
 
-// ── INLINE EDITING ──
-async function editPost(id, oldText) {
-    const newText = prompt("Edit your post:", oldText);
-    if (newText !== null && newText.trim() !== "" && newText !== oldText) {
-        await sb.from('posts').update({ content: newText.trim() }).eq('id', id);
-        fetchFeed();
-    }
+// ── FACEBOOK-STYLE INLINE EDITING ──
+function enableEdit(id, type = 'post') {
+    const textDiv = document.getElementById(type === 'post' ? `p-text-${id}` : `c-text-${id}`);
+    
+    // Stop if already editing
+    if (textDiv.querySelector('.edit-textarea')) return;
+
+    // Save the exact original text into our temporary dictionary so we don't lose it
+    const currentText = textDiv.innerText;
+    originalTexts[id] = currentText;
+
+    // Replace the text with a modern textarea and action buttons
+    textDiv.innerHTML = `
+        <textarea class="edit-textarea" id="edit-input-${id}">${currentText}</textarea>
+        <div class="edit-actions">
+            <button class="action-btn" onclick="cancelEdit('${id}', '${type}')">Cancel</button>
+            <button class="reply-btn" onclick="saveEdit('${id}', '${type}')">Save</button>
+        </div>
+    `;
 }
 
-async function editComment(id, oldText) {
-    const newText = prompt("Edit your comment:", oldText);
-    if (newText !== null && newText.trim() !== "" && newText !== oldText) {
-        await sb.from('comments').update({ content: newText.trim() }).eq('id', id);
-        fetchFeed();
+function cancelEdit(id, type) {
+    // Put the original text back exactly as it was
+    const textDiv = document.getElementById(type === 'post' ? `p-text-${id}` : `c-text-${id}`);
+    textDiv.innerText = originalTexts[id];
+    delete originalTexts[id];
+}
+
+async function saveEdit(id, type) {
+    const newText = document.getElementById(`edit-input-${id}`).value.trim();
+    
+    if (!newText) {
+        showToast("Content cannot be empty", "error");
+        return;
+    }
+    
+    const table = type === 'post' ? 'posts' : 'comments';
+    
+    try {
+        const { error } = await sb.from(table).update({ content: newText }).eq('id', id);
+        if (error) throw error;
+        
+        showToast(type === 'post' ? 'Post updated!' : 'Comment updated!');
+        fetchFeed(); // Re-render the feed to safely show the new data directly from the database
+        
+    } catch (err) {
+        showToast(err.message, 'error');
     }
 }
 

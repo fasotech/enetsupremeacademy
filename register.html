@@ -11,7 +11,7 @@
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; }
         .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; text-transform: uppercase; text-align: center; }
         .auth-logo span { color: var(--brand-red); }
-        .auth-card { background: var(--white); max-width: 500px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--navy-blue); }
+        .auth-card { background: var(--white); max-width: 550px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--navy-blue); }
         h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1.2rem; }
         label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.9rem;}
@@ -37,6 +37,13 @@
                     <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
                     <div class="form-group" style="flex: 1;"><label>Last Name</label><input type="text" id="reg-last" required></div>
                 </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;"><label>Phone Number</label><input type="tel" id="reg-phone" placeholder="e.g. +234..." required></div>
+                    <div class="form-group" style="flex: 1;"><label>Email Address</label><input type="email" id="reg-email" required></div>
+                </div>
+                <div class="form-group"><label>Home/Contact Address</label><input type="text" id="reg-address" placeholder="Full address" required></div>
+                
                 <div class="form-group">
                     <label>I am applying as a:</label>
                     <select id="reg-role" required>
@@ -44,7 +51,7 @@
                         <option value="teacher">Teacher / Instructor</option>
                     </select>
                 </div>
-                <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" required></div>
+                
                 <div class="form-group"><label>Create Password</label><input type="password" id="reg-password" required minlength="6"></div>
                 <button type="submit" class="btn-primary" id="reg-btn">Submit Application</button>
             </form>
@@ -63,64 +70,49 @@
     </section>
 
     <script>
-        // 1. Initialize Supabase
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 2. Attach the Event Listener directly to the form
         const registerForm = document.getElementById('register-form');
         const regBtn = document.getElementById('reg-btn');
 
         registerForm.addEventListener('submit', async function(e) {
-            // This firmly blocks the page reload and the '?' in the URL
             e.preventDefault(); 
-            
-            // Immediate visual feedback so we know the button is alive
             regBtn.disabled = true;
             regBtn.innerText = "Processing... Please wait";
 
             try {
-                // Grab the values
-                const firstName = document.getElementById('reg-first').value;
-                const lastName = document.getElementById('reg-last').value;
+                const firstName = document.getElementById('reg-first').value.trim();
+                const lastName = document.getElementById('reg-last').value.trim();
+                const phone = document.getElementById('reg-phone').value.trim();
+                const address = document.getElementById('reg-address').value.trim();
                 const role = document.getElementById('reg-role').value;
-                const email = document.getElementById('reg-email').value;
+                const email = document.getElementById('reg-email').value.trim();
                 const password = document.getElementById('reg-password').value;
 
-                // Step A: Create Auth Account
-                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-                    email: email,
-                    password: password
-                });
-                
-                // If Auth fails (e.g., email already exists), throw error to the catch block
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({ email, password });
                 if (authError) throw authError;
 
-                // Step B: Inject directly into profiles table instantly
                 if (authData && authData.user) {
                     const { error: dbError } = await supabaseClient.from('profiles').insert([{
                         id: authData.user.id,
                         first_name: firstName,
                         last_name: lastName,
+                        phone: phone,       // Saving new data
+                        address: address,   // Saving new data
                         email: email,
                         role: role,
                         status: 'pending'
                     }]);
-                    
-                    // If DB insertion fails, throw error to the catch block
                     if (dbError) throw new Error("Database Error: " + dbError.message);
                 }
 
-                // Step C: If everything succeeded, show Success Screen
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-screen').style.display = 'block';
 
             } catch (err) {
-                // If ANYTHING fails, this popup will tell us exactly why.
                 alert("Registration Failed: " + err.message);
-                
-                // Reset the button so the user can try again
                 regBtn.disabled = false;
                 regBtn.innerText = "Submit Application";
             }
