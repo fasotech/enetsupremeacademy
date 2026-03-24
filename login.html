@@ -121,42 +121,40 @@
         <div class="card-sub" id="card-sub">Sign in to your ENET Supreme account</div>
 
         <div class="auth-tabs">
-            <button class="auth-tab active" id="tab-login"  onclick="showTab('login')">Log In</button>
-            <button class="auth-tab"        id="tab-signup" onclick="showTab('signup')">Create Account</button>
+            <button class="auth-tab active" id="tab-login"  onclick="showTab('login')" type="button">Log In</button>
+            <button class="auth-tab"        id="tab-signup" onclick="showTab('signup')" type="button">Create Account</button>
         </div>
 
-        <div id="login-form">
+        <form id="login-form" onsubmit="event.preventDefault(); handleLogin();">
             <div class="field-group">
                 <label>Email Address</label>
-                <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+                <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required>
             </div>
             <div class="field-group">
                 <label>Password</label>
-                <input type="password" id="login-password" placeholder="Your password"
-                       autocomplete="current-password"
-                       onkeydown="if(event.key==='Enter') handleLogin()">
+                <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" required>
             </div>
-            <button class="submit-btn" id="login-btn" onclick="handleLogin()">Log In →</button>
-        </div>
+            <button type="submit" class="submit-btn" id="login-btn">Log In →</button>
+        </form>
 
-        <div id="signup-form" style="display:none">
+        <form id="signup-form" style="display:none" onsubmit="event.preventDefault(); handleSignup();">
             <div class="field-row">
                 <div>
                     <label>First Name</label>
-                    <input type="text" id="reg-first" placeholder="First name" autocomplete="given-name">
+                    <input type="text" id="reg-first" placeholder="First name" autocomplete="given-name" required>
                 </div>
                 <div>
                     <label>Last Name</label>
-                    <input type="text" id="reg-last" placeholder="Last name" autocomplete="family-name">
+                    <input type="text" id="reg-last" placeholder="Last name" autocomplete="family-name" required>
                 </div>
             </div>
             <div class="field-group">
                 <label>Email Address</label>
-                <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
+                <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" required>
             </div>
             <div class="field-group">
                 <label>Password</label>
-                <input type="password" id="reg-password" placeholder="Min 6 characters" autocomplete="new-password">
+                <input type="password" id="reg-password" placeholder="Min 6 characters" autocomplete="new-password" required minlength="6">
             </div>
             <div class="field-group">
                 <label>I am a...</label>
@@ -165,8 +163,8 @@
                     <option value="teacher">Teacher</option>
                 </select>
             </div>
-            <button class="submit-btn" id="signup-btn" onclick="handleSignup()">Create Account →</button>
-        </div>
+            <button type="submit" class="submit-btn" id="signup-btn">Create Account →</button>
+        </form>
 
         <div id="msg"></div>
 
@@ -223,18 +221,17 @@ function showTab(tab) {
 }
 
 async function routeAfterLogin(session) {
+    // If the URL has ?redirect=community.html, send them straight there!
     if (redirectTo) { window.location.href = redirectTo; return; }
 
     const { data: profile } = await supabase
         .from('profiles').select('role, status').eq('id', session.user.id).single();
 
-    // UPDATED: Send pending users to community.html so they see the friendly pending message
     if (!profile || profile.status === 'pending') {
         window.location.href = 'community.html'; 
         return;
     }
     
-    // UPDATED: Fixed admin routing to match your actual filename
     const role = profile.role || 'student';
     if (role === 'admin')        window.location.href = 'admin-dashboard.html';
     else if (role === 'teacher') window.location.href = 'teacher.html';
@@ -244,15 +241,20 @@ async function routeAfterLogin(session) {
 async function handleLogin() {
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
+    
     if (!email || !password) { showMsg('Please enter your email and password.', 'error'); return; }
 
     const btn = document.getElementById('login-btn');
     btn.disabled = true; btn.textContent = 'Logging in…'; clearMsg();
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    btn.disabled = false; btn.textContent = 'Log In →';
-
-    if (error) { showMsg(error.message, 'error'); return; }
+    
+    if (error) { 
+        btn.disabled = false; btn.textContent = 'Log In →'; 
+        showMsg(error.message, 'error'); 
+        return; 
+    }
+    
     showMsg('✅ Logged in! Redirecting…', 'success');
     setTimeout(() => routeAfterLogin(data.session), 700);
 }
@@ -271,7 +273,12 @@ async function handleSignup() {
     btn.disabled = true; btn.textContent = 'Creating account…'; clearMsg();
 
     const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) { btn.disabled = false; btn.textContent = 'Create Account →'; showMsg(error.message, 'error'); return; }
+    
+    if (error) { 
+        btn.disabled = false; btn.textContent = 'Create Account →'; 
+        showMsg(error.message, 'error'); 
+        return; 
+    }
 
     if (data.user) {
         await supabase.from('profiles').insert({
