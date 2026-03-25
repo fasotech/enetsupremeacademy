@@ -6,23 +6,153 @@
     <title>ENET SUPREME ACADEMY | Create Account</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --navy-blue: #2C1E85; --brand-red: #DA251D; --red-hover: #B81D15; --text-main: #333333; --background: #F8F9FA; --white: #FFFFFF; --border: #E2E8F0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; }
-        .auth-logo { color: var(--navy-blue); font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; text-transform: uppercase; text-align: center; }
-        .auth-logo span { color: var(--brand-red); }
-        .auth-card { background: var(--white); max-width: 550px; width: 100%; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--navy-blue); }
-        h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1.5rem; }
+        /* === ENET SUPREME BRANDING STYLES === */
+        :root { 
+            --navy-blue: #02014a; 
+            --brand-yellow: #fcd116; 
+            --yellow-hover: #e0b800; 
+            --accent-cyan: #00a0df; 
+            --text-main: #333333; 
+            --background: #F8F9FA; 
+            --white: #FFFFFF; 
+            --border: #E2E8F0; 
+            --text-gray: #475467;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background-color: var(--background); 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 1.5rem; 
+        }
+        
+        .auth-logo { 
+            color: var(--navy-blue); 
+            font-size: 2.2rem; 
+            font-weight: 800; 
+            margin-bottom: 1.5rem; 
+            text-transform: uppercase; 
+            text-align: center; 
+            letter-spacing: 1px;
+        }
+        
+        .auth-logo span { 
+            color: var(--brand-yellow); 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .auth-card { 
+            background: var(--white); 
+            max-width: 550px; 
+            width: 100%; 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-top: 5px solid var(--accent-cyan); 
+        }
+        
+        h2 { 
+            text-align: center; 
+            color: var(--navy-blue); 
+            margin-bottom: 1.5rem; 
+            font-weight: 800;
+        }
+        
         .form-group { margin-bottom: 1.2rem; }
-        label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.9rem;}
-        input, select { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px; font-size: 1rem; }
-        .btn-primary { width: 100%; background-color: var(--brand-red); color: white; border: none; padding: 1rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
-        .btn-primary:hover { background-color: var(--red-hover); }
-        .btn-primary:disabled { background-color: #cbd5e1; cursor: not-allowed; }
-        .login-link { display: block; text-align: center; margin-top: 1.5rem; color: #666; text-decoration: none; font-size: 0.9rem; }
-        .login-link span { color: var(--brand-red); font-weight: bold; }
+        
+        label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            color: var(--navy-blue);
+        }
+        
+        input, select { 
+            width: 100%; 
+            padding: 0.8rem 1rem; 
+            border: 1px solid var(--border); 
+            border-radius: 6px; 
+            font-size: 1rem; 
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 160, 223, 0.1);
+        }
+        
+        .btn-primary { 
+            width: 100%; 
+            background-color: var(--brand-yellow); 
+            color: var(--navy-blue); 
+            border: none; 
+            padding: 1rem; 
+            border-radius: 6px; 
+            font-size: 1.05rem; 
+            font-weight: 800; 
+            cursor: pointer; 
+            transition: background-color 0.3s ease; 
+            margin-top: 1rem; 
+        }
+        
+        .btn-primary:hover { 
+            background-color: var(--yellow-hover); 
+        }
+        
+        .btn-primary:disabled { 
+            background-color: #e2e8f0; 
+            color: #a0aec0;
+            cursor: not-allowed; 
+        }
+        
+        .login-link { 
+            display: block; 
+            text-align: center; 
+            margin-top: 1.5rem; 
+            color: var(--text-gray); 
+            text-decoration: none; 
+            font-size: 0.95rem; 
+            font-weight: 500;
+        }
+        
+        .login-link span { 
+            color: var(--accent-cyan); 
+            font-weight: 800; 
+            transition: color 0.2s;
+        }
+        
+        .login-link:hover span {
+            color: var(--navy-blue);
+            text-decoration: underline;
+        }
+        
         #success-screen { display: none; text-align: center; padding: 2rem 0; }
-        #success-screen h3 { color: var(--navy-blue); font-size: 1.8rem; margin-bottom: 1rem; }
+        #success-screen h3 { color: var(--navy-blue); font-size: 1.8rem; margin-bottom: 1rem; font-weight: 800;}
+        
+        .success-msg-box {
+            font-weight: 600; 
+            color: var(--navy-blue); 
+            background: rgba(0, 160, 223, 0.08);
+            padding: 1.2rem; 
+            border: 2px solid var(--accent-cyan); 
+            border-radius: 8px; 
+            margin: 1.5rem 0;
+            line-height: 1.5;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .flex-mobile-col { flex-direction: column; gap: 0 !important; }
+            .auth-card { padding: 1.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -33,16 +163,32 @@
             <h2>Submit Application</h2>
             
             <form id="register-form">
-                <div style="display: flex; gap: 1rem;">
-                    <div class="form-group" style="flex: 1;"><label>First Name</label><input type="text" id="reg-first" required></div>
-                    <div class="form-group" style="flex: 1;"><label>Last Name</label><input type="text" id="reg-last" required></div>
+                <div style="display: flex; gap: 1rem;" class="flex-mobile-col">
+                    <div class="form-group" style="flex: 1;">
+                        <label>First Name</label>
+                        <input type="text" id="reg-first" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Last Name</label>
+                        <input type="text" id="reg-last" required>
+                    </div>
                 </div>
                 
-                <div style="display: flex; gap: 1rem;">
-                    <div class="form-group" style="flex: 1;"><label>Phone Number</label><input type="tel" id="reg-phone" placeholder="e.g. +234..." required></div>
-                    <div class="form-group" style="flex: 1;"><label>Email Address</label><input type="email" id="reg-email" required></div>
+                <div style="display: flex; gap: 1rem;" class="flex-mobile-col">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Phone Number</label>
+                        <input type="tel" id="reg-phone" placeholder="e.g. +234..." required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Email Address</label>
+                        <input type="email" id="reg-email" placeholder="your@email.com" required>
+                    </div>
                 </div>
-                <div class="form-group"><label>Home/Contact Address</label><input type="text" id="reg-address" placeholder="Full address" required></div>
+                
+                <div class="form-group">
+                    <label>Home/Contact Address</label>
+                    <input type="text" id="reg-address" placeholder="Full address" required>
+                </div>
                 
                 <div class="form-group">
                     <label>I am applying as a:</label>
@@ -52,7 +198,11 @@
                     </select>
                 </div>
                 
-                <div class="form-group"><label>Create Password</label><input type="password" id="reg-password" required minlength="6"></div>
+                <div class="form-group">
+                    <label>Create Password</label>
+                    <input type="password" id="reg-password" placeholder="••••••••" required minlength="6">
+                </div>
+                
                 <button type="submit" class="btn-primary" id="reg-btn">Submit Application</button>
             </form>
 
@@ -62,10 +212,10 @@
         <div id="success-screen">
             <h3>Application Received!</h3>
             <p>Your account has been successfully created.</p>
-            <p style="font-weight: bold; color: var(--brand-red); padding: 1rem; border: 2px solid var(--brand-red); border-radius: 8px; margin: 1.5rem 0;">
+            <p class="success-msg-box">
                 Please wait for an Administrator to approve your access before attempting to log in.
             </p>
-            <button type="button" onclick="window.location.href='index.html'" class="btn-primary" style="background-color: var(--navy-blue);">Return to Homepage</button>
+            <button type="button" onclick="window.location.href='index.html'" class="btn-primary" style="background-color: var(--accent-cyan); color: white;">Return to Homepage</button>
         </div>
     </section>
 
@@ -99,8 +249,8 @@
                         id: authData.user.id,
                         first_name: firstName,
                         last_name: lastName,
-                        phone: phone,       // Saving new data
-                        address: address,   // Saving new data
+                        phone: phone,       
+                        address: address,   
                         email: email,
                         role: role,
                         status: 'pending'
