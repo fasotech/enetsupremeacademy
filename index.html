@@ -10,11 +10,11 @@
     <style>
         /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --navy-blue: #02014a;     /* Deeper navy from the logo */
-            --navy-light: #0d2a8f;    /* Lighter blue for curves/accents */
-            --brand-yellow: #fcd116;  /* Bright yellow from the 'E' */
-            --yellow-hover: #e0b800;  /* Slightly darker yellow for hover states */
-            --accent-cyan: #00a0df;   /* Bright cyan from the 'e-NET' text */
+            --navy-blue: #02014a;     
+            --navy-light: #0d2a8f;    
+            --brand-yellow: #fcd116;  
+            --yellow-hover: #e0b800;  
+            --accent-cyan: #00a0df;   
             
             --text-main: #333333;
             --text-gray: #475467;
@@ -284,28 +284,10 @@
                     <div class="preview-dot"></div>
                     <span>Live Community Feed</span>
                 </div>
-
-                <div class="preview-post">
-                    <div class="preview-avatar av-red">R</div>
-                    <div class="preview-body">
-                        <h5>Raphael U. · <span style="color:var(--brand-yellow);font-size:0.65rem;">ADMIN</span></h5>
-                        <p>Welcome to the ENET Supreme Community! Post questions, share wins 🎉</p>
-                    </div>
-                </div>
-
-                <div class="preview-post">
-                    <div class="preview-avatar av-teal">A</div>
-                    <div class="preview-body">
-                        <h5>Adiela S. · <span style="color:var(--accent-cyan);font-size:0.65rem;">TEACHER</span></h5>
-                        <p>New Networking module is live! Check your dashboard 🚀</p>
-                    </div>
-                </div>
-
-                <div class="preview-post">
-                    <div class="preview-avatar av-purple">C</div>
-                    <div class="preview-body">
-                        <h5>Chioma O. · <span style="color:#b3b3b3;font-size:0.65rem;">STUDENT</span></h5>
-                        <p>Just passed my first MikroTik quiz! Thanks everyone 🙌</p>
+                
+                <div id="preview-posts-container">
+                    <div style="padding: 2rem; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem;">
+                        Loading live updates...
                     </div>
                 </div>
             </div>
@@ -344,6 +326,9 @@
             const navLinks = document.getElementById('navLinks');
             navLinks.classList.toggle('show');
         }
+
+        // Helper for escaping strings safely
+        function esc(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
 
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
@@ -389,6 +374,68 @@
             }
         }
 
+        // NEW: Fetch Live Community Posts
+        async function fetchLiveCommunityFeed() {
+            const container = document.getElementById('preview-posts-container');
+            if (!container) return;
+
+            try {
+                // Fetch the 3 most recent posts
+                const { data: posts, error } = await supabase
+                    .from('posts')
+                    .select('*, profiles(first_name, last_name, role)')
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+
+                if (error) throw error;
+
+                if (!posts || posts.length === 0) {
+                    container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">No recent posts yet. Be the first to start a discussion!</p>';
+                    return;
+                }
+
+                let html = '';
+                const avatarClasses = ['av-purple', 'av-teal', 'av-red']; // Rotate avatar background styles
+
+                posts.forEach((post, index) => {
+                    const fName = post.profiles?.first_name || 'User';
+                    const lName = post.profiles?.last_name || '';
+                    const initial = fName.charAt(0).toUpperCase();
+                    const fullName = `${fName} ${lName}`.trim();
+                    const role = (post.profiles?.role || 'student').toUpperCase();
+                    
+                    // Create a short preview of the content (max 60 chars)
+                    let contentPreview = 'Shared an image';
+                    if (post.content) {
+                        contentPreview = post.content.length > 60 ? post.content.substring(0, 60) + '...' : post.content;
+                    }
+
+                    const avClass = avatarClasses[index % avatarClasses.length];
+                    
+                    // Color formatting based on role
+                    let roleColor = '#b3b3b3'; // default student
+                    if (role === 'ADMIN') roleColor = 'var(--brand-yellow)';
+                    if (role === 'TEACHER' || role === 'INSTRUCTOR') roleColor = 'var(--accent-cyan)';
+
+                    html += `
+                    <div class="preview-post">
+                        <div class="preview-avatar ${avClass}">${initial}</div>
+                        <div class="preview-body">
+                            <h5>${esc(fullName)} · <span style="color:${roleColor};font-size:0.65rem;">${esc(role)}</span></h5>
+                            <p>${esc(contentPreview)}</p>
+                        </div>
+                    </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+            } catch (err) {
+                console.error("Error fetching live feed:", err);
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">Unable to load live feed.</p>';
+            }
+        }
+
         function updateCartUI() {
             const t = document.getElementById('cart-total');
             const c = document.getElementById('cart-count');
@@ -420,8 +467,12 @@
             const savedCart  = localStorage.getItem('enet_cart');
             const savedTotal = localStorage.getItem('enet_cart_total');
             if (savedCart) { cart = JSON.parse(savedCart); cartTotal = Number(savedTotal); updateCartUI(); }
+            
             renderCourses();
             checkCurrentSession();
+            
+            // Fetch real posts for the Community Preview Widget
+            fetchLiveCommunityFeed();
         });
     </script>
 </body>
