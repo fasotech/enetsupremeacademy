@@ -6,205 +6,227 @@
     <title>ENET SUPREME ACADEMY | Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <script>
-        const savedTheme = localStorage.getItem('enet_theme') || 'system';
-        if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        } else {
-            document.documentElement.setAttribute('data-theme', 'light');
-        }
+        const _st = localStorage.getItem('enet_theme') || 'system';
+        document.documentElement.setAttribute('data-theme',
+            _st === 'dark' || (_st === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
     </script>
-
     <style>
         :root {
-            --orange: #FF7A00; --yellow: #FFC107; --danger: #EE5D50; --success: #05CD99;
-            --royal-blue: #2441EA; --bg-light: #F4F7FE; --surface: #FFFFFF;
-            --surface-hover: rgba(36, 65, 234, 0.04); --border: #E9EDF7; --border-bright: #D1D9EB;
-            --text-dark: #2B3674; --text-muted: #A3AED0; --text-gray: #707EAE; 
-            --topbar-bg: rgba(244, 247, 254, 0.9); --shadow-color: rgba(17, 38, 146, 0.05);
+            --orange:#FF7A00; --yellow:#FFC107; --danger:#EE5D50; --success:#05CD99;
+            --royal-blue:#2441EA; --bg-light:#F4F7FE; --surface:#FFFFFF;
+            --surface-hover:rgba(36,65,234,0.04); --border:#E9EDF7; --border-bright:#D1D9EB;
+            --text-dark:#2B3674; --text-muted:#A3AED0; --text-gray:#707EAE;
+            --topbar-bg:rgba(244,247,254,0.92); --shadow-color:rgba(17,38,146,0.06);
         }
-
         [data-theme="dark"] {
-            --royal-blue: #4F3FFF; --bg-light: #07080F; --surface: #13151F;
-            --surface-hover: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.08); --border-bright: rgba(255, 255, 255, 0.15);
-            --text-dark: #F0F0FF; --text-muted: #7B7D9A; --text-gray: #A0AEC0; 
-            --topbar-bg: rgba(7, 8, 15, 0.9); --shadow-color: rgba(0, 0, 0, 0.4);
+            --royal-blue:#4F3FFF; --bg-light:#07080F; --surface:#13151F;
+            --surface-hover:rgba(255,255,255,0.05); --border:rgba(255,255,255,0.08); --border-bright:rgba(255,255,255,0.15);
+            --text-dark:#F0F0FF; --text-muted:#7B7D9A; --text-gray:#A0AEC0;
+            --topbar-bg:rgba(7,8,15,0.92); --shadow-color:rgba(0,0,0,0.4);
         }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{background:var(--bg-light);color:var(--text-gray);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg-light); color: var(--text-gray); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
+        /* SIDEBAR */
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(17,38,146,.4);backdrop-filter:blur(4px);z-index:90;opacity:0;transition:opacity .3s}
+        .sidebar-overlay.show{display:block;opacity:1}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--surface);display:flex;flex-direction:column;z-index:100;box-shadow:4px 0 24px var(--shadow-color);border-right:1px solid var(--border);transition:transform .3s,background .3s}
+        .sidebar-logo{padding:2.5rem 2rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
+        .brand{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-.02em;text-transform:uppercase;color:var(--royal-blue);line-height:1.2}
+        .brand span{color:var(--orange)}
+        .badge-admin{display:inline-block;margin-top:.4rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+        .close-sidebar{display:none;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer}
+        .nav-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:1.5rem 2rem .5rem}
+        .nav-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 2rem;margin:.2rem 1rem;font-size:.95rem;font-weight:500;color:var(--text-gray);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
+        .nav-item:hover{color:var(--royal-blue);background:var(--surface-hover)}
+        .nav-item.active{color:var(--royal-blue);font-weight:700;background:var(--surface-hover);border-left-color:var(--royal-blue)}
+        .nav-item svg{flex-shrink:0;width:20px;height:20px;opacity:.8}
+        .nav-item.active svg{opacity:1}
+        .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--orange);color:#fff;border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
+        .sidebar-foot{margin-top:auto;padding:1.5rem 1.5rem 2rem}
+        .logout-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);padding:.85rem 1.25rem;border-radius:12px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
+        .logout-btn:hover{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2)}
 
-        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(17, 38, 146, 0.4); backdrop-filter: blur(4px); z-index: 90; opacity: 0; transition: opacity 0.3s; }
-        .sidebar-overlay.show { display: block; opacity: 1; }
+        /* LAYOUT */
+        .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s}
+        .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2.5rem;border-bottom:1px solid var(--border)}
+        .topbar-left{display:flex;align-items:center;gap:1rem}
+        .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--royal-blue);box-shadow:0 2px 10px var(--shadow-color)}
+        .welcome-text h1{font-family:'Poppins',sans-serif;font-size:1.75rem;font-weight:700;color:var(--text-dark);letter-spacing:-.02em;margin-bottom:.2rem}
+        .welcome-text p{font-size:.9rem;color:var(--text-gray)}
+        .topbar-right{display:flex;align-items:center;gap:1rem}
+        .search-wrap{display:flex;align-items:center;gap:.5rem;background:var(--surface);border-radius:50px;padding:.6rem 1.2rem;box-shadow:0 4px 15px var(--shadow-color);border:1px solid var(--border);width:250px;transition:width .3s,border-color .2s}
+        .search-wrap:focus-within{width:310px;border-color:var(--royal-blue)}
+        .search-wrap input{background:none;border:none;outline:none;color:var(--text-dark);font-family:'DM Sans',sans-serif;font-size:.85rem;width:100%}
+        .search-wrap input::placeholder{color:var(--text-muted)}
+        .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
+        .icon-btn:hover{background:var(--bg-light);color:var(--royal-blue);transform:translateY(-2px)}
+        .notification-wrapper{position:relative}
+        .bell-badge{position:absolute;top:-2px;right:-2px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid var(--surface)}
+        .notification-dropdown{position:absolute;top:120%;right:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px var(--shadow-color);display:none;flex-direction:column;z-index:1000;transform-origin:top right}
+        .notification-dropdown.show{display:flex;animation:scaleIn .18s ease}
+        .notif-header{padding:1.2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+        .notif-header h4{font-family:'Poppins',sans-serif;font-size:.95rem;color:var(--text-dark)}
+        .notif-header span{font-size:.7rem;background:rgba(238,93,80,.1);color:var(--danger);padding:3px 8px;border-radius:12px;font-weight:700}
+        .notif-body{max-height:350px;overflow-y:auto}
+        .notif-item{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .2s}
+        .notif-item:hover{background:var(--surface-hover)}
+        .notif-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,122,0,.1);color:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+        .notif-content p{font-size:.8rem;color:var(--text-dark);margin-bottom:4px;line-height:1.4}
+        .notif-empty{padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
 
-        .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: var(--surface); display: flex; flex-direction: column; z-index: 100; box-shadow: 4px 0 24px var(--shadow-color); border-right: 1px solid var(--border); transition: transform 0.3s ease, background-color 0.3s ease; }
-        .sidebar-logo { padding: 2.5rem 2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-        .brand { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; text-transform: uppercase; color: var(--royal-blue); line-height: 1.2; }
-        .brand span { color: var(--orange); }
-        .badge-admin { display: inline-block; margin-top: 0.4rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-        .close-sidebar { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        /* LIVE DOT */
+        .live-dot{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:4px 10px;border-radius:20px;white-space:nowrap}
+        .live-dot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--success);animation:livePulse 1.5s ease-in-out infinite}
 
-        .nav-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 1.5rem 2rem 0.5rem; }
-        .nav-item { display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem 2rem; margin: 0.2rem 1rem; font-size: 0.95rem; font-weight: 500; color: var(--text-gray); border-radius: 12px; cursor: pointer; text-decoration: none; transition: all 0.2s ease; }
-        .nav-item:hover { color: var(--royal-blue); background: var(--surface-hover); }
-        .nav-item.active { color: var(--royal-blue); font-weight: 700; background: var(--surface-hover); border-left: 3px solid var(--royal-blue); }
-        .nav-item svg { flex-shrink: 0; width: 20px; height: 20px; color: inherit; opacity: 0.8; }
-        .nav-item.active svg { opacity: 1; }
-        .nav-badge { margin-left: auto; font-size: 0.7rem; font-weight: 700; background: var(--orange); color: #fff; border-radius: 20px; padding: 2px 8px; min-width: 22px; text-align: center; }
+        /* CONTENT */
+        .content{padding:0 2.5rem 2.5rem;flex:1}
+        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
+        .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s,box-shadow .2s}
+        .stat-card:hover{transform:translateY(-6px);box-shadow:0 20px 45px var(--shadow-color)}
+        .stat-card.ring{outline:3px solid rgba(255,255,255,.5);outline-offset:-3px;transform:translateY(-6px)}
+        .stat-card.brand-blue{background:var(--royal-blue);color:#fff}
+        .stat-card.brand-orange{background:var(--orange);color:#fff}
+        .stat-card.brand-yellow{background:var(--yellow);color:#111}
+        .stat-card.brand-surface{background:var(--surface);color:var(--royal-blue);border:1px solid var(--border)}
+        .stat-lbl{font-size:.85rem;font-weight:500;opacity:.9;margin-bottom:.5rem}
+        .stat-card.brand-surface .stat-lbl{color:var(--text-gray)}
+        .stat-num{font-family:'Poppins',sans-serif;font-size:2.25rem;font-weight:700;line-height:1;margin-bottom:.25rem}
+        .stat-hint{font-size:.72rem;opacity:.7;margin-top:.35rem}
+        .stat-arrow{position:absolute;bottom:1.25rem;right:1.5rem;font-size:1.4rem;opacity:.18;transition:opacity .2s,transform .2s}
+        .stat-card:hover .stat-arrow,.stat-card.ring .stat-arrow{opacity:.4;transform:scale(1.15) rotate(-10deg)}
 
-        .sidebar-foot { margin-top: auto; padding: 1.5rem 1.5rem 2rem; }
-        .logout-btn { display: flex; align-items: center; gap: 0.75rem; width: 100%; background: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border); padding: 0.85rem 1.25rem; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
-        .logout-btn:hover { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
+        .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
+        .panel{background:var(--surface);border-radius:24px;margin-bottom:2rem;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);animation:fadeUp .4s ease both;transition:background .3s}
+        .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem}
+        .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark)}
+        .panel-cnt{font-size:.75rem;font-weight:700;background:var(--bg-light);color:var(--royal-blue);padding:4px 10px;border-radius:20px;margin-left:10px;vertical-align:middle;border:1px solid var(--border)}
+        .tab-bar{display:flex;gap:.5rem;padding:0 2rem 1.5rem;overflow-x:auto;white-space:nowrap}
+        .tab-bar::-webkit-scrollbar{display:none}
+        .tab-btn{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;padding:.5rem 1.25rem;border-radius:50px;border:1px solid var(--border);cursor:pointer;color:var(--text-gray);background:var(--surface);transition:all .2s}
+        .tab-btn:hover{border-color:var(--text-muted);color:var(--text-dark)}
+        .tab-btn.active{color:var(--royal-blue);background:var(--surface-hover);border-color:var(--royal-blue)}
+        .table-responsive{width:100%;overflow-x:auto}
+        .data-tbl{width:100%;border-collapse:collapse;text-align:left;min-width:800px}
+        .data-tbl th{padding:1rem 2rem;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg-light)}
+        .data-tbl td{padding:1.15rem 2rem;font-size:.9rem;color:var(--text-gray);border-bottom:1px solid var(--border);vertical-align:middle}
+        .data-tbl tbody tr{transition:background .15s}
+        .data-tbl tbody tr:hover{background:var(--bg-light)}
+        .data-tbl tbody tr.clickable{cursor:pointer}
+        .data-tbl tbody tr.clickable:hover .uname{color:var(--royal-blue)}
 
-        .main-wrap { margin-left: 260px; flex: 1; display: flex; flex-direction: column; position: relative; z-index: 1; transition: margin-left 0.3s ease; }
+        /* USER CELLS */
+        .user-cell{display:flex;align-items:center;gap:1rem}
+        .uav{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+        .uname{font-size:.95rem;font-weight:700;color:var(--text-dark);transition:color .2s}
+        .uid{font-size:.7rem;color:var(--text-muted);margin-top:2px}
+        .role-badge{display:inline-flex;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+        .role-badge.student{background:rgba(36,65,234,.1);color:var(--royal-blue)}
+        .role-badge.teacher{background:rgba(255,122,0,.1);color:var(--orange)}
+        .role-badge.admin{background:rgba(5,205,153,.1);color:var(--success)}
+        .status-badge{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600}
+        .status-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+        .status-badge.active{color:var(--success)}
+        .status-badge.pending{color:var(--orange)}
+        .status-badge.inactive{color:var(--text-muted)}
 
-        .topbar { position: sticky; top: 0; z-index: 50; background: var(--topbar-bg); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2.5rem; transition: background-color 0.3s ease; }
-        .topbar-left { display: flex; align-items: center; gap: 1rem; }
-        .mobile-toggle { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; width: 40px; height: 40px; align-items: center; justify-content: center; cursor: pointer; color: var(--royal-blue); box-shadow: 0 2px 10px var(--shadow-color); }
-        .welcome-text h1 { font-family: 'Poppins', sans-serif; font-size: 1.75rem; font-weight: 700; color: var(--text-dark); letter-spacing: -0.02em; margin-bottom: 0.2rem; }
-        .welcome-text p { font-size: 0.9rem; color: var(--text-gray); }
-        
-        .topbar-right { display: flex; align-items: center; gap: 1rem; }
-        .search-wrap { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border-radius: 50px; padding: 0.6rem 1.2rem; box-shadow: 0 4px 15px var(--shadow-color); border: 1px solid var(--border); width: 250px; }
-        .search-wrap input { background: none; border: none; outline: none; color: var(--text-dark); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; width: 100%; }
-        .search-wrap input::placeholder { color: var(--text-muted); }
+        /* BUTTONS */
+        .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+        .btn-approve{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
+        .btn-approve:hover{background:var(--success);color:#fff}
+        .btn-danger{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2)}
+        .btn-danger:hover{background:var(--danger);color:#fff}
+        .btn-admin{background:rgba(36,65,234,.1);color:var(--royal-blue);border-color:rgba(36,65,234,.2)}
+        .btn-admin:hover{background:var(--royal-blue);color:#fff}
+        .btn-unadmin{background:rgba(255,122,0,.1);color:var(--orange);border-color:rgba(255,122,0,.2)}
+        .btn-unadmin:hover{background:var(--orange);color:#fff}
+        .btn-deact{background:var(--bg-light);color:var(--text-gray);border-color:var(--border)}
+        .btn-deact:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+        .btn-activate{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
+        .btn-activate:hover{background:var(--success);color:#fff}
+        .master-tag{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px}
+        .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--royal-blue);background:var(--surface-hover);border:1px solid rgba(36,65,234,.2);padding:6px 12px;border-radius:8px}
 
-        .icon-btn { position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); transition: 0.2s; color: var(--text-muted); box-shadow: 0 4px 15px var(--shadow-color); font-size: 1.1rem; }
-        .icon-btn:hover { background: var(--bg-light); color: var(--royal-blue); transform: translateY(-2px); }
-        
-        .notification-wrapper { position: relative; }
-        .bell-badge { position: absolute; top: -2px; right: -2px; background: var(--danger); color: #fff; font-size: 0.6rem; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--surface); }
-        .notification-dropdown { position: absolute; top: 120%; right: 0; width: 320px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 10px 40px var(--shadow-color); display: none; flex-direction: column; z-index: 1000; transform-origin: top right; animation: scaleIn 0.2s ease; }
-        .notification-dropdown.show { display: flex; }
-        .notif-header { padding: 1.2rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .notif-header h4 { font-family: 'Poppins', sans-serif; font-size: 0.95rem; color: var(--text-dark); }
-        .notif-header span { font-size: 0.7rem; background: rgba(238, 93, 80, 0.1); color: var(--danger); padding: 3px 8px; border-radius: 12px; font-weight: 700; }
-        .notif-body { max-height: 350px; overflow-y: auto; }
-        .notif-item { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; gap: 12px; align-items: flex-start; cursor: pointer; transition: background 0.2s; }
-        .notif-item:hover { background: var(--surface-hover); }
-        .notif-icon { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 122, 0, 0.1); color: var(--orange); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .notif-content p { font-size: 0.8rem; color: var(--text-dark); margin-bottom: 4px; line-height: 1.4; }
-        .notif-empty { padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* EMPTY */
+        .empty-cell{padding:4rem 2rem;text-align:center}
+        .empty-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
+        .empty-ttl{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem}
+        .empty-sub{font-size:.85rem;color:var(--text-muted)}
 
-        .content { padding: 0 2.5rem 2.5rem; flex: 1; }
+        /* ACTIVITY */
+        .activity-list{padding:0 2rem 2rem;display:flex;flex-direction:column;gap:1.5rem}
+        .activity-item{display:flex;align-items:flex-start;gap:1rem;cursor:pointer;border-radius:12px;padding:.5rem;margin:-.5rem;transition:background .2s}
+        .activity-item:hover{background:var(--surface-hover)}
+        .act-av{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:.85rem}
+        .act-text p{font-size:.85rem;color:var(--text-dark);line-height:1.4}
+        .act-text p strong{font-weight:700}
+        .act-time{font-size:.7rem;color:var(--text-muted);margin-top:4px;display:block}
 
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { border-radius: 20px; padding: 1.75rem; position: relative; overflow: hidden; box-shadow: 0 10px 30px var(--shadow-color); animation: fadeUp 0.4s ease both; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px var(--shadow-color); }
-        .stat-card.brand-blue { background: var(--royal-blue); color: #fff; }
-        .stat-card.brand-orange { background: var(--orange); color: #fff; }
-        .stat-card.brand-yellow { background: var(--yellow); color: #111; }
-        .stat-card.brand-surface { background: var(--surface); color: var(--royal-blue); border: 1px solid var(--border); }
-        .stat-lbl { font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-bottom: 0.5rem; }
-        .stat-card.brand-surface .stat-lbl { color: var(--text-gray); }
-        .stat-num { font-family: 'Poppins', sans-serif; font-size: 2.25rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+        /* ADS */
+        .ads-management-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1rem 2rem 2rem}
+        .ad-slot-form{background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem}
+        .ad-slot-form h4{color:var(--text-dark);font-family:'Poppins'}
+        .ad-preview-img{width:100%;height:150px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
+        .ad-slot-form textarea{width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;background:var(--surface);color:var(--text-dark);font-family:'DM Sans';outline:none}
+        .ad-slot-form input[type="url"]{padding:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-dark);outline:none;width:100%}
+        .ad-slot-form textarea:focus,.ad-slot-form input[type="url"]:focus{border-color:var(--royal-blue)}
 
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+        /* USER DETAIL DRAWER */
+        .drawer-backdrop{position:fixed;inset:0;background:rgba(17,38,146,.3);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
+        .drawer-backdrop.open{opacity:1;pointer-events:all}
+        .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+        .drawer.open{transform:translateX(0)}
+        .drawer-header{padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg-light)}
+        .drawer-header-left{display:flex;align-items:center;gap:.75rem}
+        .drawer-header h3{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark)}
+        .drawer-close{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:1.1rem;transition:all .2s}
+        .drawer-close:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+        .drawer-body{flex:1;overflow-y:auto;padding:1.75rem}
+        .d-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:1px solid var(--border)}
+        .d-avatar{width:88px;height:88px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:2.2rem;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.15)}
+        .d-name{font-family:'Poppins',sans-serif;font-size:1.35rem;font-weight:700;color:var(--text-dark);text-align:center}
+        .d-email{font-size:.85rem;color:var(--text-muted);text-align:center;margin-top:.2rem}
+        .d-badges{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.6rem}
+        .detail-section{margin-bottom:1.5rem}
+        .detail-section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.85rem}
+        .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+        .detail-item{background:var(--bg-light);border-radius:14px;padding:1rem 1.25rem;border:1px solid var(--border)}
+        .detail-item.full{grid-column:span 2}
+        .detail-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.4rem}
+        .detail-val{font-size:.92rem;font-weight:600;color:var(--text-dark);word-break:break-all}
+        .drawer-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+        .drawer-action-grid .btn{justify-content:center;padding:.75rem 1rem;font-size:.85rem}
+        .drawer-action-grid .btn.full{grid-column:span 2}
 
-        .panel { background: var(--surface); border-radius: 24px; margin-bottom: 2rem; overflow: hidden; box-shadow: 0 10px 40px var(--shadow-color); animation: fadeUp 0.4s ease both; transition: background-color 0.3s ease; }
-        .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem 1rem; }
-        .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
-        .panel-cnt { font-size: 0.75rem; font-weight: 700; background: var(--bg-light); color: var(--royal-blue); padding: 4px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; border: 1px solid var(--border); }
+        /* SKELETON */
+        .skeleton{height:14px;border-radius:8px;background:linear-gradient(90deg,var(--border) 25%,var(--border-bright) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:inline-block;width:100%}
+        .skeleton.sm{width:65%}.skeleton.xs{width:42%}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+        @keyframes livePulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
 
-        .tab-bar { display: flex; gap: 0.5rem; padding: 0 2rem 1.5rem; overflow-x: auto; white-space: nowrap; }
-        .tab-bar::-webkit-scrollbar { display: none; }
-        .tab-btn { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 0.5rem 1.25rem; border-radius: 50px; border: 1px solid var(--border); cursor: pointer; color: var(--text-gray); background: var(--surface); transition: all 0.2s; }
-        .tab-btn:hover { border-color: var(--text-muted); color: var(--text-dark); }
-        .tab-btn.active { color: var(--royal-blue); background: var(--surface-hover); border-color: var(--royal-blue); }
-
-        .table-responsive { width: 100%; overflow-x: auto; }
-        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
-        .data-tbl th { padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); }
-        .data-tbl td { padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .data-tbl tbody tr:hover { background: var(--bg-light); }
-
-        .user-cell { display: flex; align-items: center; gap: 1rem; }
-        .uav { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .uname { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
-        .uid { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
-        .role-badge { display: inline-flex; align-items: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
-        .role-badge.student { background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); }
-        .role-badge.teacher { background: rgba(255, 122, 0, 0.1); color: var(--orange); }
-        .role-badge.admin   { background: rgba(5, 205, 153, 0.1); color: var(--success); }
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; }
-        .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-        .status-badge.active   { color: var(--success); }
-        .status-badge.pending  { color: var(--orange); }
-        .status-badge.inactive { color: var(--text-muted); }
-
-        .actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-        .btn { display: inline-flex; align-items: center; gap: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .btn-approve  { background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2); }
-        .btn-approve:hover { background: var(--success); color: #fff; }
-        .btn-danger   { background: rgba(238, 93, 80, 0.1); color: var(--danger); border-color: rgba(238, 93, 80, 0.2); }
-        .btn-danger:hover  { background: var(--danger); color: #fff; }
-        .btn-admin    { background: rgba(36, 65, 234, 0.1); color: var(--royal-blue); border-color: rgba(36, 65, 234, 0.2); }
-        .btn-admin:hover   { background: var(--royal-blue); color: #fff; }
-        .btn-unadmin  { background: rgba(255, 122, 0, 0.1); color: var(--orange); border-color: rgba(255, 122, 0, 0.2); }
-        .btn-unadmin:hover { background: var(--orange); color: #fff; }
-        .btn-deact    { background: var(--bg-light); color: var(--text-gray); border-color: var(--border); }
-        .btn-deact:hover   { background: var(--danger); color: #fff; border-color: var(--danger); }
-        .btn-activate { background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2); }
-        .btn-activate:hover { background: var(--success); color: #fff; }
-
-        .master-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.1); border: 1px solid rgba(5, 205, 153, 0.2); padding: 6px 12px; border-radius: 8px; }
-        .system-owner-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; color: var(--royal-blue); background: var(--surface-hover); border: 1px solid rgba(36, 65, 234, 0.2); padding: 6px 12px; border-radius: 8px; }
-
-        .empty-cell { padding: 4rem 2rem; text-align: center; }
-        .empty-ico  { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3; }
-        .empty-ttl  { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem; }
-
-        .activity-list { padding: 0 2rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
-        .activity-item { display: flex; align-items: flex-start; gap: 1rem; }
-        .act-av { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; flex-shrink: 0; font-size: 0.85rem; }
-        .act-text p { font-size: 0.85rem; color: var(--text-dark); line-height: 1.4; }
-        .act-text p strong { font-weight: 700; }
-        .act-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; display: block; }
-
-        /* AD MANAGEMENT STYLES */
-        .ads-management-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 1rem 2rem 2rem; }
-        .ad-slot-form { background: var(--bg-light); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem; }
-        .ad-slot-form h4 { color: var(--text-dark); margin-bottom: 0.5rem; font-family: 'Poppins'; }
-        .ad-preview-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); }
-        .ad-slot-form textarea { width: 100%; height: 80px; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); resize: none; background: var(--surface); color: var(--text-dark); font-family: 'DM Sans'; outline: none;}
-        .ad-slot-form input[type="url"] { padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dark); outline: none;}
-        .ad-slot-form textarea:focus, .ad-slot-form input[type="url"]:focus { border-color: var(--royal-blue); }
-
-        /* ── LOADING SKELETON ── */
-        .skeleton-row td { padding: 1.25rem 2rem; }
-        .skeleton { height: 14px; border-radius: 8px; background: linear-gradient(90deg, var(--border) 25%, var(--border-bright) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; display: inline-block; width: 100%; }
-        .skeleton.sm { width: 60%; }
-        .skeleton.xs { width: 40%; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-        @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulse  { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
-        .loading-row td { animation: pulse 1.5s ease-in-out infinite; }
-
-        /* ── MOBILE RESPONSIVE FIXES ── */
-        @media (max-width: 1200px) { 
-            .dashboard-grid { grid-template-columns: 1fr; } 
-            .ads-management-grid { grid-template-columns: 1fr; } 
+        /* RESPONSIVE */
+        @media(max-width:1200px){.dashboard-grid{grid-template-columns:1fr}.ads-management-grid{grid-template-columns:1fr}}
+        @media(max-width:992px){
+            .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+            .main-wrap{margin-left:0}.mobile-toggle{display:flex}
+            .stats-grid{grid-template-columns:repeat(2,1fr)}
+            .topbar{padding:1rem 1.5rem}.content{padding:0 1.5rem 1.5rem}
+            .welcome-text h1{font-size:1.4rem}.welcome-text p{display:none}
+            .close-sidebar{display:block}
         }
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-wrap { margin-left: 0; }
-            .mobile-toggle { display: flex; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .topbar { padding: 1rem 1.5rem; }
-            .content { padding: 0 1.5rem 1.5rem; }
-            .welcome-text h1 { font-size: 1.4rem; }
-            .welcome-text p { display: none; }
-        }
-        @media (max-width: 576px) { 
-            .stats-grid { grid-template-columns: 1fr; } 
-            .topbar { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem; }
-            .topbar-right { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-            .search-wrap { width: 100%; order: 3; margin-top: 5px; }
-            .ads-management-grid { padding: 1rem; }
+        @media(max-width:576px){
+            .stats-grid{grid-template-columns:1fr}
+            .topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}
+            .topbar-right{width:100%;justify-content:space-between;flex-wrap:wrap;gap:10px}
+            .search-wrap{width:100%;order:3;margin-top:5px}
+            .ads-management-grid{padding:1rem}
+            .drawer{width:100vw}.detail-grid{grid-template-columns:1fr}
+            .drawer-action-grid{grid-template-columns:1fr}
+            .drawer-action-grid .btn.full{grid-column:span 1}
         }
     </style>
 </head>
@@ -220,35 +242,32 @@
         </div>
         <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
     </div>
-
     <div class="nav-label">Main Menu</div>
     <a class="nav-item active" href="admin-dashboard.html">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
     </a>
-    <a class="nav-item" href="#" onclick="switchTab('students'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> Students
+    <a class="nav-item" href="#" onclick="quickNav('students');return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Students
     </a>
-    <a class="nav-item" href="#" onclick="switchTab('teachers'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Teachers
+    <a class="nav-item" href="#" onclick="quickNav('teachers');return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Teachers
     </a>
     <a class="nav-item" href="community.html">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Community Hub
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Community Hub
     </a>
-
     <div class="nav-label">Management</div>
-    <a class="nav-item" href="#" onclick="switchTab('admins'); document.querySelector('.users').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Admins
+    <a class="nav-item" href="#" onclick="quickNav('admins');return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admins
     </a>
-    <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pending <span class="nav-badge" id="nav-pcount">0</span>
+    <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Pending <span class="nav-badge" id="nav-pcount">0</span>
     </a>
-    <a class="nav-item" href="#" onclick="document.getElementById('ad-management-section').scrollIntoView({behavior:'smooth'}); toggleSidebar(); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Manage Ads
+    <a class="nav-item" href="#" onclick="document.getElementById('ad-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Manage Ads
     </a>
-
     <div class="sidebar-foot">
         <button class="logout-btn" id="logoutBtn">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Log Out
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log Out
         </button>
     </div>
 </aside>
@@ -257,7 +276,7 @@
     <header class="topbar">
         <div class="topbar-left">
             <button class="mobile-toggle" onclick="toggleSidebar()">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
             <div class="welcome-text">
                 <h1>Welcome back, Admin!</h1>
@@ -266,13 +285,14 @@
         </div>
         <div class="topbar-right">
             <div class="search-wrap">
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--text-muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input type="text" id="search-input" placeholder="Search users..." oninput="filterUsers()">
             </div>
-            <button class="icon-btn" id="themeToggleBtn" onclick="cycleTheme()" title="Switch Theme"><span id="theme-icon">💻</span></button>
+            <div class="live-dot" title="Real-time sync active">LIVE</div>
+            <button class="icon-btn" onclick="cycleTheme()" title="Toggle theme"><span id="theme-icon">💻</span></button>
             <div class="notification-wrapper">
                 <div class="icon-btn" onclick="toggleNotifications()">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     <div class="bell-badge" id="bell-badge">0</div>
                 </div>
                 <div class="notification-dropdown" id="notif-dropdown">
@@ -284,88 +304,109 @@
     </header>
 
     <main class="content">
+
+        <!-- STAT CARDS — clicking Students/Teachers switches tab instantly -->
         <div class="stats-grid">
-            <div class="stat-card brand-blue" onclick="switchTab('students'); document.querySelector('.users').scrollIntoView({behavior:'smooth'});">
-                <div class="stat-lbl">Total Students</div><div class="stat-num" id="stat-students">—</div>
+            <div class="stat-card brand-blue" id="card-students" onclick="statCardNav('students')">
+                <div class="stat-lbl">Total Students</div>
+                <div class="stat-num" id="stat-students">—</div>
+                <div class="stat-hint">Click to view all students</div>
+                <div class="stat-arrow">🎒</div>
             </div>
-            <div class="stat-card brand-orange" onclick="switchTab('teachers'); document.querySelector('.users').scrollIntoView({behavior:'smooth'});">
-                <div class="stat-lbl">Active Teachers</div><div class="stat-num" id="stat-teachers">—</div>
+            <div class="stat-card brand-orange" id="card-teachers" onclick="statCardNav('teachers')">
+                <div class="stat-lbl">Active Teachers</div>
+                <div class="stat-num" id="stat-teachers">—</div>
+                <div class="stat-hint">Click to view all teachers</div>
+                <div class="stat-arrow">🎓</div>
             </div>
             <div class="stat-card brand-yellow" onclick="window.location.href='tracks.html'">
-                <div class="stat-lbl">Academy Tracks</div><div class="stat-num" id="stat-tracks">6</div>
+                <div class="stat-lbl">Academy Tracks</div>
+                <div class="stat-num" id="stat-tracks">6</div>
+                <div class="stat-hint">View curriculum</div>
+                <div class="stat-arrow">📚</div>
             </div>
-            <div class="stat-card brand-surface" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});">
-                <div class="stat-lbl">Pending Reviews</div><div class="stat-num" id="stat-pending">—</div>
+            <div class="stat-card brand-surface" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'})">
+                <div class="stat-lbl">Pending Reviews</div>
+                <div class="stat-num" id="stat-pending">—</div>
+                <div class="stat-hint">Needs your attention</div>
+                <div class="stat-arrow">⏳</div>
             </div>
         </div>
 
+        <!-- PENDING APPROVALS -->
         <div class="panel pend">
-            <div class="panel-head"><div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div></div>
+            <div class="panel-head">
+                <div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div>
+            </div>
             <div class="table-responsive">
                 <table class="data-tbl">
                     <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
                     <tbody id="pending-users-list">
-                        <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
-                        <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                        <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                        <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- USER MANAGEMENT + ACTIVITY -->
         <div class="dashboard-grid">
             <div class="panel users">
-                <div class="panel-head"><div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div></div>
+                <div class="panel-head">
+                    <div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div>
+                </div>
                 <div class="tab-bar">
-                    <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All</button>
-                    <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
-                    <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
-                    <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
+                    <button class="tab-btn active" onclick="switchTab('all')"      id="tab-all">All</button>
+                    <button class="tab-btn"         onclick="switchTab('students')" id="tab-students">Students</button>
+                    <button class="tab-btn"         onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
+                    <button class="tab-btn"         onclick="switchTab('admins')"   id="tab-admins">Admins</button>
                 </div>
                 <div class="table-responsive">
                     <table class="data-tbl">
                         <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
                         <tbody id="all-users-list">
-                            <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
-                            <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
-                            <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                            <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                            <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                            <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="panel activity">
                 <div class="panel-head"><div class="panel-title">Recent Activity</div></div>
-                <div class="activity-list" id="recent-activities-list"><p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin-top:1rem;">Loading activity...</p></div>
+                <div class="activity-list" id="recent-activities-list">
+                    <p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">Loading...</p>
+                </div>
             </div>
         </div>
 
-        <div class="panel ads-panel" id="ad-management-section">
-            <div class="panel-head">
-                <div class="panel-title">Manage Community Ads (3 Slots)</div>
-            </div>
+        <!-- ADS -->
+        <div class="panel" id="ad-management-section">
+            <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
             <div class="ads-management-grid">
                 <div class="ad-slot-form" id="slot-1">
                     <h4>Ad Slot 1</h4>
-                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event, 1)">
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,1)">
                     <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-1" alt="Preview 1">
                     <textarea placeholder="Ad Copy Text..." id="copy-1"></textarea>
                     <input type="url" placeholder="Advertiser Link (https://...)" id="link-1">
-                    <button class="btn btn-admin" style="width:100%; justify-content:center; padding:0.8rem;" onclick="saveAd(1)">Save Slot 1</button>
+                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(1)">Save Slot 1</button>
                 </div>
                 <div class="ad-slot-form" id="slot-2">
                     <h4>Ad Slot 2</h4>
-                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event, 2)">
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,2)">
                     <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-2" alt="Preview 2">
                     <textarea placeholder="Ad Copy Text..." id="copy-2"></textarea>
                     <input type="url" placeholder="Advertiser Link (https://...)" id="link-2">
-                    <button class="btn btn-admin" style="width:100%; justify-content:center; padding:0.8rem;" onclick="saveAd(2)">Save Slot 2</button>
+                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(2)">Save Slot 2</button>
                 </div>
                 <div class="ad-slot-form" id="slot-3">
                     <h4>Ad Slot 3</h4>
-                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event, 3)">
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,3)">
                     <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-3" alt="Preview 3">
                     <textarea placeholder="Ad Copy Text..." id="copy-3"></textarea>
                     <input type="url" placeholder="Advertiser Link (https://...)" id="link-3">
-                    <button class="btn btn-admin" style="width:100%; justify-content:center; padding:0.8rem;" onclick="saveAd(3)">Save Slot 3</button>
+                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(3)">Save Slot 3</button>
                 </div>
             </div>
         </div>
@@ -373,392 +414,527 @@
     </main>
 </div>
 
+<!-- USER DETAIL DRAWER -->
+<div class="drawer-backdrop" id="drawerBg" onclick="closeDrawer()"></div>
+<div class="drawer" id="userDrawer">
+    <div class="drawer-header">
+        <div class="drawer-header-left">
+            <span id="drawer-role-icon" style="font-size:1.3rem">👤</span>
+            <h3 id="drawer-title">User Details</h3>
+        </div>
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ── THEME ──
-const themes = ['system', 'light', 'dark'];
-const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
+/* ═══════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════ */
+const _themes = ['system','light','dark'];
+const _tIcons = {system:'💻',light:'☀️',dark:'🌙'};
 function cycleTheme() {
-    let current = localStorage.getItem('enet_theme') || 'system';
-    let nextTheme = themes[(themes.indexOf(current) + 1) % themes.length];
-    localStorage.setItem('enet_theme', nextTheme);
-    applyTheme(nextTheme);
+    const cur  = localStorage.getItem('enet_theme')||'system';
+    const next = _themes[(_themes.indexOf(cur)+1)%_themes.length];
+    localStorage.setItem('enet_theme',next); applyTheme(next);
 }
-function applyTheme(theme) {
-    document.getElementById('theme-icon').textContent = themeIcons[theme];
+function applyTheme(t) {
+    const iconEl = document.getElementById('theme-icon');
+    if (iconEl) iconEl.textContent = _tIcons[t];
     document.documentElement.setAttribute('data-theme',
-        theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : theme);
+        t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':t);
 }
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (localStorage.getItem('enet_theme') === 'system') {
-        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    }
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{
+    if(localStorage.getItem('enet_theme')==='system')
+        document.documentElement.setAttribute('data-theme',e.matches?'dark':'light');
 });
 
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('show');
+/* ═══════════════════════════════════════════
+   SIDEBAR / NOTIFICATIONS
+═══════════════════════════════════════════ */
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show')}
+function closeSidebar() {document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show')}
+function toggleNotifications(){document.getElementById('notif-dropdown').classList.toggle('show')}
+document.addEventListener('click',e=>{
+    const w=document.querySelector('.notification-wrapper');
+    if(w&&!w.contains(e.target)) document.getElementById('notif-dropdown').classList.remove('show');
+});
+
+/* ═══════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════ */
+const GRADS=[
+    'linear-gradient(135deg,#2441EA,#5C75FF)',
+    'linear-gradient(135deg,#FF7A00,#FFB067)',
+    'linear-gradient(135deg,#05CD99,#43E8BA)',
+    'linear-gradient(135deg,#FFC107,#FFE37E)',
+    'linear-gradient(135deg,#8B5CF6,#B496F9)'
+];
+function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length]}
+function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase()}
+function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
+function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d)}
+function getRole(u){return(u.role||'').trim().toLowerCase()||'student'}
+function emptyRow(msg,cols,ico,sub){
+    return `<tr><td colspan="${cols}"><div class="empty-cell">
+        <div class="empty-ico">${ico||'📭'}</div>
+        <div class="empty-ttl">${msg}</div>
+        ${sub?`<div class="empty-sub">${sub}</div>`:''}
+    </div></td></tr>`;
 }
-function toggleNotifications() { document.getElementById('notif-dropdown').classList.toggle('show'); }
-document.addEventListener('click', function(e) {
-    const wrap = document.querySelector('.notification-wrapper');
-    if (wrap && !wrap.contains(e.target)) document.getElementById('notif-dropdown').classList.remove('show');
-});
 
-window.addEventListener('load', function () {
-    const currentTheme = localStorage.getItem('enet_theme') || 'system';
-    document.getElementById('theme-icon').textContent = themeIcons[currentTheme];
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let _data=[], _tab='all', _sb;
 
-    // ── SUPABASE CONFIG ──
-    const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-    window._sb = window.supabase.createClient(supabaseUrl, supabaseKey);
+/* ═══════════════════════════════════════════
+   USER DETAIL DRAWER
+═══════════════════════════════════════════ */
+const ROLE_ICONS={student:'🎒',teacher:'🎓',admin:'🛡️'};
 
-    // ── HELPERS ──
-    const GRADS = [
-        'linear-gradient(135deg, #2441EA, #5C75FF)',
-        'linear-gradient(135deg, #FF7A00, #FFB067)',
-        'linear-gradient(135deg, #05CD99, #43E8BA)',
-        'linear-gradient(135deg, #FFC107, #FFE37E)',
-        'linear-gradient(135deg, #8B5CF6, #B496F9)'
-    ];
-    function grad(str) { let h = 0; for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h); return GRADS[Math.abs(h) % GRADS.length]; }
-    function inits(f, l) { return ((f || 'U')[0] + (l || '?')[0]).toUpperCase(); }
-    function fmtDate(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
-    function timeAgo(dateStr) {
-        const diff = Math.floor((new Date() - new Date(dateStr)) / 1000);
-        if (diff < 60) return 'just now';
-        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-        return fmtDate(dateStr);
-    }
-    function emptyRow(title, cols, ico) {
-        return `<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico || '📭'}</div><div class="empty-ttl">${title}</div></div></td></tr>`;
-    }
+function openDrawer(userId){
+    const u=_data.find(x=>x.id===userId);
+    if(!u) return;
+    const r         = getRole(u);
+    const isInactive= u.status==='inactive';
+    const isPending = u.status==='pending';
+    const isOwner   = (u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
+    const nm        = `${u.first_name||'User'} ${u.last_name||''}`.trim();
 
-    // ── IN-MEMORY CACHE — no round-trips on tab switch / search ──
-    let allData = [];
-    let curTab = 'all';
-    let isFetching = false;
+    // Header icon + title
+    document.getElementById('drawer-role-icon').textContent = ROLE_ICONS[r]||'👤';
+    document.getElementById('drawer-title').textContent =
+        r==='teacher'?'Teacher Profile':r==='admin'?'Admin Profile':'Student Profile';
 
-    // ── FAST LOAD: profiles + ads in parallel, no sequential awaits ──
-    async function loadAdminDashboard(forceRefresh = false) {
-        if (isFetching && !forceRefresh) return;
-        isFetching = true;
-
-        try {
-            // Fire both queries at exactly the same time
-            const [profilesResult, adsResult] = await Promise.all([
-                window._sb
-                    .from('profiles')
-                    .select('id, first_name, last_name, email, role, status, created_at')
-                    .order('created_at', { ascending: false })
-                    .limit(500),
-                window._sb.from('ads').select('*').order('slot_id')
-            ]);
-
-            // ── Handle profiles ──
-            if (profilesResult.error) throw profilesResult.error;
-            allData = profilesResult.data || [];
-            render(allData);
-            renderActivities(allData);
-
-            // ── Handle ads (non-blocking — already done) ──
-            if (!adsResult.error && adsResult.data) {
-                adsResult.data.forEach(ad => {
-                    const previewEl = document.getElementById(`preview-${ad.slot_id}`);
-                    const copyEl   = document.getElementById(`copy-${ad.slot_id}`);
-                    const linkEl   = document.getElementById(`link-${ad.slot_id}`);
-                    if (previewEl) previewEl.src = ad.image_url;
-                    if (copyEl)   copyEl.value   = ad.ads_copy || '';
-                    if (linkEl)   linkEl.value   = ad.advertiser_link || '';
-                });
-            }
-        } catch (err) {
-            console.error('Dashboard load error:', err);
-            document.getElementById('pending-users-list').innerHTML = emptyRow('Error loading data. Check console.', 5, '⚠️');
-            document.getElementById('all-users-list').innerHTML     = emptyRow('Error loading data. Check console.', 6, '⚠️');
-        } finally {
-            isFetching = false;
+    // Build action buttons
+    let actions='';
+    if(isPending){
+        actions=`
+            <button class="btn btn-approve full" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Registration</button>
+            <button class="btn btn-danger  full" onclick="rejectUser('${u.id}');closeDrawer()">✕ Reject & Remove</button>`;
+    } else if(r==='admin'){
+        if(isOwner){
+            actions=`<div class="system-owner-tag full" style="justify-content:center;padding:1rem;grid-column:span 2">👑 System Owner — Cannot be modified</div>`;
+        } else {
+            actions=`
+                <button class="btn btn-unadmin" onclick="removeAdmin('${u.id}');closeDrawer()">↓ Demote to Student</button>
+                <button class="btn btn-deact"   onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`;
         }
+    } else {
+        actions=`
+            <button class="btn btn-admin" onclick="makeAdmin('${u.id}');closeDrawer()">↑ Make Admin</button>
+            ${isInactive
+                ?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">▶ Activate Account</button>`
+                :`<button class="btn btn-deact"    onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`}`;
     }
 
-    // ── RENDER: pending + stats in one pass ──
-    function render(data) {
-        let pendHTML = '';
-        let sc = 0, tc = 0, pc = 0;
-        const pendingUsers = [];
+    document.getElementById('drawer-body').innerHTML=`
+        <div class="d-avatar-wrap">
+            <div class="d-avatar" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(.7)':''}">
+                ${inits(u.first_name,u.last_name)}
+            </div>
+            <div>
+                <div class="d-name">${nm}</div>
+                <div class="d-email">${u.email||'No email on record'}</div>
+            </div>
+            <div class="d-badges">
+                <span class="role-badge ${r}">${r}</span>
+                <span class="status-badge ${isInactive?'inactive':isPending?'pending':'active'}">
+                    ${isInactive?'Suspended':isPending?'Pending Approval':'Active'}
+                </span>
+            </div>
+        </div>
 
-        data.forEach(u => {
-            // ── FIX: normalize role — never fall back blindly to 'student' ──
-            const role = (u.role || '').trim().toLowerCase() || 'student';
-
-            if (u.status === 'pending') {
-                pc++;
-                pendingUsers.push({ ...u, _role: role });
-                const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-                pendHTML += `<tr>
-                    <td><div class="user-cell">
-                        <div class="uav" style="background:${grad(u.id || nm)}">${inits(u.first_name, u.last_name)}</div>
-                        <div><div class="uname">${nm}</div><div class="uid">#${(u.id || '').slice(0, 8)}</div></div>
-                    </div></td>
-                    <td>${u.email || 'N/A'}</td>
-                    <td><span class="role-badge ${role}">${role}</span></td>
-                    <td>${fmtDate(u.created_at)}</td>
-                    <td><div class="actions">
-                        <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
-                        <button class="btn btn-danger"  onclick="rejectUser('${u.id}')">✕ Reject</button>
-                    </div></td>
-                </tr>`;
-            } else if (u.status === 'approved' || u.status === 'inactive') {
-                // ── FIX: count teachers from ALL non-pending users ──
-                if (role === 'student') sc++;
-                else if (role === 'teacher') tc++;
-            }
-        });
-
-        document.getElementById('pending-users-list').innerHTML =
-            pendHTML || emptyRow('All caught up! No pending approvals.', 5, '✅');
-        document.getElementById('pend-badge').textContent    = pc;
-        document.getElementById('nav-pcount').textContent    = pc;
-        document.getElementById('bell-badge').textContent    = pc;
-        document.getElementById('stat-students').textContent = sc;
-        document.getElementById('stat-teachers').textContent = tc;
-        document.getElementById('stat-pending').textContent  = pc;
-
-        renderNotifications(pendingUsers);
-        renderUsers(data, curTab);
-    }
-
-    function renderNotifications(pendingUsers) {
-        const list = document.getElementById('notif-list');
-        document.getElementById('notif-count').textContent = pendingUsers.length + ' New';
-        if (!pendingUsers.length) {
-            list.innerHTML = '<div class="notif-empty">You are all caught up! No pending approvals.</div>';
-            return;
-        }
-        let html = '';
-        pendingUsers.forEach(u => {
-            const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-            html += `<div class="notif-item" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'}); document.getElementById('notif-dropdown').classList.remove('show');">
-                <div class="notif-icon">👤</div>
-                <div class="notif-content">
-                    <p><strong>${nm}</strong> is waiting for ${u._role || u.role || 'student'} approval.</p>
-                    <span class="notif-time">${timeAgo(u.created_at)}</span>
+        <div class="detail-section">
+            <div class="detail-section-title">Account Details</div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-lbl">First Name</div>
+                    <div class="detail-val">${u.first_name||'—'}</div>
                 </div>
-            </div>`;
-        });
-        list.innerHTML = html;
-    }
-
-    function renderActivities(data) {
-        const recent = data.slice(0, 6);
-        let html = '';
-        recent.forEach(u => {
-            const nm   = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-            const role = (u.role || 'student').trim().toLowerCase();
-            html += `<div class="activity-item">
-                <div class="act-av" style="background:${grad(u.id || nm)}">${inits(u.first_name, u.last_name)}</div>
-                <div class="act-text">
-                    <p><strong>${nm}</strong> created a ${role} account.</p>
-                    <span class="act-time">${timeAgo(u.created_at)}</span>
+                <div class="detail-item">
+                    <div class="detail-lbl">Last Name</div>
+                    <div class="detail-val">${u.last_name||'—'}</div>
                 </div>
-            </div>`;
-        });
-        document.getElementById('recent-activities-list').innerHTML = html;
-    }
+                <div class="detail-item">
+                    <div class="detail-lbl">Role</div>
+                    <div class="detail-val" style="text-transform:capitalize">${r}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-lbl">Account Status</div>
+                    <div class="detail-val" style="text-transform:capitalize">${isInactive?'Suspended':isPending?'Pending':'Active'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-lbl">Date Joined</div>
+                    <div class="detail-val">${fmtDate(u.created_at)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-lbl">Member Since</div>
+                    <div class="detail-val">${timeAgo(u.created_at)}</div>
+                </div>
+                <div class="detail-item full">
+                    <div class="detail-lbl">Email Address</div>
+                    <div class="detail-val">${u.email||'Not provided'}</div>
+                </div>
+                <div class="detail-item full">
+                    <div class="detail-lbl">User ID</div>
+                    <div class="detail-val" style="font-size:.8rem;color:var(--text-muted)">${u.id||'—'}</div>
+                </div>
+            </div>
+        </div>
 
-    // ── FIX: renderUsers — correct teacher filter, no bad fallback ──
-    function renderUsers(data, tab) {
-        const q = (document.getElementById('search-input').value || '').toLowerCase();
+        <div class="detail-section">
+            <div class="detail-section-title">Quick Actions</div>
+            <div class="drawer-action-grid">${actions}</div>
+        </div>
+    `;
 
-        // Include approved + inactive (not pending)
-        let rows = data.filter(u => u.status === 'approved' || u.status === 'inactive');
+    document.getElementById('drawerBg').classList.add('open');
+    document.getElementById('userDrawer').classList.add('open');
+}
 
-        // ── FIX: use trimmed lowercase role for comparison ──
-        if (tab === 'students') {
-            rows = rows.filter(u => {
-                const r = (u.role || '').trim().toLowerCase();
-                // Treat null/empty as student, explicitly filter 'student'
-                return r === 'student' || r === '';
-            });
-        } else if (tab === 'teachers') {
-            rows = rows.filter(u => {
-                const r = (u.role || '').trim().toLowerCase();
-                return r === 'teacher';
-            });
-        } else if (tab === 'admins') {
-            rows = rows.filter(u => {
-                const r = (u.role || '').trim().toLowerCase();
-                return r === 'admin';
-            });
-        }
+function closeDrawer(){
+    document.getElementById('drawerBg').classList.remove('open');
+    document.getElementById('userDrawer').classList.remove('open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
 
-        if (q) {
-            rows = rows.filter(u => {
-                const nm = `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase();
-                return nm.includes(q) || (u.email || '').toLowerCase().includes(q);
-            });
-        }
-
-        document.getElementById('users-badge').textContent = rows.length;
-
-        if (!rows.length) {
-            const msg = tab === 'teachers' ? 'No teachers registered yet' : 'No users found';
-            document.getElementById('all-users-list').innerHTML = emptyRow(msg, 6, tab === 'teachers' ? '🎓' : '🔍');
-            return;
-        }
-
-        let html = '';
-        rows.forEach(u => {
-            const nm         = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-            const role       = (u.role || 'student').trim().toLowerCase();
-            const isAdmin    = role === 'admin';
-            const isInactive = u.status === 'inactive';
-            const isSystemOwner = (u.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com';
-
-            let btns = '';
-            if (isAdmin) {
-                if (isSystemOwner) btns = `<span class="system-owner-tag">👑 System Owner</span>`;
-                else btns = `<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
-            } else {
-                btns = `<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Make Admin</button>`;
-                btns += isInactive
-                    ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
-                    : `<button class="btn btn-deact"    onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
-            }
-
-            html += `<tr>
-                <td><div class="user-cell">
-                    <div class="uav" style="background:${grad(u.id || nm)};${isInactive ? 'filter:grayscale(1);opacity:0.6' : ''}">${inits(u.first_name, u.last_name)}</div>
-                    <div>
-                        <div class="uname" style="${isInactive ? 'color:var(--text-muted)' : ''}">${nm}</div>
-                        <div class="uid">#${(u.id || '').slice(0, 8)}</div>
-                    </div>
-                </div></td>
-                <td>${u.email || 'N/A'}</td>
-                <td><span class="role-badge ${role}">${role}</span></td>
-                <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${isInactive ? 'Suspended' : 'Active'}</span></td>
-                <td>${fmtDate(u.created_at)}</td>
-                <td><div class="actions">${btns}</div></td>
-            </tr>`;
-        });
-        document.getElementById('all-users-list').innerHTML = html;
-    }
-
-    // ── TAB SWITCHING (pure client-side, instant) ──
-    window.switchTab = function(tab) {
-        curTab = tab;
-        ['all', 'students', 'teachers', 'admins'].forEach(t => {
-            const el = document.getElementById('tab-' + t);
-            if (el) el.classList.toggle('active', t === tab);
-        });
-        renderUsers(allData, tab);  // No DB call — uses cache
-    };
-
-    window.filterUsers = function() { renderUsers(allData, curTab); };
-
-    // ── MUTATIONS: minimal targeted update + local cache patch ──
-    async function mutate(userId, updates) {
-        const { error } = await window._sb.from('profiles').update(updates).eq('id', userId);
-        if (error) { alert('Action failed: ' + error.message); return false; }
-        // Patch local cache immediately — no re-fetch needed
-        const idx = allData.findIndex(u => u.id === userId);
-        if (idx !== -1) Object.assign(allData[idx], updates);
-        render(allData);
-        return true;
-    }
-
-    async function mutateDelete(userId) {
-        const { error } = await window._sb.from('profiles').delete().eq('id', userId);
-        if (error) { alert('Action failed: ' + error.message); return false; }
-        allData = allData.filter(u => u.id !== userId);
-        render(allData);
-        return true;
-    }
-
-    window.approveUser = async function(userId) {
-        await mutate(userId, { status: 'approved' });
-    };
-
-    window.rejectUser = async function(userId) {
-        const user = allData.find(u => u.id === userId);
-        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') return;
-        if (confirm('Reject and remove this registration?')) await mutateDelete(userId);
-    };
-
-    window.makeAdmin = async function(userId) {
-        if (confirm('Make this user an Admin?')) await mutate(userId, { role: 'admin' });
-    };
-
-    window.removeAdmin = async function(userId) {
-        const user = allData.find(u => u.id === userId);
-        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
-            alert('System Owner cannot be demoted.'); return;
-        }
-        if (confirm('Remove admin privileges?')) await mutate(userId, { role: 'student' });
-    };
-
-    window.toggleUserStatus = async function(userId, newStatus) {
-        const user = allData.find(u => u.id === userId);
-        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') return;
-        if (confirm('Change account status?')) await mutate(userId, { status: newStatus });
-    };
-
-    // ── LOGOUT ──
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-        try { await window._sb.auth.signOut(); } catch (e) {}
-        localStorage.clear(); sessionStorage.clear();
-        window.location.href = 'index.html';
-    });
-
-    // ── KICK OFF (single parallel fetch) ──
-    loadAdminDashboard();
-});
-
-// ── AD IMAGE PREVIEW (instant, no DB) ──
-window.previewAdImage = function(event, slot) {
-    const input   = event.target;
-    const preview = document.getElementById(`preview-${slot}`);
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => { preview.src = e.target.result; };
-        reader.readAsDataURL(input.files[0]);
-    }
+/* ═══════════════════════════════════════════
+   STAT CARD → instant tab switch + scroll
+═══════════════════════════════════════════ */
+window.statCardNav=function(tab){
+    // Flash the card
+    const card=document.getElementById('card-'+tab);
+    if(card){card.classList.add('ring');setTimeout(()=>card.classList.remove('ring'),1200)}
+    // Switch tab immediately (no DB call)
+    switchTab(tab);
+    // Smooth scroll to users panel
+    setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50);
 };
 
-// ── SAVE AD ──
-window.saveAd = async function(slotId) {
-    const fileInput = document.querySelector(`#slot-${slotId} .ad-image-input`);
-    const adCopy    = document.getElementById(`copy-${slotId}`).value;
-    const adLink    = document.getElementById(`link-${slotId}`).value;
+window.quickNav=function(tab){
+    closeSidebar();
+    switchTab(tab);
+    setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300);
+};
 
-    let imageUrl = document.getElementById(`preview-${slotId}`).src;
+/* ═══════════════════════════════════════════
+   RENDER — PENDING
+═══════════════════════════════════════════ */
+function renderPending(data){
+    const pending=data.filter(u=>u.status==='pending');
+    const pc=pending.length;
+    let html='';
+    pending.forEach(u=>{
+        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
+        const r=getRole(u);
+        html+=`<tr class="clickable" onclick="openDrawer('${u.id}')">
+            <td><div class="user-cell">
+                <div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
+                <div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div>
+            </div></td>
+            <td>${u.email||'N/A'}</td>
+            <td><span class="role-badge ${r}">${r}</span></td>
+            <td>${fmtDate(u.created_at)}</td>
+            <td onclick="event.stopPropagation()"><div class="actions">
+                <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
+                <button class="btn btn-danger"  onclick="rejectUser('${u.id}')">✕ Reject</button>
+            </div></td>
+        </tr>`;
+    });
+    document.getElementById('pending-users-list').innerHTML=html||emptyRow('All caught up!',5,'✅','No pending approvals.');
+    document.getElementById('pend-badge').textContent=pc;
+    document.getElementById('nav-pcount').textContent=pc;
+    document.getElementById('bell-badge').textContent=pc;
+    document.getElementById('stat-pending').textContent=pc;
+    renderNotifications(pending);
+}
 
-    if (fileInput.files.length > 0) {
-        const file     = fileInput.files[0];
-        const ext      = file.name.split('.').pop();
-        const fileName = `ad_slot_${slotId}_${Date.now()}.${ext}`;
-
-        const { error: uploadErr } = await window._sb.storage.from('community_images').upload(fileName, file, { upsert: true });
-        if (uploadErr) {
-            alert('Image upload failed: ' + uploadErr.message + '\nEnsure you have an RLS policy allowing inserts to community_images.');
-            return;
+/* ═══════════════════════════════════════════
+   RENDER — STATS
+═══════════════════════════════════════════ */
+function renderStats(data){
+    let sc=0,tc=0;
+    data.forEach(u=>{
+        if(u.status==='approved'||u.status==='inactive'){
+            const r=getRole(u);
+            if(r==='student')sc++;
+            else if(r==='teacher')tc++;
         }
-        const { data: urlData } = window._sb.storage.from('community_images').getPublicUrl(fileName);
-        imageUrl = urlData.publicUrl;
+    });
+    document.getElementById('stat-students').textContent=sc;
+    document.getElementById('stat-teachers').textContent=tc;
+}
+
+/* ═══════════════════════════════════════════
+   RENDER — NOTIFICATIONS
+═══════════════════════════════════════════ */
+function renderNotifications(pending){
+    document.getElementById('notif-count').textContent=pending.length+' New';
+    if(!pending.length){
+        document.getElementById('notif-list').innerHTML='<div class="notif-empty">All caught up! No pending approvals.</div>';
+        return;
+    }
+    document.getElementById('notif-list').innerHTML=pending.map(u=>{
+        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
+        return `<div class="notif-item" onclick="openDrawer('${u.id}');document.getElementById('notif-dropdown').classList.remove('show')">
+            <div class="notif-icon">👤</div>
+            <div class="notif-content">
+                <p><strong>${nm}</strong> is waiting for ${getRole(u)} approval.</p>
+                <span class="act-time">${timeAgo(u.created_at)}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   RENDER — ACTIVITY
+═══════════════════════════════════════════ */
+function renderActivities(data){
+    document.getElementById('recent-activities-list').innerHTML=data.slice(0,6).map(u=>{
+        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
+        return `<div class="activity-item" onclick="openDrawer('${u.id}')">
+            <div class="act-av" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
+            <div class="act-text">
+                <p><strong>${nm}</strong> joined as a ${getRole(u)}.</p>
+                <span class="act-time">${timeAgo(u.created_at)}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   RENDER — USER TABLE (pure client-side, instant)
+═══════════════════════════════════════════ */
+function renderUsers(data,tab){
+    const q=(document.getElementById('search-input').value||'').toLowerCase();
+    let rows=data.filter(u=>u.status==='approved'||u.status==='inactive');
+
+    // FIXED: correct role filtering with trim + toLowerCase
+    if     (tab==='students') rows=rows.filter(u=>{const r=getRole(u);return r==='student'||r===''});
+    else if(tab==='teachers') rows=rows.filter(u=>getRole(u)==='teacher');
+    else if(tab==='admins')   rows=rows.filter(u=>getRole(u)==='admin');
+
+    if(q) rows=rows.filter(u=>{
+        const nm=`${u.first_name||''} ${u.last_name||''}`.toLowerCase();
+        return nm.includes(q)||(u.email||'').toLowerCase().includes(q);
+    });
+
+    document.getElementById('users-badge').textContent=rows.length;
+
+    if(!rows.length){
+        const msgs={students:'No students registered yet',teachers:'No teachers registered yet',admins:'No admins found',all:'No users found'};
+        const icos={students:'🎒',teachers:'🎓',admins:'🛡️',all:'🔍'};
+        const subs ={students:'Students will appear here once they register.',teachers:'Teachers will appear here once they register.',admins:'',all:''};
+        document.getElementById('all-users-list').innerHTML=emptyRow(msgs[tab]||'No users found',6,icos[tab]||'🔍',subs[tab]||'');
+        return;
     }
 
-    const { error } = await window._sb.from('ads').upsert(
-        { slot_id: slotId, image_url: imageUrl, ads_copy: adCopy, advertiser_link: adLink },
-        { onConflict: 'slot_id' }
+    document.getElementById('all-users-list').innerHTML=rows.map(u=>{
+        const nm        =`${u.first_name||'User'} ${u.last_name||''}`.trim();
+        const r         =getRole(u);
+        const isAdmin   =r==='admin';
+        const isInactive=u.status==='inactive';
+        const isOwner   =(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
+
+        let btns='';
+        if(isAdmin){
+            if(isOwner) btns=`<span class="system-owner-tag">👑 System Owner</span>`;
+            else btns=`<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
+        } else {
+            btns=`<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Admin</button>`;
+            btns+=isInactive
+                ?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
+                :`<button class="btn btn-deact"    onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
+        }
+
+        return `<tr class="clickable" onclick="openDrawer('${u.id}')">
+            <td><div class="user-cell">
+                <div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:.55':''}">
+                    ${inits(u.first_name,u.last_name)}
+                </div>
+                <div>
+                    <div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div>
+                    <div class="uid">#${(u.id||'').slice(0,8)}</div>
+                </div>
+            </div></td>
+            <td>${u.email||'N/A'}</td>
+            <td><span class="role-badge ${r}">${r}</span></td>
+            <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td>
+            <td>${fmtDate(u.created_at)}</td>
+            <td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td>
+        </tr>`;
+    }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   MASTER RENDER
+═══════════════════════════════════════════ */
+function renderAll(data){
+    renderPending(data);
+    renderStats(data);
+    renderActivities(data);
+    renderUsers(data,_tab);
+}
+
+/* ═══════════════════════════════════════════
+   TAB SWITCH — zero DB calls, instant
+═══════════════════════════════════════════ */
+window.switchTab=function(tab){
+    _tab=tab;
+    ['all','students','teachers','admins'].forEach(t=>{
+        const el=document.getElementById('tab-'+t);
+        if(el) el.classList.toggle('active',t===tab);
+    });
+    renderUsers(_data,tab); // instant from cache
+};
+window.filterUsers=function(){renderUsers(_data,_tab);};
+
+/* ═══════════════════════════════════════════
+   MUTATIONS — optimistic UI (update cache → render → DB)
+═══════════════════════════════════════════ */
+async function mutate(userId,updates){
+    // 1. Patch cache & re-render immediately
+    const idx=_data.findIndex(u=>u.id===userId);
+    if(idx!==-1) Object.assign(_data[idx],updates);
+    renderAll(_data);
+    // 2. Persist (if fails, rollback via reload)
+    const {error}=await _sb.from('profiles').update(updates).eq('id',userId);
+    if(error){alert('Save failed: '+error.message);loadAll();}
+}
+async function mutateDelete(userId){
+    _data=_data.filter(u=>u.id!==userId);
+    renderAll(_data);
+    const {error}=await _sb.from('profiles').delete().eq('id',userId);
+    if(error){alert('Delete failed: '+error.message);loadAll();}
+}
+
+window.approveUser=async function(userId){await mutate(userId,{status:'approved'});};
+window.rejectUser =async function(userId){
+    const u=_data.find(x=>x.id===userId);
+    if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com') return;
+    if(confirm('Reject and permanently remove this registration?')) await mutateDelete(userId);
+};
+window.makeAdmin  =async function(userId){if(confirm('Grant admin privileges to this user?')) await mutate(userId,{role:'admin'});};
+window.removeAdmin=async function(userId){
+    const u=_data.find(x=>x.id===userId);
+    if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com'){alert('System Owner cannot be demoted.');return;}
+    if(confirm('Remove admin privileges? User will become a student.')) await mutate(userId,{role:'student'});
+};
+window.toggleUserStatus=async function(userId,newStatus){
+    const u=_data.find(x=>x.id===userId);
+    if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com'&&newStatus==='inactive') return;
+    const msg=newStatus==='inactive'?'Suspend this account?':'Reactivate this account?';
+    if(confirm(msg)) await mutate(userId,{status:newStatus});
+};
+
+/* ═══════════════════════════════════════════
+   DATA LOAD — profiles + ads fired in parallel
+═══════════════════════════════════════════ */
+async function loadAll(){
+    const [pr,ar]=await Promise.all([
+        _sb.from('profiles').select('id,first_name,last_name,email,role,status,created_at')
+           .order('created_at',{ascending:false}).limit(500),
+        _sb.from('ads').select('*').order('slot_id')
+    ]);
+    if(pr.error){
+        console.error(pr.error);
+        document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5,'⚠️','Check console for details.');
+        document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6,'⚠️','Check console for details.');
+        return;
+    }
+    _data=pr.data||[];
+    renderAll(_data);
+    if(!ar.error&&ar.data){
+        ar.data.forEach(ad=>{
+            const p=document.getElementById(`preview-${ad.slot_id}`);
+            const c=document.getElementById(`copy-${ad.slot_id}`);
+            const l=document.getElementById(`link-${ad.slot_id}`);
+            if(p) p.src=ad.image_url;
+            if(c) c.value=ad.ads_copy||'';
+            if(l) l.value=ad.advertiser_link||'';
+        });
+    }
+}
+
+/* ═══════════════════════════════════════════
+   REALTIME — push updates without polling
+═══════════════════════════════════════════ */
+function subscribeRealtime(){
+    _sb.channel('db-changes')
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'profiles'},p=>{
+            if(!_data.some(u=>u.id===p.new.id)){_data.unshift(p.new);renderAll(_data);}
+        })
+        .on('postgres_changes',{event:'UPDATE',schema:'public',table:'profiles'},p=>{
+            const i=_data.findIndex(u=>u.id===p.new.id);
+            if(i!==-1){_data[i]={..._data[i],...p.new};}else{_data.unshift(p.new);}
+            renderAll(_data);
+        })
+        .on('postgres_changes',{event:'DELETE',schema:'public',table:'profiles'},p=>{
+            _data=_data.filter(u=>u.id!==p.old.id);
+            renderAll(_data);
+        })
+        .subscribe();
+}
+
+/* ═══════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════ */
+window.addEventListener('load',function(){
+    const t=localStorage.getItem('enet_theme')||'system';
+    const iconEl=document.getElementById('theme-icon');
+    if(iconEl) iconEl.textContent=_tIcons[t];
+
+    _sb=window.supabase.createClient(
+        'https://lskwzcvexyxjncttvimf.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
     );
 
-    if (error) {
-        alert("Saving Ad data failed. Did you run the SQL to create the 'ads' table?\nError: " + error.message);
-    } else {
-        alert(`Ad Slot ${slotId} saved successfully!`);
+    loadAll();          // single parallel fetch
+    subscribeRealtime(); // live push updates
+
+    document.getElementById('logoutBtn').addEventListener('click',async()=>{
+        try{await _sb.auth.signOut();}catch(e){}
+        localStorage.clear();sessionStorage.clear();
+        window.location.href='index.html';
+    });
+});
+
+/* ═══════════════════════════════════════════
+   AD MANAGEMENT
+═══════════════════════════════════════════ */
+window.previewAdImage=function(event,slot){
+    const f=event.target.files[0];
+    if(!f) return;
+    const r=new FileReader();
+    r.onload=e=>document.getElementById(`preview-${slot}`).src=e.target.result;
+    r.readAsDataURL(f);
+};
+
+window.saveAd=async function(slotId){
+    const fi=document.querySelector(`#slot-${slotId} .ad-image-input`);
+    const adCopy=document.getElementById(`copy-${slotId}`).value;
+    const adLink=document.getElementById(`link-${slotId}`).value;
+    let imageUrl=document.getElementById(`preview-${slotId}`).src;
+
+    if(fi&&fi.files.length>0){
+        const file=fi.files[0];
+        const ext=file.name.split('.').pop();
+        const name=`ad_slot_${slotId}_${Date.now()}.${ext}`;
+        const{error:upErr}=await _sb.storage.from('community_images').upload(name,file,{upsert:true});
+        if(upErr){alert('Upload failed: '+upErr.message);return;}
+        const{data:ud}=_sb.storage.from('community_images').getPublicUrl(name);
+        imageUrl=ud.publicUrl;
     }
+
+    const{error}=await _sb.from('ads').upsert(
+        {slot_id:slotId,image_url:imageUrl,ads_copy:adCopy,advertiser_link:adLink},
+        {onConflict:'slot_id'}
+    );
+    if(error) alert("Save failed. Is the 'ads' table set up?\n"+error.message);
+    else       alert(`Ad Slot ${slotId} saved successfully!`);
 };
 </script>
 </body>
