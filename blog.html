@@ -3,61 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>ENET SUPREME ACADEMY | Blog</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* === GLOBAL STYLES === */
+        /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --navy-blue: #2C1E85;
-            --brand-red: #DA251D;
-            --accent-blue: #2DAAE1;
+            --navy-blue: #02014a;     
+            --navy-light: #0d2a8f;    
+            --brand-yellow: #fcd116;  
+            --yellow-hover: #e0b800;  
+            --accent-cyan: #00a0df;   
+            
             --text-main: #333333;
-            --text-light: #666666;
+            --text-gray: #475467;
+            --light-gray: #EAECF0;
             --background: #F8F9FA;
             --white: #FFFFFF;
             --border: #E2E8F0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        /* === NAVIGATION === */
-        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-red); }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; }
-        .logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--brand-red); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        /* === GLOBAL STICKY HEADER === */
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo span { color: var(--brand-yellow); }
+        
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
+
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; transition: max-height 0.3s ease-in-out; }
         .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--accent-blue); }
+        .nav-links a:hover { color: var(--accent-cyan); }
+        .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
+
+        .nav-community {
+            display: flex; align-items: center; gap: 6px; justify-content: center;
+            background: rgba(0, 160, 223, 0.15);
+            border: 1px solid rgba(0, 160, 223, 0.3);
+            padding: 5px 14px; border-radius: 50px;
+            color: var(--accent-cyan) !important;
+            font-weight: 700 !important;
+            transition: all 0.3s !important;
+        }
+        .nav-community:hover { background: rgba(0, 160, 223, 0.28) !important; color: white !important; }
+        .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
         /* === BLOG LAYOUT === */
-        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; }
-        @media (max-width: 800px) { .container { grid-template-columns: 1fr; gap: 2rem; } }
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; width: 100%;}
+        @media (max-width: 850px) { .container { grid-template-columns: 1fr; gap: 2rem; } }
 
         /* === MAIN ARTICLE AREA === */
-        .blog-main { background: var(--white); padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--navy-blue); }
-        .post-title { font-size: 2.2rem; color: var(--brand-red); margin-bottom: 0.5rem; line-height: 1.3; }
-        .post-meta { color: var(--accent-blue); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .blog-main { background: var(--white); padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 5px solid var(--accent-cyan); }
+        .post-cover { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem; display: none;}
+        .post-cover.show { display: block; }
+        .post-title { font-size: 2.2rem; color: var(--navy-blue); margin-bottom: 0.5rem; line-height: 1.3; font-weight: 800; }
+        .post-meta { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;}
+        .post-meta span { color: var(--accent-cyan); font-weight: bold; }
+        
+        /* Rendered Quill Content Styles */
         .post-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-main); }
         .post-content p { margin-bottom: 1.5rem; }
-        .post-content h3, .post-content h4 { color: var(--navy-blue); margin: 2rem 0 1rem 0; }
+        .post-content h1, .post-content h2, .post-content h3 { color: var(--navy-blue); margin: 2rem 0 1rem 0; font-weight: bold; }
+        .post-content ul, .post-content ol { margin-bottom: 1.5rem; padding-left: 2rem; }
+        .post-content li { margin-bottom: 0.5rem; }
+        .post-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0; }
+        .post-content a { color: var(--accent-cyan); text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
 
         /* === SIDEBAR === */
         .blog-sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
-        .widget { background: var(--white); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--accent-blue); }
-        .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; }
+        .widget { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 4px solid var(--brand-yellow); }
+        .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; font-weight: bold; border-bottom: 2px solid var(--border); }
 
         .search-box { display: flex; width: 100%; }
         .search-box input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px 0 0 4px; font-size: 1rem; outline: none; }
-        .search-box input:focus { border-color: var(--brand-red); }
-        .search-box button { background: var(--background); border: 1px solid var(--border); border-left: none; padding: 0.8rem 1rem; border-radius: 0 4px 4px 0; cursor: pointer; color: var(--text-main); }
+        .search-box input:focus { border-color: var(--accent-cyan); }
+        .search-box button { background: var(--navy-blue); border: 1px solid var(--navy-blue); border-left: none; padding: 0.8rem 1rem; border-radius: 0 4px 4px 0; cursor: pointer; color: var(--white); transition: 0.2s;}
+        .search-box button:hover { background: var(--brand-yellow); color: var(--navy-blue); border-color: var(--brand-yellow);}
 
         .sidebar-list { list-style: none; }
-        .sidebar-list li { margin-bottom: 1.2rem; line-height: 1.5; }
-        .sidebar-list a { color: var(--navy-blue); text-decoration: none; transition: color 0.2s; }
-        .sidebar-list a:hover { color: var(--brand-red); text-decoration: underline; }
+        .sidebar-list li { margin-bottom: 1.2rem; line-height: 1.5; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); cursor: pointer;}
+        .sidebar-list li:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0;}
+        .sidebar-list a { color: var(--navy-blue); text-decoration: none; transition: color 0.2s; font-weight: 600; display: block;}
+        .sidebar-list a:hover { color: var(--accent-cyan); }
+        .sidebar-list span { display: block; font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
+
+        /* === GLOBAL FOOTER === */
+        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto;}
+        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .footer-logo span { color: var(--brand-yellow); }
+        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
+
+        @media (max-width: 950px) { 
+            .mobile-menu-btn { display: block; }
+            .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
+            .nav-links.show { display: flex; } 
+        }
     </style>
 </head>
 <body>
@@ -65,25 +116,35 @@
     <header>
         <nav>
             <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            <div class="nav-links">
+            
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
-                <a href="blog.html" style="color: var(--accent-blue); font-weight: bold;">Read Blog</a>
-                <a href="index.html#shop">Buy Courses</a>
-                <a href="login.html">My Account</a>
+                <a href="blog.html" class="active">Blog</a>
+                <a href="tracks.html">Buy Course</a>
+                <a href="community.html" class="nav-community">
+                    <span class="dot"></span>
+                    Community
+                </a>
+                <a href="login.html">Log In / Academy</a>
             </div>
         </nav>
     </header>
 
     <main class="container">
         
-        <article class="blog-main" id="article-container">
-            <div id="loading-message">Loading latest post...</div>
+        <article class="blog-main">
+            <img id="article-cover" src="" alt="Blog Cover" class="post-cover">
+            <div id="article-container">
+                <div style="padding: 3rem; text-align: center; color: var(--navy-blue); font-weight: bold;">Loading latest post...</div>
+            </div>
         </article>
 
         <aside class="blog-sidebar">
             <div class="widget">
                 <form class="search-box" onsubmit="event.preventDefault(); alert('Search functionality coming soon!');">
-                    <input type="text" placeholder="Search ...">
+                    <input type="text" placeholder="Search blog...">
                     <button type="submit">🔍</button>
                 </form>
             </div>
@@ -91,59 +152,144 @@
             <div class="widget">
                 <h3 class="widget-title">Recent Posts</h3>
                 <ul class="sidebar-list" id="recent-posts-list">
-                    <li><a href="#">Let The Market See The Problem And The Differentiation</a></li>
-                    <li><a href="#">How To Sell To Someone In A Conversation</a></li>
-                    <li><a href="#">The Business That You Call Side-Gig</a></li>
+                    <li><span style="color: var(--text-gray);">Loading...</span></li>
                 </ul>
             </div>
         </aside>
 
     </main>
 
+    <footer>
+        <div class="container footer-container" style="margin: 0 auto;">
+            <div>
+                <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+                <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+            </div>
+            <div style="color: #cbd5e1; font-size: 0.9rem; text-align: right;">
+                <p>Suite 58 Georgewill/Clifford Plaza</p>
+                <p>Choba Junction, Port Harcourt</p>
+                <p>Rivers State, Nigeria.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        const dummyArticle = {
-            title: "Business Lessons From Local Businesses Around Us",
-            author: "Admin",
-            category: "Business",
-            date: "January 31, 2026",
-            content: `
-                <p>There are several lessons we can pick from some local traders that we see every day.</p>
-                <p>We may not be attentive to picking up those lessons, so let me help you.</p>
-                <p><strong>1. Lessons from the Suya Man</strong> – You approach the Suya man to buy Suya. You are standing in front of him; so he is sure of the intent to buy. He however wants to increase your level of trust and spending; so he cuts a small piece, dips it in pepper and hands you to eat. He offers value ahead so that he earns your trust.</p>
-                <p><strong>Summary</strong> – Once the customer has approached you, give value ahead to earn his trust and increase the spend value.</p>
-            `
-        };
+        let allPosts = [];
 
-        async function fetchLatestPost() {
+        async function fetchBlogData() {
             try {
-                const { data, error } = await supabase.from('blog_posts').select('*').order('published_at', { ascending: false }).limit(1).single();
+                // FIXED QUERY: Requesting the correct columns including 'created_at' and joining the profiles table to get the author's name
+                const { data, error } = await supabase
+                    .from('blog_posts')
+                    .select('id, title, excerpt, content, cover_image, created_at, profiles(first_name, last_name)')
+                    .order('created_at', { ascending: false });
 
-                if (data) {
-                    renderArticle(data.title, 'Admin', data.category || 'General', new Date(data.published_at).toLocaleDateString(), data.content);
-                } else {
-                    renderArticle(dummyArticle.title, dummyArticle.author, dummyArticle.category, dummyArticle.date, dummyArticle.content);
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    document.getElementById('article-container').innerHTML = `
+                        <h1 class="post-title" style="text-align:center; color: var(--text-gray); margin-top:2rem;">No posts yet.</h1>
+                        <p style="text-align:center;">Check back soon for updates from the Academy!</p>
+                    `;
+                    document.getElementById('recent-posts-list').innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
+                    return;
                 }
+
+                allPosts = data;
+
+                // Render the Sidebar List
+                renderSidebar(data);
+
+                // Render the latest post (or the post specified in the URL if we add that later)
+                renderFullArticle(data[0]);
+
             } catch (err) {
-                renderArticle(dummyArticle.title, dummyArticle.author, dummyArticle.category, dummyArticle.date, dummyArticle.content);
+                console.error("Blog Fetch Error:", err);
+                document.getElementById('article-container').innerHTML = `
+                    <div style="padding: 3rem; text-align: center; color: var(--danger); font-weight: bold;">
+                        Failed to connect to the database. Please try refreshing the page.
+                    </div>
+                `;
             }
         }
 
-        function renderArticle(title, author, category, date, contentHTML) {
-            const articleContainer = document.getElementById('article-container');
-            articleContainer.innerHTML = `
-                <h1 class="post-title">${title}</h1>
-                <div class="post-meta">By ${author} / ${category} / ${date}</div>
-                <div class="post-content">
-                    ${contentHTML}
-                </div>
-            `;
+        function renderSidebar(posts) {
+            const list = document.getElementById('recent-posts-list');
+            let html = '';
+            
+            // Show up to 5 recent posts in the sidebar
+            const recentPosts = posts.slice(0, 5);
+
+            recentPosts.forEach(post => {
+                const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                
+                // When clicked, it will render this specific post in the main window
+                html += `
+                    <li>
+                        <a href="#" onclick="event.preventDefault(); switchArticle('${post.id}')">${post.title}</a>
+                        <span>${date}</span>
+                    </li>
+                `;
+            });
+
+            list.innerHTML = html;
         }
 
-        document.addEventListener('DOMContentLoaded', fetchLatestPost);
+        function renderFullArticle(post) {
+            const container = document.getElementById('article-container');
+            const coverImg = document.getElementById('article-cover');
+
+            // Handle the Cover Image
+            if (post.cover_image && post.cover_image !== "") {
+                coverImg.src = post.cover_image;
+                coverImg.classList.add('show');
+            } else {
+                coverImg.src = "";
+                coverImg.classList.remove('show');
+            }
+
+            // Format Author Name
+            const fName = post.profiles?.first_name || 'Admin';
+            const lName = post.profiles?.last_name || '';
+            const authorName = `${fName} ${lName}`.trim();
+
+            // Format Date
+            const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            // Inject the HTML
+            container.innerHTML = `
+                <h1 class="post-title">${post.title}</h1>
+                <div class="post-meta">
+                    By <span>${authorName}</span> &nbsp;•&nbsp; ${date}
+                </div>
+                <div class="post-content">
+                    ${post.content}
+                </div>
+            `;
+
+            // Scroll to the top of the article smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Helper function for the sidebar to switch the main article
+        window.switchArticle = function(id) {
+            const selectedPost = allPosts.find(p => p.id === id);
+            if (selectedPost) {
+                renderFullArticle(selectedPost);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchBlogData);
     </script>
 </body>
 </html>
