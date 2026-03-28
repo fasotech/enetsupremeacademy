@@ -27,6 +27,7 @@
             --background: #F8F9FA;
             --white: #FFFFFF;
             --border: #E2E8F0;
+            --danger: #EE5D50;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -36,7 +37,7 @@
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
         .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--brand-yellow); }
+        .logo span { color: var(--brand-yellow); text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
         
         .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
 
@@ -152,7 +153,7 @@
             <div class="widget">
                 <h3 class="widget-title">Recent Posts</h3>
                 <ul class="sidebar-list" id="recent-posts-list">
-                    <li><span style="color: var(--text-gray);">Loading...</span></li>
+                    <li><span style="color: var(--text-gray);">Loading articles...</span></li>
                 </ul>
             </div>
         </aside>
@@ -187,7 +188,7 @@
 
         async function fetchBlogData() {
             try {
-                // FIXED QUERY: Requesting the correct columns including 'created_at' and joining the profiles table to get the author's name
+                // Fetch posts from database, joined with profiles to get the author's name
                 const { data, error } = await supabase
                     .from('blog_posts')
                     .select('id, title, excerpt, content, cover_image, created_at, profiles(first_name, last_name)')
@@ -209,14 +210,15 @@
                 // Render the Sidebar List
                 renderSidebar(data);
 
-                // Render the latest post (or the post specified in the URL if we add that later)
+                // Render the most recent post
                 renderFullArticle(data[0]);
 
             } catch (err) {
                 console.error("Blog Fetch Error:", err);
                 document.getElementById('article-container').innerHTML = `
                     <div style="padding: 3rem; text-align: center; color: var(--danger); font-weight: bold;">
-                        Failed to connect to the database. Please try refreshing the page.
+                        Failed to connect to the database.<br><br>
+                        <span style="font-size:0.9rem; font-weight:normal; color:var(--text-gray);">Error Details: ${err.message}</span>
                     </div>
                 `;
             }
@@ -226,13 +228,11 @@
             const list = document.getElementById('recent-posts-list');
             let html = '';
             
-            // Show up to 5 recent posts in the sidebar
-            const recentPosts = posts.slice(0, 5);
+            const recentPosts = posts.slice(0, 5); // Show up to 5
 
             recentPosts.forEach(post => {
                 const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                 
-                // When clicked, it will render this specific post in the main window
                 html += `
                     <li>
                         <a href="#" onclick="event.preventDefault(); switchArticle('${post.id}')">${post.title}</a>
@@ -248,7 +248,7 @@
             const container = document.getElementById('article-container');
             const coverImg = document.getElementById('article-cover');
 
-            // Handle the Cover Image
+            // Handle Cover Image
             if (post.cover_image && post.cover_image !== "") {
                 coverImg.src = post.cover_image;
                 coverImg.classList.add('show');
@@ -257,15 +257,13 @@
                 coverImg.classList.remove('show');
             }
 
-            // Format Author Name
+            // Handle Author Name
             const fName = post.profiles?.first_name || 'Admin';
             const lName = post.profiles?.last_name || '';
             const authorName = `${fName} ${lName}`.trim();
 
-            // Format Date
             const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Inject the HTML
             container.innerHTML = `
                 <h1 class="post-title">${post.title}</h1>
                 <div class="post-meta">
@@ -276,11 +274,9 @@
                 </div>
             `;
 
-            // Scroll to the top of the article smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Helper function for the sidebar to switch the main article
         window.switchArticle = function(id) {
             const selectedPost = allPosts.find(p => p.id === id);
             if (selectedPost) {
@@ -288,7 +284,6 @@
             }
         }
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', fetchBlogData);
     </script>
 </body>
