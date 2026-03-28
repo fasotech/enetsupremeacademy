@@ -117,28 +117,25 @@
     <header>
         <nav>
             <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
                 <a href="blog.html" class="active">Blog</a>
                 <a href="tracks.html">Buy Course</a>
-                <a href="community.html" class="nav-community">
-                    <span class="dot"></span>
-                    Community
-                </a>
+                <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
                 <a href="login.html">Log In / Academy</a>
             </div>
         </nav>
     </header>
 
     <main class="container">
-        
         <article class="blog-main">
             <img id="article-cover" src="" alt="Blog Cover" class="post-cover">
             <div id="article-container">
-                <div style="padding: 3rem; text-align: center; color: var(--navy-blue); font-weight: bold;">Loading latest post...</div>
+                <div style="padding: 4rem 2rem; text-align: center; border: 3px dashed var(--accent-cyan); border-radius: 12px; background: var(--bg-light);">
+                    <h2 style="color: var(--navy-blue); margin-bottom: 1rem;">Fetching Live Database...</h2>
+                    <p>If you see this box, the new code has successfully loaded!</p>
+                </div>
             </div>
         </article>
 
@@ -153,11 +150,10 @@
             <div class="widget">
                 <h3 class="widget-title">Recent Posts</h3>
                 <ul class="sidebar-list" id="recent-posts-list">
-                    <li><span style="color: var(--text-gray);">Loading articles...</span></li>
+                    <li><span style="color: var(--text-gray);">Fetching posts...</span></li>
                 </ul>
             </div>
         </aside>
-
     </main>
 
     <footer>
@@ -176,8 +172,7 @@
 
     <script>
         function toggleMobileMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('show');
+            document.getElementById('navLinks').classList.toggle('show');
         }
 
         const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
@@ -186,53 +181,49 @@
 
         let allPosts = [];
 
-        async function fetchBlogData() {
+        window.addEventListener('load', async () => {
             try {
-                // Fetch posts from database, joined with profiles to get the author's name
+                // Simplified query: No joins, just fetch the data directly to guarantee it works.
                 const { data, error } = await supabase
                     .from('blog_posts')
-                    .select('id, title, excerpt, content, cover_image, created_at, profiles(first_name, last_name)')
+                    .select('*')
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
 
                 if (!data || data.length === 0) {
                     document.getElementById('article-container').innerHTML = `
-                        <h1 class="post-title" style="text-align:center; color: var(--text-gray); margin-top:2rem;">No posts yet.</h1>
-                        <p style="text-align:center;">Check back soon for updates from the Academy!</p>
+                        <div style="padding: 3rem; text-align: center;">
+                            <h2 style="color: var(--navy-blue);">No posts published yet.</h2>
+                            <p style="color: var(--text-gray); margin-top: 1rem;">Head over to the Admin Dashboard and publish your first article!</p>
+                        </div>
                     `;
                     document.getElementById('recent-posts-list').innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
                     return;
                 }
 
                 allPosts = data;
-
-                // Render the Sidebar List
                 renderSidebar(data);
-
-                // Render the most recent post
                 renderFullArticle(data[0]);
 
             } catch (err) {
                 console.error("Blog Fetch Error:", err);
                 document.getElementById('article-container').innerHTML = `
-                    <div style="padding: 3rem; text-align: center; color: var(--danger); font-weight: bold;">
-                        Failed to connect to the database.<br><br>
-                        <span style="font-size:0.9rem; font-weight:normal; color:var(--text-gray);">Error Details: ${err.message}</span>
+                    <div style="padding: 3rem; text-align: center; color: var(--danger); font-weight: bold; border: 2px solid var(--danger); border-radius: 8px; background: #fee2e2;">
+                        Database Connection Failed.<br><br>
+                        <span style="font-size:0.9rem; font-weight:normal; color:#991b1b;">Error Details: ${err.message}</span>
                     </div>
                 `;
             }
-        }
+        });
 
         function renderSidebar(posts) {
             const list = document.getElementById('recent-posts-list');
             let html = '';
-            
-            const recentPosts = posts.slice(0, 5); // Show up to 5
+            const recentPosts = posts.slice(0, 6); 
 
             recentPosts.forEach(post => {
                 const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                
                 html += `
                     <li>
                         <a href="#" onclick="event.preventDefault(); switchArticle('${post.id}')">${post.title}</a>
@@ -240,7 +231,6 @@
                     </li>
                 `;
             });
-
             list.innerHTML = html;
         }
 
@@ -248,7 +238,6 @@
             const container = document.getElementById('article-container');
             const coverImg = document.getElementById('article-cover');
 
-            // Handle Cover Image
             if (post.cover_image && post.cover_image !== "") {
                 coverImg.src = post.cover_image;
                 coverImg.classList.add('show');
@@ -257,23 +246,17 @@
                 coverImg.classList.remove('show');
             }
 
-            // Handle Author Name
-            const fName = post.profiles?.first_name || 'Admin';
-            const lName = post.profiles?.last_name || '';
-            const authorName = `${fName} ${lName}`.trim();
-
             const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
             container.innerHTML = `
                 <h1 class="post-title">${post.title}</h1>
                 <div class="post-meta">
-                    By <span>${authorName}</span> &nbsp;•&nbsp; ${date}
+                    By <span>Academy Admin</span> &nbsp;•&nbsp; ${date}
                 </div>
                 <div class="post-content">
                     ${post.content}
                 </div>
             `;
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -283,8 +266,6 @@
                 renderFullArticle(selectedPost);
             }
         }
-
-        document.addEventListener('DOMContentLoaded', fetchBlogData);
     </script>
 </body>
 </html>
