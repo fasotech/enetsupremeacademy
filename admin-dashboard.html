@@ -172,6 +172,13 @@
         .ad-slot-form input[type="url"] { padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dark); outline: none;}
         .ad-slot-form textarea:focus, .ad-slot-form input[type="url"]:focus { border-color: var(--royal-blue); }
 
+        /* ── LOADING SKELETON ── */
+        .skeleton-row td { padding: 1.25rem 2rem; }
+        .skeleton { height: 14px; border-radius: 8px; background: linear-gradient(90deg, var(--border) 25%, var(--border-bright) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; display: inline-block; width: 100%; }
+        .skeleton.sm { width: 60%; }
+        .skeleton.xs { width: 40%; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
         @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
         @keyframes pulse  { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
         .loading-row td { animation: pulse 1.5s ease-in-out infinite; }
@@ -194,12 +201,9 @@
         }
         @media (max-width: 576px) { 
             .stats-grid { grid-template-columns: 1fr; } 
-            
-            /* Enhanced Topbar for Mobile */
             .topbar { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem; }
             .topbar-right { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
             .search-wrap { width: 100%; order: 3; margin-top: 5px; }
-            
             .ads-management-grid { padding: 1rem; }
         }
     </style>
@@ -300,7 +304,10 @@
             <div class="table-responsive">
                 <table class="data-tbl">
                     <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
-                    <tbody id="pending-users-list"><tr class="loading-row"><td colspan="5" class="empty-cell"><div class="empty-ico">⏳</div><div class="empty-ttl">Loading database...</div></td></tr></tbody>
+                    <tbody id="pending-users-list">
+                        <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                        <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -317,7 +324,11 @@
                 <div class="table-responsive">
                     <table class="data-tbl">
                         <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
-                        <tbody id="all-users-list"><tr class="loading-row"><td colspan="6" class="empty-cell"><div class="empty-ico">⏳</div><div class="empty-ttl">Loading database...</div></td></tr></tbody>
+                        <tbody id="all-users-list">
+                            <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                            <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                            <tr class="skeleton-row"><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -364,217 +375,391 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// THEME
+// ── THEME ──
 const themes = ['system', 'light', 'dark'];
 const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
 function cycleTheme() {
     let current = localStorage.getItem('enet_theme') || 'system';
     let nextTheme = themes[(themes.indexOf(current) + 1) % themes.length];
-    localStorage.setItem('enet_theme', nextTheme); applyTheme(nextTheme);
+    localStorage.setItem('enet_theme', nextTheme);
+    applyTheme(nextTheme);
 }
 function applyTheme(theme) {
     document.getElementById('theme-icon').textContent = themeIcons[theme];
-    document.documentElement.setAttribute('data-theme', theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : theme);
+    document.documentElement.setAttribute('data-theme',
+        theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : theme);
 }
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (localStorage.getItem('enet_theme') === 'system') { document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light'); }
+    if (localStorage.getItem('enet_theme') === 'system') {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    }
 });
 
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
 function toggleNotifications() { document.getElementById('notif-dropdown').classList.toggle('show'); }
-document.addEventListener('click', function(e) { const wrap = document.querySelector('.notification-wrapper'); if (wrap && !wrap.contains(e.target)) { document.getElementById('notif-dropdown').classList.remove('show'); } });
+document.addEventListener('click', function(e) {
+    const wrap = document.querySelector('.notification-wrapper');
+    if (wrap && !wrap.contains(e.target)) document.getElementById('notif-dropdown').classList.remove('show');
+});
 
 window.addEventListener('load', function () {
     const currentTheme = localStorage.getItem('enet_theme') || 'system';
     document.getElementById('theme-icon').textContent = themeIcons[currentTheme];
 
-    // SUPABASE CONFIG
+    // ── SUPABASE CONFIG ──
     const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-    window.supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    window._sb = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    const GRADS = ['linear-gradient(135deg, #2441EA, #5C75FF)', 'linear-gradient(135deg, #FF7A00, #FFB067)', 'linear-gradient(135deg, #05CD99, #43E8BA)', 'linear-gradient(135deg, #FFC107, #FFE37E)', 'linear-gradient(135deg, #8B5CF6, #B496F9)'];
+    // ── HELPERS ──
+    const GRADS = [
+        'linear-gradient(135deg, #2441EA, #5C75FF)',
+        'linear-gradient(135deg, #FF7A00, #FFB067)',
+        'linear-gradient(135deg, #05CD99, #43E8BA)',
+        'linear-gradient(135deg, #FFC107, #FFE37E)',
+        'linear-gradient(135deg, #8B5CF6, #B496F9)'
+    ];
     function grad(str) { let h = 0; for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h); return GRADS[Math.abs(h) % GRADS.length]; }
-    function inits(f, l) { return ((f||'U')[0]+(l||'?')[0]).toUpperCase(); }
-    function fmtDate(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
-    function timeAgo(dateStr) { const diff = Math.floor((new Date() - new Date(dateStr)) / 1000); if (diff < 60) return 'just now'; if (diff < 3600) return Math.floor(diff / 60) + 'm ago'; if (diff < 86400) return Math.floor(diff / 3600) + 'h ago'; return fmtDate(dateStr); }
-
-    let allData = [];
-    let curTab = 'all';
-
-    async function loadAdminDashboard() {
-        try {
-            // OPTIMIZED QUERY: Fetching only what is strictly needed for the table view
-            const { data, error } = await window.supabase.from('profiles').select('id, first_name, last_name, email, role, status, created_at').order('created_at', { ascending: false }).limit(500);
-            if (error) throw error;
-            if (!data || data.length === 0) {
-                document.getElementById('pending-users-list').innerHTML = emptyRow('No pending approvals', '', 5);
-                document.getElementById('all-users-list').innerHTML = emptyRow('No users yet', '', 6);
-                setStats(0,0,0); return;
-            }
-            allData = data;
-            render(data); renderActivities(data);
-        } catch (err) { console.error(err); }
+    function inits(f, l) { return ((f || 'U')[0] + (l || '?')[0]).toUpperCase(); }
+    function fmtDate(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+    function timeAgo(dateStr) {
+        const diff = Math.floor((new Date() - new Date(dateStr)) / 1000);
+        if (diff < 60) return 'just now';
+        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+        return fmtDate(dateStr);
+    }
+    function emptyRow(title, cols, ico) {
+        return `<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico || '📭'}</div><div class="empty-ttl">${title}</div></div></td></tr>`;
     }
 
+    // ── IN-MEMORY CACHE — no round-trips on tab switch / search ──
+    let allData = [];
+    let curTab = 'all';
+    let isFetching = false;
+
+    // ── FAST LOAD: profiles + ads in parallel, no sequential awaits ──
+    async function loadAdminDashboard(forceRefresh = false) {
+        if (isFetching && !forceRefresh) return;
+        isFetching = true;
+
+        try {
+            // Fire both queries at exactly the same time
+            const [profilesResult, adsResult] = await Promise.all([
+                window._sb
+                    .from('profiles')
+                    .select('id, first_name, last_name, email, role, status, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(500),
+                window._sb.from('ads').select('*').order('slot_id')
+            ]);
+
+            // ── Handle profiles ──
+            if (profilesResult.error) throw profilesResult.error;
+            allData = profilesResult.data || [];
+            render(allData);
+            renderActivities(allData);
+
+            // ── Handle ads (non-blocking — already done) ──
+            if (!adsResult.error && adsResult.data) {
+                adsResult.data.forEach(ad => {
+                    const previewEl = document.getElementById(`preview-${ad.slot_id}`);
+                    const copyEl   = document.getElementById(`copy-${ad.slot_id}`);
+                    const linkEl   = document.getElementById(`link-${ad.slot_id}`);
+                    if (previewEl) previewEl.src = ad.image_url;
+                    if (copyEl)   copyEl.value   = ad.ads_copy || '';
+                    if (linkEl)   linkEl.value   = ad.advertiser_link || '';
+                });
+            }
+        } catch (err) {
+            console.error('Dashboard load error:', err);
+            document.getElementById('pending-users-list').innerHTML = emptyRow('Error loading data. Check console.', 5, '⚠️');
+            document.getElementById('all-users-list').innerHTML     = emptyRow('Error loading data. Check console.', 6, '⚠️');
+        } finally {
+            isFetching = false;
+        }
+    }
+
+    // ── RENDER: pending + stats in one pass ──
     function render(data) {
-        let pendHTML = ''; let sc = 0, tc = 0, pc = 0; const pendingUsers = [];
+        let pendHTML = '';
+        let sc = 0, tc = 0, pc = 0;
+        const pendingUsers = [];
+
         data.forEach(u => {
-            if (u.status === 'pending') { pc++; pendingUsers.push(u); }
-            if (u.status === 'approved') { const r = u.role || 'student'; if (r === 'student') sc++; if (r === 'teacher') tc++; }
+            // ── FIX: normalize role — never fall back blindly to 'student' ──
+            const role = (u.role || '').trim().toLowerCase() || 'student';
+
+            if (u.status === 'pending') {
+                pc++;
+                pendingUsers.push({ ...u, _role: role });
+                const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
+                pendHTML += `<tr>
+                    <td><div class="user-cell">
+                        <div class="uav" style="background:${grad(u.id || nm)}">${inits(u.first_name, u.last_name)}</div>
+                        <div><div class="uname">${nm}</div><div class="uid">#${(u.id || '').slice(0, 8)}</div></div>
+                    </div></td>
+                    <td>${u.email || 'N/A'}</td>
+                    <td><span class="role-badge ${role}">${role}</span></td>
+                    <td>${fmtDate(u.created_at)}</td>
+                    <td><div class="actions">
+                        <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
+                        <button class="btn btn-danger"  onclick="rejectUser('${u.id}')">✕ Reject</button>
+                    </div></td>
+                </tr>`;
+            } else if (u.status === 'approved' || u.status === 'inactive') {
+                // ── FIX: count teachers from ALL non-pending users ──
+                if (role === 'student') sc++;
+                else if (role === 'teacher') tc++;
+            }
         });
-        pendingUsers.forEach(u => {
-            const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim(); const role = u.role || 'student';
-            pendHTML += `<tr>
-                <td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
-                <div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td>
-                <td>${u.email||'N/A'}</td><td><span class="role-badge ${role}">${role}</span></td><td>${fmtDate(u.created_at)}</td>
-                <td><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
-                <button class="btn btn-danger" onclick="rejectUser('${u.id}')">✕ Reject</button></div></td></tr>`;
-        });
-        document.getElementById('pending-users-list').innerHTML = pendHTML || emptyRow('All caught up!', '', 5, '✅');
-        document.getElementById('pend-badge').textContent = pc; document.getElementById('nav-pcount').textContent = pc; document.getElementById('bell-badge').textContent = pc; 
-        renderNotifications(pendingUsers); setStats(sc, tc, pc); renderUsers(data, curTab);
+
+        document.getElementById('pending-users-list').innerHTML =
+            pendHTML || emptyRow('All caught up! No pending approvals.', 5, '✅');
+        document.getElementById('pend-badge').textContent    = pc;
+        document.getElementById('nav-pcount').textContent    = pc;
+        document.getElementById('bell-badge').textContent    = pc;
+        document.getElementById('stat-students').textContent = sc;
+        document.getElementById('stat-teachers').textContent = tc;
+        document.getElementById('stat-pending').textContent  = pc;
+
+        renderNotifications(pendingUsers);
+        renderUsers(data, curTab);
     }
 
     function renderNotifications(pendingUsers) {
         const list = document.getElementById('notif-list');
         document.getElementById('notif-count').textContent = pendingUsers.length + ' New';
-        if (pendingUsers.length === 0) { list.innerHTML = '<div class="notif-empty">You are all caught up! No pending approvals.</div>'; return; }
+        if (!pendingUsers.length) {
+            list.innerHTML = '<div class="notif-empty">You are all caught up! No pending approvals.</div>';
+            return;
+        }
         let html = '';
         pendingUsers.forEach(u => {
-            const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim();
+            const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
             html += `<div class="notif-item" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'}); document.getElementById('notif-dropdown').classList.remove('show');">
-                <div class="notif-icon">👤</div><div class="notif-content"><p><strong>${nm}</strong> is waiting for ${u.role || 'student'} approval.</p><span class="notif-time">${timeAgo(u.created_at)}</span></div></div>`;
+                <div class="notif-icon">👤</div>
+                <div class="notif-content">
+                    <p><strong>${nm}</strong> is waiting for ${u._role || u.role || 'student'} approval.</p>
+                    <span class="notif-time">${timeAgo(u.created_at)}</span>
+                </div>
+            </div>`;
         });
         list.innerHTML = html;
     }
 
     function renderActivities(data) {
-        const recent = data.slice(0, 6); let html = '';
+        const recent = data.slice(0, 6);
+        let html = '';
         recent.forEach(u => {
-            const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim();
-            html += `<div class="activity-item"><div class="act-av" style="background:${grad(u.id||nm)}">${inits(u.first_name, u.last_name)}</div>
-                <div class="act-text"><p><strong>${nm}</strong> created a ${u.role || 'student'} account.</p><span class="act-time">${timeAgo(u.created_at)}</span></div></div>`;
+            const nm   = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
+            const role = (u.role || 'student').trim().toLowerCase();
+            html += `<div class="activity-item">
+                <div class="act-av" style="background:${grad(u.id || nm)}">${inits(u.first_name, u.last_name)}</div>
+                <div class="act-text">
+                    <p><strong>${nm}</strong> created a ${role} account.</p>
+                    <span class="act-time">${timeAgo(u.created_at)}</span>
+                </div>
+            </div>`;
         });
         document.getElementById('recent-activities-list').innerHTML = html;
     }
 
+    // ── FIX: renderUsers — correct teacher filter, no bad fallback ──
     function renderUsers(data, tab) {
-        const q = (document.getElementById('search-input').value||'').toLowerCase();
+        const q = (document.getElementById('search-input').value || '').toLowerCase();
+
+        // Include approved + inactive (not pending)
         let rows = data.filter(u => u.status === 'approved' || u.status === 'inactive');
-        if (tab === 'students') rows = rows.filter(u => (u.role||'student') === 'student');
-        else if (tab === 'teachers') rows = rows.filter(u => (u.role||'student') === 'teacher');
-        else if (tab === 'admins') rows = rows.filter(u => (u.role||'student') === 'admin');
-        if (q) rows = rows.filter(u => { const nm = `${u.first_name||''} ${u.last_name||''}`.toLowerCase(); return nm.includes(q) || (u.email||'').toLowerCase().includes(q); });
+
+        // ── FIX: use trimmed lowercase role for comparison ──
+        if (tab === 'students') {
+            rows = rows.filter(u => {
+                const r = (u.role || '').trim().toLowerCase();
+                // Treat null/empty as student, explicitly filter 'student'
+                return r === 'student' || r === '';
+            });
+        } else if (tab === 'teachers') {
+            rows = rows.filter(u => {
+                const r = (u.role || '').trim().toLowerCase();
+                return r === 'teacher';
+            });
+        } else if (tab === 'admins') {
+            rows = rows.filter(u => {
+                const r = (u.role || '').trim().toLowerCase();
+                return r === 'admin';
+            });
+        }
+
+        if (q) {
+            rows = rows.filter(u => {
+                const nm = `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase();
+                return nm.includes(q) || (u.email || '').toLowerCase().includes(q);
+            });
+        }
+
         document.getElementById('users-badge').textContent = rows.length;
-        if (!rows.length) { document.getElementById('all-users-list').innerHTML = emptyRow('No users found', '', 6, '🔍'); return; }
+
+        if (!rows.length) {
+            const msg = tab === 'teachers' ? 'No teachers registered yet' : 'No users found';
+            document.getElementById('all-users-list').innerHTML = emptyRow(msg, 6, tab === 'teachers' ? '🎓' : '🔍');
+            return;
+        }
+
         let html = '';
         rows.forEach(u => {
-            const nm = `${u.first_name||'User'} ${u.last_name||''}`.trim(); const role = u.role || 'student';
-            const isAdmin = role === 'admin'; const isInactive = u.status === 'inactive';
+            const nm         = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
+            const role       = (u.role || 'student').trim().toLowerCase();
+            const isAdmin    = role === 'admin';
+            const isInactive = u.status === 'inactive';
             const isSystemOwner = (u.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com';
+
             let btns = '';
             if (isAdmin) {
                 if (isSystemOwner) btns = `<span class="system-owner-tag">👑 System Owner</span>`;
                 else btns = `<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
             } else {
                 btns = `<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Make Admin</button>`;
-                btns += isInactive ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>` : `<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
+                btns += isInactive
+                    ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
+                    : `<button class="btn btn-deact"    onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
             }
-            html += `<tr><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:0.6':''}">${inits(u.first_name,u.last_name)}</div>
-                <div><div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td>
-                <td>${u.email||'N/A'}</td><td><span class="role-badge ${role}">${role}</span></td>
-                <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td>
-                <td>${fmtDate(u.created_at)}</td><td><div class="actions">${btns}</div></td></tr>`;
+
+            html += `<tr>
+                <td><div class="user-cell">
+                    <div class="uav" style="background:${grad(u.id || nm)};${isInactive ? 'filter:grayscale(1);opacity:0.6' : ''}">${inits(u.first_name, u.last_name)}</div>
+                    <div>
+                        <div class="uname" style="${isInactive ? 'color:var(--text-muted)' : ''}">${nm}</div>
+                        <div class="uid">#${(u.id || '').slice(0, 8)}</div>
+                    </div>
+                </div></td>
+                <td>${u.email || 'N/A'}</td>
+                <td><span class="role-badge ${role}">${role}</span></td>
+                <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${isInactive ? 'Suspended' : 'Active'}</span></td>
+                <td>${fmtDate(u.created_at)}</td>
+                <td><div class="actions">${btns}</div></td>
+            </tr>`;
         });
         document.getElementById('all-users-list').innerHTML = html;
     }
 
-    function setStats(s, t, p) { document.getElementById('stat-students').textContent = s; document.getElementById('stat-teachers').textContent = t; document.getElementById('stat-pending').textContent = p; }
-    function emptyRow(title, sub, cols, ico) { return `<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico||'📭'}</div><div class="empty-ttl">${title}</div><div class="empty-sub">${sub}</div></div></td></tr>`; }
-
+    // ── TAB SWITCHING (pure client-side, instant) ──
     window.switchTab = function(tab) {
-        curTab = tab; ['all','students','teachers','admins'].forEach(t => { const el = document.getElementById('tab-'+t); if (el) el.classList.toggle('active', t === tab); }); renderUsers(allData, tab);
+        curTab = tab;
+        ['all', 'students', 'teachers', 'admins'].forEach(t => {
+            const el = document.getElementById('tab-' + t);
+            if (el) el.classList.toggle('active', t === tab);
+        });
+        renderUsers(allData, tab);  // No DB call — uses cache
     };
+
     window.filterUsers = function() { renderUsers(allData, curTab); };
 
-    window.approveUser = async function(userId) { await window.supabase.from('profiles').update({ status: 'approved' }).eq('id', userId); loadAdminDashboard(); };
-    window.rejectUser = async function(userId) {
-        const user = allData.find(u => u.id === userId); if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') return;
-        if (confirm("Reject and remove this registration?")) { await window.supabase.from('profiles').delete().eq('id', userId); loadAdminDashboard(); }
-    };
-    window.makeAdmin = async function(userId) { if (confirm("Make this user an Admin?")) { await window.supabase.from('profiles').update({ role: 'admin' }).eq('id', userId); loadAdminDashboard(); } };
-    window.removeAdmin = async function(userId) {
-        const user = allData.find(u => u.id === userId); if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') { alert("System Owner cannot be demoted."); return; }
-        if (confirm("Remove admin privileges?")) { await window.supabase.from('profiles').update({ role: 'student' }).eq('id', userId); loadAdminDashboard(); }
-    };
-    window.toggleUserStatus = async function(userId, newStatus) {
-        const user = allData.find(u => u.id === userId); if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') return;
-        if (confirm(`Change account status?`)) { await window.supabase.from('profiles').update({ status: newStatus }).eq('id', userId); loadAdminDashboard(); }
-    };
-
-    document.getElementById('logoutBtn').addEventListener('click', async () => { try { await window.supabase.auth.signOut(); } catch (err) {} localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; });
-
-    loadAdminDashboard();
-    
-    async function loadExistingAds() {
-        const { data: ads, error } = await window.supabase.from('ads').select('*').order('slot_id');
-        if (ads) {
-            ads.forEach(ad => {
-                document.getElementById(`preview-${ad.slot_id}`).src = ad.image_url;
-                document.getElementById(`copy-${ad.slot_id}`).value = ad.ads_copy;
-                document.getElementById(`link-${ad.slot_id}`).value = ad.advertiser_link;
-            });
-        }
+    // ── MUTATIONS: minimal targeted update + local cache patch ──
+    async function mutate(userId, updates) {
+        const { error } = await window._sb.from('profiles').update(updates).eq('id', userId);
+        if (error) { alert('Action failed: ' + error.message); return false; }
+        // Patch local cache immediately — no re-fetch needed
+        const idx = allData.findIndex(u => u.id === userId);
+        if (idx !== -1) Object.assign(allData[idx], updates);
+        render(allData);
+        return true;
     }
-    loadExistingAds();
+
+    async function mutateDelete(userId) {
+        const { error } = await window._sb.from('profiles').delete().eq('id', userId);
+        if (error) { alert('Action failed: ' + error.message); return false; }
+        allData = allData.filter(u => u.id !== userId);
+        render(allData);
+        return true;
+    }
+
+    window.approveUser = async function(userId) {
+        await mutate(userId, { status: 'approved' });
+    };
+
+    window.rejectUser = async function(userId) {
+        const user = allData.find(u => u.id === userId);
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') return;
+        if (confirm('Reject and remove this registration?')) await mutateDelete(userId);
+    };
+
+    window.makeAdmin = async function(userId) {
+        if (confirm('Make this user an Admin?')) await mutate(userId, { role: 'admin' });
+    };
+
+    window.removeAdmin = async function(userId) {
+        const user = allData.find(u => u.id === userId);
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com') {
+            alert('System Owner cannot be demoted.'); return;
+        }
+        if (confirm('Remove admin privileges?')) await mutate(userId, { role: 'student' });
+    };
+
+    window.toggleUserStatus = async function(userId, newStatus) {
+        const user = allData.find(u => u.id === userId);
+        if (user && (user.email || '').toLowerCase() === 'microsoftportharcourt@gmail.com' && newStatus === 'inactive') return;
+        if (confirm('Change account status?')) await mutate(userId, { status: newStatus });
+    };
+
+    // ── LOGOUT ──
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        try { await window._sb.auth.signOut(); } catch (e) {}
+        localStorage.clear(); sessionStorage.clear();
+        window.location.href = 'index.html';
+    });
+
+    // ── KICK OFF (single parallel fetch) ──
+    loadAdminDashboard();
 });
 
+// ── AD IMAGE PREVIEW (instant, no DB) ──
 window.previewAdImage = function(event, slot) {
-    const input = event.target;
+    const input   = event.target;
     const preview = document.getElementById(`preview-${slot}`);
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => { preview.src = e.target.result; };
         reader.readAsDataURL(input.files[0]);
     }
-}
+};
 
+// ── SAVE AD ──
 window.saveAd = async function(slotId) {
     const fileInput = document.querySelector(`#slot-${slotId} .ad-image-input`);
-    const adCopy = document.getElementById(`copy-${slotId}`).value;
-    const adLink = document.getElementById(`link-${slotId}`).value;
-    
-    let imageUrl = null;
+    const adCopy    = document.getElementById(`copy-${slotId}`).value;
+    const adLink    = document.getElementById(`link-${slotId}`).value;
+
+    let imageUrl = document.getElementById(`preview-${slotId}`).src;
 
     if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const ext = file.name.split('.').pop();
-        const fileName = `ad_slot_${slotId}_${Date.now()}.${ext}`; 
-        
-        const { data, error } = await window.supabase.storage.from('community_images').upload(fileName, file, { upsert: true });
-        if (error) { alert("Image upload failed: " + error.message + "\nEnsure you have an RLS policy allowing inserts to community_images."); return; }
-        
-        const { data: publicUrlData } = window.supabase.storage.from('community_images').getPublicUrl(fileName);
-        imageUrl = publicUrlData.publicUrl;
-    } else {
-        imageUrl = document.getElementById(`preview-${slotId}`).src;
+        const file     = fileInput.files[0];
+        const ext      = file.name.split('.').pop();
+        const fileName = `ad_slot_${slotId}_${Date.now()}.${ext}`;
+
+        const { error: uploadErr } = await window._sb.storage.from('community_images').upload(fileName, file, { upsert: true });
+        if (uploadErr) {
+            alert('Image upload failed: ' + uploadErr.message + '\nEnsure you have an RLS policy allowing inserts to community_images.');
+            return;
+        }
+        const { data: urlData } = window._sb.storage.from('community_images').getPublicUrl(fileName);
+        imageUrl = urlData.publicUrl;
     }
 
-    const { data, error } = await window.supabase.from('ads').upsert({ 
-        slot_id: slotId, 
-        image_url: imageUrl, 
-        ads_copy: adCopy, 
-        advertiser_link: adLink 
-    }, { onConflict: 'slot_id' });
+    const { error } = await window._sb.from('ads').upsert(
+        { slot_id: slotId, image_url: imageUrl, ads_copy: adCopy, advertiser_link: adLink },
+        { onConflict: 'slot_id' }
+    );
 
     if (error) {
         alert("Saving Ad data failed. Did you run the SQL to create the 'ads' table?\nError: " + error.message);
     } else {
         alert(`Ad Slot ${slotId} saved successfully!`);
     }
-}
+};
 </script>
 </body>
 </html>
