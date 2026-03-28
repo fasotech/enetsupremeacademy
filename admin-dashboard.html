@@ -69,7 +69,7 @@
         .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--brand-yellow);color:var(--brand-navy);border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
         .sidebar-foot{margin-top:auto;padding:1.5rem 1.5rem 2rem}
         .logout-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);padding:.85rem 1.25rem;border-radius:12px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
-        .logout-btn:hover{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2)}
+        .logout-btn:hover{background:rgba(238, 93, 80, 0.1);color:var(--danger);border-color:rgba(238, 93, 80, 0.2)}
 
         /* LAYOUT */
         .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s}
@@ -85,13 +85,14 @@
         .search-wrap input::placeholder{color:var(--text-muted)}
         .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
         .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
+        
         .notification-wrapper{position:relative}
         .bell-badge{position:absolute;top:-2px;right:-2px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid var(--surface)}
-        .notification-dropdown{position:absolute;top:120%;right:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px var(--shadow-color);display:none;flex-direction:column;z-index:1000;transform-origin:top right}
-        .notification-dropdown.show{display:flex;animation:scaleIn .18s ease}
+        .notification-dropdown{position:absolute;top:120%;right:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px var(--shadow-color);display:none;flex-direction:column;z-index:1000;transform-origin:top right;animation:scaleIn .18s ease}
+        .notification-dropdown.show{display:flex;}
         .notif-header{padding:1.2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
         .notif-header h4{font-family:'Poppins',sans-serif;font-size:.95rem;color:var(--text-dark)}
-        .notif-header span{font-size:.7rem;background:rgba(238,93,80,.1);color:var(--danger);padding:3px 8px;border-radius:12px;font-weight:700}
+        .notif-header span{font-size:.7rem;background:rgba(238, 93, 80, 0.1);color:var(--danger);padding:3px 8px;border-radius:12px;font-weight:700}
         .notif-body{max-height:350px;overflow-y:auto}
         .notif-item{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .2s}
         .notif-item:hover{background:var(--surface-hover)}
@@ -133,7 +134,7 @@
         .table-responsive{width:100%;overflow-x:auto}
         .data-tbl{width:100%;border-collapse:collapse;text-align:left;min-width:800px}
         .data-tbl th{padding:1rem 2rem;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg-light)}
-        .data-tbl td{padding:1.15rem 2rem;font-size:.9rem;color:var(--text-gray);border-bottom:1px solid var(--border);vertical-align:middle}
+        .data-tbl td{padding:1.25rem 2rem;font-size:.9rem;color:var(--text-gray);border-bottom:1px solid var(--border);vertical-align:middle}
         .data-tbl tbody tr{transition:background .15s}
         .data-tbl tbody tr:hover{background:var(--bg-light)}
         .data-tbl tbody tr.clickable{cursor:pointer}
@@ -144,17 +145,19 @@
         .uav{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.1)}
         .uname{font-size:.95rem;font-weight:700;color:var(--text-dark);transition:color .2s}
         .uid{font-size:.7rem;color:var(--text-muted);margin-top:2px}
+        
         .role-badge{display:inline-flex;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
         .role-badge.student{background:rgba(0, 160, 223, 0.1);color:var(--accent-cyan)}
         .role-badge.teacher{background:rgba(252, 209, 22, 0.2);color:var(--brand-navy)}
+        .role-badge.instructor{background:rgba(252, 209, 22, 0.2);color:var(--brand-navy)}
         .role-badge.admin{background:rgba(5,205,153,.1);color:var(--success)}
+        
         .status-badge{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600}
         .status-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
         .status-badge.active{color:var(--success)}
         .status-badge.pending{color:var(--brand-yellow)}
         .status-badge.inactive{color:var(--text-muted)}
 
-        /* BUTTONS */
         .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
         .btn{display:inline-flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
         .btn-approve{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
@@ -169,16 +172,15 @@
         .btn-deact:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
         .btn-activate{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
         .btn-activate:hover{background:var(--success);color:#fff}
+
         .master-tag{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px}
         .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--brand-navy);background:var(--brand-yellow);border:1px solid rgba(252, 209, 22, 0.5);padding:6px 12px;border-radius:8px}
 
-        /* EMPTY */
         .empty-cell{padding:4rem 2rem;text-align:center}
         .empty-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
         .empty-ttl{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem}
         .empty-sub{font-size:.85rem;color:var(--text-muted)}
 
-        /* ACTIVITY */
         .activity-list{padding:0 2rem 2rem;display:flex;flex-direction:column;gap:1.5rem}
         .activity-item{display:flex;align-items:flex-start;gap:1rem;cursor:pointer;border-radius:12px;padding:.5rem;margin:-.5rem;transition:background .2s}
         .activity-item:hover{background:var(--surface-hover)}
@@ -364,7 +366,6 @@
                     <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
                     <tbody id="pending-users-list">
                         <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
-                        <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -385,7 +386,6 @@
                     <table class="data-tbl">
                         <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
                         <tbody id="all-users-list">
-                            <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                             <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                             <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                         </tbody>
@@ -682,6 +682,10 @@ function renderStats(data){
     });
     document.getElementById('stat-students').textContent=sc;
     document.getElementById('stat-teachers').textContent=tc;
+    
+    // Save values to localStorage so they load instantly on next refresh
+    localStorage.setItem('enet_stat_students', sc);
+    localStorage.setItem('enet_stat_teachers', tc);
 }
 
 /* ═══════════════════════════════════════════
@@ -772,12 +776,12 @@ function renderUsers(data,tab){
         let btns='';
         if(isAdmin){
             if(isOwner) btns=`<span class="system-owner-tag">👑 System Owner</span>`;
-            else btns=`<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="removeAdmin('${u.id}')">↓ Demote</button>`;
+            else btns=`<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="event.stopPropagation(); removeAdmin('${u.id}')">↓ Demote</button>`;
         } else {
-            btns=`<button class="btn btn-admin" onclick="makeAdmin('${u.id}')">↑ Admin</button>`;
+            btns=`<button class="btn btn-admin" onclick="event.stopPropagation(); makeAdmin('${u.id}')">↑ Admin</button>`;
             btns+=isInactive
-                ?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
-                :`<button class="btn btn-deact"    onclick="toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
+                ?`<button class="btn btn-activate" onclick="event.stopPropagation(); toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
+                :`<button class="btn btn-deact"    onclick="event.stopPropagation(); toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
         }
 
         return `<tr class="clickable" onclick="openDrawer('${u.id}')">
@@ -935,12 +939,25 @@ window.addEventListener('load',function(){
     const iconEl=document.getElementById('theme-icon');
     if(iconEl) iconEl.textContent=_tIcons[t];
 
+    // OPTIMISTIC CACHING - instantly load numbers from memory
+    const c_students = localStorage.getItem('enet_stat_students');
+    const c_teachers = localStorage.getItem('enet_stat_teachers');
+    const c_pending = localStorage.getItem('enet_stat_pending') || '0';
+    
+    if (c_students !== null && c_teachers !== null) {
+        document.getElementById('stat-students').textContent = c_students;
+        document.getElementById('stat-teachers').textContent = c_teachers;
+        document.getElementById('stat-pending').textContent = c_pending;
+        document.getElementById('pend-badge').textContent = c_pending;
+        document.getElementById('nav-pcount').textContent = c_pending;
+        document.getElementById('bell-badge').textContent = c_pending;
+    }
+
     _sb=window.supabase.createClient(
         'https://lskwzcvexyxjncttvimf.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
     );
 
-    // Fire off all loaders independently! Lightning fast.
     loadProfiles();
     loadActivities();
     loadExistingAds();
