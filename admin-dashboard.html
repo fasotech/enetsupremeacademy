@@ -6,6 +6,9 @@
     <title>ENET SUPREME ACADEMY | Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
     <script>
         const _st = localStorage.getItem('enet_theme') || 'system';
         document.documentElement.setAttribute('data-theme',
@@ -51,7 +54,6 @@
         *{box-sizing:border-box;margin:0;padding:0}
         body{background:var(--bg-light);color:var(--text-gray);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
 
-        /* SIDEBAR */
         .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(2, 1, 74, 0.4);backdrop-filter:blur(4px);z-index:90;opacity:0;transition:opacity .3s}
         .sidebar-overlay.show{display:block;opacity:1}
         .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--surface);display:flex;flex-direction:column;z-index:100;box-shadow:4px 0 24px var(--shadow-color);border-right:1px solid var(--border);transition:transform .3s,background .3s}
@@ -60,6 +62,7 @@
         .brand span{color:var(--brand-yellow); text-shadow: 1px 1px 1px rgba(0,0,0,0.1);}
         .badge-admin{display:inline-block;margin-top:.4rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
         .close-sidebar{display:none;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer}
+        
         .nav-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:1.5rem 2rem .5rem}
         .nav-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 2rem;margin:.2rem 1rem;font-size:.95rem;font-weight:500;color:var(--text-gray);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
         .nav-item:hover{color:var(--accent-cyan);background:var(--surface-hover)}
@@ -67,17 +70,18 @@
         .nav-item svg{flex-shrink:0;width:20px;height:20px;opacity:.8}
         .nav-item.active svg{opacity:1; color: var(--accent-cyan);}
         .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--brand-yellow);color:var(--brand-navy);border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
+        
         .sidebar-foot{margin-top:auto;padding:1.5rem 1.5rem 2rem}
         .logout-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);padding:.85rem 1.25rem;border-radius:12px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
         .logout-btn:hover{background:rgba(238, 93, 80, 0.1);color:var(--danger);border-color:rgba(238, 93, 80, 0.2)}
 
-        /* LAYOUT */
         .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s}
         .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2.5rem;border-bottom:1px solid var(--border)}
         .topbar-left{display:flex;align-items:center;gap:1rem}
         .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--accent-cyan);box-shadow:0 2px 10px var(--shadow-color)}
         .welcome-text h1{font-family:'Poppins',sans-serif;font-size:1.75rem;font-weight:700;color:var(--text-dark);letter-spacing:-.02em;margin-bottom:.2rem}
         .welcome-text p{font-size:.9rem;color:var(--text-gray)}
+        
         .topbar-right{display:flex;align-items:center;gap:1rem}
         .search-wrap{display:flex;align-items:center;gap:.5rem;background:var(--surface);border-radius:50px;padding:.6rem 1.2rem;box-shadow:0 4px 15px var(--shadow-color);border:1px solid var(--border);width:250px;transition:width .3s,border-color .2s}
         .search-wrap:focus-within{width:310px;border-color:var(--accent-cyan)}
@@ -100,15 +104,13 @@
         .notif-content p{font-size:.8rem;color:var(--text-dark);margin-bottom:4px;line-height:1.4}
         .notif-empty{padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
 
-        /* LIVE DOT */
         .live-dot{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:4px 10px;border-radius:20px;white-space:nowrap}
         .live-dot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--success);animation:livePulse 1.5s ease-in-out infinite}
 
-        /* CONTENT */
         .content{padding:0 2.5rem 2.5rem;flex:1}
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
-        .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s,box-shadow .2s}
-        .stat-card:hover{transform:translateY(-6px);box-shadow:0 20px 45px var(--shadow-color)}
+        .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
+        .stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px var(--shadow-color)}
         .stat-card.ring{outline:3px solid var(--accent-cyan);outline-offset:-3px;transform:translateY(-6px)}
         .stat-card.brand-blue{background:var(--brand-navy);color:#fff}
         .stat-card.brand-orange{background:var(--accent-cyan);color:#fff}
@@ -126,11 +128,13 @@
         .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem}
         .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark)}
         .panel-cnt{font-size:.75rem;font-weight:700;background:var(--bg-light);color:var(--accent-cyan);padding:4px 10px;border-radius:20px;margin-left:10px;vertical-align:middle;border:1px solid var(--border)}
+        
         .tab-bar{display:flex;gap:.5rem;padding:0 2rem 1.5rem;overflow-x:auto;white-space:nowrap}
         .tab-bar::-webkit-scrollbar{display:none}
         .tab-btn{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;padding:.5rem 1.25rem;border-radius:50px;border:1px solid var(--border);cursor:pointer;color:var(--text-gray);background:var(--surface);transition:all .2s}
         .tab-btn:hover{border-color:var(--accent-cyan);color:var(--text-dark)}
         .tab-btn.active{color:var(--brand-navy);background:var(--brand-yellow);border-color:var(--brand-yellow)}
+        
         .table-responsive{width:100%;overflow-x:auto}
         .data-tbl{width:100%;border-collapse:collapse;text-align:left;min-width:800px}
         .data-tbl th{padding:1rem 2rem;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg-light)}
@@ -140,7 +144,6 @@
         .data-tbl tbody tr.clickable{cursor:pointer}
         .data-tbl tbody tr.clickable:hover .uname{color:var(--accent-cyan)}
 
-        /* USER CELLS */
         .user-cell{display:flex;align-items:center;gap:1rem}
         .uav{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.1)}
         .uname{font-size:.95rem;font-weight:700;color:var(--text-dark);transition:color .2s}
@@ -197,6 +200,15 @@
         .ad-slot-form textarea{width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;background:var(--surface);color:var(--text-dark);font-family:'DM Sans';outline:none}
         .ad-slot-form input[type="url"]{padding:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-dark);outline:none;width:100%}
         .ad-slot-form textarea:focus,.ad-slot-form input[type="url"]:focus{border-color:var(--accent-cyan)}
+
+        /* BLOG WRITER STYLES */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem; }
+        .form-group input[type="text"], .form-group input[type="file"] { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dark); outline: none; font-family: 'DM Sans'; }
+        .form-group input[type="text"]:focus { border-color: var(--accent-cyan); }
+        .ql-toolbar { background: var(--bg-light); border-radius: 8px 8px 0 0; border-color: var(--border) !important; }
+        .ql-container { font-family: 'DM Sans', sans-serif !important; font-size: 1rem !important; border-color: var(--border) !important; }
+        .ql-editor { color: var(--text-dark); }
 
         /* USER DETAIL DRAWER */
         .drawer-backdrop{position:fixed;inset:0;background:rgba(2, 1, 74, 0.5);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
@@ -281,6 +293,9 @@
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Community Hub
     </a>
     <div class="nav-label">Management</div>
+    <a class="nav-item" href="#" onclick="document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Write Blog
+    </a>
     <a class="nav-item" href="#" onclick="quickNav('admins');return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admins
     </a>
@@ -400,6 +415,31 @@
             </div>
         </div>
 
+        <div class="panel" id="blog-management-section">
+            <div class="panel-head"><div class="panel-title">Write a New Blog Post</div></div>
+            <div style="padding: 1.5rem; background: var(--bg-light);">
+                <div class="form-group">
+                    <label>Post Title</label>
+                    <input type="text" id="blog-title" placeholder="Enter an engaging title...">
+                </div>
+                <div class="form-group">
+                    <label>Short Excerpt / Summary</label>
+                    <input type="text" id="blog-excerpt" placeholder="A brief summary that will appear on the blog card...">
+                </div>
+                <div class="form-group">
+                    <label>Cover Image (Required)</label>
+                    <input type="file" id="blog-cover" accept="image/*" style="background: var(--surface);">
+                </div>
+                <div class="form-group">
+                    <label>Post Content</label>
+                    <div id="editor-container" style="height: 350px; background: var(--surface); border-radius: 0 0 8px 8px;"></div>
+                </div>
+                <button class="btn btn-primary" style="width:100%; justify-content:center; padding:1rem; font-size: 1rem; background: var(--accent-cyan); color: white; border:none;" onclick="publishBlogPost()" id="publish-blog-btn">
+                    Publish Blog Post
+                </button>
+            </div>
+        </div>
+
         <div class="panel" id="ad-management-section">
             <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
             <div class="ads-management-grid">
@@ -446,6 +486,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
 <script>
 /* ═══════════════════════════════════════════
    THEME
@@ -500,14 +542,8 @@ function emptyRow(msg,cols,ico,sub){
     </div></td></tr>`;
 }
 
-/* ═══════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════ */
 let _data=[], _tab='all', _sb;
 
-/* ═══════════════════════════════════════════
-   USER DETAIL DRAWER
-═══════════════════════════════════════════ */
 const ROLE_ICONS={student:'🎒',teacher:'🎓',instructor:'🎓',admin:'🛡️'};
 
 function openDrawer(userId){
@@ -519,7 +555,6 @@ function openDrawer(userId){
     const isOwner   = (u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
     const nm        = `${u.first_name||'User'} ${u.last_name||''}`.trim();
 
-    // Determine clean role string for display
     let displayRole = r;
     if (r.includes('teacher') || r.includes('instructor')) displayRole = 'teacher';
     else if (r === 'admin') displayRole = 'admin';
@@ -616,9 +651,6 @@ function closeDrawer(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
 
-/* ═══════════════════════════════════════════
-   STAT CARD → instant tab switch + scroll
-═══════════════════════════════════════════ */
 window.statCardNav=function(tab){
     const card=document.getElementById('card-'+tab);
     if(card){card.classList.add('ring');setTimeout(()=>card.classList.remove('ring'),1200)}
@@ -632,9 +664,6 @@ window.quickNav=function(tab){
     setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300);
 };
 
-/* ═══════════════════════════════════════════
-   RENDER — PENDING
-═══════════════════════════════════════════ */
 function renderPending(data){
     const pending=data.filter(u=>u.status==='pending');
     const pc=pending.length;
@@ -668,9 +697,6 @@ function renderPending(data){
     renderNotifications(pending);
 }
 
-/* ═══════════════════════════════════════════
-   RENDER — STATS
-═══════════════════════════════════════════ */
 function renderStats(data){
     let sc=0,tc=0;
     data.forEach(u=>{
@@ -682,15 +708,10 @@ function renderStats(data){
     });
     document.getElementById('stat-students').textContent=sc;
     document.getElementById('stat-teachers').textContent=tc;
-    
-    // Save values to localStorage so they load instantly on next refresh
     localStorage.setItem('enet_stat_students', sc);
     localStorage.setItem('enet_stat_teachers', tc);
 }
 
-/* ═══════════════════════════════════════════
-   RENDER — NOTIFICATIONS
-═══════════════════════════════════════════ */
 function renderNotifications(pending){
     document.getElementById('notif-count').textContent=pending.length+' New';
     if(!pending.length){
@@ -709,9 +730,6 @@ function renderNotifications(pending){
     }).join('');
 }
 
-/* ═══════════════════════════════════════════
-   RENDER — ACTIVITY
-═══════════════════════════════════════════ */
 function renderActivities(data){
     document.getElementById('recent-activities-list').innerHTML=data.slice(0,6).map(u=>{
         const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
@@ -725,14 +743,10 @@ function renderActivities(data){
     }).join('');
 }
 
-/* ═══════════════════════════════════════════
-   RENDER — USER TABLE
-═══════════════════════════════════════════ */
 function renderUsers(data,tab){
     const q=(document.getElementById('search-input').value||'').toLowerCase();
     let rows=data.filter(u=>u.status==='approved'||u.status==='inactive');
 
-    // Filter Logic
     if (tab==='students') {
         rows=rows.filter(u=>{
             const r=getRole(u);
@@ -803,18 +817,12 @@ function renderUsers(data,tab){
     }).join('');
 }
 
-/* ═══════════════════════════════════════════
-   MASTER RENDER
-═══════════════════════════════════════════ */
 function renderAll(data){
     renderPending(data);
     renderStats(data);
     renderUsers(data,_tab);
 }
 
-/* ═══════════════════════════════════════════
-   TAB SWITCH
-═══════════════════════════════════════════ */
 window.switchTab=function(tab){
     _tab=tab;
     ['all','students','teachers','admins'].forEach(t=>{
@@ -825,9 +833,6 @@ window.switchTab=function(tab){
 };
 window.filterUsers=function(){renderUsers(_data,_tab);};
 
-/* ═══════════════════════════════════════════
-   MUTATIONS
-═══════════════════════════════════════════ */
 async function mutate(userId,updates){
     const idx=_data.findIndex(u=>u.id===userId);
     if(idx!==-1) Object.assign(_data[idx],updates);
@@ -861,22 +866,16 @@ window.toggleUserStatus=async function(userId,newStatus){
     if(confirm(msg)) await mutate(userId,{status:newStatus});
 };
 
-/* ═══════════════════════════════════════════
-   ASYNC LOADERS
-═══════════════════════════════════════════ */
 async function loadProfiles(){
     try {
         const { data, error } = await _sb.from('profiles')
             .select('id,first_name,last_name,email,role,status,created_at,phone,address,avatar_url')
             .order('created_at',{ascending:false})
             .limit(500);
-
         if (error) throw error;
-        
         _data = data || [];
         renderAll(_data);
     } catch(err) {
-        console.error(err);
         document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5,'⚠️','Check console for details.');
         document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6,'⚠️','Check console for details.');
     }
@@ -888,11 +887,8 @@ async function loadActivities() {
             .select('id,first_name,last_name,role,created_at')
             .order('created_at', { ascending: false })
             .limit(6);
-            
         if (!error && data) renderActivities(data);
-    } catch (err) {
-        document.getElementById('recent-activities-list').innerHTML = '<p style="text-align:center;color:var(--text-muted);">Unable to load activity.</p>';
-    }
+    } catch (err) {}
 }
 
 async function loadExistingAds() {
@@ -911,9 +907,6 @@ async function loadExistingAds() {
     } catch(err) {}
 }
 
-/* ═══════════════════════════════════════════
-   REALTIME
-═══════════════════════════════════════════ */
 function subscribeRealtime(){
     _sb.channel('db-changes')
         .on('postgres_changes',{event:'INSERT',schema:'public',table:'profiles'},p=>{
@@ -932,14 +925,15 @@ function subscribeRealtime(){
 }
 
 /* ═══════════════════════════════════════════
-   BOOT
+   BLOG WRITER SCRIPT (QUILL.JS)
 ═══════════════════════════════════════════ */
+let quillEditor;
+
 window.addEventListener('load',function(){
     const t=localStorage.getItem('enet_theme')||'system';
     const iconEl=document.getElementById('theme-icon');
     if(iconEl) iconEl.textContent=_tIcons[t];
 
-    // OPTIMISTIC CACHING - instantly load numbers from memory
     const c_students = localStorage.getItem('enet_stat_students');
     const c_teachers = localStorage.getItem('enet_stat_teachers');
     const c_pending = localStorage.getItem('enet_stat_pending') || '0';
@@ -948,9 +942,6 @@ window.addEventListener('load',function(){
         document.getElementById('stat-students').textContent = c_students;
         document.getElementById('stat-teachers').textContent = c_teachers;
         document.getElementById('stat-pending').textContent = c_pending;
-        document.getElementById('pend-badge').textContent = c_pending;
-        document.getElementById('nav-pcount').textContent = c_pending;
-        document.getElementById('bell-badge').textContent = c_pending;
     }
 
     _sb=window.supabase.createClient(
@@ -961,8 +952,22 @@ window.addEventListener('load',function(){
     loadProfiles();
     loadActivities();
     loadExistingAds();
-    
     subscribeRealtime(); 
+
+    // Initialize Quill Editor
+    quillEditor = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'Write your beautiful blog post here...',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link', 'image'],
+                ['clean']
+            ]
+        }
+    });
 
     document.getElementById('logoutBtn').addEventListener('click',async()=>{
         try{await _sb.auth.signOut();}catch(e){}
@@ -970,6 +975,67 @@ window.addEventListener('load',function(){
         window.location.href='index.html';
     });
 });
+
+/* BLOG PUBLISHING LOGIC */
+window.publishBlogPost = async function() {
+    const title = document.getElementById('blog-title').value.trim();
+    const excerpt = document.getElementById('blog-excerpt').value.trim();
+    const fileInput = document.getElementById('blog-cover');
+    const content = quillEditor.root.innerHTML; // Extracts the HTML styling
+    const btn = document.getElementById('publish-blog-btn');
+
+    if(!title) { alert('Please enter a blog title.'); return; }
+    if(content === '<p><br></p>' || !content) { alert('Please write some content.'); return; }
+
+    btn.disabled = true;
+    btn.innerText = "Publishing to Website...";
+
+    try {
+        let coverUrl = null;
+
+        // 1. Upload Cover Image (if selected)
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const ext = file.name.split('.').pop();
+            const fileName = `blog_${Date.now()}.${ext}`;
+            
+            const { error: upErr } = await _sb.storage.from('blog_images').upload(fileName, file);
+            if (upErr) throw new Error('Image upload failed: ' + upErr.message);
+            
+            const { data: urlData } = _sb.storage.from('blog_images').getPublicUrl(fileName);
+            coverUrl = urlData.publicUrl;
+        }
+
+        // 2. Get current Admin ID
+        const { data: userData } = await _sb.auth.getUser();
+        if (!userData.user) throw new Error("You must be logged in to publish.");
+
+        // 3. Save to database
+        const { error } = await _sb.from('blog_posts').insert([{
+            title: title,
+            excerpt: excerpt,
+            content: content,
+            cover_image: coverUrl,
+            author_id: userData.user.id
+        }]);
+
+        if (error) throw error;
+
+        alert("Blog Post Published Successfully!");
+        
+        // Reset the form
+        document.getElementById('blog-title').value = '';
+        document.getElementById('blog-excerpt').value = '';
+        fileInput.value = '';
+        quillEditor.setContents([]);
+
+    } catch (err) {
+        alert("Failed to publish: " + err.message + "\nDid you run the SQL to create the 'blog_posts' table and 'blog_images' storage bucket?");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Publish Blog Post";
+    }
+}
 
 /* ═══════════════════════════════════════════
    AD MANAGEMENT
