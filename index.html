@@ -121,21 +121,39 @@
         .preview-body h5 { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
         .preview-body p  { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.45; }
 
-        .store-section { background-color: var(--white); padding: 6rem 1.5rem; border-top: 1px solid var(--light-gray); }
+        /* === REASONS TO START SECTION === */
+        .reasons-section { background-color: var(--white); padding: 5rem 1.5rem; }
+        .reasons-title { text-align: center; color: var(--navy-blue); font-size: 2.5rem; font-weight: 800; font-family: 'Poppins', sans-serif; margin-bottom: 4rem; }
+        .reasons-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; text-align: center; }
+        .reason-card { display: flex; flex-direction: column; align-items: center; padding: 1rem; transition: transform 0.3s ease; }
+        .reason-card:hover { transform: translateY(-10px); }
+        .reason-icon-wrapper { width: 80px; height: 80px; background: rgba(0, 160, 223, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--accent-cyan); border: 2px solid rgba(0, 160, 223, 0.2); }
+        .reason-card h3 { font-family: 'Poppins', sans-serif; font-size: 1.4rem; color: var(--navy-blue); margin-bottom: 1rem; font-weight: 700; }
+        .reason-card p { font-size: 1rem; color: var(--text-gray); line-height: 1.6; }
+
+        /* === STATS BANNER SECTION === */
+        .stats-banner { background-color: var(--navy-blue); padding: 4rem 1.5rem; position: relative; border-top: 4px solid var(--accent-cyan); border-bottom: 4px solid var(--brand-yellow); }
+        .stats-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; text-align: center; }
+        .stat-item { flex: 1; min-width: 160px; }
+        .stat-number { font-family: 'Poppins', sans-serif; font-size: 3.5rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 0.5rem; line-height: 1; }
+        .stat-label { font-size: 0.95rem; color: rgba(255,255,255,0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* === ACADEMY TRACKS STOREFRONT === */
+        .store-section { background-color: var(--background); padding: 6rem 1.5rem; border-top: 1px solid var(--light-gray); }
         .container { max-width: 1200px; margin: 0 auto; }
-        .section-title { color: var(--navy-blue); margin-bottom: 3rem; text-align: center; font-size: 2.5rem; font-weight: 800;}
+        .section-title { color: var(--navy-blue); margin-bottom: 3rem; text-align: center; font-size: 2.5rem; font-weight: 800; font-family: 'Poppins', sans-serif;}
         .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
-        .course-card { background: var(--background); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; border-top: 4px solid var(--accent-cyan); }
+        .course-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; border-top: 4px solid var(--accent-cyan); }
         .course-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top-color: var(--brand-yellow); }
         .course-img { width: 100%; height: 200px; background-color: var(--navy-blue); object-fit: cover; }
         .course-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
-        .course-title { font-size: 1.25rem; margin-bottom: 1rem; color: var(--navy-blue); line-height: 1.4; flex: 1; font-weight: bold; }
+        .course-title { font-size: 1.25rem; margin-bottom: 1rem; color: var(--navy-blue); line-height: 1.4; flex: 1; font-weight: bold; font-family: 'Poppins', sans-serif;}
         .course-price { font-size: 1.35rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 1.5rem; text-shadow: 1px 1px 1px rgba(0,0,0,0.1);}
         .purchase-btn { width: 100%; background-color: var(--navy-blue); color: var(--white); border: none; padding: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.3s; }
         .purchase-btn:hover { background-color: var(--navy-light); }
 
         footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); }
-        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; font-family: 'Poppins', sans-serif;}
         .footer-logo span { color: var(--brand-yellow); }
         .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;}
 
@@ -154,6 +172,7 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
+        /* MOBILE RESPONSIVE MEDIA QUERIES */
         @media (max-width: 950px) { 
             .mobile-menu-btn { display: block; }
             .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
@@ -168,6 +187,10 @@
             .feature-ticks { justify-content: center; }
             .community-inner { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
             .community-cta { justify-content: center; }
+            
+            .reasons-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .stats-container { justify-content: center; gap: 2.5rem; }
+            .stat-item { min-width: 40%; }
         }
         @media (max-width: 600px) {
             .hero-title { font-size: 2.2rem; }
@@ -180,6 +203,10 @@
             .footer-container { flex-direction: column; text-align: center; gap: 1rem; }
             .whatsapp-float { width: 55px; height: 55px; bottom: 20px; right: 20px; }
             .whatsapp-icon { width: 30px; height: 30px; }
+            
+            .reasons-title { font-size: 2rem; margin-bottom: 2rem; }
+            .stat-item { min-width: 100%; }
+            .stat-number { font-size: 3rem; }
         }
     </style>
 </head>
@@ -264,6 +291,60 @@
         </div>
     </section>
 
+    <section class="reasons-section">
+        <h2 class="reasons-title">So many reasons to start</h2>
+        <div class="reasons-grid">
+            <div class="reason-card">
+                <div class="reason-icon-wrapper">
+                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h2m-2 4h2m-4 4h2"></path></svg>
+                </div>
+                <h3>Teach your way</h3>
+                <p>Publish the course you want, in the way you want, and always have control of your own content.</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="reason-icon-wrapper">
+                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </div>
+                <h3>Inspire learners</h3>
+                <p>Teach what you know and help learners explore their interests, gain new skills, and advance their careers.</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="reason-icon-wrapper">
+                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                </div>
+                <h3>Get rewarded</h3>
+                <p>Expand your professional network, build your expertise, and earn money on each paid enrollment.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-banner">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">80M</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">75+</div>
+                <div class="stat-label">Languages</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1.1B</div>
+                <div class="stat-label">Enrollments</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">180+</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">17,200+</div>
+                <div class="stat-label">Enterprise customers</div>
+            </div>
+        </div>
+    </section>
+
     <section class="store-section" id="shop">
         <div class="container">
             <h2 class="section-title">Academy Tracks Overview</h2>
@@ -335,7 +416,7 @@
                     container.appendChild(card);
                 });
             } catch (err) {
-                container.innerHTML = '<p style="text-align:center;color:var(--brand-red);grid-column:1/-1;">Failed to load courses. Please check your connection.</p>';
+                container.innerHTML = '<p style="text-align:center;color:var(--danger);grid-column:1/-1;">Failed to load courses. Please check your connection.</p>';
             }
         }
 
@@ -346,14 +427,14 @@
             try {
                 const { data: posts, error } = await supabase
                     .from('posts')
-                    .select('*, profiles(first_name, last_name, role)')
+                    .select('*, profiles(*)')
                     .order('created_at', { ascending: false })
                     .limit(3);
 
                 if (error) throw error;
 
                 if (!posts || posts.length === 0) {
-                    container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">No recent posts yet. Be the first to start a discussion!</p>';
+                    container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">No recent posts yet. Join the community to start a discussion!</p>';
                     return;
                 }
 
@@ -365,10 +446,11 @@
                     const lName = post.profiles?.last_name || '';
                     const initial = fName.charAt(0).toUpperCase();
                     const fullName = `${fName} ${lName}`.trim();
-                    const role = (post.profiles?.role || 'student').toUpperCase();
+                    const rawRole = post.profiles?.role || 'student';
+                    const role = rawRole.toUpperCase();
                     
-                    let contentPreview = 'Shared an image';
-                    if (post.content) {
+                    let contentPreview = 'Shared an image/file';
+                    if (post.content && post.content.trim() !== '') {
                         contentPreview = post.content.length > 60 ? post.content.substring(0, 60) + '...' : post.content;
                     }
 
@@ -390,7 +472,8 @@
                 });
                 container.innerHTML = html;
             } catch (err) {
-                container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">Unable to load live feed.</p>';
+                console.error("Live Feed Error:", err);
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">Log in to view the live community discussions!</p>';
             }
         }
 
@@ -410,7 +493,7 @@
                 
                 let dashboardPage = 'student-dashboard.html'; 
                 if (profile && profile.role === 'admin') dashboardPage = 'admin-dashboard.html';
-                if (profile && profile.role === 'teacher') dashboardPage = 'teacher-dashboard.html';
+                if (profile && profile.role === 'teacher' || profile?.role === 'instructor') dashboardPage = 'teacher-dashboard.html';
 
                 heroBtn.innerText = "Access My Dashboard";
                 heroBtn.href = dashboardPage;
@@ -418,11 +501,12 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const savedCart  = localStorage.getItem('enet_cart');
-            const savedTotal = localStorage.getItem('enet_cart_total');
-            if (savedCart) { cart = JSON.parse(savedCart); cartTotal = Number(savedTotal); updateCartUI(); }
+            try {
+                const savedCart  = localStorage.getItem('enet_cart');
+                const savedTotal = localStorage.getItem('enet_cart_total');
+                if (savedCart) { cart = JSON.parse(savedCart); cartTotal = Number(savedTotal); updateCartUI(); }
+            } catch(e) { console.error("Cart error", e); }
             
-            // Run functions independently so if one fails, it doesn't break the others
             renderCourses().catch(console.error);
             checkCurrentSession().catch(console.error);
             fetchLiveCommunityFeed().catch(console.error);
