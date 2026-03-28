@@ -3,169 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    
     <title>ENET SUPREME ACADEMY | Blog</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
+        /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --navy-blue: #02014a; --navy-light: #0d2a8f; --brand-yellow: #fcd116;
-            --yellow-hover: #e0b800; --accent-cyan: #00a0df;
-            --text-main: #1a1a2e; --text-gray: #475467;
-            --light-gray: #EAECF0; --background: #F8F9FA;
-            --white: #FFFFFF; --border: #E2E8F0; --danger: #EE5D50;
-            --success: #05CD99;
+            --navy-blue: #02014a;     
+            --navy-light: #0d2a8f;    
+            --brand-yellow: #fcd116;  
+            --yellow-hover: #e0b800;  
+            --accent-cyan: #00a0df;   
+            
+            --text-main: #333333;
+            --text-gray: #475467;
+            --light-gray: #EAECF0;
+            --background: #F8F9FA;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+            --danger: #EE5D50;
         }
-        *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
-        body{background-color:var(--background);color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
 
-        /* NAV */
-        header{background-color:var(--navy-blue);position:sticky;top:0;z-index:1000;box-shadow:0 4px 6px rgba(0,0,0,0.1);border-bottom:3px solid var(--brand-yellow)}
-        nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 5%;max-width:1400px;margin:0 auto;flex-wrap:wrap}
-        .logo{color:var(--white);font-size:1.5rem;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:1px}
-        .logo span{color:var(--brand-yellow)}
-        .mobile-menu-btn{display:none;background:transparent;border:none;color:var(--white);font-size:1.8rem;cursor:pointer}
-        .nav-links{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
-        .nav-links a{color:var(--white);text-decoration:none;font-weight:500;font-size:0.95rem;transition:color 0.3s}
-        .nav-links a:hover{color:var(--accent-cyan)}
-        .nav-links a.active{color:var(--brand-yellow);font-weight:bold}
-        .nav-community{display:flex;align-items:center;gap:6px;justify-content:center;background:rgba(0,160,223,0.15);border:1px solid rgba(0,160,223,0.3);padding:5px 14px;border-radius:50px;color:var(--accent-cyan)!important;font-weight:700!important;transition:all 0.3s!important}
-        .nav-community:hover{background:rgba(0,160,223,0.28)!important;color:white!important}
-        .nav-community .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-cyan);animation:blink 1.6s infinite}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        /* VIEWS — controlled by JS */
-        #view-listing{display:block}
-        #view-article{display:none}
+        /* === GLOBAL STICKY HEADER === */
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo span { color: var(--brand-yellow); text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
+        
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
 
-        /* ═══════════════════════════
-           BLOG LISTING PAGE
-        ═══════════════════════════ */
-        .listing-wrap{max-width:1200px;margin:3rem auto;padding:0 1.5rem;width:100%}
-        .listing-header{margin-bottom:2.5rem}
-        .listing-header h1{font-size:2.5rem;font-weight:800;color:var(--navy-blue);margin-bottom:.5rem}
-        .listing-header p{color:var(--text-gray);font-size:1.05rem}
-        .listing-header-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1.5rem}
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; transition: max-height 0.3s ease-in-out; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent-cyan); }
+        .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
 
-        /* Search */
-        .blog-search{display:flex;align-items:center;gap:.5rem;background:var(--white);border:1.5px solid var(--border);border-radius:50px;padding:.5rem 1.2rem;width:280px;transition:border-color .2s,box-shadow .2s}
-        .blog-search:focus-within{border-color:var(--accent-cyan);box-shadow:0 0 0 3px rgba(0,160,223,0.12)}
-        .blog-search input{background:none;border:none;outline:none;font-size:.9rem;color:var(--text-main);width:100%}
-        .blog-search input::placeholder{color:#aaa}
-        .post-count-pill{font-size:.82rem;font-weight:700;color:var(--text-gray);background:var(--white);border:1px solid var(--border);padding:5px 14px;border-radius:20px}
-
-        /* Featured post (first/largest) */
-        .featured-post{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--white);border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(2,1,74,0.08);margin-bottom:2.5rem;cursor:pointer;transition:transform .25s,box-shadow .25s;border:1px solid var(--border)}
-        .featured-post:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(2,1,74,0.13)}
-        .featured-cover{width:100%;height:360px;object-fit:cover;display:block}
-        .featured-cover-placeholder{width:100%;height:360px;background:linear-gradient(135deg,var(--navy-blue),var(--navy-light));display:flex;align-items:center;justify-content:center;font-size:5rem;color:rgba(255,255,255,0.15)}
-        .featured-body{padding:3rem;display:flex;flex-direction:column;justify-content:center}
-        .featured-tag{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-cyan);background:rgba(0,160,223,0.1);border:1px solid rgba(0,160,223,0.2);padding:5px 12px;border-radius:20px;margin-bottom:1.25rem}
-        .featured-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent-cyan)}
-        .featured-body h2{font-size:1.9rem;font-weight:800;color:var(--navy-blue);line-height:1.25;margin-bottom:1rem}
-        .featured-excerpt{font-size:1rem;color:var(--text-gray);line-height:1.75;margin-bottom:1.75rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-        .featured-meta{display:flex;align-items:center;gap:1rem;font-size:.82rem;color:var(--text-gray)}
-        .featured-meta .dot-sep{color:var(--border)}
-        .read-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--navy-blue);color:#fff;font-weight:700;font-size:.88rem;padding:.7rem 1.5rem;border-radius:50px;border:none;cursor:pointer;transition:background .2s,transform .2s;text-decoration:none;margin-top:1.25rem;align-self:flex-start}
-        .read-btn:hover{background:var(--accent-cyan);transform:translateX(4px)}
-        .read-btn svg{transition:transform .2s}
-        .read-btn:hover svg{transform:translateX(3px)}
-
-        /* Post grid */
-        .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem;margin-bottom:3rem}
-        .post-card{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(2,1,74,0.07);border:1px solid var(--border);cursor:pointer;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column}
-        .post-card:hover{transform:translateY(-5px);box-shadow:0 12px 35px rgba(2,1,74,0.12)}
-        .post-card:hover .card-title{color:var(--accent-cyan)}
-        .card-cover{width:100%;height:200px;object-fit:cover;display:block}
-        .card-cover-placeholder{width:100%;height:200px;background:linear-gradient(135deg,var(--navy-blue),var(--navy-light));display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(255,255,255,0.15)}
-        .card-body{padding:1.5rem;flex:1;display:flex;flex-direction:column}
-        .card-title{font-size:1.1rem;font-weight:700;color:var(--navy-blue);line-height:1.35;margin-bottom:.6rem;transition:color .2s;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-        .card-excerpt{font-size:.875rem;color:var(--text-gray);line-height:1.6;margin-bottom:1rem;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-        .card-meta{font-size:.75rem;color:#999;display:flex;align-items:center;gap:.5rem;padding-top:.85rem;border-top:1px solid var(--border);margin-top:auto}
-        .card-meta .dot{width:4px;height:4px;border-radius:50%;background:#ccc}
-
-        /* Empty state */
-        .empty-blog{text-align:center;padding:5rem 2rem}
-        .empty-blog .ico{font-size:4rem;margin-bottom:1.25rem;opacity:.4}
-        .empty-blog h2{font-size:1.6rem;font-weight:800;color:var(--navy-blue);margin-bottom:.5rem}
-        .empty-blog p{color:var(--text-gray);font-size:1rem}
-
-        /* Search no results */
-        .no-results{text-align:center;padding:3rem;color:var(--text-gray);font-size:1rem}
-
-        /* ═══════════════════════════
-           SINGLE ARTICLE PAGE
-        ═══════════════════════════ */
-        .article-container{max-width:1200px;margin:3rem auto;padding:0 1.5rem;width:100%;display:grid;grid-template-columns:2fr 1fr;gap:4rem}
-
-        .back-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:700;color:var(--accent-cyan);background:rgba(0,160,223,0.08);border:1px solid rgba(0,160,223,0.2);padding:.5rem 1rem;border-radius:50px;cursor:pointer;margin-bottom:1.5rem;transition:background .2s}
-        .back-btn:hover{background:rgba(0,160,223,0.18)}
-
-        .blog-main{background:var(--white);padding:2.5rem;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);border-top:5px solid var(--accent-cyan)}
-        .post-cover{width:100%;max-height:440px;object-fit:cover;border-radius:10px;margin-bottom:2rem;display:none}
-        .post-cover.show{display:block}
-        .post-title{font-size:2.4rem;color:var(--navy-blue);margin-bottom:.6rem;line-height:1.25;font-weight:800}
-        .post-meta{color:var(--text-gray);font-size:.92rem;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:2px solid var(--light-gray);display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
-        .post-meta .author-chip{display:inline-flex;align-items:center;gap:.4rem;background:rgba(0,160,223,0.08);border:1px solid rgba(0,160,223,0.18);padding:4px 10px;border-radius:20px;color:var(--accent-cyan);font-weight:700;font-size:.8rem}
-        .post-content{font-size:1.08rem;line-height:1.85;color:var(--text-main)}
-        .post-content p{margin-bottom:1.4rem}
-        .post-content h1,.post-content h2,.post-content h3{color:var(--navy-blue);margin:2.25rem 0 1rem;font-weight:800;line-height:1.3}
-        .post-content h1{font-size:1.8rem}.post-content h2{font-size:1.45rem}.post-content h3{font-size:1.2rem}
-        .post-content ul,.post-content ol{margin-bottom:1.5rem;padding-left:2rem}
-        .post-content li{margin-bottom:.5rem}
-        .post-content img{max-width:100%;height:auto;border-radius:10px;margin:1.5rem 0;box-shadow:0 4px 15px rgba(0,0,0,0.08)}
-        .post-content a{color:var(--accent-cyan);text-decoration:none;border-bottom:1px solid rgba(0,160,223,0.3)}
-        .post-content a:hover{border-bottom-color:var(--accent-cyan)}
-        .post-content blockquote{border-left:4px solid var(--accent-cyan);padding:1rem 1.5rem;margin:1.5rem 0;background:rgba(0,160,223,0.04);border-radius:0 8px 8px 0;color:var(--text-gray);font-style:italic}
-        .post-content pre{background:var(--navy-blue);color:#e2e8f0;padding:1.25rem;border-radius:10px;overflow-x:auto;margin-bottom:1.5rem;font-size:.88rem}
-        .post-content code{background:rgba(0,160,223,0.1);color:var(--navy-blue);padding:2px 6px;border-radius:4px;font-size:.88em}
-        .post-content pre code{background:none;color:inherit;padding:0}
-
-        /* Sidebar */
-        .blog-sidebar{display:flex;flex-direction:column;gap:2.5rem}
-        .widget{background:var(--white);padding:1.75rem;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);border-top:4px solid var(--brand-yellow)}
-        .widget-title{font-size:1.1rem;color:var(--navy-blue);margin-bottom:1.25rem;padding-bottom:.6rem;font-weight:800;border-bottom:2px solid var(--border)}
-        .sidebar-list{list-style:none}
-        .sidebar-list li{margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);cursor:pointer}
-        .sidebar-list li:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
-        .sidebar-list .sl-title{font-size:.88rem;font-weight:600;color:var(--navy-blue);display:block;line-height:1.35;transition:color .2s}
-        .sidebar-list li:hover .sl-title{color:var(--accent-cyan)}
-        .sidebar-list .sl-date{display:block;font-size:.75rem;color:var(--text-gray);margin-top:4px}
-
-        /* Error state */
-        .error-box{padding:2rem;color:#721c24;background:#f8d7da;border-radius:10px;border:1px solid #f5c6cb}
-        .error-box h3{margin-bottom:8px}
-
-        /* Loading skeleton */
-        .skel{height:14px;border-radius:6px;background:linear-gradient(90deg,var(--border) 25%,#e9ecef 50%,var(--border) 75%);background-size:200% 100%;animation:skShim 1.2s infinite;display:block;margin-bottom:.5rem}
-        .skel.lg{height:28px}.skel.sm{width:60%}
-        @keyframes skShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-        /* Footer */
-        footer{background-color:var(--navy-blue);color:var(--white);padding:4rem 1.5rem;border-top:4px solid var(--brand-yellow);margin-top:auto}
-        .footer-logo{color:var(--white);font-size:1.5rem;font-weight:bold;text-transform:uppercase;letter-spacing:1px}
-        .footer-logo span{color:var(--brand-yellow)}
-        .footer-container{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;flex-wrap:wrap;gap:2rem}
-
-        /* Responsive */
-        @media(max-width:950px){
-            .mobile-menu-btn{display:block}
-            .nav-links{display:none;width:100%;flex-direction:column;text-align:center;padding-top:1rem;gap:1rem}
-            .nav-links.show{display:flex}
+        .nav-community {
+            display: flex; align-items: center; gap: 6px; justify-content: center;
+            background: rgba(0, 160, 223, 0.15);
+            border: 1px solid rgba(0, 160, 223, 0.3);
+            padding: 5px 14px; border-radius: 50px;
+            color: var(--accent-cyan) !important;
+            font-weight: 700 !important;
+            transition: all 0.3s !important;
         }
-        @media(max-width:900px){
-            .featured-post{grid-template-columns:1fr}
-            .featured-cover,.featured-cover-placeholder{height:220px}
-            .featured-body{padding:2rem}
-            .posts-grid{grid-template-columns:repeat(2,1fr)}
-            .article-container{grid-template-columns:1fr;gap:2rem}
-        }
-        @media(max-width:600px){
-            .posts-grid{grid-template-columns:1fr}
-            .featured-body h2{font-size:1.4rem}
-            .listing-header h1{font-size:1.8rem}
-            .post-title{font-size:1.75rem}
+        .nav-community:hover { background: rgba(0, 160, 223, 0.28) !important; color: white !important; }
+        .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        /* === BLOG LAYOUT === */
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; width: 100%;}
+        @media (max-width: 850px) { .container { grid-template-columns: 1fr; gap: 2rem; } }
+
+        /* === MAIN ARTICLE AREA === */
+        .blog-main { background: var(--white); padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 5px solid var(--accent-cyan); }
+        .post-cover { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem; display: none;}
+        .post-cover.show { display: block; }
+        .post-title { font-size: 2.2rem; color: var(--navy-blue); margin-bottom: 0.5rem; line-height: 1.3; font-weight: 800; }
+        .post-meta { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;}
+        .post-meta span { color: var(--accent-cyan); font-weight: bold; }
+        
+        /* Rendered Quill Content Styles */
+        .post-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-main); }
+        .post-content p { margin-bottom: 1.5rem; }
+        .post-content h1, .post-content h2, .post-content h3 { color: var(--navy-blue); margin: 2rem 0 1rem 0; font-weight: bold; }
+        .post-content ul, .post-content ol { margin-bottom: 1.5rem; padding-left: 2rem; }
+        .post-content li { margin-bottom: 0.5rem; }
+        .post-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 1rem 0; }
+        .post-content a { color: var(--accent-cyan); text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+
+        /* === SIDEBAR === */
+        .blog-sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
+        .widget { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 4px solid var(--brand-yellow); }
+        .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; font-weight: bold; border-bottom: 2px solid var(--border); }
+
+        .search-box { display: flex; width: 100%; }
+        .search-box input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px 0 0 4px; font-size: 1rem; outline: none; }
+        .search-box input:focus { border-color: var(--accent-cyan); }
+        .search-box button { background: var(--navy-blue); border: 1px solid var(--navy-blue); border-left: none; padding: 0.8rem 1rem; border-radius: 0 4px 4px 0; cursor: pointer; color: var(--white); transition: 0.2s;}
+        .search-box button:hover { background: var(--brand-yellow); color: var(--navy-blue); border-color: var(--brand-yellow);}
+
+        .sidebar-list { list-style: none; }
+        .sidebar-list li { margin-bottom: 1.2rem; line-height: 1.5; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
+        .sidebar-list li:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0;}
+        .sidebar-list a { color: var(--navy-blue); text-decoration: none; transition: color 0.2s; font-weight: 600; display: block;}
+        .sidebar-list a:hover { color: var(--accent-cyan); }
+        .sidebar-list span { display: block; font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
+
+        /* === GLOBAL FOOTER === */
+        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto;}
+        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .footer-logo span { color: var(--brand-yellow); }
+        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
+
+        @media (max-width: 950px) { 
+            .mobile-menu-btn { display: block; }
+            .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
+            .nav-links.show { display: flex; } 
         }
     </style>
 </head>
@@ -185,89 +128,40 @@
         </nav>
     </header>
 
-    <!-- ═══ VIEW: BLOG LISTING ═══ -->
-    <div id="view-listing">
-        <div class="listing-wrap">
-            <div class="listing-header">
-                <h1>Academy Blog</h1>
-                <p>Insights, tutorials, and news from ENET Supreme Academy.</p>
-                <div class="listing-header-bar">
-                    <div class="blog-search">
-                        <svg width="14" height="14" fill="none" stroke="#aaa" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="search-input" placeholder="Search posts..." oninput="handleSearch()">
-                    </div>
-                    <span class="post-count-pill" id="post-count-pill">Loading...</span>
+    <main class="container">
+        <article class="blog-main">
+            <img id="article-cover" src="" alt="Blog Cover" class="post-cover">
+            <div id="article-container">
+                <div style="padding: 4rem 2rem; text-align: center; border: 3px dashed var(--accent-cyan); border-radius: 12px; background: var(--bg-light);">
+                    <h2 style="color: var(--navy-blue); margin-bottom: 1rem;">Establishing Secure Connection...</h2>
+                    <p>Executing data fetch protocol.</p>
                 </div>
             </div>
+        </article>
 
-            <!-- Featured post slot -->
-            <div id="featured-slot"></div>
-
-            <!-- Posts grid -->
-            <div class="posts-grid" id="posts-grid">
-                <!-- Loading skeletons -->
-                <div class="post-card" style="pointer-events:none">
-                    <div class="card-cover-placeholder"></div>
-                    <div class="card-body"><span class="skel lg"></span><span class="skel"></span><span class="skel sm"></span></div>
-                </div>
-                <div class="post-card" style="pointer-events:none">
-                    <div class="card-cover-placeholder"></div>
-                    <div class="card-body"><span class="skel lg"></span><span class="skel"></span><span class="skel sm"></span></div>
-                </div>
-                <div class="post-card" style="pointer-events:none">
-                    <div class="card-cover-placeholder"></div>
-                    <div class="card-body"><span class="skel lg"></span><span class="skel"></span><span class="skel sm"></span></div>
-                </div>
+        <aside class="blog-sidebar">
+            <div class="widget">
+                <form class="search-box" onsubmit="event.preventDefault(); alert('Search functionality coming soon!');">
+                    <input type="text" placeholder="Search blog...">
+                    <button type="submit">🔍</button>
+                </form>
             </div>
-        </div>
-    </div>
-
-    <!-- ═══ VIEW: SINGLE ARTICLE ═══ -->
-    <div id="view-article" style="display:none">
-        <div class="article-container">
-            <article>
-                <button class="back-btn" onclick="showListing()">
-                    ← Back to Blog
-                </button>
-                <div class="blog-main">
-                    <img id="article-cover" src="" alt="Cover" class="post-cover">
-                    <div id="article-content">
-                        <span class="skel lg" style="width:80%;margin-bottom:1rem"></span>
-                        <span class="skel" style="width:40%;margin-bottom:2rem"></span>
-                        <span class="skel"></span><span class="skel sm"></span>
-                        <span class="skel"></span><span class="skel" style="width:70%"></span>
-                    </div>
-                </div>
-            </article>
-
-            <aside class="blog-sidebar">
-                <div class="widget">
-                    <div class="blog-search" style="width:100%">
-                        <svg width="14" height="14" fill="none" stroke="#aaa" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="search-input-sidebar" placeholder="Search blog..." oninput="sidebarSearch()">
-                    </div>
-                </div>
-                <div class="widget">
-                    <h3 class="widget-title">Recent Posts</h3>
-                    <ul class="sidebar-list" id="sidebar-recent-posts">
-                        <li><span style="color:#aaa;font-size:.85rem">Loading posts...</span></li>
-                    </ul>
-                </div>
-                <div class="widget" id="sidebar-related" style="display:none">
-                    <h3 class="widget-title">More Posts</h3>
-                    <ul class="sidebar-list" id="sidebar-more-posts"></ul>
-                </div>
-            </aside>
-        </div>
-    </div>
+            <div class="widget">
+                <h3 class="widget-title">Recent Posts</h3>
+                <ul class="sidebar-list" id="recent-posts-list">
+                    <li><span style="color: var(--text-gray);">Fetching posts...</span></li>
+                </ul>
+            </div>
+        </aside>
+    </main>
 
     <footer>
-        <div class="footer-container">
+        <div class="container footer-container" style="margin: 0 auto;">
             <div>
                 <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
-                <p style="margin-top:1rem;color:#cbd5e1">info@enetsupreme.com.ng | +234 8062 770 265</p>
+                <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
             </div>
-            <div style="color:#cbd5e1;font-size:.9rem;text-align:right">
+            <div style="color: #cbd5e1; font-size: 0.9rem; text-align: right;">
                 <p>Suite 58 Georgewill/Clifford Plaza</p>
                 <p>Choba Junction, Port Harcourt</p>
                 <p>Rivers State, Nigeria.</p>
@@ -276,285 +170,122 @@
     </footer>
 
     <script>
-        /* ═══════════════════════════════════════
-           INIT SUPABASE
-        ═══════════════════════════════════════ */
-        if(typeof window.supabase==='undefined'){
-            document.getElementById('posts-grid').innerHTML='<div class="error-box" style="grid-column:span 3"><h3>⚠️ Connection Error</h3><p>Supabase library failed to load. Check your internet connection.</p></div>';
-            throw new Error('Supabase library not available');
-        }
-        const supabase=window.supabase.createClient(
-            'https://lskwzcvexyxjncttvimf.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
-        );
+        // Asynchronous IIFE to guarantee execution regardless of load events
+        (async function initBlogEngine() {
+            const container = document.getElementById('article-container');
+            const sidebarList = document.getElementById('recent-posts-list');
 
-        let allPosts=[];
-        let currentSearchQuery='';
+            try {
+                // Safety Check: Validate CDN load
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error("Supabase library failed to initialize. Please check your network connection or disable script-blocking extensions.");
+                }
 
-        /* ═══════════════════════════════════════
-           UTILITY
-        ═══════════════════════════════════════ */
-        function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});}
-        function fmtDateShort(d){if(!d)return'';return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
-        function readTime(content){if(!content)return'1 min read';const words=content.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;return Math.max(1,Math.round(words/200))+' min read';}
-        function escHtml(s){const d=document.createElement('div');d.appendChild(document.createTextNode(s||''));return d.innerHTML;}
+                // Initialize securely
+                const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        /* ═══════════════════════════════════════
-           ROUTING — URL ?post=ID
-        ═══════════════════════════════════════ */
-        function getPostIdFromUrl(){
-            return new URLSearchParams(window.location.search).get('post');
-        }
-        function setUrlParam(postId){
-            const url=new URL(window.location.href);
-            if(postId){url.searchParams.set('post',postId);}
-            else{url.searchParams.delete('post');}
-            history.pushState({postId},'',url);
-        }
-        window.addEventListener('popstate',e=>{
-            const pid=(e.state&&e.state.postId)||getPostIdFromUrl();
-            if(pid){openArticleById(pid,false);}
-            else{showListingView(false);}
-        });
-
-        /* ═══════════════════════════════════════
-           LOAD ALL POSTS
-        ═══════════════════════════════════════ */
-        async function loadPosts(){
-            try{
-                const{data,error}=await supabase
+                // Fetch data
+                const { data, error } = await supabase
                     .from('blog_posts')
-                    .select('id,title,excerpt,cover_image,content,created_at,updated_at')
-                    .order('created_at',{ascending:false});
-                if(error)throw error;
-                allPosts=data||[];
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-                // Check if a specific post is requested via URL
-                const pid=getPostIdFromUrl();
-                if(pid){
-                    renderListing(allPosts); // render listing in background
-                    await openArticleById(pid,false);
-                } else {
-                    renderListing(allPosts);
-                }
-                renderSidebar(allPosts);
-            }catch(err){
-                console.error('Blog load error:',err);
-                document.getElementById('featured-slot').innerHTML='';
-                document.getElementById('posts-grid').innerHTML=`<div style="grid-column:span 3"><div class="error-box"><h3>⚠️ Failed to Load Posts</h3><p style="font-family:monospace;font-size:.88rem;margin-top:.4rem">${err.message}</p></div></div>`;
-                document.getElementById('post-count-pill').textContent='Error';
-            }
-        }
+                if (error) throw error;
 
-        /* ═══════════════════════════════════════
-           RENDER LISTING
-        ═══════════════════════════════════════ */
-        function renderListing(posts,skipFeatured=false){
-            const cnt=posts.length;
-            document.getElementById('post-count-pill').textContent=cnt+' post'+(cnt!==1?'s':'');
-
-            if(!cnt){
-                document.getElementById('featured-slot').innerHTML='';
-                document.getElementById('posts-grid').innerHTML=`<div style="grid-column:span 3"><div class="empty-blog"><div class="ico">✍️</div><h2>No Posts Yet</h2><p>The academy blog is coming soon. Check back later!</p></div></div>`;
-                return;
-            }
-
-            // Featured = most recent post (only when not searching)
-            if(!skipFeatured&&!currentSearchQuery&&posts===allPosts){
-                const f=posts[0];
-                const rest=posts.slice(1);
-                renderFeatured(f);
-                renderGrid(rest);
-            } else {
-                document.getElementById('featured-slot').innerHTML='';
-                renderGrid(posts);
-            }
-        }
-
-        function renderFeatured(post){
-            const cover=post.cover_image
-                ?`<img src="${escHtml(post.cover_image)}" class="featured-cover" alt="" onerror="this.style.display='none'">`
-                :`<div class="featured-cover-placeholder">📝</div>`;
-            document.getElementById('featured-slot').innerHTML=`
-                <div class="featured-post" onclick="openArticle('${post.id}')">
-                    ${cover}
-                    <div class="featured-body">
-                        <span class="featured-tag">Latest Post</span>
-                        <h2>${escHtml(post.title)}</h2>
-                        ${post.excerpt?`<p class="featured-excerpt">${escHtml(post.excerpt)}</p>`:''}
-                        <div class="featured-meta">
-                            <span>${fmtDate(post.created_at)}</span>
-                            <span class="dot-sep">•</span>
-                            <span>${readTime(post.content)}</span>
+                // Handle Empty State
+                if (!data || data.length === 0) {
+                    container.innerHTML = `
+                        <div style="padding: 3rem; text-align: center;">
+                            <h2 style="color: var(--navy-blue);">No posts published yet.</h2>
+                            <p style="color: var(--text-gray); margin-top: 1rem;">Head over to the Admin Dashboard to publish your first article.</p>
                         </div>
-                        <span class="read-btn">Read Article <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-                    </div>
-                </div>`;
-        }
-
-        function renderGrid(posts){
-            const grid=document.getElementById('posts-grid');
-            if(!posts.length){
-                // Only show empty if also no featured
-                if(currentSearchQuery||allPosts.length<=1){
-                    grid.innerHTML=`<div style="grid-column:span 3" class="no-results">
-                        <p style="font-size:2rem;margin-bottom:.75rem">🔍</p>
-                        <p>No posts match "<strong>${escHtml(currentSearchQuery)}</strong>"</p>
-                    </div>`;
-                } else {
-                    grid.innerHTML='';
+                    `;
+                    sidebarList.innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
+                    return;
                 }
-                return;
-            }
-            grid.innerHTML=posts.map(p=>{
-                const cover=p.cover_image
-                    ?`<img src="${escHtml(p.cover_image)}" class="card-cover" alt="" loading="lazy" onerror="this.style.display='none'">`
-                    :`<div class="card-cover-placeholder">📝</div>`;
-                return`<div class="post-card" onclick="openArticle('${p.id}')">
-                    ${cover}
-                    <div class="card-body">
-                        <div class="card-title">${escHtml(p.title)}</div>
-                        <div class="card-excerpt">${escHtml(p.excerpt||'')}</div>
-                        <div class="card-meta">
-                            <span>${fmtDateShort(p.created_at)}</span>
-                            <span class="dot"></span>
-                            <span>${readTime(p.content)}</span>
-                        </div>
+
+                // Hydrate the Sidebar with REAL LINKS
+                renderSidebar(data);
+
+                // ROUTING LOGIC: Check URL for a specific Post ID
+                const urlParams = new URLSearchParams(window.location.search);
+                const postIdFromUrl = urlParams.get('id');
+
+                if (postIdFromUrl) {
+                    // Try to find the requested post
+                    const targetPost = data.find(p => p.id === postIdFromUrl);
+                    if (targetPost) {
+                        renderFullArticle(targetPost);
+                    } else {
+                        // If ID is invalid/deleted, default to the latest post
+                        renderFullArticle(data[0]);
+                    }
+                } else {
+                    // No ID in URL? Load the newest post by default
+                    renderFullArticle(data[0]);
+                }
+
+            } catch (err) {
+                console.error("Fatal System Error:", err);
+                container.innerHTML = `
+                    <div style="padding: 2rem; color: #721c24; background: #f8d7da; border-radius: 8px; border: 1px solid #f5c6cb;">
+                        <h3 style="margin-bottom: 10px;">System Exception</h3>
+                        <p style="font-family: monospace; font-size: 0.9rem;">${err.message}</p>
                     </div>
-                </div>`;
-            }).join('');
+                `;
+                sidebarList.innerHTML = '<li><span style="color: var(--danger);">System Error</span></li>';
+            }
+        })();
+
+        function renderSidebar(posts) {
+            const list = document.getElementById('recent-posts-list');
+            let html = '';
+            const recentPosts = posts.slice(0, 6); 
+
+            recentPosts.forEach(post => {
+                const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                
+                // REAL LINK INJECTION HERE: blog.html?id=XYZ
+                html += `
+                    <li>
+                        <a href="blog.html?id=${post.id}">${post.title}</a>
+                        <span>${date}</span>
+                    </li>
+                `;
+            });
+            list.innerHTML = html;
         }
 
-        /* ═══════════════════════════════════════
-           RENDER SIDEBAR
-        ═══════════════════════════════════════ */
-        function renderSidebar(posts){
-            const list=document.getElementById('sidebar-recent-posts');
-            if(!posts.length){list.innerHTML='<li><span style="color:#aaa;font-size:.85rem">No posts yet</span></li>';return;}
-            list.innerHTML=posts.slice(0,6).map(p=>`
-                <li onclick="openArticle('${p.id}')">
-                    <span class="sl-title">${escHtml(p.title)}</span>
-                    <span class="sl-date">${fmtDateShort(p.created_at)}</span>
-                </li>`).join('');
-        }
+        function renderFullArticle(post) {
+            const container = document.getElementById('article-container');
+            const coverImg = document.getElementById('article-cover');
 
-        function renderMorePosts(currentPostId){
-            const others=allPosts.filter(p=>p.id!==currentPostId).slice(0,4);
-            const widget=document.getElementById('sidebar-related');
-            const list=document.getElementById('sidebar-more-posts');
-            if(!others.length){widget.style.display='none';return;}
-            widget.style.display='block';
-            list.innerHTML=others.map(p=>`
-                <li onclick="openArticle('${p.id}')">
-                    <span class="sl-title">${escHtml(p.title)}</span>
-                    <span class="sl-date">${fmtDateShort(p.created_at)}</span>
-                </li>`).join('');
-        }
+            // Dynamic Page Title for SEO
+            document.title = `${post.title} | ENET SUPREME Blog`;
 
-        /* ═══════════════════════════════════════
-           OPEN ARTICLE
-        ═══════════════════════════════════════ */
-        function openArticle(postId,pushState=true){
-            const post=allPosts.find(p=>p.id===postId);
-            if(post){
-                renderArticle(post);
-                if(pushState)setUrlParam(postId);
+            // Cover Image
+            if (post.cover_image && post.cover_image !== "") {
+                coverImg.src = post.cover_image;
+                coverImg.classList.add('show');
             } else {
-                openArticleById(postId,pushState);
+                coverImg.src = "";
+                coverImg.classList.remove('show');
             }
-        }
 
-        async function openArticleById(postId,pushState=true){
-            // Try local cache first
-            const cached=allPosts.find(p=>p.id===postId);
-            if(cached){renderArticle(cached);if(pushState)setUrlParam(postId);return;}
+            const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Fetch from DB
-            showArticleView();
-            document.getElementById('article-content').innerHTML=`
-                <span class="skel lg" style="width:80%;margin-bottom:1rem"></span>
-                <span class="skel" style="width:40%;margin-bottom:2rem"></span>
-                <span class="skel"></span><span class="skel sm"></span>
-                <span class="skel"></span><span class="skel" style="width:70%"></span>`;
-            try{
-                const{data,error}=await supabase.from('blog_posts').select('*').eq('id',postId).single();
-                if(error)throw error;
-                renderArticle(data);
-                if(pushState)setUrlParam(postId);
-            }catch(err){
-                document.getElementById('article-content').innerHTML=`<div class="error-box"><h3>Post Not Found</h3><p>${err.message}</p></div>`;
-            }
-        }
-
-        function renderArticle(post){
-            // Show cover
-            const cover=document.getElementById('article-cover');
-            if(post.cover_image){cover.src=post.cover_image;cover.classList.add('show');}
-            else{cover.src='';cover.classList.remove('show');}
-
-            // Render content
-            document.getElementById('article-content').innerHTML=`
-                <h1 class="post-title">${escHtml(post.title)}</h1>
+            container.innerHTML = `
+                <h1 class="post-title">${post.title}</h1>
                 <div class="post-meta">
-                    <span class="author-chip">✍️ Academy Admin</span>
-                    <span>•</span>
-                    <span>${fmtDate(post.created_at)}</span>
-                    <span>•</span>
-                    <span>${readTime(post.content)}</span>
-                    ${post.updated_at&&post.updated_at!==post.created_at?`<span style="color:var(--accent-cyan);font-size:.78rem">(updated ${fmtDateShort(post.updated_at)})</span>`:''}
+                    By <span style="text-transform: uppercase;">Academy Admin</span> &nbsp;•&nbsp; ${date}
                 </div>
-                <div class="post-content">${post.content||''}</div>
+                <div class="post-content">
+                    ${post.content}
+                </div>
             `;
-
-            // Update page title
-            document.title=`${post.title} | ENET Supreme Academy Blog`;
-
-            // Sidebar
-            renderMorePosts(post.id);
-            showArticleView();
-            window.scrollTo({top:0,behavior:'smooth'});
         }
-
-        /* ═══════════════════════════════════════
-           VIEW SWITCHING
-        ═══════════════════════════════════════ */
-        function showArticleView(){
-            document.getElementById('view-listing').style.display='none';
-            document.getElementById('view-article').style.display='block';
-        }
-        function showListingView(pushState=true){
-            document.getElementById('view-listing').style.display='block';
-            document.getElementById('view-article').style.display='none';
-            document.title='ENET SUPREME ACADEMY | Blog';
-            if(pushState)setUrlParam(null);
-            window.scrollTo({top:0,behavior:'smooth'});
-        }
-        window.showListing=function(){showListingView(true);};
-
-        /* ═══════════════════════════════════════
-           SEARCH
-        ═══════════════════════════════════════ */
-        function handleSearch(){
-            currentSearchQuery=document.getElementById('search-input').value.toLowerCase().trim();
-            if(!currentSearchQuery){renderListing(allPosts);return;}
-            const filtered=allPosts.filter(p=>
-                (p.title||'').toLowerCase().includes(currentSearchQuery)||
-                (p.excerpt||'').toLowerCase().includes(currentSearchQuery)
-            );
-            renderListing(filtered,true);
-        }
-
-        function sidebarSearch(){
-            const q=document.getElementById('search-input-sidebar').value.toLowerCase().trim();
-            if(!q){renderSidebar(allPosts);return;}
-            const filtered=allPosts.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.excerpt||'').toLowerCase().includes(q));
-            renderSidebar(filtered);
-        }
-
-        /* ═══════════════════════════════════════
-           START
-        ═══════════════════════════════════════ */
-        loadPosts();
     </script>
 </body>
 </html>
