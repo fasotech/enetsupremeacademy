@@ -20,7 +20,6 @@
             --brand-yellow: #fcd116;  
             --yellow-hover: #e0b800;  
             --accent-cyan: #00a0df;   
-            
             --text-main: #333333;
             --text-gray: #475467;
             --light-gray: #EAECF0;
@@ -33,7 +32,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        /* === GLOBAL STICKY HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
         .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
@@ -59,11 +57,9 @@
         .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-        /* === BLOG LAYOUT === */
         .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; width: 100%;}
         @media (max-width: 850px) { .container { grid-template-columns: 1fr; gap: 2rem; } }
 
-        /* === MAIN ARTICLE AREA === */
         .blog-main { background: var(--white); padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 5px solid var(--accent-cyan); }
         .post-cover { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem; display: none;}
         .post-cover.show { display: block; }
@@ -71,7 +67,6 @@
         .post-meta { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;}
         .post-meta span { color: var(--accent-cyan); font-weight: bold; }
         
-        /* Rendered Quill Content Styles */
         .post-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-main); }
         .post-content p { margin-bottom: 1.5rem; }
         .post-content h1, .post-content h2, .post-content h3 { color: var(--navy-blue); margin: 2rem 0 1rem 0; font-weight: bold; }
@@ -81,7 +76,6 @@
         .post-content a { color: var(--accent-cyan); text-decoration: none; }
         .post-content a:hover { text-decoration: underline; }
 
-        /* === SIDEBAR === */
         .blog-sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
         .widget { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 4px solid var(--brand-yellow); }
         .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; font-weight: bold; border-bottom: 2px solid var(--border); }
@@ -99,7 +93,6 @@
         .sidebar-list a:hover { color: var(--accent-cyan); }
         .sidebar-list span { display: block; font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
 
-        /* === GLOBAL FOOTER === */
         footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto;}
         .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
         .footer-logo span { color: var(--brand-yellow); }
@@ -117,7 +110,7 @@
     <header>
         <nav>
             <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
                 <a href="blog.html" class="active">Blog</a>
@@ -133,8 +126,8 @@
             <img id="article-cover" src="" alt="Blog Cover" class="post-cover">
             <div id="article-container">
                 <div style="padding: 4rem 2rem; text-align: center; border: 3px dashed var(--accent-cyan); border-radius: 12px; background: var(--bg-light);">
-                    <h2 style="color: var(--navy-blue); margin-bottom: 1rem;">Fetching Live Database...</h2>
-                    <p>If you see this box, the new code has successfully loaded!</p>
+                    <h2 style="color: var(--navy-blue); margin-bottom: 1rem;">Establishing Secure Connection...</h2>
+                    <p>Executing data fetch protocol.</p>
                 </div>
             </div>
         </article>
@@ -146,7 +139,6 @@
                     <button type="submit">🔍</button>
                 </form>
             </div>
-
             <div class="widget">
                 <h3 class="widget-title">Recent Posts</h3>
                 <ul class="sidebar-list" id="recent-posts-list">
@@ -171,19 +163,25 @@
     </footer>
 
     <script>
-        function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('show');
-        }
-
-        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
         let allPosts = [];
 
-        window.addEventListener('load', async () => {
+        // Asynchronous IIFE (Immediately Invoked Function Expression) to guarantee execution regardless of load events
+        (async function initBlogEngine() {
+            const container = document.getElementById('article-container');
+            const sidebarList = document.getElementById('recent-posts-list');
+
             try {
-                // Simplified query: No joins, just fetch the data directly to guarantee it works.
+                // Safety Check: Validate CDN load
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error("Supabase library failed to initialize. Please check your network connection or disable script-blocking extensions.");
+                }
+
+                // Initialize securely inside the thread
+                const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+                // Fetch pure data. No risky joins.
                 const { data, error } = await supabase
                     .from('blog_posts')
                     .select('*')
@@ -191,31 +189,34 @@
 
                 if (error) throw error;
 
+                // Handle Empty State
                 if (!data || data.length === 0) {
-                    document.getElementById('article-container').innerHTML = `
+                    container.innerHTML = `
                         <div style="padding: 3rem; text-align: center;">
                             <h2 style="color: var(--navy-blue);">No posts published yet.</h2>
-                            <p style="color: var(--text-gray); margin-top: 1rem;">Head over to the Admin Dashboard and publish your first article!</p>
+                            <p style="color: var(--text-gray); margin-top: 1rem;">If you just posted an article in the Admin Dashboard, ensure it saved correctly in the Database.</p>
                         </div>
                     `;
-                    document.getElementById('recent-posts-list').innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
+                    sidebarList.innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
                     return;
                 }
 
+                // Hydrate the DOM
                 allPosts = data;
                 renderSidebar(data);
                 renderFullArticle(data[0]);
 
             } catch (err) {
-                console.error("Blog Fetch Error:", err);
-                document.getElementById('article-container').innerHTML = `
-                    <div style="padding: 3rem; text-align: center; color: var(--danger); font-weight: bold; border: 2px solid var(--danger); border-radius: 8px; background: #fee2e2;">
-                        Database Connection Failed.<br><br>
-                        <span style="font-size:0.9rem; font-weight:normal; color:#991b1b;">Error Details: ${err.message}</span>
+                console.error("Fatal System Error:", err);
+                container.innerHTML = `
+                    <div style="padding: 2rem; color: #721c24; background: #f8d7da; border-radius: 8px; border: 1px solid #f5c6cb;">
+                        <h3 style="margin-bottom: 10px;">System Exception</h3>
+                        <p style="font-family: monospace; font-size: 0.9rem;">${err.message}</p>
                     </div>
                 `;
+                sidebarList.innerHTML = '<li><span style="color: var(--danger);">System Error</span></li>';
             }
-        });
+        })();
 
         function renderSidebar(posts) {
             const list = document.getElementById('recent-posts-list');
@@ -251,7 +252,7 @@
             container.innerHTML = `
                 <h1 class="post-title">${post.title}</h1>
                 <div class="post-meta">
-                    By <span>Academy Admin</span> &nbsp;•&nbsp; ${date}
+                    By <span style="text-transform: uppercase;">Academy Admin</span> &nbsp;•&nbsp; ${date}
                 </div>
                 <div class="post-content">
                     ${post.content}
