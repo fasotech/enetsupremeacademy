@@ -12,38 +12,61 @@
             _st === 'dark' || (_st === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
     </script>
     <style>
+        /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --orange:#FF7A00; --yellow:#FFC107; --danger:#EE5D50; --success:#05CD99;
-            --royal-blue:#2441EA; --bg-light:#F4F7FE; --surface:#FFFFFF;
-            --surface-hover:rgba(36,65,234,0.04); --border:#E9EDF7; --border-bright:#D1D9EB;
-            --text-dark:#2B3674; --text-muted:#A3AED0; --text-gray:#707EAE;
-            --topbar-bg:rgba(244,247,254,0.92); --shadow-color:rgba(17,38,146,0.06);
+            --brand-navy: #02014a;     
+            --navy-light: #0d2a8f;    
+            --brand-yellow: #fcd116;  
+            --yellow-hover: #e0b800;  
+            --accent-cyan: #00a0df;   
+            
+            --danger: #EE5D50; 
+            --success: #05CD99;
+            
+            --bg-light: #F4F7FE; 
+            --surface: #FFFFFF;
+            --surface-hover: rgba(0, 160, 223, 0.05); 
+            --border: #E9EDF7; 
+            --border-bright: #D1D9EB;
+            
+            --text-dark: #02014a; 
+            --text-muted: #8A98C9; 
+            --text-gray: #475467;
+            
+            --topbar-bg: rgba(244, 247, 254, 0.92); 
+            --shadow-color: rgba(2, 1, 74, 0.06);
         }
         [data-theme="dark"] {
-            --royal-blue:#4F3FFF; --bg-light:#07080F; --surface:#13151F;
-            --surface-hover:rgba(255,255,255,0.05); --border:rgba(255,255,255,0.08); --border-bright:rgba(255,255,255,0.15);
-            --text-dark:#F0F0FF; --text-muted:#7B7D9A; --text-gray:#A0AEC0;
-            --topbar-bg:rgba(7,8,15,0.92); --shadow-color:rgba(0,0,0,0.4);
+            --bg-light: #07080F; 
+            --surface: #13151F;
+            --surface-hover: rgba(255, 255, 255, 0.05); 
+            --border: rgba(255, 255, 255, 0.08); 
+            --border-bright: rgba(255, 255, 255, 0.15);
+            --text-dark: #F0F0FF; 
+            --text-muted: #7B7D9A; 
+            --text-gray: #A0AEC0;
+            --topbar-bg: rgba(7, 8, 15, 0.92); 
+            --shadow-color: rgba(0, 0, 0, 0.4);
         }
         *{box-sizing:border-box;margin:0;padding:0}
         body{background:var(--bg-light);color:var(--text-gray);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
 
         /* SIDEBAR */
-        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(17,38,146,.4);backdrop-filter:blur(4px);z-index:90;opacity:0;transition:opacity .3s}
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(2, 1, 74, 0.4);backdrop-filter:blur(4px);z-index:90;opacity:0;transition:opacity .3s}
         .sidebar-overlay.show{display:block;opacity:1}
         .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--surface);display:flex;flex-direction:column;z-index:100;box-shadow:4px 0 24px var(--shadow-color);border-right:1px solid var(--border);transition:transform .3s,background .3s}
         .sidebar-logo{padding:2.5rem 2rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
-        .brand{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-.02em;text-transform:uppercase;color:var(--royal-blue);line-height:1.2}
-        .brand span{color:var(--orange)}
+        .brand{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-.02em;text-transform:uppercase;color:var(--text-dark);line-height:1.2}
+        .brand span{color:var(--brand-yellow); text-shadow: 1px 1px 1px rgba(0,0,0,0.1);}
         .badge-admin{display:inline-block;margin-top:.4rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
         .close-sidebar{display:none;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer}
         .nav-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:1.5rem 2rem .5rem}
         .nav-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 2rem;margin:.2rem 1rem;font-size:.95rem;font-weight:500;color:var(--text-gray);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
-        .nav-item:hover{color:var(--royal-blue);background:var(--surface-hover)}
-        .nav-item.active{color:var(--royal-blue);font-weight:700;background:var(--surface-hover);border-left-color:var(--royal-blue)}
+        .nav-item:hover{color:var(--accent-cyan);background:var(--surface-hover)}
+        .nav-item.active{color:var(--brand-navy);font-weight:700;background:var(--surface-hover);border-left-color:var(--accent-cyan)}
         .nav-item svg{flex-shrink:0;width:20px;height:20px;opacity:.8}
-        .nav-item.active svg{opacity:1}
-        .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--orange);color:#fff;border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
+        .nav-item.active svg{opacity:1; color: var(--accent-cyan);}
+        .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--brand-yellow);color:var(--brand-navy);border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
         .sidebar-foot{margin-top:auto;padding:1.5rem 1.5rem 2rem}
         .logout-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);padding:.85rem 1.25rem;border-radius:12px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s}
         .logout-btn:hover{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2)}
@@ -52,16 +75,16 @@
         .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s}
         .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2.5rem;border-bottom:1px solid var(--border)}
         .topbar-left{display:flex;align-items:center;gap:1rem}
-        .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--royal-blue);box-shadow:0 2px 10px var(--shadow-color)}
+        .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--accent-cyan);box-shadow:0 2px 10px var(--shadow-color)}
         .welcome-text h1{font-family:'Poppins',sans-serif;font-size:1.75rem;font-weight:700;color:var(--text-dark);letter-spacing:-.02em;margin-bottom:.2rem}
         .welcome-text p{font-size:.9rem;color:var(--text-gray)}
         .topbar-right{display:flex;align-items:center;gap:1rem}
         .search-wrap{display:flex;align-items:center;gap:.5rem;background:var(--surface);border-radius:50px;padding:.6rem 1.2rem;box-shadow:0 4px 15px var(--shadow-color);border:1px solid var(--border);width:250px;transition:width .3s,border-color .2s}
-        .search-wrap:focus-within{width:310px;border-color:var(--royal-blue)}
+        .search-wrap:focus-within{width:310px;border-color:var(--accent-cyan)}
         .search-wrap input{background:none;border:none;outline:none;color:var(--text-dark);font-family:'DM Sans',sans-serif;font-size:.85rem;width:100%}
         .search-wrap input::placeholder{color:var(--text-muted)}
         .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
-        .icon-btn:hover{background:var(--bg-light);color:var(--royal-blue);transform:translateY(-2px)}
+        .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
         .notification-wrapper{position:relative}
         .bell-badge{position:absolute;top:-2px;right:-2px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid var(--surface)}
         .notification-dropdown{position:absolute;top:120%;right:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px var(--shadow-color);display:none;flex-direction:column;z-index:1000;transform-origin:top right}
@@ -72,7 +95,7 @@
         .notif-body{max-height:350px;overflow-y:auto}
         .notif-item{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .2s}
         .notif-item:hover{background:var(--surface-hover)}
-        .notif-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,122,0,.1);color:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+        .notif-icon{width:36px;height:36px;border-radius:50%;background:rgba(252, 209, 22, 0.2);color:var(--brand-navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
         .notif-content p{font-size:.8rem;color:var(--text-dark);margin-bottom:4px;line-height:1.4}
         .notif-empty{padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
 
@@ -85,11 +108,11 @@
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
         .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s,box-shadow .2s}
         .stat-card:hover{transform:translateY(-6px);box-shadow:0 20px 45px var(--shadow-color)}
-        .stat-card.ring{outline:3px solid rgba(255,255,255,.5);outline-offset:-3px;transform:translateY(-6px)}
-        .stat-card.brand-blue{background:var(--royal-blue);color:#fff}
-        .stat-card.brand-orange{background:var(--orange);color:#fff}
-        .stat-card.brand-yellow{background:var(--yellow);color:#111}
-        .stat-card.brand-surface{background:var(--surface);color:var(--royal-blue);border:1px solid var(--border)}
+        .stat-card.ring{outline:3px solid var(--accent-cyan);outline-offset:-3px;transform:translateY(-6px)}
+        .stat-card.brand-blue{background:var(--brand-navy);color:#fff}
+        .stat-card.brand-orange{background:var(--accent-cyan);color:#fff}
+        .stat-card.brand-yellow{background:var(--brand-yellow);color:var(--brand-navy)}
+        .stat-card.brand-surface{background:var(--surface);color:var(--brand-navy);border:1px solid var(--border); border-top:4px solid var(--danger);}
         .stat-lbl{font-size:.85rem;font-weight:500;opacity:.9;margin-bottom:.5rem}
         .stat-card.brand-surface .stat-lbl{color:var(--text-gray)}
         .stat-num{font-family:'Poppins',sans-serif;font-size:2.25rem;font-weight:700;line-height:1;margin-bottom:.25rem}
@@ -101,12 +124,12 @@
         .panel{background:var(--surface);border-radius:24px;margin-bottom:2rem;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);animation:fadeUp .4s ease both;transition:background .3s}
         .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem}
         .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark)}
-        .panel-cnt{font-size:.75rem;font-weight:700;background:var(--bg-light);color:var(--royal-blue);padding:4px 10px;border-radius:20px;margin-left:10px;vertical-align:middle;border:1px solid var(--border)}
+        .panel-cnt{font-size:.75rem;font-weight:700;background:var(--bg-light);color:var(--accent-cyan);padding:4px 10px;border-radius:20px;margin-left:10px;vertical-align:middle;border:1px solid var(--border)}
         .tab-bar{display:flex;gap:.5rem;padding:0 2rem 1.5rem;overflow-x:auto;white-space:nowrap}
         .tab-bar::-webkit-scrollbar{display:none}
         .tab-btn{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;padding:.5rem 1.25rem;border-radius:50px;border:1px solid var(--border);cursor:pointer;color:var(--text-gray);background:var(--surface);transition:all .2s}
-        .tab-btn:hover{border-color:var(--text-muted);color:var(--text-dark)}
-        .tab-btn.active{color:var(--royal-blue);background:var(--surface-hover);border-color:var(--royal-blue)}
+        .tab-btn:hover{border-color:var(--accent-cyan);color:var(--text-dark)}
+        .tab-btn.active{color:var(--brand-navy);background:var(--brand-yellow);border-color:var(--brand-yellow)}
         .table-responsive{width:100%;overflow-x:auto}
         .data-tbl{width:100%;border-collapse:collapse;text-align:left;min-width:800px}
         .data-tbl th{padding:1rem 2rem;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg-light)}
@@ -114,7 +137,7 @@
         .data-tbl tbody tr{transition:background .15s}
         .data-tbl tbody tr:hover{background:var(--bg-light)}
         .data-tbl tbody tr.clickable{cursor:pointer}
-        .data-tbl tbody tr.clickable:hover .uname{color:var(--royal-blue)}
+        .data-tbl tbody tr.clickable:hover .uname{color:var(--accent-cyan)}
 
         /* USER CELLS */
         .user-cell{display:flex;align-items:center;gap:1rem}
@@ -122,13 +145,13 @@
         .uname{font-size:.95rem;font-weight:700;color:var(--text-dark);transition:color .2s}
         .uid{font-size:.7rem;color:var(--text-muted);margin-top:2px}
         .role-badge{display:inline-flex;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
-        .role-badge.student{background:rgba(36,65,234,.1);color:var(--royal-blue)}
-        .role-badge.teacher{background:rgba(255,122,0,.1);color:var(--orange)}
+        .role-badge.student{background:rgba(0, 160, 223, 0.1);color:var(--accent-cyan)}
+        .role-badge.teacher{background:rgba(252, 209, 22, 0.2);color:var(--brand-navy)}
         .role-badge.admin{background:rgba(5,205,153,.1);color:var(--success)}
         .status-badge{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600}
         .status-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
         .status-badge.active{color:var(--success)}
-        .status-badge.pending{color:var(--orange)}
+        .status-badge.pending{color:var(--brand-yellow)}
         .status-badge.inactive{color:var(--text-muted)}
 
         /* BUTTONS */
@@ -138,16 +161,16 @@
         .btn-approve:hover{background:var(--success);color:#fff}
         .btn-danger{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2)}
         .btn-danger:hover{background:var(--danger);color:#fff}
-        .btn-admin{background:rgba(36,65,234,.1);color:var(--royal-blue);border-color:rgba(36,65,234,.2)}
-        .btn-admin:hover{background:var(--royal-blue);color:#fff}
-        .btn-unadmin{background:rgba(255,122,0,.1);color:var(--orange);border-color:rgba(255,122,0,.2)}
-        .btn-unadmin:hover{background:var(--orange);color:#fff}
+        .btn-admin{background:rgba(0, 160, 223, 0.1);color:var(--accent-cyan);border-color:rgba(0, 160, 223, 0.2)}
+        .btn-admin:hover{background:var(--accent-cyan);color:#fff}
+        .btn-unadmin{background:rgba(252, 209, 22, 0.2);color:var(--brand-navy);border-color:rgba(252, 209, 22, 0.3)}
+        .btn-unadmin:hover{background:var(--brand-yellow);color:var(--brand-navy)}
         .btn-deact{background:var(--bg-light);color:var(--text-gray);border-color:var(--border)}
         .btn-deact:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
         .btn-activate{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
         .btn-activate:hover{background:var(--success);color:#fff}
         .master-tag{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px}
-        .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--royal-blue);background:var(--surface-hover);border:1px solid rgba(36,65,234,.2);padding:6px 12px;border-radius:8px}
+        .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--brand-navy);background:var(--brand-yellow);border:1px solid rgba(252, 209, 22, 0.5);padding:6px 12px;border-radius:8px}
 
         /* EMPTY */
         .empty-cell{padding:4rem 2rem;text-align:center}
@@ -171,10 +194,10 @@
         .ad-preview-img{width:100%;height:150px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
         .ad-slot-form textarea{width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;background:var(--surface);color:var(--text-dark);font-family:'DM Sans';outline:none}
         .ad-slot-form input[type="url"]{padding:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-dark);outline:none;width:100%}
-        .ad-slot-form textarea:focus,.ad-slot-form input[type="url"]:focus{border-color:var(--royal-blue)}
+        .ad-slot-form textarea:focus,.ad-slot-form input[type="url"]:focus{border-color:var(--accent-cyan)}
 
         /* USER DETAIL DRAWER */
-        .drawer-backdrop{position:fixed;inset:0;background:rgba(17,38,146,.3);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
+        .drawer-backdrop{position:fixed;inset:0;background:rgba(2, 1, 74, 0.5);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
         .drawer-backdrop.open{opacity:1;pointer-events:all}
         .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
         .drawer.open{transform:translateX(0)}
@@ -185,7 +208,7 @@
         .drawer-close:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
         .drawer-body{flex:1;overflow-y:auto;padding:1.75rem}
         .d-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:1px solid var(--border)}
-        .d-avatar{width:88px;height:88px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:2.2rem;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.15)}
+        .d-avatar{width:88px;height:88px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:2.2rem;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.15); background-size: cover; background-position: center;}
         .d-name{font-family:'Poppins',sans-serif;font-size:1.35rem;font-weight:700;color:var(--text-dark);text-align:center}
         .d-email{font-size:.85rem;color:var(--text-muted);text-align:center;margin-top:.2rem}
         .d-badges{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.6rem}
@@ -305,7 +328,6 @@
 
     <main class="content">
 
-        <!-- STAT CARDS — clicking Students/Teachers switches tab instantly -->
         <div class="stats-grid">
             <div class="stat-card brand-blue" id="card-students" onclick="statCardNav('students')">
                 <div class="stat-lbl">Total Students</div>
@@ -333,7 +355,6 @@
             </div>
         </div>
 
-        <!-- PENDING APPROVALS -->
         <div class="panel pend">
             <div class="panel-head">
                 <div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div>
@@ -349,7 +370,6 @@
             </div>
         </div>
 
-        <!-- USER MANAGEMENT + ACTIVITY -->
         <div class="dashboard-grid">
             <div class="panel users">
                 <div class="panel-head">
@@ -380,7 +400,6 @@
             </div>
         </div>
 
-        <!-- ADS -->
         <div class="panel" id="ad-management-section">
             <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
             <div class="ads-management-grid">
@@ -414,7 +433,6 @@
     </main>
 </div>
 
-<!-- USER DETAIL DRAWER -->
 <div class="drawer-backdrop" id="drawerBg" onclick="closeDrawer()"></div>
 <div class="drawer" id="userDrawer">
     <div class="drawer-header">
@@ -465,11 +483,9 @@ document.addEventListener('click',e=>{
    HELPERS
 ═══════════════════════════════════════════ */
 const GRADS=[
-    'linear-gradient(135deg,#2441EA,#5C75FF)',
-    'linear-gradient(135deg,#FF7A00,#FFB067)',
-    'linear-gradient(135deg,#05CD99,#43E8BA)',
-    'linear-gradient(135deg,#FFC107,#FFE37E)',
-    'linear-gradient(135deg,#8B5CF6,#B496F9)'
+    'linear-gradient(135deg,#02014a,#0d2a8f)',
+    'linear-gradient(135deg,#fcd116,#e0b800)',
+    'linear-gradient(135deg,#00a0df,#0088bd)'
 ];
 function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length]}
 function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase()}
@@ -492,29 +508,33 @@ let _data=[], _tab='all', _sb;
 /* ═══════════════════════════════════════════
    USER DETAIL DRAWER
 ═══════════════════════════════════════════ */
-const ROLE_ICONS={student:'🎒',teacher:'🎓',admin:'🛡️'};
+const ROLE_ICONS={student:'🎒',teacher:'🎓',instructor:'🎓',admin:'🛡️'};
 
 function openDrawer(userId){
     const u=_data.find(x=>x.id===userId);
     if(!u) return;
-    const r         = getRole(u);
+    const r        = getRole(u);
     const isInactive= u.status==='inactive';
     const isPending = u.status==='pending';
     const isOwner   = (u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
     const nm        = `${u.first_name||'User'} ${u.last_name||''}`.trim();
 
-    // Header icon + title
-    document.getElementById('drawer-role-icon').textContent = ROLE_ICONS[r]||'👤';
-    document.getElementById('drawer-title').textContent =
-        r==='teacher'?'Teacher Profile':r==='admin'?'Admin Profile':'Student Profile';
+    // Determine clean role string for display
+    let displayRole = r;
+    if (r.includes('teacher') || r.includes('instructor')) displayRole = 'teacher';
+    else if (r === 'admin') displayRole = 'admin';
+    else displayRole = 'student';
 
-    // Build action buttons
+    document.getElementById('drawer-role-icon').textContent = ROLE_ICONS[displayRole]||'👤';
+    document.getElementById('drawer-title').textContent =
+        displayRole==='teacher'?'Teacher Profile':displayRole==='admin'?'Admin Profile':'Student Profile';
+
     let actions='';
     if(isPending){
         actions=`
             <button class="btn btn-approve full" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Registration</button>
             <button class="btn btn-danger  full" onclick="rejectUser('${u.id}');closeDrawer()">✕ Reject & Remove</button>`;
-    } else if(r==='admin'){
+    } else if(displayRole==='admin'){
         if(isOwner){
             actions=`<div class="system-owner-tag full" style="justify-content:center;padding:1rem;grid-column:span 2">👑 System Owner — Cannot be modified</div>`;
         } else {
@@ -530,17 +550,20 @@ function openDrawer(userId){
                 :`<button class="btn btn-deact"    onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`}`;
     }
 
+    const avatarBg = u.avatar_url ? `background-image: url('${u.avatar_url}'); background-size: cover; background-position: center;` : `background:${grad(u.id||nm)};`;
+    const avatarText = u.avatar_url ? '' : inits(u.first_name,u.last_name);
+
     document.getElementById('drawer-body').innerHTML=`
         <div class="d-avatar-wrap">
-            <div class="d-avatar" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(.7)':''}">
-                ${inits(u.first_name,u.last_name)}
+            <div class="d-avatar" style="${avatarBg};${isInactive?'filter:grayscale(.7)':''}">
+                ${avatarText}
             </div>
             <div>
                 <div class="d-name">${nm}</div>
                 <div class="d-email">${u.email||'No email on record'}</div>
             </div>
             <div class="d-badges">
-                <span class="role-badge ${r}">${r}</span>
+                <span class="role-badge ${displayRole}">${r}</span>
                 <span class="status-badge ${isInactive?'inactive':isPending?'pending':'active'}">
                     ${isInactive?'Suspended':isPending?'Pending Approval':'Active'}
                 </span>
@@ -558,9 +581,13 @@ function openDrawer(userId){
                     <div class="detail-lbl">Last Name</div>
                     <div class="detail-val">${u.last_name||'—'}</div>
                 </div>
-                <div class="detail-item">
-                    <div class="detail-lbl">Role</div>
-                    <div class="detail-val" style="text-transform:capitalize">${r}</div>
+                <div class="detail-item full">
+                    <div class="detail-lbl">Phone Number</div>
+                    <div class="detail-val">${u.phone||'Not provided'}</div>
+                </div>
+                <div class="detail-item full">
+                    <div class="detail-lbl">Contact Address</div>
+                    <div class="detail-val">${u.address||'Not provided'}</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-lbl">Account Status</div>
@@ -569,18 +596,6 @@ function openDrawer(userId){
                 <div class="detail-item">
                     <div class="detail-lbl">Date Joined</div>
                     <div class="detail-val">${fmtDate(u.created_at)}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-lbl">Member Since</div>
-                    <div class="detail-val">${timeAgo(u.created_at)}</div>
-                </div>
-                <div class="detail-item full">
-                    <div class="detail-lbl">Email Address</div>
-                    <div class="detail-val">${u.email||'Not provided'}</div>
-                </div>
-                <div class="detail-item full">
-                    <div class="detail-lbl">User ID</div>
-                    <div class="detail-val" style="font-size:.8rem;color:var(--text-muted)">${u.id||'—'}</div>
                 </div>
             </div>
         </div>
@@ -605,12 +620,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
    STAT CARD → instant tab switch + scroll
 ═══════════════════════════════════════════ */
 window.statCardNav=function(tab){
-    // Flash the card
     const card=document.getElementById('card-'+tab);
     if(card){card.classList.add('ring');setTimeout(()=>card.classList.remove('ring'),1200)}
-    // Switch tab immediately (no DB call)
     switchTab(tab);
-    // Smooth scroll to users panel
     setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50);
 };
 
@@ -630,13 +642,17 @@ function renderPending(data){
     pending.forEach(u=>{
         const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
         const r=getRole(u);
+        let badgeClass = 'student';
+        if (r.includes('teacher') || r.includes('instructor')) badgeClass = 'teacher';
+        if (r === 'admin') badgeClass = 'admin';
+
         html+=`<tr class="clickable" onclick="openDrawer('${u.id}')">
             <td><div class="user-cell">
                 <div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div>
                 <div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div>
             </div></td>
             <td>${u.email||'N/A'}</td>
-            <td><span class="role-badge ${r}">${r}</span></td>
+            <td><span class="role-badge ${badgeClass}">${r}</span></td>
             <td>${fmtDate(u.created_at)}</td>
             <td onclick="event.stopPropagation()"><div class="actions">
                 <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
@@ -660,8 +676,8 @@ function renderStats(data){
     data.forEach(u=>{
         if(u.status==='approved'||u.status==='inactive'){
             const r=getRole(u);
-            if(r==='student')sc++;
-            else if(r==='teacher')tc++;
+            if(r==='student'||r==='') sc++;
+            else if(r.includes('teacher')||r.includes('instructor')) tc++;
         }
     });
     document.getElementById('stat-students').textContent=sc;
@@ -706,16 +722,26 @@ function renderActivities(data){
 }
 
 /* ═══════════════════════════════════════════
-   RENDER — USER TABLE (pure client-side, instant)
+   RENDER — USER TABLE
 ═══════════════════════════════════════════ */
 function renderUsers(data,tab){
     const q=(document.getElementById('search-input').value||'').toLowerCase();
     let rows=data.filter(u=>u.status==='approved'||u.status==='inactive');
 
-    // FIXED: correct role filtering with trim + toLowerCase
-    if     (tab==='students') rows=rows.filter(u=>{const r=getRole(u);return r==='student'||r===''});
-    else if(tab==='teachers') rows=rows.filter(u=>getRole(u)==='teacher');
-    else if(tab==='admins')   rows=rows.filter(u=>getRole(u)==='admin');
+    // Filter Logic
+    if (tab==='students') {
+        rows=rows.filter(u=>{
+            const r=getRole(u);
+            return r==='student'||r==='';
+        });
+    } else if(tab==='teachers') {
+        rows=rows.filter(u=>{
+            const r=getRole(u);
+            return r.includes('teacher') || r.includes('instructor');
+        });
+    } else if(tab==='admins') {
+        rows=rows.filter(u=>getRole(u)==='admin');
+    }
 
     if(q) rows=rows.filter(u=>{
         const nm=`${u.first_name||''} ${u.last_name||''}`.toLowerCase();
@@ -739,6 +765,10 @@ function renderUsers(data,tab){
         const isInactive=u.status==='inactive';
         const isOwner   =(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
 
+        let badgeClass = 'student';
+        if (r.includes('teacher') || r.includes('instructor')) badgeClass = 'teacher';
+        if (r === 'admin') badgeClass = 'admin';
+
         let btns='';
         if(isAdmin){
             if(isOwner) btns=`<span class="system-owner-tag">👑 System Owner</span>`;
@@ -761,7 +791,7 @@ function renderUsers(data,tab){
                 </div>
             </div></td>
             <td>${u.email||'N/A'}</td>
-            <td><span class="role-badge ${r}">${r}</span></td>
+            <td><span class="role-badge ${badgeClass}">${r}</span></td>
             <td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td>
             <td>${fmtDate(u.created_at)}</td>
             <td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td>
@@ -775,12 +805,11 @@ function renderUsers(data,tab){
 function renderAll(data){
     renderPending(data);
     renderStats(data);
-    renderActivities(data);
     renderUsers(data,_tab);
 }
 
 /* ═══════════════════════════════════════════
-   TAB SWITCH — zero DB calls, instant
+   TAB SWITCH
 ═══════════════════════════════════════════ */
 window.switchTab=function(tab){
     _tab=tab;
@@ -788,27 +817,25 @@ window.switchTab=function(tab){
         const el=document.getElementById('tab-'+t);
         if(el) el.classList.toggle('active',t===tab);
     });
-    renderUsers(_data,tab); // instant from cache
+    renderUsers(_data,tab); 
 };
 window.filterUsers=function(){renderUsers(_data,_tab);};
 
 /* ═══════════════════════════════════════════
-   MUTATIONS — optimistic UI (update cache → render → DB)
+   MUTATIONS
 ═══════════════════════════════════════════ */
 async function mutate(userId,updates){
-    // 1. Patch cache & re-render immediately
     const idx=_data.findIndex(u=>u.id===userId);
     if(idx!==-1) Object.assign(_data[idx],updates);
     renderAll(_data);
-    // 2. Persist (if fails, rollback via reload)
     const {error}=await _sb.from('profiles').update(updates).eq('id',userId);
-    if(error){alert('Save failed: '+error.message);loadAll();}
+    if(error){alert('Save failed: '+error.message);loadProfiles();}
 }
 async function mutateDelete(userId){
     _data=_data.filter(u=>u.id!==userId);
     renderAll(_data);
     const {error}=await _sb.from('profiles').delete().eq('id',userId);
-    if(error){alert('Delete failed: '+error.message);loadAll();}
+    if(error){alert('Delete failed: '+error.message);loadProfiles();}
 }
 
 window.approveUser=async function(userId){await mutate(userId,{status:'approved'});};
@@ -831,36 +858,57 @@ window.toggleUserStatus=async function(userId,newStatus){
 };
 
 /* ═══════════════════════════════════════════
-   DATA LOAD — profiles + ads fired in parallel
+   ASYNC LOADERS
 ═══════════════════════════════════════════ */
-async function loadAll(){
-    const [pr,ar]=await Promise.all([
-        _sb.from('profiles').select('id,first_name,last_name,email,role,status,created_at')
-           .order('created_at',{ascending:false}).limit(500),
-        _sb.from('ads').select('*').order('slot_id')
-    ]);
-    if(pr.error){
-        console.error(pr.error);
+async function loadProfiles(){
+    try {
+        const { data, error } = await _sb.from('profiles')
+            .select('id,first_name,last_name,email,role,status,created_at,phone,address,avatar_url')
+            .order('created_at',{ascending:false})
+            .limit(500);
+
+        if (error) throw error;
+        
+        _data = data || [];
+        renderAll(_data);
+    } catch(err) {
+        console.error(err);
         document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5,'⚠️','Check console for details.');
         document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6,'⚠️','Check console for details.');
-        return;
-    }
-    _data=pr.data||[];
-    renderAll(_data);
-    if(!ar.error&&ar.data){
-        ar.data.forEach(ad=>{
-            const p=document.getElementById(`preview-${ad.slot_id}`);
-            const c=document.getElementById(`copy-${ad.slot_id}`);
-            const l=document.getElementById(`link-${ad.slot_id}`);
-            if(p) p.src=ad.image_url;
-            if(c) c.value=ad.ads_copy||'';
-            if(l) l.value=ad.advertiser_link||'';
-        });
     }
 }
 
+async function loadActivities() {
+    try {
+        const { data, error } = await _sb.from('profiles')
+            .select('id,first_name,last_name,role,created_at')
+            .order('created_at', { ascending: false })
+            .limit(6);
+            
+        if (!error && data) renderActivities(data);
+    } catch (err) {
+        document.getElementById('recent-activities-list').innerHTML = '<p style="text-align:center;color:var(--text-muted);">Unable to load activity.</p>';
+    }
+}
+
+async function loadExistingAds() {
+    try {
+        const { data: ads, error } = await _sb.from('ads').select('*').order('slot_id');
+        if (ads) {
+            ads.forEach(ad => {
+                const p=document.getElementById(`preview-${ad.slot_id}`);
+                const c=document.getElementById(`copy-${ad.slot_id}`);
+                const l=document.getElementById(`link-${ad.slot_id}`);
+                if(p) p.src=ad.image_url;
+                if(c) c.value=ad.ads_copy||'';
+                if(l) l.value=ad.advertiser_link||'';
+            });
+        }
+    } catch(err) {}
+}
+
 /* ═══════════════════════════════════════════
-   REALTIME — push updates without polling
+   REALTIME
 ═══════════════════════════════════════════ */
 function subscribeRealtime(){
     _sb.channel('db-changes')
@@ -892,8 +940,12 @@ window.addEventListener('load',function(){
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
     );
 
-    loadAll();          // single parallel fetch
-    subscribeRealtime(); // live push updates
+    // Fire off all loaders independently! Lightning fast.
+    loadProfiles();
+    loadActivities();
+    loadExistingAds();
+    
+    subscribeRealtime(); 
 
     document.getElementById('logoutBtn').addEventListener('click',async()=>{
         try{await _sb.auth.signOut();}catch(e){}
