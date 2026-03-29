@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
     <title>ENET SUPREME ACADEMY | Home</title>
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --navy-blue: #02014a;     
-            --navy-light: #0d2a8f;    
-            --brand-yellow: #fcd116;  
-            --yellow-hover: #e0b800;  
-            --accent-cyan: #00a0df;   
-            
+            --navy-blue: #02014a;
+            --navy-light: #0d2a8f;
+            --brand-yellow: #fcd116;
+            --yellow-hover: #e0b800;
+            --accent-cyan: #00a0df;
             --text-main: #333333;
             --text-gray: #475467;
             --light-gray: #EAECF0;
@@ -31,142 +26,278 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
+        /* === HIDE ALL GOOGLE TRANSLATE UI === */
+        .goog-te-banner-frame, .goog-te-balloon-frame { display: none !important; }
+        body { top: 0 !important; }
+        .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background: none !important; box-shadow: none !important; }
+        #google_translate_element { display: none !important; }
+        .skiptranslate { display: none !important; }
+
+        /* === HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
         .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
         .logo span { color: var(--brand-yellow); }
-        
         .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
-
-        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; transition: max-height 0.3s ease-in-out; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
         .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
         .nav-links a:hover { color: var(--accent-cyan); }
         .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
 
         .nav-community {
             display: flex; align-items: center; gap: 6px; justify-content: center;
-            background: rgba(0, 160, 223, 0.15);
-            border: 1px solid rgba(0, 160, 223, 0.3);
+            background: rgba(0,160,223,0.15); border: 1px solid rgba(0,160,223,0.3);
             padding: 5px 14px; border-radius: 50px;
-            color: var(--accent-cyan) !important;
-            font-weight: 700 !important;
-            transition: all 0.3s !important;
+            color: var(--accent-cyan) !important; font-weight: 700 !important; transition: all 0.3s !important;
         }
-        .nav-community:hover { background: rgba(0, 160, 223, 0.28) !important; color: white !important; }
+        .nav-community:hover { background: rgba(0,160,223,0.28) !important; color: white !important; }
         .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-        .cart-btn { background-color: transparent; color: var(--brand-yellow); border: 2px solid var(--brand-yellow); padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; justify-content: center;}
+        .cart-btn { background-color: transparent; color: var(--brand-yellow); border: 2px solid var(--brand-yellow); padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; justify-content: center; }
         .cart-btn:hover { background-color: var(--brand-yellow); border-color: var(--brand-yellow); color: var(--navy-blue); }
 
-        /* === LANGUAGE TRANSLATOR UI === */
-        .lang-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); padding: 0.4rem 0.8rem; border-radius: 50px; color: var(--white); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.3s; }
-        .lang-btn:hover { background: rgba(255,255,255,0.1); color: var(--brand-yellow); border-color: var(--brand-yellow); }
-        
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 1, 74, 0.6); backdrop-filter: blur(3px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;}
-        .modal-overlay.show { display: flex; opacity: 1; }
-        
-        .lang-modal { background: var(--white); border-radius: 16px; padding: 2rem; width: 100%; max-width: 600px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); transform: translateY(20px); transition: transform 0.3s ease; position: relative;}
-        .modal-overlay.show .lang-modal { transform: translateY(0); }
-        
-        .lang-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .lang-header h3 { font-family: 'Segoe UI', sans-serif; color: var(--navy-blue); font-size: 1.4rem; font-weight: 700; }
-        .lang-close { background: transparent; border: none; font-size: 1.5rem; color: var(--text-gray); cursor: pointer; transition: 0.2s; }
-        .lang-close:hover { color: var(--accent-cyan); }
-        
-        .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .lang-option { background: transparent; border: 1px solid var(--light-gray); padding: 0.8rem 1rem; text-align: left; font-size: 0.95rem; color: var(--text-main); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
-        .lang-option:hover { background: var(--background); color: var(--accent-cyan); border-color: var(--accent-cyan); }
-        .lang-option.active { border: 2px solid var(--navy-blue); font-weight: 700; color: var(--navy-blue); background: rgba(2, 1, 74, 0.05); }
+        /* === TRANSLATOR BUTTON === */
+        .translator-btn {
+            display: flex; align-items: center; gap: 7px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: var(--white);
+            padding: 7px 14px; border-radius: 6px;
+            cursor: pointer; font-size: 0.88rem; font-weight: 500;
+            transition: all 0.2s; white-space: nowrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .translator-btn:hover { background: rgba(255,255,255,0.16); border-color: var(--brand-yellow); color: var(--brand-yellow); }
+        .translator-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .translator-btn .chevron { width: 11px; height: 11px; transition: transform 0.2s; }
+        .translator-btn.active-lang-btn { border-color: var(--brand-yellow); color: var(--brand-yellow); background: rgba(252,209,22,0.1); }
 
-        /* === GOOGLE TRANSLATE FIXES === */
-        /* Push the widget off-screen instead of display:none so it loads properly */
-        #google_translate_element { position: absolute; top: -1000px; left: -1000px; z-index: -1; opacity: 0; }
-        .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon { display: none !important; }
-        body { top: 0px !important; }
-        #goog-gt-tt { display: none !important; }
-        .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+        /* === LANGUAGE MODAL OVERLAY === */
+        .lang-modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9000;
+            align-items: center; justify-content: center;
+            padding: 1rem;
+            backdrop-filter: blur(2px);
+        }
+        .lang-modal-overlay.show { display: flex; }
 
+        /* === MODAL PANEL === */
+        .lang-modal {
+            background: #fff; border-radius: 12px;
+            width: 100%; max-width: 740px;
+            max-height: 88vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+            overflow: hidden;
+            animation: modalIn 0.22s ease;
+        }
+        @keyframes modalIn { from { opacity:0; transform: scale(0.96) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
+
+        .lang-modal-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.1rem 1.4rem;
+            border-bottom: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+        .lang-modal-head h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy-blue); display: flex; align-items: center; gap: 8px; }
+        .lang-modal-head h3 svg { color: var(--accent-cyan); }
+        .lang-modal-close {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: none; background: #f3f4f6;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; color: #6b7280; transition: background 0.15s, color 0.15s;
+        }
+        .lang-modal-close:hover { background: #e5e7eb; color: #111; }
+
+        /* Search bar */
+        .lang-search-bar {
+            padding: 0.8rem 1.4rem;
+            border-bottom: 1px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+        .lang-search-inner {
+            display: flex; align-items: center; gap: 8px;
+            background: #f9fafb; border: 1px solid #e5e7eb;
+            border-radius: 8px; padding: 0 12px;
+            transition: border-color 0.2s;
+        }
+        .lang-search-inner:focus-within { border-color: var(--accent-cyan); }
+        .lang-search-inner svg { color: #9ca3af; width: 16px; height: 16px; flex-shrink: 0; }
+        .lang-search-input {
+            border: none; background: transparent;
+            padding: 9px 0; width: 100%; font-size: 0.9rem;
+            color: var(--text-main); outline: none;
+        }
+        .lang-search-clear {
+            border: none; background: none; cursor: pointer;
+            color: #9ca3af; font-size: 1rem; padding: 0; display: none;
+        }
+        .lang-search-clear.show { display: block; }
+        .lang-search-clear:hover { color: #ef4444; }
+
+        /* Currently active banner */
+        .lang-current-banner {
+            margin: 0 1.4rem 0;
+            padding: 8px 12px;
+            background: rgba(0,160,223,0.07);
+            border: 1px solid rgba(0,160,223,0.2);
+            border-radius: 8px;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.82rem; color: var(--text-gray);
+            margin-top: 0.8rem;
+        }
+        .lang-current-banner .current-flag { font-size: 1rem; }
+        .lang-current-banner strong { color: var(--navy-blue); }
+        .lang-current-banner .reset-link {
+            margin-left: auto; color: var(--accent-cyan);
+            font-weight: 600; cursor: pointer; font-size: 0.8rem;
+            border: none; background: none; padding: 0;
+            font-family: inherit;
+        }
+        .lang-current-banner .reset-link:hover { text-decoration: underline; }
+
+        /* Language grid scroll area */
+        .lang-grid-scroll {
+            overflow-y: auto; flex: 1;
+            padding: 1rem 1.4rem 1.4rem;
+        }
+        .lang-grid-scroll::-webkit-scrollbar { width: 6px; }
+        .lang-grid-scroll::-webkit-scrollbar-track { background: #f9fafb; }
+        .lang-grid-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+        .lang-group-label {
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em;
+            text-transform: uppercase; color: #9ca3af;
+            margin: 1rem 0 0.5rem; padding-bottom: 4px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .lang-group-label:first-child { margin-top: 0; }
+
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .lang-item {
+            display: flex; align-items: center; gap: 9px;
+            padding: 9px 11px; border-radius: 8px;
+            cursor: pointer; border: 1.5px solid transparent;
+            background: #f9fafb;
+            transition: all 0.15s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: left; width: 100%;
+        }
+        .lang-item:hover { background: #eff6ff; border-color: #bfdbfe; }
+        .lang-item.selected {
+            background: rgba(2,1,74,0.05);
+            border-color: var(--navy-blue);
+        }
+        .lang-item .li-flag { font-size: 1.15rem; line-height: 1; flex-shrink: 0; }
+        .lang-item .li-text { display: flex; flex-direction: column; min-width: 0; }
+        .lang-item .li-name { font-size: 0.85rem; font-weight: 600; color: var(--navy-blue); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lang-item .li-native { font-size: 0.72rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lang-item.selected .li-name { color: var(--navy-blue); }
+        .lang-item .li-check { margin-left: auto; color: var(--accent-cyan); flex-shrink: 0; display: none; }
+        .lang-item.selected .li-check { display: block; }
+
+        .lang-no-results { text-align: center; padding: 2.5rem 1rem; color: #9ca3af; font-size: 0.9rem; }
+
+        /* Modal footer */
+        .lang-modal-foot {
+            padding: 0.9rem 1.4rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex; align-items: center; justify-content: space-between;
+            background: #fafafa; flex-shrink: 0;
+        }
+        .lang-modal-foot span { font-size: 0.78rem; color: #9ca3af; }
+        .lang-close-btn {
+            background: var(--navy-blue); color: #fff;
+            border: none; padding: 8px 20px; border-radius: 6px;
+            font-size: 0.88rem; font-weight: 600; cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .lang-close-btn:hover { background: var(--navy-light); }
+
+        /* === MOBILE: full bottom sheet === */
+        @media (max-width: 600px) {
+            .lang-modal-overlay { align-items: flex-end; padding: 0; }
+            .lang-modal {
+                border-radius: 18px 18px 0 0;
+                max-height: 92vh;
+                animation: sheetUp 0.28s cubic-bezier(0.32,0.72,0,1);
+            }
+            @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+            .lang-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* === HERO === */
         .hero-container { max-width: 1300px; margin: 0 auto; padding: 5rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; min-height: 85vh; }
-        
         .hero-content { display: flex; flex-direction: column; gap: 1.5rem; }
-        .trust-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--navy-blue); font-weight: 600; font-size: 0.95rem; background: rgba(0, 160, 223, 0.15); padding: 0.4rem 1.2rem; border-radius: 50px; width: fit-content; }
+        .trust-badge { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--navy-blue); font-weight: 600; font-size: 0.95rem; background: rgba(0,160,223,0.15); padding: 0.4rem 1.2rem; border-radius: 50px; width: fit-content; }
         .hero-title { font-size: 4rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--navy-blue); }
         .hero-title span { color: var(--brand-yellow); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         .hero-description { font-size: 1.2rem; color: var(--text-gray); line-height: 1.6; max-width: 90%; }
-
         .cta-group { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
-        .btn { padding: 1rem 2rem; border-radius: 8px; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; transition: all 0.3s ease; text-align: center;}
+        .btn { padding: 1rem 2rem; border-radius: 8px; font-size: 1.05rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; transition: all 0.3s ease; text-align: center; }
         .btn-primary { background-color: var(--brand-yellow); color: var(--navy-blue); border: 2px solid var(--brand-yellow); }
         .btn-primary:hover { background-color: var(--yellow-hover); border-color: var(--yellow-hover); }
         .btn-secondary { background-color: transparent; color: var(--navy-blue); border: 2px solid var(--light-gray); }
         .btn-secondary:hover { background-color: #f9fafb; border-color: #d0d5dd; }
         .btn-community { background-color: var(--accent-cyan); color: var(--white); border: 2px solid var(--accent-cyan); }
         .btn-community:hover { background-color: #0088bd; border-color: #0088bd; }
-
         .feature-ticks { display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
         .tick-item { display: flex; align-items: center; gap: 0.5rem; color: var(--text-gray); font-size: 1rem; font-weight: 500; }
         .tick-item svg { width: 20px; height: 20px; color: var(--accent-cyan); }
-
         .hero-visuals { position: relative; width: 100%; height: 600px; display: flex; justify-content: center; align-items: center; }
         .blob-bg { position: absolute; width: 85%; height: 85%; background-color: var(--accent-cyan); opacity: 0.15; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; z-index: 1; transform: rotate(-5deg); }
         .main-image { position: relative; z-index: 2; width: 90%; height: auto; max-height: 650px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: contain; background-color: white; padding: 2rem; border-bottom: 5px solid var(--brand-yellow); }
-        
-        /* === AUTHENTIC ENET MISSION SECTION === */
+
+        /* === REASONS SECTION === */
         .reasons-section { background-color: var(--white); padding: 5rem 1.5rem; }
         .reasons-title { text-align: center; color: var(--navy-blue); font-size: 2.5rem; font-weight: 800; margin-bottom: 4rem; }
         .reasons-title span { color: var(--accent-cyan); }
         .reasons-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; text-align: center; }
         .reason-card { display: flex; flex-direction: column; align-items: center; padding: 1rem; transition: transform 0.3s ease; }
         .reason-card:hover { transform: translateY(-10px); }
-        .reason-icon-wrapper { width: 80px; height: 80px; background: rgba(0, 160, 223, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--accent-cyan); border: 2px solid rgba(0, 160, 223, 0.2); }
+        .reason-icon-wrapper { width: 80px; height: 80px; background: rgba(0,160,223,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--accent-cyan); border: 2px solid rgba(0,160,223,0.2); }
         .reason-card h3 { font-size: 1.4rem; color: var(--navy-blue); margin-bottom: 1rem; font-weight: 700; }
         .reason-card p { font-size: 1rem; color: var(--text-gray); line-height: 1.6; }
 
-        /* === REALISTIC TRUST STATS BANNER === */
-        .stats-banner { background-color: var(--navy-blue); padding: 4rem 1.5rem; position: relative; border-top: 4px solid var(--accent-cyan); border-bottom: 4px solid var(--brand-yellow); }
+        /* === STATS BANNER === */
+        .stats-banner { background-color: var(--navy-blue); padding: 4rem 1.5rem; border-top: 4px solid var(--accent-cyan); border-bottom: 4px solid var(--brand-yellow); }
         .stats-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; text-align: center; }
         .stat-item { flex: 1; min-width: 160px; }
         .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 0.5rem; line-height: 1; }
         .stat-label { font-size: 0.95rem; color: rgba(255,255,255,0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        .community-section {
-            background: linear-gradient(135deg, var(--navy-blue) 0%, var(--navy-light) 100%);
-            padding: 5rem 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .community-section::before {
-            content: ''; position: absolute; inset: 0;
-            background-image: linear-gradient(rgba(0, 160, 223, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 160, 223, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px; pointer-events: none;
-        }
-        .community-inner {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 4rem; align-items: center;
-            position: relative; z-index: 1;
-        }
-
+        /* === COMMUNITY SECTION === */
+        .community-section { background: linear-gradient(135deg, var(--navy-blue) 0%, var(--navy-light) 100%); padding: 5rem 1.5rem; position: relative; overflow: hidden; }
+        .community-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,160,223,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,160,223,0.1) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+        .community-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; }
         .community-text h2 { font-size: 2.8rem; font-weight: 800; color: var(--white); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.2rem; }
         .community-text h2 span { color: var(--brand-yellow); }
         .community-text p { font-size: 1.1rem; color: rgba(255,255,255,0.8); line-height: 1.65; margin-bottom: 2rem; }
         .community-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
-
         .community-preview { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 1.5rem; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .preview-header { display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .preview-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
         .preview-header span { color: var(--accent-cyan); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
-
         .preview-post { display: flex; gap: 10px; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
         .preview-post:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .preview-avatar { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; color: white; }
         .av-purple { background: linear-gradient(135deg, var(--navy-blue), var(--navy-light)); }
-        .av-teal   { background: linear-gradient(135deg, var(--accent-cyan), #0088bd); }
-        .av-red    { background: linear-gradient(135deg, var(--brand-yellow), #e0b800); color: var(--navy-blue); }
+        .av-teal { background: linear-gradient(135deg, var(--accent-cyan), #0088bd); }
+        .av-red { background: linear-gradient(135deg, var(--brand-yellow), #e0b800); color: var(--navy-blue); }
         .preview-body h5 { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
-        .preview-body p  { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.45; }
+        .preview-body p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.45; }
 
+        /* === STORE === */
         .store-section { background-color: var(--background); padding: 6rem 1.5rem; border-top: 1px solid var(--light-gray); }
         .container { max-width: 1200px; margin: 0 auto; }
         .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
@@ -175,62 +306,54 @@
         .course-img { width: 100%; height: 200px; background-color: var(--navy-blue); object-fit: cover; }
         .course-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
         .course-title { font-size: 1.25rem; margin-bottom: 1rem; color: var(--navy-blue); line-height: 1.4; flex: 1; font-weight: bold; }
-        .course-price { font-size: 1.35rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 1.5rem; text-shadow: 1px 1px 1px rgba(0,0,0,0.1);}
+        .course-price { font-size: 1.35rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 1.5rem; }
         .purchase-btn { width: 100%; background-color: var(--navy-blue); color: var(--white); border: none; padding: 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.3s; }
         .purchase-btn:hover { background-color: var(--navy-light); }
 
+        /* === FOOTER === */
         footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); }
         .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
         .footer-logo span { color: var(--brand-yellow); }
-        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;}
+        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
 
-        .whatsapp-float {
-            position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px;
-            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center;
-            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.25); z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; animation: pulse-wa 2s infinite; transition: transform 0.3s ease;
-        }
+        /* === WHATSAPP FLOAT === */
+        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; box-shadow: 0px 6px 18px rgba(0,0,0,0.25); z-index: 9999; display: flex; align-items: center; justify-content: center; text-decoration: none; animation: pulse-wa 2s infinite; transition: transform 0.3s ease; }
         .whatsapp-float:hover { transform: scale(1.1); animation: none; }
         .whatsapp-icon { width: 35px; height: 35px; fill: currentColor; }
-        @keyframes pulse-wa {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
+        @keyframes pulse-wa { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,211,102,0.6); } 70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(37,211,102,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
 
-        /* MOBILE RESPONSIVE MEDIA QUERIES */
-        @media (max-width: 950px) { 
+        /* === RESPONSIVE === */
+        @media (max-width: 950px) {
             .mobile-menu-btn { display: block; }
             .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
-            .nav-links.show { display: flex; } 
-            .hero-container { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; text-align: center; gap: 2rem; } 
+            .nav-links.show { display: flex; }
+            .hero-container { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; text-align: center; gap: 2rem; }
             .hero-content { align-items: center; }
             .hero-title { font-size: 2.8rem; }
             .hero-description { max-width: 100%; }
-            .hero-visuals { height: auto; padding: 2rem 0; } 
-            .blob-bg { display: none; } 
+            .hero-visuals { height: auto; padding: 2rem 0; }
+            .blob-bg { display: none; }
             .main-image { width: 100%; }
             .feature-ticks { justify-content: center; }
             .community-inner { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
             .community-cta { justify-content: center; }
-            
             .reasons-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .stats-container { justify-content: center; gap: 2.5rem; }
             .stat-item { min-width: 40%; }
+            .translator-dropdown { right: auto; left: 50%; transform: translateX(-50%) translateY(-8px); }
+            .translator-wrapper.open .translator-dropdown { transform: translateX(-50%) translateY(0); }
         }
         @media (max-width: 600px) {
             .hero-title { font-size: 2.2rem; }
             .hero-container { padding: 1.5rem 1rem; }
             .cta-group { flex-direction: column; width: 100%; }
-            .btn { width: 100%; } 
+            .btn { width: 100%; }
             .feature-ticks { flex-direction: column; align-items: center; gap: 1rem; }
             .community-text h2 { font-size: 2rem; }
             .community-section { padding: 3rem 1rem; }
             .footer-container { flex-direction: column; text-align: center; gap: 1rem; }
             .whatsapp-float { width: 55px; height: 55px; bottom: 20px; right: 20px; }
             .whatsapp-icon { width: 30px; height: 30px; }
-            
             .reasons-title { font-size: 2rem; margin-bottom: 2rem; }
             .stat-item { min-width: 100%; }
             .stat-number { font-size: 3rem; }
@@ -239,381 +362,494 @@
 </head>
 <body>
 
-    <header>
-        <nav>
-            <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
+<!-- Hidden Google Translate element — must stay in DOM for widget to initialise -->
+<div id="google_translate_element"></div>
 
-            <div class="nav-links" id="navLinks">
-                <a href="index.html" class="active">Home</a>
-                <a href="blog.html">Blog</a>
-                <a href="tracks.html">Buy Course</a>
-                <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
-                
-                <button class="lang-btn" onclick="toggleLangModal()" title="Change Language">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                    <span id="current-lang-text">EN</span>
-                </button>
+<header>
+    <nav>
+        <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+        <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
 
-                <a href="login.html">Log In / Academy</a>
-                
-                <button class="cart-btn" id="cart-toggle" onclick="window.location.href='checkout.html'">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    ₦<span id="cart-total">0.00</span> (<span id="cart-count">0</span>)
-                </button>
-            </div>
-        </nav>
-    </header>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html" class="active">Home</a>
+            <a href="blog.html">Blog</a>
+            <a href="tracks.html">Buy Course</a>
+            <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
 
-    <section class="hero-container">
-        <div class="hero-content">
-            <div class="trust-badge">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Trusted Learning Academy
-            </div>
+            <!-- TRANSLATOR BUTTON -->
+            <button class="translator-btn" id="translatorBtn" onclick="openLangModal()" aria-label="Choose language">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <span id="translatorBtnLabel">Language</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
 
-            <h1 class="hero-title">Master Tech Skills. <br><span>Advance Your Career.</span></h1>
-            <p class="hero-description">The ultimate digital platform for your online learning. Access premium video courses, practical workshops, and real-world tools all in one place.</p>
+            <a href="login.html">Log In / Academy</a>
 
-            <div class="cta-group">
-                <a href="tracks.html" class="btn btn-primary" id="hero-auth-btn">
-                    Explore Academy Tracks
-                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            <button class="cart-btn" onclick="window.location.href='checkout.html'">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                ₦<span id="cart-total">0.00</span> (<span id="cart-count">0</span>)
+            </button>
+        </div>
+    </nav>
+</header>
+
+<section class="hero-container">
+    <div class="hero-content">
+        <div class="trust-badge">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Trusted Learning Academy
+        </div>
+        <h1 class="hero-title">Master Tech Skills. <br><span>Advance Your Career.</span></h1>
+        <p class="hero-description">The ultimate digital platform for your online learning. Access premium video courses, practical workshops, and real-world tools all in one place.</p>
+        <div class="cta-group">
+            <a href="tracks.html" class="btn btn-primary" id="hero-auth-btn">
+                Explore Academy Tracks
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+            <a href="community.html" class="btn btn-community">
+                Join Community
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </a>
+            <a href="blog.html" class="btn btn-secondary">Read Our Blog</a>
+        </div>
+        <div class="feature-ticks">
+            <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Practical Workshops</div>
+            <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Lifetime Access</div>
+            <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Expert Mentorship</div>
+        </div>
+    </div>
+    <div class="hero-visuals">
+        <div class="blob-bg"></div>
+        <img src="student1.png" alt="Students learning tech skills" class="main-image">
+    </div>
+</section>
+
+<section class="reasons-section">
+    <h2 class="reasons-title">Your Bridge to a <span>Global Tech Career</span></h2>
+    <div class="reasons-grid">
+        <div class="reason-card">
+            <div class="reason-icon-wrapper"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>
+            <h3>Expert Mentorship</h3>
+            <p>Learn directly from seasoned industry professionals across the globe who are dedicated to your success and growth.</p>
+        </div>
+        <div class="reason-card">
+            <div class="reason-icon-wrapper"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg></div>
+            <h3>Job-Ready Skills</h3>
+            <p>Master high-demand tech skills through hands-on projects, live classes, and a highly practical, real-world curriculum.</p>
+        </div>
+        <div class="reason-card">
+            <div class="reason-icon-wrapper"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
+            <h3>Internship & Placement</h3>
+            <p>We don't just teach. We place top-performing students into exclusive internships and fast-track them to remote jobs.</p>
+        </div>
+    </div>
+</section>
+
+<section class="stats-banner">
+    <div class="stats-container">
+        <div class="stat-item"><div class="stat-number">250+</div><div class="stat-label">Active Learners</div></div>
+        <div class="stat-item"><div class="stat-number">90%</div><div class="stat-label">Internship Placement</div></div>
+        <div class="stat-item"><div class="stat-number">15+</div><div class="stat-label">Global Mentors</div></div>
+        <div class="stat-item"><div class="stat-number">10+</div><div class="stat-label">Premium Tracks</div></div>
+        <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Community Support</div></div>
+    </div>
+</section>
+
+<section class="community-section">
+    <div class="community-inner">
+        <div class="community-text">
+            <h2>Connect. Learn. <span>Grow Together.</span></h2>
+            <p>Join the ENET Supreme Community Hub — where students, teachers, and mentors post updates, share resources, ask questions, and cheer each other on. It's your academy social feed.</p>
+            <div class="community-cta">
+                <a href="community.html" class="btn btn-community" style="background:var(--accent-cyan);border-color:var(--accent-cyan);">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    Open Community Feed
                 </a>
-                <a href="community.html" class="btn btn-community">
-                    Join Community
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                </a>
-                <a href="blog.html" class="btn btn-secondary">Read Our Blog</a>
-            </div>
-
-            <div class="feature-ticks">
-                <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Practical Workshops</div>
-                <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Lifetime Access</div>
-                <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Expert Mentorship</div>
             </div>
         </div>
-
-        <div class="hero-visuals">
-            <div class="blob-bg"></div>
-            <img src="student1.png" alt="Students learning tech skills" class="main-image">
-        </div>
-    </section>
-
-    <section class="reasons-section">
-        <h2 class="reasons-title">Your Bridge to a <span>Global Tech Career</span></h2>
-        <div class="reasons-grid">
-            <div class="reason-card">
-                <div class="reason-icon-wrapper">
-                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                </div>
-                <h3>Expert Mentorship</h3>
-                <p>Learn directly from seasoned industry professionals across the globe who are dedicated to your success and growth.</p>
-            </div>
-            
-            <div class="reason-card">
-                <div class="reason-icon-wrapper">
-                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                </div>
-                <h3>Job-Ready Skills</h3>
-                <p>Master high-demand tech skills through hands-on projects, live classes, and a highly practical, real-world curriculum.</p>
-            </div>
-            
-            <div class="reason-card">
-                <div class="reason-icon-wrapper">
-                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                </div>
-                <h3>Internship & Placement</h3>
-                <p>We don't just teach. We place top-performing students into exclusive internships and fast-track them to remote jobs.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="stats-banner">
-        <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-number">250+</div>
-                <div class="stat-label">Active Learners</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">90%</div>
-                <div class="stat-label">Internship Placement</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">15+</div>
-                <div class="stat-label">Global Mentors</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">10+</div>
-                <div class="stat-label">Premium Tracks</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Community Support</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="community-section">
-        <div class="community-inner">
-            <div class="community-text">
-                <h2>Connect. Learn. <span>Grow Together.</span></h2>
-                <p>Join the ENET Supreme Community Hub — where students, teachers, and mentors post updates, share resources, ask questions, and cheer each other on. It's your academy social feed.</p>
-                <div class="community-cta">
-                    <a href="community.html" class="btn btn-community" style="background:var(--accent-cyan);border-color:var(--accent-cyan);">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                        Open Community Feed
-                    </a>
-                </div>
-            </div>
-
-            <div class="community-preview">
-                <div class="preview-header"><div class="preview-dot"></div><span>Live Community Feed</span></div>
-                <div id="preview-posts-container">
-                    <div style="padding: 2rem; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem;">
-                        Loading live updates...
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="store-section" id="shop">
-        <div class="container">
-            <div class="course-grid" id="course-container"></div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container footer-container">
-            <div>
-                <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
-                <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
-            </div>
-            <div style="color: #cbd5e1; font-size: 0.9rem;">
-                <p>Suite 58 Georgewill/Clifford Plaza</p>
-                <p>Choba Junction, Port Harcourt</p>
-                <p>Rivers State, Nigeria.</p>
-            </div>
-        </div>
-    </footer>
-
-    <a href="https://wa.me/2348162337303" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Chat with us on WhatsApp">
-        <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.013-.967-.253-.099-.439-.149-.621.149-.183.297-.762.967-.933 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/>
-        </svg>
-    </a>
-
-    <div id="google_translate_element"></div>
-
-    <div class="modal-overlay" id="langOverlay" onclick="closeLangModal(event)">
-        <div class="lang-modal" onclick="event.stopPropagation()">
-            <div class="lang-header">
-                <h3>Choose a language</h3>
-                <button class="lang-close" onclick="toggleLangModal()">✕</button>
-            </div>
-            <div class="lang-grid">
-                <button class="lang-option" onclick="changeLanguage('en')">English</button>
-                <button class="lang-option" onclick="changeLanguage('fr')">Français</button>
-                <button class="lang-option" onclick="changeLanguage('es')">Español</button>
-                <button class="lang-option" onclick="changeLanguage('it')">Italiano</button>
-                <button class="lang-option" onclick="changeLanguage('de')">Deutsch</button>
-                <button class="lang-option" onclick="changeLanguage('pt')">Português</button>
-                <button class="lang-option" onclick="changeLanguage('ar')">العربية</button>
-                <button class="lang-option" onclick="changeLanguage('zh-CN')">中文(简体)</button>
-                <button class="lang-option" onclick="changeLanguage('ru')">Русский</button>
-                <button class="lang-option" onclick="changeLanguage('ja')">日本語</button>
-                <button class="lang-option" onclick="changeLanguage('ko')">한국어</button>
-                <button class="lang-option" onclick="changeLanguage('hi')">हिन्दी</button>
+        <div class="community-preview">
+            <div class="preview-header"><div class="preview-dot"></div><span>Live Community Feed</span></div>
+            <div id="preview-posts-container">
+                <div style="padding: 2rem; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem;">Loading live updates...</div>
             </div>
         </div>
     </div>
+</section>
 
-    <script>
-        function esc(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
+<section class="store-section" id="shop">
+    <div class="container">
+        <div class="course-grid" id="course-container"></div>
+    </div>
+</section>
 
-        /* === LANGUAGE TRANSLATION ENGINE === */
-        function toggleLangModal() {
-            document.getElementById('langOverlay').classList.toggle('show');
+<footer>
+    <div class="container footer-container">
+        <div>
+            <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+            <p style="margin-top: 1rem;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cea7a0a8a18eaba0abbabdbbbebcaba3abe0ada1a3e0a0a9">[email&#160;protected]</a> | +234 8062 770 265</p>
+        </div>
+        <div style="color: #cbd5e1; font-size: 0.9rem;">
+            <p>Suite 58 Georgewill/Clifford Plaza</p>
+            <p>Choba Junction, Port Harcourt</p>
+            <p>Rivers State, Nigeria.</p>
+        </div>
+    </div>
+</footer>
+
+<a href="https://wa.me/2348162337303" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Chat with us on WhatsApp">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.013-.967-.253-.099-.439-.149-.621.149-.183.297-.762.967-.933 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/>
+    </svg>
+</a>
+
+<!-- Language Modal -->
+<div id="google_translate_element"></div>
+
+<div class="lang-modal-overlay" id="langModalOverlay" onclick="handleOverlayClick(event)">
+    <div class="lang-modal" id="langModal">
+        <div class="lang-modal-head">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Choose your language
+            </h3>
+            <button class="lang-modal-close" onclick="closeLangModal()">✕</button>
+        </div>
+        <div class="lang-search-bar">
+            <div class="lang-search-inner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="lang-search-input" id="langSearchInput" type="text" placeholder="Search languages..." oninput="filterLangs(this.value)" autocomplete="off">
+                <button class="lang-search-clear" id="langSearchClear" onclick="clearLangSearch()">✕</button>
+            </div>
+        </div>
+        <div class="lang-current-banner">
+            <span class="current-flag" id="currentFlagDisplay">🌐</span>
+            <span>Currently: <strong id="currentLangDisplay">English</strong></span>
+            <button class="reset-link" onclick="resetToEnglish()">Reset to English</button>
+        </div>
+        <div class="lang-grid-scroll" id="langGridScroll"></div>
+        <div class="lang-modal-foot">
+            <span id="langCountLabel">30 languages available</span>
+            <button class="lang-close-btn" onclick="closeLangModal()">Done</button>
+        </div>
+    </div>
+</div>
+
+<!-- Google Translate Script -->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,fr,es,pt,de,it,nl,ru,pl,tr,ar,fa,ur,hi,bn,sw,ha,yo,ig,pcm,zh-CN,zh-TW,ja,ko,vi,id,ms,th,fil,am',
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+    function esc(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
+
+    /* ============================================================
+       LANGUAGE DATA — 30 languages in 5 regional groups
+    ============================================================ */
+    const LANG_GROUPS = [
+        {
+            group: '🌍 African Languages',
+            langs: [
+                { code: 'ha',  flag: '🇳🇬', name: 'Hausa',         native: 'Harshen Hausa' },
+                { code: 'yo',  flag: '🇳🇬', name: 'Yoruba',        native: 'Yorùbá' },
+                { code: 'ig',  flag: '🇳🇬', name: 'Igbo',          native: 'Asụsụ Igbo' },
+                { code: 'pcm', flag: '🇳🇬', name: 'Nigerian Pidgin',native: 'Naija' },
+                { code: 'sw',  flag: '🇰🇪', name: 'Swahili',       native: 'Kiswahili' },
+                { code: 'am',  flag: '🇪🇹', name: 'Amharic',       native: 'አማርኛ' },
+            ]
+        },
+        {
+            group: '🌐 European Languages',
+            langs: [
+                { code: 'fr',  flag: '🇫🇷', name: 'French',        native: 'Français' },
+                { code: 'es',  flag: '🇪🇸', name: 'Spanish',       native: 'Español' },
+                { code: 'pt',  flag: '🇧🇷', name: 'Portuguese',    native: 'Português' },
+                { code: 'de',  flag: '🇩🇪', name: 'German',        native: 'Deutsch' },
+                { code: 'it',  flag: '🇮🇹', name: 'Italian',       native: 'Italiano' },
+                { code: 'nl',  flag: '🇳🇱', name: 'Dutch',         native: 'Nederlands' },
+                { code: 'ru',  flag: '🇷🇺', name: 'Russian',       native: 'Русский' },
+                { code: 'pl',  flag: '🇵🇱', name: 'Polish',        native: 'Polski' },
+                { code: 'tr',  flag: '🇹🇷', name: 'Turkish',       native: 'Türkçe' },
+            ]
+        },
+        {
+            group: '🕌 Middle East & South Asia',
+            langs: [
+                { code: 'ar',  flag: '🇸🇦', name: 'Arabic',        native: 'العربية' },
+                { code: 'fa',  flag: '🇮🇷', name: 'Persian',       native: 'فارسی' },
+                { code: 'ur',  flag: '🇵🇰', name: 'Urdu',          native: 'اردو' },
+                { code: 'hi',  flag: '🇮🇳', name: 'Hindi',         native: 'हिन्दी' },
+                { code: 'bn',  flag: '🇧🇩', name: 'Bengali',       native: 'বাংলা' },
+            ]
+        },
+        {
+            group: '🌏 East & Southeast Asia',
+            langs: [
+                { code: 'zh-CN', flag: '🇨🇳', name: 'Chinese (Simplified)',  native: '中文(简体)' },
+                { code: 'zh-TW', flag: '🇹🇼', name: 'Chinese (Traditional)', native: '中文(繁體)' },
+                { code: 'ja',    flag: '🇯🇵', name: 'Japanese',    native: '日本語' },
+                { code: 'ko',    flag: '🇰🇷', name: 'Korean',      native: '한국어' },
+                { code: 'vi',    flag: '🇻🇳', name: 'Vietnamese',  native: 'Tiếng Việt' },
+                { code: 'id',    flag: '🇮🇩', name: 'Indonesian',  native: 'Bahasa Indonesia' },
+                { code: 'ms',    flag: '🇲🇾', name: 'Malay',       native: 'Bahasa Melayu' },
+                { code: 'th',    flag: '🇹🇭', name: 'Thai',        native: 'ภาษาไทย' },
+                { code: 'fil',   flag: '🇵🇭', name: 'Filipino',    native: 'Filipino' },
+            ]
+        }
+    ];
+
+    let currentLangCode = 'en';
+    let currentLangName = 'English';
+    let currentLangFlag = '🌐';
+
+    /* ============================================================
+       BUILD MODAL GRID
+    ============================================================ */
+    function buildLangGrid(filter) {
+        const scroll = document.getElementById('langGridScroll');
+        const q = (filter || '').toLowerCase().trim();
+        let html = '';
+        let totalShown = 0;
+
+        LANG_GROUPS.forEach(group => {
+            const matches = group.langs.filter(l =>
+                !q || l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q) || l.code.toLowerCase().includes(q)
+            );
+            if (matches.length === 0) return;
+            totalShown += matches.length;
+            html += `<div class="lang-group-label">${group.group}</div>`;
+            html += `<div class="lang-grid">`;
+            matches.forEach(l => {
+                const sel = l.code === currentLangCode ? 'selected' : '';
+                html += `
+                    <button class="lang-item ${sel}" onclick="selectLang('${l.code}','${l.name}','${l.flag}')">
+                        <span class="li-flag">${l.flag}</span>
+                        <span class="li-text">
+                            <span class="li-name">${l.name}</span>
+                            <span class="li-native">${l.native}</span>
+                        </span>
+                        <svg class="li-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>`;
+            });
+            html += `</div>`;
+        });
+
+        if (totalShown === 0) {
+            html = `<div class="lang-no-results">No languages found for "<strong>${esc(filter)}</strong>"</div>`;
         }
 
-        function closeLangModal(event) {
-            if(event.target.id === 'langOverlay') toggleLangModal();
-        }
+        scroll.innerHTML = html;
+        document.getElementById('langCountLabel').textContent = q ? `${totalShown} result${totalShown !== 1 ? 's' : ''}` : `${LANG_GROUPS.reduce((a,g)=>a+g.langs.length,0)} languages available`;
+    }
 
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en', autoDisplay: false}, 'google_translate_element');
-        }
+    function filterLangs(val) {
+        buildLangGrid(val);
+        document.getElementById('langSearchClear').classList.toggle('show', val.length > 0);
+    }
 
-        const gtScript = document.createElement('script');
-        gtScript.type = 'text/javascript';
-        gtScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        document.body.appendChild(gtScript);
+    function clearLangSearch() {
+        document.getElementById('langSearchInput').value = '';
+        document.getElementById('langSearchClear').classList.remove('show');
+        buildLangGrid('');
+    }
 
-        function changeLanguage(langCode) {
-            // Save preference to localStorage
-            localStorage.setItem('enet_lang', langCode);
+    /* ============================================================
+       MODAL OPEN / CLOSE
+    ============================================================ */
+    function openLangModal() {
+        buildLangGrid('');
+        document.getElementById('langModalOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('langSearchInput').focus(), 300);
+    }
 
-            // Brutally wipe all existing Google Translate cookies
-            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname + ";";
+    function closeLangModal() {
+        document.getElementById('langModalOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+        clearLangSearch();
+    }
 
-            // If not English, set the new translation cookies
-            if (langCode !== 'en') {
-                document.cookie = `googtrans=/en/${langCode}; path=/;`;
-                document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname};`;
+    function handleOverlayClick(e) {
+        if (e.target === document.getElementById('langModalOverlay')) closeLangModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLangModal(); });
+
+    /* ============================================================
+       SELECT A LANGUAGE
+    ============================================================ */
+    function selectLang(code, name, flag) {
+        currentLangCode = code;
+        currentLangName = name;
+        currentLangFlag = flag;
+
+        // Update button
+        const btn = document.getElementById('translatorBtn');
+        document.getElementById('translatorBtnLabel').textContent = name;
+        btn.classList.add('active-lang-btn');
+
+        // Update banner
+        document.getElementById('currentFlagDisplay').textContent = flag;
+        document.getElementById('currentLangDisplay').textContent = name;
+
+        // Refresh grid to show checkmark
+        buildLangGrid(document.getElementById('langSearchInput').value);
+
+        // Fire translation
+        doGoogleTranslate(code);
+
+        // Close after short delay so user sees the checkmark
+        setTimeout(closeLangModal, 320);
+    }
+
+    function resetToEnglish() {
+        currentLangCode = 'en';
+        currentLangName = 'English';
+        currentLangFlag = '🌐';
+
+        const btn = document.getElementById('translatorBtn');
+        document.getElementById('translatorBtnLabel').textContent = 'Language';
+        btn.classList.remove('active-lang-btn');
+
+        document.getElementById('currentFlagDisplay').textContent = '🌐';
+        document.getElementById('currentLangDisplay').textContent = 'English';
+
+        buildLangGrid(document.getElementById('langSearchInput').value);
+        doGoogleTranslate('en');
+        setTimeout(closeLangModal, 320);
+    }
+
+    /* ============================================================
+       GOOGLE TRANSLATE INJECTION
+    ============================================================ */
+    function doGoogleTranslate(lang) {
+        function tryTranslate(attempts) {
+            const select = document.querySelector('.goog-te-combo');
+            if (select) {
+                select.value = lang;
+                select.dispatchEvent(new Event('change'));
+            } else if (attempts > 0) {
+                setTimeout(() => tryTranslate(attempts - 1), 300);
             }
-            
-            // Reload to activate Google Translate
-            window.location.reload();
         }
+        tryTranslate(20);
+    }
 
-        // Supabase Initialization
-        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    /* ============================================================
+       SUPABASE + APP LOGIC
+    ============================================================ */
+    const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        let cart = [];
-        let cartTotal = 0;
+    let cart = [];
+    let cartTotal = 0;
 
-        async function renderCourses() {
-            const container = document.getElementById('course-container');
-            if (!container) return;
-            container.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1 / -1; color: var(--navy-blue); font-weight: bold;">Loading Academy Tracks...</p>';
-
-            try {
-                const { data: courses, error } = await supabase.from('courses').select('*').order('id', { ascending: true });
-                if (error) throw error;
-                container.innerHTML = '';
-
-                if (courses.length === 0) {
-                    container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;">No tracks available at the moment.</p>';
-                    return;
-                }
-
-                courses.forEach(course => {
-                    const card = document.createElement('div');
-                    card.className = 'course-card';
-                    card.innerHTML = `
-                        <img src="${course.image_url}" alt="${course.title}" class="course-img">
-                        <div class="course-content">
-                            <h3 class="course-title">${course.title}</h3>
-                            <p style="color:var(--text-gray);font-size:0.9rem;margin-bottom:1rem;line-height:1.4;">${course.description}</p>
-                            <div class="course-price">₦${Number(course.price).toLocaleString()}</div>
-                            <button class="purchase-btn" onclick="window.location.href='tracks.html'">View Details & Enroll</button>
-                        </div>`;
-                    container.appendChild(card);
-                });
-            } catch (err) {
-                container.innerHTML = '<p style="text-align:center;color:var(--danger);grid-column:1/-1;">Failed to load courses. Please check your connection.</p>';
+    async function renderCourses() {
+        const container = document.getElementById('course-container');
+        if (!container) return;
+        container.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1 / -1; color: var(--navy-blue); font-weight: bold;">Loading Academy Tracks...</p>';
+        try {
+            const { data: courses, error } = await supabase.from('courses').select('*').order('id', { ascending: true });
+            if (error) throw error;
+            container.innerHTML = '';
+            if (courses.length === 0) {
+                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;">No tracks available at the moment.</p>';
+                return;
             }
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.innerHTML = `
+                    <img src="${course.image_url}" alt="${course.title}" class="course-img">
+                    <div class="course-content">
+                        <h3 class="course-title">${course.title}</h3>
+                        <p style="color:var(--text-gray);font-size:0.9rem;margin-bottom:1rem;line-height:1.4;">${course.description}</p>
+                        <div class="course-price">₦${Number(course.price).toLocaleString()}</div>
+                        <button class="purchase-btn" onclick="window.location.href='tracks.html'">View Details & Enroll</button>
+                    </div>`;
+                container.appendChild(card);
+            });
+        } catch (err) {
+            container.innerHTML = '<p style="text-align:center;color:#EE5D50;grid-column:1/-1;">Failed to load courses. Please check your connection.</p>';
         }
+    }
 
-        async function fetchLiveCommunityFeed() {
-            const container = document.getElementById('preview-posts-container');
-            if (!container) return;
-
-            try {
-                const { data: posts, error } = await supabase
-                    .from('posts')
-                    .select('*, profiles(*)')
-                    .order('created_at', { ascending: false })
-                    .limit(3);
-
-                if (error) throw error;
-
-                if (!posts || posts.length === 0) {
-                    container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">No recent posts yet. Join the community to start a discussion!</p>';
-                    return;
+    async function fetchLiveCommunityFeed() {
+        const container = document.getElementById('preview-posts-container');
+        if (!container) return;
+        try {
+            const { data: posts, error } = await supabase.from('posts').select('*, profiles(*)').order('created_at', { ascending: false }).limit(3);
+            if (error) throw error;
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">No recent posts yet. Join the community to start a discussion!</p>';
+                return;
+            }
+            const avatarClasses = ['av-purple', 'av-teal', 'av-red'];
+            let html = '';
+            posts.forEach((post, index) => {
+                const fName = post.profiles?.first_name || 'User';
+                const lName = post.profiles?.last_name || '';
+                const initial = fName.charAt(0).toUpperCase();
+                const fullName = `${fName} ${lName}`.trim();
+                const role = (post.profiles?.role || 'student').toUpperCase();
+                let contentPreview = 'Shared an image/file';
+                if (post.content && post.content.trim() !== '') {
+                    contentPreview = post.content.length > 60 ? post.content.substring(0, 60) + '...' : post.content;
                 }
-
-                let html = '';
-                const avatarClasses = ['av-purple', 'av-teal', 'av-red']; 
-
-                posts.forEach((post, index) => {
-                    const fName = post.profiles?.first_name || 'User';
-                    const lName = post.profiles?.last_name || '';
-                    const initial = fName.charAt(0).toUpperCase();
-                    const fullName = `${fName} ${lName}`.trim();
-                    const rawRole = post.profiles?.role || 'student';
-                    const role = rawRole.toUpperCase();
-                    
-                    let contentPreview = 'Shared an image/file';
-                    if (post.content && post.content.trim() !== '') {
-                        contentPreview = post.content.length > 60 ? post.content.substring(0, 60) + '...' : post.content;
-                    }
-
-                    const avClass = avatarClasses[index % avatarClasses.length];
-                    
-                    let roleColor = '#b3b3b3'; 
-                    if (role === 'ADMIN') roleColor = 'var(--brand-yellow)';
-                    if (role === 'TEACHER' || role === 'INSTRUCTOR') roleColor = 'var(--accent-cyan)';
-
-                    html += `
+                const avClass = avatarClasses[index % avatarClasses.length];
+                let roleColor = '#b3b3b3';
+                if (role === 'ADMIN') roleColor = 'var(--brand-yellow)';
+                if (role === 'TEACHER' || role === 'INSTRUCTOR') roleColor = 'var(--accent-cyan)';
+                html += `
                     <div class="preview-post">
                         <div class="preview-avatar ${avClass}">${initial}</div>
                         <div class="preview-body">
                             <h5>${esc(fullName)} · <span style="color:${roleColor};font-size:0.65rem;">${esc(role)}</span></h5>
                             <p>${esc(contentPreview)}</p>
                         </div>
-                    </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (err) {
-                console.error("Live Feed Error:", err);
-                container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">Log in to view the live community discussions!</p>';
-            }
-        }
-
-        function updateCartUI() {
-            const t = document.getElementById('cart-total');
-            const c = document.getElementById('cart-count');
-            if (t) t.innerText = cartTotal.toLocaleString();
-            if (c) c.innerText = cart.length;
-        }
-
-        async function checkCurrentSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            const heroBtn = document.getElementById('hero-auth-btn');
-
-            if (session && heroBtn) {
-                const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
-                
-                let dashboardPage = 'student-dashboard.html'; 
-                if (profile && profile.role === 'admin') dashboardPage = 'admin-dashboard.html';
-                if (profile && profile.role === 'teacher' || profile?.role === 'instructor') dashboardPage = 'teacher-dashboard.html';
-
-                heroBtn.innerText = "Access My Dashboard";
-                heroBtn.href = dashboardPage;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Apply language active state UI
-            const currentLang = localStorage.getItem('enet_lang') || 'en';
-            const buttons = document.querySelectorAll('.lang-option');
-            const btnText = document.getElementById('current-lang-text');
-            
-            if(btnText) btnText.innerText = currentLang.toUpperCase();
-
-            buttons.forEach(btn => {
-                if(btn.getAttribute('onclick').includes(`'${currentLang}'`)) {
-                    btn.classList.add('active');
-                }
+                    </div>`;
             });
+            container.innerHTML = html;
+        } catch (err) {
+            container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">Log in to view the live community discussions!</p>';
+        }
+    }
 
-            // Initialize app logic
-            try {
-                const savedCart  = localStorage.getItem('enet_cart');
-                const savedTotal = localStorage.getItem('enet_cart_total');
-                if (savedCart) { cart = JSON.parse(savedCart); cartTotal = Number(savedTotal); updateCartUI(); }
-            } catch(e) { console.error("Cart error", e); }
-            
-            renderCourses().catch(console.error);
-            checkCurrentSession().catch(console.error);
-            fetchLiveCommunityFeed().catch(console.error);
-        });
-    </script>
-</body>
-</html>
+    function updateCartUI() {
+        const t = document.getElementById('cart-total');
+        const c = document.getElementById('cart-count');
+        if (t) t.innerText = cartTotal.toLocaleString();
+        if (c) c.innerText = cart.length;
+    }
+
+    async function checkCurrentSession() {
+        const { data: { session } } = await supabase.auth.getSession();
+        const heroBtn = document.getElementById('hero-auth-btn');
+        if (session && heroBtn) {
+            const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+            let dashboardPage = 'student-dashboard.html';
+            if (profile && profile.role === 'admin') dashboardPage = 'admin-dashboard.html';
+            if (profile && (profile.role === 'teacher' || profile.role === 'instructor')) dashboardPage = 'teacher-dashboard.html';
+            heroBtn.innerText = "Access My Dashboard";
+            heroBtn.href = dashboardPage;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            const savedCart = localStorage.getItem('enet_cart');
+            const savedTotal = localStorage.getItem('enet_cart_total');
+            if (savedCart) { cart = JSON.parse(savedCart); cartTotal = Number(savedTotal); updateCartUI(); }
+        }
