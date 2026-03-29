@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
     <title>ENET SUPREME ACADEMY | Blog</title>
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* === ENET SUPREME BRANDING STYLES === */
         :root {
-            --navy-blue: #02014a;     
-            --navy-light: #0d2a8f;    
-            --brand-yellow: #fcd116;  
-            --yellow-hover: #e0b800;  
-            --accent-cyan: #00a0df;   
-            
+            --navy-blue: #02014a;
+            --navy-light: #0d2a8f;
+            --brand-yellow: #fcd116;
+            --yellow-hover: #e0b800;
+            --accent-cyan: #00a0df;
             --text-main: #333333;
             --text-gray: #475467;
             --light-gray: #EAECF0;
@@ -33,45 +28,111 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        /* === GLOBAL STICKY HEADER === */
+        /* Hide Google Translate banner and toolbar */
+        .goog-te-banner-frame, .goog-te-balloon-frame { display: none !important; }
+        body { top: 0 !important; }
+        .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background: none !important; box-shadow: none !important; }
+        #google_translate_element { display: none; }
+
+        /* === HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 0.5rem; }
         .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--brand-yellow); text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
-        
+        .logo span { color: var(--brand-yellow); }
+
         .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
 
-        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; transition: max-height 0.3s ease-in-out; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
         .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
         .nav-links a:hover { color: var(--accent-cyan); }
         .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
 
         .nav-community {
-            display: flex; align-items: center; gap: 6px; justify-content: center;
-            background: rgba(0, 160, 223, 0.15);
-            border: 1px solid rgba(0, 160, 223, 0.3);
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,160,223,0.15); border: 1px solid rgba(0,160,223,0.3);
             padding: 5px 14px; border-radius: 50px;
-            color: var(--accent-cyan) !important;
-            font-weight: 700 !important;
-            transition: all 0.3s !important;
+            color: var(--accent-cyan) !important; font-weight: 700 !important; transition: all 0.3s !important;
         }
-        .nav-community:hover { background: rgba(0, 160, 223, 0.28) !important; color: white !important; }
+        .nav-community:hover { background: rgba(0,160,223,0.28) !important; color: white !important; }
         .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+        /* === TRANSLATOR IN NAV === */
+        .translator-wrapper { position: relative; }
+
+        .translator-btn {
+            display: flex; align-items: center; gap: 7px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 6px 13px; border-radius: 50px;
+            cursor: pointer; font-size: 0.88rem; font-weight: 500;
+            transition: all 0.25s; white-space: nowrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .translator-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--brand-yellow); color: var(--brand-yellow); }
+        .translator-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .translator-btn .chevron { width: 12px; height: 12px; transition: transform 0.25s; }
+        .translator-wrapper.open .translator-btn .chevron { transform: rotate(180deg); }
+        .translator-btn .active-lang { color: var(--brand-yellow); font-weight: 700; font-size: 0.8rem; }
+
+        .translator-dropdown {
+            position: absolute; top: calc(100% + 10px); right: 0;
+            background: var(--navy-blue);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-top: 2px solid var(--brand-yellow);
+            border-radius: 10px; overflow: hidden;
+            min-width: 200px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+            opacity: 0; transform: translateY(-8px); pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+            z-index: 9999;
+        }
+        .translator-wrapper.open .translator-dropdown { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+        .translator-dropdown-header {
+            padding: 10px 14px 8px;
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.4); text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .lang-option {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; cursor: pointer;
+            color: rgba(255,255,255,0.85); font-size: 0.9rem;
+            transition: background 0.15s, color 0.15s;
+            border: none; background: none; width: 100%; text-align: left;
+        }
+        .lang-option:hover { background: rgba(255,255,255,0.07); color: var(--white); }
+        .lang-option.selected { color: var(--brand-yellow); background: rgba(252,209,22,0.08); }
+        .lang-option .flag { font-size: 1.1rem; width: 22px; text-align: center; }
+        .lang-option .lang-name { flex: 1; }
+        .lang-option .lang-native { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+        .lang-option.selected .lang-native { color: rgba(252,209,22,0.6); }
+
+        .lang-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 0; }
+
+        .lang-reset {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 14px; cursor: pointer;
+            color: rgba(255,255,255,0.4); font-size: 0.82rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            transition: color 0.15s; background: none; border-left: none; border-right: none; border-bottom: none; width: 100%; text-align: left;
+        }
+        .lang-reset:hover { color: var(--danger); }
+
         /* === BLOG LAYOUT === */
-        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; width: 100%;}
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem; flex: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; width: 100%; }
         @media (max-width: 850px) { .container { grid-template-columns: 1fr; gap: 2rem; } }
 
-        /* === MAIN ARTICLE AREA === */
         .blog-main { background: var(--white); padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 5px solid var(--accent-cyan); }
-        .post-cover { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem; display: none;}
+        .post-cover { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem; display: none; }
         .post-cover.show { display: block; }
         .post-title { font-size: 2.2rem; color: var(--navy-blue); margin-bottom: 0.5rem; line-height: 1.3; font-weight: 800; }
-        .post-meta { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;}
+        .post-meta { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
         .post-meta span { color: var(--accent-cyan); font-weight: bold; }
-        
-        /* Rendered Quill Content Styles */
         .post-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-main); }
         .post-content p { margin-bottom: 1.5rem; }
         .post-content h1, .post-content h2, .post-content h3 { color: var(--navy-blue); margin: 2rem 0 1rem 0; font-weight: bold; }
@@ -81,211 +142,532 @@
         .post-content a { color: var(--accent-cyan); text-decoration: none; }
         .post-content a:hover { text-decoration: underline; }
 
-        /* === SIDEBAR === */
         .blog-sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
         .widget { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 4px solid var(--brand-yellow); }
         .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; font-weight: bold; border-bottom: 2px solid var(--border); }
-
+        /* === SEARCH === */
+        .search-wrapper { position: relative; width: 100%; }
         .search-box { display: flex; width: 100%; }
-        .search-box input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px 0 0 4px; font-size: 1rem; outline: none; }
+        .search-box input { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 4px 0 0 4px; font-size: 1rem; outline: none; transition: border-color 0.2s; }
         .search-box input:focus { border-color: var(--accent-cyan); }
-        .search-box button { background: var(--navy-blue); border: 1px solid var(--navy-blue); border-left: none; padding: 0.8rem 1rem; border-radius: 0 4px 4px 0; cursor: pointer; color: var(--white); transition: 0.2s;}
-        .search-box button:hover { background: var(--brand-yellow); color: var(--navy-blue); border-color: var(--brand-yellow);}
+        .search-box button { background: var(--navy-blue); border: 1px solid var(--navy-blue); border-left: none; padding: 0.8rem 1rem; border-radius: 0 4px 4px 0; cursor: pointer; color: var(--white); transition: 0.2s; flex-shrink: 0; }
+        .search-box button:hover { background: var(--brand-yellow); color: var(--navy-blue); border-color: var(--brand-yellow); }
+        .search-box button:disabled { opacity: 0.6; cursor: not-allowed; }
 
+        .search-results-dropdown {
+            display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 500;
+            background: var(--white); border: 1px solid var(--border); border-top: 2px solid var(--accent-cyan);
+            border-radius: 0 0 8px 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 360px; overflow-y: auto;
+        }
+        .search-results-dropdown.visible { display: block; }
+
+        .search-result-item {
+            padding: 0.9rem 1rem; border-bottom: 1px solid var(--border);
+            cursor: pointer; transition: background 0.15s;
+        }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: #f0f8ff; }
+        .search-result-item .result-title { font-weight: 700; color: var(--navy-blue); font-size: 0.95rem; margin-bottom: 3px; }
+        .search-result-item .result-title mark { background: #fff3b0; color: var(--navy-blue); border-radius: 2px; padding: 0 2px; font-weight: 700; }
+        .search-result-item .result-snippet { font-size: 0.8rem; color: var(--text-gray); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .search-result-item .result-date { font-size: 0.75rem; color: var(--accent-cyan); margin-top: 4px; }
+
+        .search-status { padding: 1rem; text-align: center; color: var(--text-gray); font-size: 0.9rem; }
+        .search-status.loading { color: var(--accent-cyan); }
+        .search-status.error { color: var(--danger); }
+
+        .search-clear-btn {
+            position: absolute; right: 50px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; color: var(--text-gray);
+            font-size: 1.1rem; line-height: 1; padding: 4px; display: none; z-index: 1;
+        }
+        .search-clear-btn:hover { color: var(--danger); }
+        .search-clear-btn.visible { display: block; }
         .sidebar-list { list-style: none; }
         .sidebar-list li { margin-bottom: 1.2rem; line-height: 1.5; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
-        .sidebar-list li:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0;}
-        .sidebar-list a { color: var(--navy-blue); text-decoration: none; transition: color 0.2s; font-weight: 600; display: block;}
+        .sidebar-list li:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .sidebar-list a { color: var(--navy-blue); text-decoration: none; transition: color 0.2s; font-weight: 600; display: block; }
         .sidebar-list a:hover { color: var(--accent-cyan); }
         .sidebar-list span { display: block; font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
 
-        /* === GLOBAL FOOTER === */
-        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto;}
-        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto; }
+        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         .footer-logo span { color: var(--brand-yellow); }
-        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
+        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 2rem; }
 
-        @media (max-width: 950px) { 
+        @media (max-width: 950px) {
             .mobile-menu-btn { display: block; }
             .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
-            .nav-links.show { display: flex; } 
+            .nav-links.show { display: flex; }
+            .translator-dropdown { right: auto; left: 50%; transform: translateX(-50%) translateY(-8px); }
+            .translator-wrapper.open .translator-dropdown { transform: translateX(-50%) translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html">Home</a>
-                <a href="blog.html" class="active">Blog</a>
-                <a href="tracks.html">Buy Course</a>
-                <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
-                <a href="login.html">Log In / Academy</a>
-            </div>
-        </nav>
-    </header>
+<!-- Hidden Google Translate element -->
+<div id="google_translate_element"></div>
 
-    <main class="container">
-        <article class="blog-main">
-            <img id="article-cover" src="" alt="Blog Cover" class="post-cover">
-            <div id="article-container">
-                <div style="padding: 4rem 2rem; text-align: center; border: 3px dashed var(--accent-cyan); border-radius: 12px; background: var(--bg-light);">
-                    <h2 style="color: var(--navy-blue); margin-bottom: 1rem;">Establishing Secure Connection...</h2>
-                    <p>Executing data fetch protocol.</p>
+<header>
+    <nav>
+        <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+        <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="blog.html" class="active">Blog</a>
+            <a href="tracks.html">Buy Course</a>
+            <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
+            <a href="login.html">Log In / Academy</a>
+
+            <!-- TRANSLATOR -->
+            <div class="translator-wrapper" id="translatorWrapper">
+                <button class="translator-btn" id="translatorBtn" onclick="toggleTranslator(event)" aria-label="Translate page">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span id="currentLangLabel">Translate</span>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </button>
+
+                <div class="translator-dropdown" id="translatorDropdown">
+                    <div class="translator-dropdown-header">Select language</div>
+
+                    <button class="lang-option" onclick="translateTo('fr', 'French', this)">
+                        <span class="flag">🇫🇷</span>
+                        <span class="lang-name">French</span>
+                        <span class="lang-native">Français</span>
+                    </button>
+                    <button class="lang-option" onclick="translateTo('yo', 'Yoruba', this)">
+                        <span class="flag">🇳🇬</span>
+                        <span class="lang-name">Yoruba</span>
+                        <span class="lang-native">Yorùbá</span>
+                    </button>
+                    <button class="lang-option" onclick="translateTo('ig', 'Igbo', this)">
+                        <span class="flag">🇳🇬</span>
+                        <span class="lang-name">Igbo</span>
+                        <span class="lang-native">Asụsụ Igbo</span>
+                    </button>
+                    <button class="lang-option" onclick="translateTo('ha', 'Hausa', this)">
+                        <span class="flag">🇳🇬</span>
+                        <span class="lang-name">Hausa</span>
+                        <span class="lang-native">Harshen Hausa</span>
+                    </button>
+                    <button class="lang-option" onclick="translateTo('ar', 'Arabic', this)">
+                        <span class="flag">🇸🇦</span>
+                        <span class="lang-name">Arabic</span>
+                        <span class="lang-native">العربية</span>
+                    </button>
+                    <button class="lang-option" onclick="translateTo('es', 'Spanish', this)">
+                        <span class="flag">🇪🇸</span>
+                        <span class="lang-name">Spanish</span>
+                        <span class="lang-native">Español</span>
+                    </button>
+
+                    <button class="lang-reset" onclick="resetLanguage()">
+                        ↩ Reset to English
+                    </button>
                 </div>
-            </div>
-        </article>
-
-        <aside class="blog-sidebar">
-            <div class="widget">
-                <form class="search-box" onsubmit="event.preventDefault(); alert('Search functionality coming soon!');">
-                    <input type="text" placeholder="Search blog...">
-                    <button type="submit">🔍</button>
-                </form>
-            </div>
-            <div class="widget">
-                <h3 class="widget-title">Recent Posts</h3>
-                <ul class="sidebar-list" id="recent-posts-list">
-                    <li><span style="color: var(--text-gray);">Fetching posts...</span></li>
-                </ul>
-            </div>
-        </aside>
-    </main>
-
-    <footer>
-        <div class="container footer-container" style="margin: 0 auto;">
-            <div>
-                <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
-                <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
-            </div>
-            <div style="color: #cbd5e1; font-size: 0.9rem; text-align: right;">
-                <p>Suite 58 Georgewill/Clifford Plaza</p>
-                <p>Choba Junction, Port Harcourt</p>
-                <p>Rivers State, Nigeria.</p>
             </div>
         </div>
-    </footer>
+    </nav>
+</header>
 
-    <script>
-        // Asynchronous IIFE to guarantee execution regardless of load events
-        (async function initBlogEngine() {
-            const container = document.getElementById('article-container');
-            const sidebarList = document.getElementById('recent-posts-list');
+<main class="container">
+    <article class="blog-main">
+        <img id="article-cover" src="" alt="Blog Cover" class="post-cover">
+        <div id="article-container">
+            <div style="padding: 4rem 2rem; text-align: center; border: 3px dashed var(--accent-cyan); border-radius: 12px;">
+                <h2 style="color: var(--navy-blue); margin-bottom: 1rem;">Establishing Secure Connection...</h2>
+                <p>Executing data fetch protocol.</p>
+            </div>
+        </div>
+    </article>
 
-            try {
-                // Safety Check: Validate CDN load
-                if (typeof window.supabase === 'undefined') {
-                    throw new Error("Supabase library failed to initialize. Please check your network connection or disable script-blocking extensions.");
-                }
+    <aside class="blog-sidebar">
+        <div class="widget">
+            <div class="search-wrapper" id="searchWrapper">
+                <form class="search-box" onsubmit="event.preventDefault(); runSearch();" autocomplete="off">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search articles..."
+                        oninput="onSearchInput(this.value)"
+                        onkeydown="onSearchKeydown(event)"
+                        aria-label="Search blog articles"
+                    >
+                    <button type="button" class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()" title="Clear search">✕</button>
+                    <button type="submit" id="searchBtn" title="Search">🔍</button>
+                </form>
+                <div class="search-results-dropdown" id="searchDropdown" role="listbox"></div>
+            </div>
+        </div>
+        <div class="widget">
+            <h3 class="widget-title">Recent Posts</h3>
+            <ul class="sidebar-list" id="recent-posts-list">
+                <li><span style="color: var(--text-gray);">Fetching posts...</span></li>
+            </ul>
+        </div>
+    </aside>
+</main>
 
-                // Initialize securely
+<footer>
+    <div class="footer-container">
+        <div>
+            <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+            <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+        </div>
+        <div style="color: #cbd5e1; font-size: 0.9rem; text-align: right;">
+            <p>Suite 58 Georgewill/Clifford Plaza</p>
+            <p>Choba Junction, Port Harcourt</p>
+            <p>Rivers State, Nigeria.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Google Translate Script -->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'fr,yo,ig,ha,ar,es',
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+    /* === TRANSLATOR LOGIC === */
+    let currentLang = 'en';
+
+    function toggleTranslator(e) {
+        e.stopPropagation();
+        document.getElementById('translatorWrapper').classList.toggle('open');
+    }
+
+    document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('translatorWrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+            wrapper.classList.remove('open');
+        }
+    });
+
+    function translateTo(langCode, langName, btnEl) {
+        currentLang = langCode;
+
+        // Update button label
+        document.getElementById('currentLangLabel').textContent = langName;
+
+        // Mark selected
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('selected'));
+        btnEl.classList.add('selected');
+
+        // Close dropdown
+        document.getElementById('translatorWrapper').classList.remove('open');
+
+        // Trigger Google Translate
+        doGoogleTranslate(langCode);
+    }
+
+    function resetLanguage() {
+        currentLang = 'en';
+        document.getElementById('currentLangLabel').textContent = 'Translate';
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('selected'));
+        document.getElementById('translatorWrapper').classList.remove('open');
+        doGoogleTranslate('en');
+    }
+
+    function doGoogleTranslate(lang) {
+        // Wait for Google Translate to be ready
+        function tryTranslate(attempts) {
+            const select = document.querySelector('.goog-te-combo');
+            if (select) {
+                select.value = lang;
+                select.dispatchEvent(new Event('change'));
+            } else if (attempts > 0) {
+                setTimeout(() => tryTranslate(attempts - 1), 300);
+            }
+        }
+        tryTranslate(10);
+    }
+
+    /* === BLOG ENGINE === */
+    (async function initBlogEngine() {
+        const container = document.getElementById('article-container');
+        const sidebarList = document.getElementById('recent-posts-list');
+
+        try {
+            if (typeof window.supabase === 'undefined') {
+                throw new Error("Supabase library failed to initialize. Please check your network connection or disable script-blocking extensions.");
+            }
+
+            const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 3rem; text-align: center;">
+                        <h2 style="color: var(--navy-blue);">No posts published yet.</h2>
+                        <p style="color: var(--text-gray); margin-top: 1rem;">Head over to the Admin Dashboard to publish your first article.</p>
+                    </div>`;
+                sidebarList.innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
+                return;
+            }
+
+            renderSidebar(data);
+            cachePostsForSearch(data);
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const postIdFromUrl = urlParams.get('id');
+
+            if (postIdFromUrl) {
+                const targetPost = data.find(p => p.id === postIdFromUrl);
+                renderFullArticle(targetPost || data[0]);
+            } else {
+                renderFullArticle(data[0]);
+            }
+
+        } catch (err) {
+            console.error("Fatal System Error:", err);
+            container.innerHTML = `
+                <div style="padding: 2rem; color: #721c24; background: #f8d7da; border-radius: 8px; border: 1px solid #f5c6cb;">
+                    <h3 style="margin-bottom: 10px;">System Exception</h3>
+                    <p style="font-family: monospace; font-size: 0.9rem;">${err.message}</p>
+                </div>`;
+            sidebarList.innerHTML = '<li><span style="color: var(--danger);">System Error</span></li>';
+        }
+    })();
+
+    function renderSidebar(posts) {
+        const list = document.getElementById('recent-posts-list');
+        let html = '';
+        posts.slice(0, 6).forEach(post => {
+            const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            html += `<li><a href="blog.html?id=${post.id}">${post.title}</a><span>${date}</span></li>`;
+        });
+        list.innerHTML = html;
+    }
+
+    /* === LIVE SEARCH === */
+    let searchDebounceTimer = null;
+    let allPostsCache = [];
+
+    // Cache posts after initial load so search works offline from memory
+    function cachePostsForSearch(posts) {
+        allPostsCache = posts;
+    }
+
+    function onSearchInput(value) {
+        const clearBtn = document.getElementById('searchClearBtn');
+        clearBtn.classList.toggle('visible', value.length > 0);
+
+        clearTimeout(searchDebounceTimer);
+        if (value.trim().length === 0) {
+            closeSearchDropdown();
+            return;
+        }
+        if (value.trim().length < 2) return;
+
+        searchDebounceTimer = setTimeout(() => runSearch(), 350);
+    }
+
+    function onSearchKeydown(e) {
+        const dropdown = document.getElementById('searchDropdown');
+        const items = dropdown.querySelectorAll('.search-result-item');
+        const focused = dropdown.querySelector('.search-result-item.focused');
+        let idx = Array.from(items).indexOf(focused);
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (focused) focused.classList.remove('focused');
+            const next = items[idx + 1] || items[0];
+            if (next) { next.classList.add('focused'); next.scrollIntoView({ block: 'nearest' }); }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (focused) focused.classList.remove('focused');
+            const prev = items[idx - 1] || items[items.length - 1];
+            if (prev) { prev.classList.add('focused'); prev.scrollIntoView({ block: 'nearest' }); }
+        } else if (e.key === 'Enter') {
+            if (focused) { e.preventDefault(); focused.click(); }
+        } else if (e.key === 'Escape') {
+            closeSearchDropdown();
+        }
+    }
+
+    async function runSearch() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) return;
+
+        const dropdown = document.getElementById('searchDropdown');
+        const btn = document.getElementById('searchBtn');
+
+        dropdown.innerHTML = '<div class="search-status loading">🔍 Searching...</div>';
+        dropdown.classList.add('visible');
+        btn.disabled = true;
+
+        try {
+            let results = [];
+
+            // First try against cached posts (fast, instant)
+            if (allPostsCache.length > 0) {
+                results = clientSideSearch(allPostsCache, query);
+            } else {
+                // Fallback: query Supabase directly using ilike on title and content
                 const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
                 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                const sb = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-                // Fetch data
-                const { data, error } = await supabase
-                    .from('blog_posts')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+                // Search title OR content using Supabase ilike filter (OR via two queries merged)
+                const [r1, r2] = await Promise.all([
+                    sb.from('blog_posts').select('id, title, content, created_at').ilike('title', `%${query}%`).order('created_at', { ascending: false }),
+                    sb.from('blog_posts').select('id, title, content, created_at').ilike('content', `%${query}%`).order('created_at', { ascending: false })
+                ]);
 
-                if (error) throw error;
-
-                // Handle Empty State
-                if (!data || data.length === 0) {
-                    container.innerHTML = `
-                        <div style="padding: 3rem; text-align: center;">
-                            <h2 style="color: var(--navy-blue);">No posts published yet.</h2>
-                            <p style="color: var(--text-gray); margin-top: 1rem;">Head over to the Admin Dashboard to publish your first article.</p>
-                        </div>
-                    `;
-                    sidebarList.innerHTML = '<li><span style="color: var(--text-gray);">No posts available</span></li>';
-                    return;
-                }
-
-                // Hydrate the Sidebar with REAL LINKS
-                renderSidebar(data);
-
-                // ROUTING LOGIC: Check URL for a specific Post ID
-                const urlParams = new URLSearchParams(window.location.search);
-                const postIdFromUrl = urlParams.get('id');
-
-                if (postIdFromUrl) {
-                    // Try to find the requested post
-                    const targetPost = data.find(p => p.id === postIdFromUrl);
-                    if (targetPost) {
-                        renderFullArticle(targetPost);
-                    } else {
-                        // If ID is invalid/deleted, default to the latest post
-                        renderFullArticle(data[0]);
-                    }
-                } else {
-                    // No ID in URL? Load the newest post by default
-                    renderFullArticle(data[0]);
-                }
-
-            } catch (err) {
-                console.error("Fatal System Error:", err);
-                container.innerHTML = `
-                    <div style="padding: 2rem; color: #721c24; background: #f8d7da; border-radius: 8px; border: 1px solid #f5c6cb;">
-                        <h3 style="margin-bottom: 10px;">System Exception</h3>
-                        <p style="font-family: monospace; font-size: 0.9rem;">${err.message}</p>
-                    </div>
-                `;
-                sidebarList.innerHTML = '<li><span style="color: var(--danger);">System Error</span></li>';
-            }
-        })();
-
-        function renderSidebar(posts) {
-            const list = document.getElementById('recent-posts-list');
-            let html = '';
-            const recentPosts = posts.slice(0, 6); 
-
-            recentPosts.forEach(post => {
-                const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                
-                // REAL LINK INJECTION HERE: blog.html?id=XYZ
-                html += `
-                    <li>
-                        <a href="blog.html?id=${post.id}">${post.title}</a>
-                        <span>${date}</span>
-                    </li>
-                `;
-            });
-            list.innerHTML = html;
-        }
-
-        function renderFullArticle(post) {
-            const container = document.getElementById('article-container');
-            const coverImg = document.getElementById('article-cover');
-
-            // Dynamic Page Title for SEO
-            document.title = `${post.title} | ENET SUPREME Blog`;
-
-            // Cover Image
-            if (post.cover_image && post.cover_image !== "") {
-                coverImg.src = post.cover_image;
-                coverImg.classList.add('show');
-            } else {
-                coverImg.src = "";
-                coverImg.classList.remove('show');
+                const merged = [...(r1.data || []), ...(r2.data || [])];
+                // Deduplicate by id
+                const seen = new Set();
+                results = merged.filter(p => { if (seen.has(p.id)) return false; seen.add(p.id); return true; });
             }
 
-            const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            renderSearchResults(results, query);
 
-            container.innerHTML = `
-                <h1 class="post-title">${post.title}</h1>
-                <div class="post-meta">
-                    By <span style="text-transform: uppercase;">Academy Admin</span> &nbsp;•&nbsp; ${date}
-                </div>
-                <div class="post-content">
-                    ${post.content}
-                </div>
-            `;
+        } catch (err) {
+            dropdown.innerHTML = `<div class="search-status error">Error: ${err.message}</div>`;
+        } finally {
+            btn.disabled = false;
         }
-    </script>
+    }
+
+    function clientSideSearch(posts, query) {
+        const keywords = query.toLowerCase().split(/\s+/).filter(Boolean);
+        return posts.filter(post => {
+            const titleText = (post.title || '').toLowerCase();
+            const contentText = (post.content || '').replace(/<[^>]*>/g, '').toLowerCase();
+            return keywords.every(kw => titleText.includes(kw) || contentText.includes(kw));
+        });
+    }
+
+    function renderSearchResults(results, query) {
+        const dropdown = document.getElementById('searchDropdown');
+
+        if (!results || results.length === 0) {
+            dropdown.innerHTML = `<div class="search-status">No articles found for "<strong>${escapeHtml(query)}</strong>"</div>`;
+            return;
+        }
+
+        const countLabel = results.length === 1 ? '1 result' : `${results.length} results`;
+        let html = `<div class="search-status" style="font-size:0.78rem; padding: 6px 12px; border-bottom: 1px solid var(--border); color: var(--accent-cyan);">${countLabel} for "${escapeHtml(query)}"</div>`;
+
+        results.slice(0, 10).forEach((post, i) => {
+            const date = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const plainContent = (post.content || '').replace(/<[^>]*>/g, '');
+            const snippet = getSnippet(plainContent, query);
+            const highlightedTitle = highlightMatch(escapeHtml(post.title), query);
+
+            html += `
+                <div class="search-result-item" role="option" tabindex="-1" onclick="selectSearchResult('${post.id}')">
+                    <div class="result-title">${highlightedTitle}</div>
+                    <div class="result-snippet">${snippet}</div>
+                    <div class="result-date">${date}</div>
+                </div>`;
+        });
+
+        dropdown.innerHTML = html;
+        dropdown.classList.add('visible');
+    }
+
+    function selectSearchResult(postId) {
+        closeSearchDropdown();
+        clearSearch();
+
+        // Find in cache or navigate to URL
+        const post = allPostsCache.find(p => p.id === postId);
+        if (post) {
+            renderFullArticle(post);
+            window.history.pushState({}, '', `?id=${postId}`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            window.location.href = `blog.html?id=${postId}`;
+        }
+    }
+
+    function clearSearch() {
+        const input = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('searchClearBtn');
+        input.value = '';
+        clearBtn.classList.remove('visible');
+        closeSearchDropdown();
+        input.focus();
+    }
+
+    function closeSearchDropdown() {
+        const dropdown = document.getElementById('searchDropdown');
+        dropdown.classList.remove('visible');
+        dropdown.innerHTML = '';
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function(e) {
+        const wrapper = document.getElementById('searchWrapper');
+        if (wrapper && !wrapper.contains(e.target)) closeSearchDropdown();
+    });
+
+    function getSnippet(text, query) {
+        const kw = query.split(/\s+/)[0].toLowerCase();
+        const idx = text.toLowerCase().indexOf(kw);
+        if (idx === -1) return escapeHtml(text.slice(0, 100)) + '…';
+        const start = Math.max(0, idx - 40);
+        const end = Math.min(text.length, idx + 80);
+        const raw = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+        return highlightMatch(escapeHtml(raw), query);
+    }
+
+    function highlightMatch(text, query) {
+        const keywords = query.trim().split(/\s+/).filter(Boolean);
+        let result = text;
+        keywords.forEach(kw => {
+            const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            result = result.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+        });
+        return result;
+    }
+
+    function escapeHtml(str) {
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function renderFullArticle(post) {
+        const container = document.getElementById('article-container');
+        const coverImg = document.getElementById('article-cover');
+        document.title = `${post.title} | ENET SUPREME Blog`;
+
+        if (post.cover_image && post.cover_image !== "") {
+            coverImg.src = post.cover_image;
+            coverImg.classList.add('show');
+        } else {
+            coverImg.src = "";
+            coverImg.classList.remove('show');
+        }
+
+        const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        container.innerHTML = `
+            <h1 class="post-title">${post.title}</h1>
+            <div class="post-meta">By <span style="text-transform: uppercase;">Academy Admin</span> &nbsp;•&nbsp; ${date}</div>
+            <div class="post-content">${post.content}</div>`;
+    }
+</script>
 </body>
 </html>
