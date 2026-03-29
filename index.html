@@ -79,7 +79,9 @@
         .lang-option:hover { background: var(--background); color: var(--accent-cyan); border-color: var(--accent-cyan); }
         .lang-option.active { border: 2px solid var(--navy-blue); font-weight: 700; color: var(--navy-blue); background: rgba(2, 1, 74, 0.05); }
 
-        /* Hide Google's default ugly popup toolbar */
+        /* === GOOGLE TRANSLATE FIXES === */
+        /* Push the widget off-screen instead of display:none so it loads properly */
+        #google_translate_element { position: absolute; top: -1000px; left: -1000px; z-index: -1; opacity: 0; }
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon { display: none !important; }
         body { top: 0px !important; }
         #goog-gt-tt { display: none !important; }
@@ -240,7 +242,7 @@
     <header>
         <nav>
             <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
 
             <div class="nav-links" id="navLinks">
                 <a href="index.html" class="active">Home</a>
@@ -402,7 +404,7 @@
         </svg>
     </a>
 
-    <div id="google_translate_element" style="display:none;"></div>
+    <div id="google_translate_element"></div>
 
     <div class="modal-overlay" id="langOverlay" onclick="closeLangModal(event)">
         <div class="lang-modal" onclick="event.stopPropagation()">
@@ -428,11 +430,6 @@
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('show');
-        }
-
         function esc(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
 
         /* === LANGUAGE TRANSLATION ENGINE === */
@@ -454,9 +451,20 @@
         document.body.appendChild(gtScript);
 
         function changeLanguage(langCode) {
-            document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname};`;
-            document.cookie = `googtrans=/en/${langCode}; path=/;`;
+            // Save preference to localStorage
             localStorage.setItem('enet_lang', langCode);
+
+            // Brutally wipe all existing Google Translate cookies
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname + ";";
+
+            // If not English, set the new translation cookies
+            if (langCode !== 'en') {
+                document.cookie = `googtrans=/en/${langCode}; path=/;`;
+                document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname};`;
+            }
+            
+            // Reload to activate Google Translate
             window.location.reload();
         }
 
@@ -609,4 +617,3 @@
     </script>
 </body>
 </html>
-```
