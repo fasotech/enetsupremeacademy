@@ -39,6 +39,7 @@
             text-transform: uppercase; 
             text-align: center; 
             letter-spacing: 1px;
+            text-decoration: none;
         }
         
         .auth-logo span { 
@@ -54,100 +55,59 @@
             border-radius: 12px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
             border-top: 5px solid var(--accent-cyan); 
+            transition: 0.3s ease;
         }
         
-        h2 { 
-            text-align: center; 
-            color: var(--navy-blue); 
-            margin-bottom: 1.5rem; 
-            font-weight: 800;
-        }
+        h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1.5rem; font-weight: 800; }
+        .sub-text { text-align: center; color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem; }
         
-        .form-group { margin-bottom: 1.2rem; }
+        .form-group { margin-bottom: 1.2rem; position: relative;}
         
-        label { 
-            display: block; 
-            margin-bottom: 0.5rem; 
-            font-weight: 600; 
-            font-size: 0.9rem;
-            color: var(--navy-blue);
-        }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--navy-blue); }
         
         input { 
-            width: 100%; 
-            padding: 0.8rem 1rem; 
-            border: 1px solid var(--border); 
-            border-radius: 6px; 
-            font-size: 1rem; 
-            transition: all 0.3s ease;
-            outline: none;
+            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); 
+            border-radius: 6px; font-size: 1rem; transition: all 0.3s ease; outline: none;
         }
+        input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 3px rgba(0, 160, 223, 0.1); }
         
-        input:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 0 3px rgba(0, 160, 223, 0.1);
+        /* Password Toggle Eye Icon */
+        .password-wrapper { position: relative; }
+        .toggle-password { 
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%); 
+            background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #94a3b8;
         }
-        
+        .toggle-password:hover { color: var(--accent-cyan); }
+
         .btn-primary { 
-            width: 100%; 
-            background-color: var(--brand-yellow); 
-            color: var(--navy-blue); 
-            border: none; 
-            padding: 1rem; 
-            border-radius: 6px; 
-            font-size: 1.05rem; 
-            font-weight: 800; 
-            cursor: pointer; 
-            transition: background-color 0.3s ease; 
+            width: 100%; background-color: var(--brand-yellow); color: var(--navy-blue); 
+            border: none; padding: 1rem; border-radius: 6px; font-size: 1.05rem; 
+            font-weight: 800; cursor: pointer; transition: background-color 0.3s ease; 
             margin-top: 1rem; 
         }
-        
-        .btn-primary:hover { 
-            background-color: var(--yellow-hover); 
-        }
-        
-        .btn-primary:disabled { 
-            background-color: #e2e8f0; 
-            color: #a0aec0;
-            cursor: not-allowed; 
-        }
+        .btn-primary:hover { background-color: var(--yellow-hover); }
+        .btn-primary:disabled { background-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
         
         #auth-message { 
-            margin-bottom: 1.5rem; 
-            font-size: 0.9rem; 
-            text-align: center; 
-            font-weight: bold; 
-            padding: 0.8rem; 
-            border-radius: 6px; 
-            display: none; 
+            margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; 
+            font-weight: bold; padding: 0.8rem; border-radius: 6px; display: none; 
         }
         
-        .register-link { 
-            display: block; 
-            text-align: center; 
-            margin-top: 1.5rem; 
-            color: var(--text-gray); 
-            text-decoration: none; 
-            font-size: 0.95rem; 
-            font-weight: 500;
-        }
-        
-        .register-link span { 
-            color: var(--accent-cyan); 
-            font-weight: 800; 
-            transition: color 0.2s;
-        }
-        
-        .register-link:hover span {
-            color: var(--navy-blue);
-            text-decoration: underline;
-        }
+        .register-link { display: block; text-align: center; margin-top: 1.5rem; color: #64748b; text-decoration: none; font-size: 0.95rem; font-weight: 500;}
+        .register-link span { color: var(--accent-cyan); font-weight: 800; transition: color 0.2s;}
+        .register-link:hover span { color: var(--navy-blue); text-decoration: underline;}
+
+        .forgot-password { display: block; text-align: right; margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; text-decoration: none; cursor: pointer;}
+        .forgot-password:hover { text-decoration: underline; color: var(--navy-blue); }
+
+        /* Hidden Sections */
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
-    <div class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></div>
+    <a href="index.html" class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></a>
     
-    <section class="auth-card">
+    <section class="auth-card" id="login-section">
         <h2>Gateway Portal</h2>
         
         <div id="auth-message"></div>
@@ -159,7 +119,11 @@
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="login-password" required placeholder="••••••••">
+                <div class="password-wrapper">
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password', this)">👁️</button>
+                </div>
+                <span class="forgot-password" onclick="toggleResetForm()">Forgot Password?</span>
             </div>
             <button type="submit" class="btn-primary" id="login-btn">Secure Log In</button>
         </form>
@@ -167,64 +131,133 @@
         <a href="register.html" class="register-link">Don't have an account? <span>Apply here</span></a>
     </section>
 
+    <section class="auth-card hidden" id="reset-section">
+        <h2>Reset Password</h2>
+        <p class="sub-text">Enter your email address below and we'll send you a secure link to reset your password.</p>
+        
+        <div id="reset-message" style="margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; font-weight: bold; padding: 0.8rem; border-radius: 6px; display: none;"></div>
+        
+        <form id="reset-form" onsubmit="event.preventDefault(); attemptPasswordReset(); return false;">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="reset-email" required placeholder="your@email.com">
+            </div>
+            <button type="submit" class="btn-primary" id="reset-btn">Send Reset Link</button>
+        </form>
+
+        <a href="#" class="register-link" onclick="toggleResetForm(); return false;">Back to <span>Secure Log In</span></a>
+    </section>
+
     <script>
-        function showMessage(text, isError) {
-            const msgDiv = document.getElementById('auth-message');
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        /* 1. UI TOGGLES */
+        function showMessage(text, isError, elementId = 'auth-message') {
+            const msgDiv = document.getElementById(elementId);
             msgDiv.style.display = 'block';
             msgDiv.style.backgroundColor = isError ? '#fee2e2' : '#e0f2fe';
             msgDiv.style.color = isError ? '#DC2626' : 'var(--navy-blue)';
             msgDiv.innerText = text;
         }
 
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                btn.innerHTML = "🙈"; // Hide icon
+            } else {
+                input.type = "password";
+                btn.innerHTML = "👁️"; // Show icon
+            }
+        }
+
+        function toggleResetForm() {
+            document.getElementById('login-section').classList.toggle('hidden');
+            document.getElementById('reset-section').classList.toggle('hidden');
+            
+            // Clear messages when switching
+            document.getElementById('auth-message').style.display = 'none';
+            document.getElementById('reset-message').style.display = 'none';
+            document.getElementById('reset-email').value = document.getElementById('login-email').value;
+        }
+
+        /* 2. LOGIN LOGIC */
         async function attemptLogin() {
             const btn = document.getElementById('login-btn');
             btn.disabled = true;
-            showMessage('Authenticating securely...', false);
+            showMessage('Authenticating securely...', false, 'auth-message');
 
             try {
-                // Failsafe: Check if the Supabase library loaded properly
-                if (typeof window.supabase === 'undefined') {
-                    throw new Error("Cannot connect to the database. Please check your internet connection or disable adblockers.");
-                }
-
-                // Initialize Supabase ONLY when the button is clicked
-                const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'; 
-                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                if (typeof window.supabase === 'undefined') throw new Error("Cannot connect to the database. Please check your internet connection.");
 
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
 
-                // 1. Check Credentials
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-                if (error) throw new Error(error.message);
+                const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+                if (error) throw new Error("Invalid email or password.");
 
-                // 2. Fetch Role
                 const { data: profile, error: profileError } = await supabase.from('profiles').select('role, status').eq('id', data.user.id).single();
                 if (profileError || !profile) throw new Error("Profile not found in database.");
 
-                // 3. Security Block
                 if (profile.role !== 'admin' && profile.status === 'pending') {
                     await supabase.auth.signOut();
                     throw new Error("Your account is pending Admin approval. Please check back later.");
                 }
 
-                // 4. Success Routing
-                showMessage('Success! Redirecting...', false);
-                if (profile.role === 'admin') window.location.href = "admin-dashboard.html";
-                else if (profile.role === 'teacher') window.location.href = "teacher-dashboard.html";
-                else window.location.href = "student-dashboard.html";
+                showMessage('Success! Redirecting...', false, 'auth-message');
+                
+                // Redirect logic: If they came from the "Buy Course" page, send them back there.
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectUrl = urlParams.get('redirect');
+                
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                } else if (profile.role === 'admin') {
+                    window.location.href = "admin-dashboard.html";
+                } else if (profile.role === 'teacher') {
+                    window.location.href = "teacher-dashboard.html";
+                } else {
+                    window.location.href = "student-dashboard.html";
+                }
 
             } catch (err) {
-                showMessage("Error: " + err.message, true);
-                // Safe Sign Out if it partially fails
-                if (typeof window.supabase !== 'undefined') {
-                    const tempSupa = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
-                    await tempSupa.auth.signOut();
-                }
+                showMessage(err.message, true, 'auth-message');
+                if (typeof window.supabase !== 'undefined') await supabase.auth.signOut();
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        /* 3. PASSWORD RESET LOGIC */
+        async function attemptPasswordReset() {
+            const btn = document.getElementById('reset-btn');
+            const email = document.getElementById('reset-email').value;
+            
+            btn.disabled = true;
+            showMessage('Checking database...', false, 'reset-message');
+
+            try {
+                // Supabase resets password and sends an email. 
+                // We use a redirect URL back to login so they can log back in.
+                const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/login.html',
+                });
+
+                if (error) throw error;
+
+                // For privacy, Supabase won't explicitly say "User not found". 
+                // We show a friendly, bulletproof message.
+                showMessage('If an account matches that email, a password reset link has been sent. If you don\'t receive it, please ensure you have registered.', false, 'reset-message');
+                
+                setTimeout(() => {
+                    toggleResetForm(); // Send them back to the login screen after 5 seconds
+                }, 5000);
+
+            } catch (err) {
+                // If it explicitly fails (rate limit, offline)
+                showMessage("Notice: " + err.message, true, 'reset-message');
             } finally {
                 btn.disabled = false;
             }
