@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENET SUPREME ACADEMY | Login</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
+        /* === BRANDING STYLES === */
         :root { 
             --navy-blue: #02014a; 
             --brand-yellow: #fcd116; 
             --yellow-hover: #e0b800; 
             --accent-cyan: #00a0df; 
             --text-main: #333333; 
+            --text-muted: #64748b;
             --background: #F8F9FA; 
             --white: #FFFFFF; 
             --border: #E2E8F0; 
@@ -18,127 +23,69 @@
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        body { 
-            background-color: var(--background); 
-            color: var(--text-main); 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 1.5rem; 
-        }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1.5rem; }
         
-        .auth-logo { 
-            color: var(--navy-blue); 
-            font-size: 2.2rem; 
-            font-weight: 800; 
-            margin-bottom: 2rem; 
-            text-transform: uppercase; 
-            text-align: center; 
-            letter-spacing: 1px;
-            text-decoration: none;
-        }
+        .auth-logo { color: var(--navy-blue); font-size: 2.2rem; font-weight: 800; margin-bottom: 2rem; text-transform: uppercase; text-align: center; letter-spacing: 1px; text-decoration: none; display: block;}
+        .auth-logo span { color: var(--brand-yellow); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         
-        .auth-logo span { 
-            color: var(--brand-yellow); 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
+        .auth-card { background: var(--white); max-width: 450px; width: 100%; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 5px solid var(--accent-cyan); animation: fadeIn 0.4s ease; }
         
-        .auth-card { 
-            background: var(--white); 
-            max-width: 450px; 
-            width: 100%; 
-            padding: 2.5rem; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            border-top: 5px solid var(--accent-cyan); 
-        }
+        h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1rem; font-weight: 800; }
+        .sub-text { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.5; }
         
-        h2 { text-align: center; color: var(--navy-blue); margin-bottom: 1.5rem; font-weight: 800; }
-        .sub-text { text-align: center; color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem; }
-        
-        .form-group { margin-bottom: 1.2rem; position: relative; }
-        
+        .form-group { margin-bottom: 1.2rem; position: relative;}
         label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--navy-blue); }
         
-        input { 
-            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); 
-            border-radius: 6px; font-size: 1rem; transition: all 0.3s ease; outline: none;
-        }
-        input[type="password"], input[type="text"] { padding-right: 2.8rem; }
-        input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 3px rgba(0, 160, 223, 0.1); }
+        input { width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; transition: all 0.2s ease; outline: none; background: #fdfdfd; color: var(--text-main);}
+        input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 3px rgba(0, 160, 223, 0.1); background: #fff;}
         
-        .password-wrapper { position: relative; }
-        .toggle-password { 
-            position: absolute; right: 10px; top: 50%; transform: translateY(-50%); 
-            background: none; border: none; cursor: pointer; color: #94a3b8;
-            display: flex; align-items: center; justify-content: center; padding: 5px;
-        }
-        .toggle-password:hover { color: var(--accent-cyan); }
+        /* Professional Password Field */
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper input { padding-right: 45px; } 
+        .toggle-password { position: absolute; right: 12px; background: transparent; border: none; cursor: pointer; color: #94a3b8; display: flex; align-items: center; justify-content: center; transition: 0.2s; padding: 4px; }
+        .toggle-password:hover { color: var(--navy-blue); }
 
-        .btn-primary { 
-            width: 100%; background-color: var(--brand-yellow); color: var(--navy-blue); 
-            border: none; padding: 1rem; border-radius: 6px; font-size: 1.05rem; 
-            font-weight: 800; cursor: pointer; transition: background-color 0.3s ease; 
-            margin-top: 1rem; 
-        }
-        .btn-primary:hover { background-color: var(--yellow-hover); }
-        .btn-primary:disabled { background-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
+        .btn-primary { width: 100%; background-color: var(--brand-yellow); color: var(--navy-blue); border: none; padding: 1rem; border-radius: 8px; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: 0.2s ease; margin-top: 0.5rem; }
+        .btn-primary:hover { background-color: var(--yellow-hover); transform: translateY(-2px); }
+        .btn-primary:disabled { background-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; transform: none; }
         
-        .message-box { 
-            margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; 
-            font-weight: 600; padding: 0.8rem; border-radius: 6px; display: none; 
-        }
+        .message-box { margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; font-weight: 600; padding: 0.8rem; border-radius: 8px; display: none; border: 1px solid transparent; }
+        .message-box.error { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+        .message-box.success { background: #f0fdf4; color: #059669; border-color: #86efac; }
+        .message-box.info { background: #f0f9ff; color: #0284c7; border-color: #bae6fd; }
         
-        .register-link { display: block; text-align: center; margin-top: 1.5rem; color: #64748b; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
-        .register-link span { color: var(--accent-cyan); font-weight: 800; }
-        .register-link:hover span { color: var(--navy-blue); text-decoration: underline; }
+        .register-link { display: block; text-align: center; margin-top: 1.5rem; color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500;}
+        .register-link span { color: var(--accent-cyan); font-weight: 800; transition: color 0.2s;}
+        .register-link:hover span { color: var(--navy-blue); text-decoration: underline;}
 
-        .forgot-password { display: block; text-align: right; margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; text-decoration: none; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; }
-        .forgot-password:hover { text-decoration: underline; color: var(--navy-blue); }
+        .forgot-password { display: block; text-align: right; margin-top: 0.6rem; font-size: 0.85rem; color: var(--accent-cyan); font-weight: 700; text-decoration: none; cursor: pointer; transition: 0.2s;}
+        .forgot-password:hover { color: var(--navy-blue); }
 
         .hidden { display: none !important; }
-
-        /* Loading spinner inside button */
-        .spinner {
-            display: inline-block;
-            width: 16px; height: 16px;
-            border: 2px solid var(--navy-blue);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            vertical-align: middle;
-            margin-right: 6px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <a href="index.html" class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></a>
     
-    <!-- LOGIN SECTION -->
     <section class="auth-card" id="login-section">
         <h2>Gateway Portal</h2>
         <div class="message-box" id="auth-message"></div>
         
-        <form id="login-form">
+        <form id="login-form" onsubmit="event.preventDefault(); attemptLogin();">
             <div class="form-group">
-                <label for="login-email">Email Address</label>
-                <input type="email" id="login-email" required placeholder="your@email.com" autocomplete="email">
+                <label>Email Address</label>
+                <input type="email" id="login-email" required placeholder="your@email.com">
             </div>
             <div class="form-group">
-                <label for="login-password">Password</label>
+                <label>Password</label>
                 <div class="password-wrapper">
-                    <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
-                    <button type="button" class="toggle-password" id="toggle-login-pw" aria-label="Toggle password visibility">
-                        <!-- Eye Open Icon -->
-                        <svg id="eye-open-login" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <!-- Eye Slash Icon (hidden by default) -->
-                        <svg id="eye-slash-login" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password', this)" title="Show Password">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
-                <button type="button" class="forgot-password" id="forgot-pw-btn">Forgot Password?</button>
+                <span class="forgot-password" onclick="toggleResetForm()">Forgot Password?</span>
             </div>
             <button type="submit" class="btn-primary" id="login-btn">Secure Log In</button>
         </form>
@@ -146,37 +93,36 @@
         <a href="register.html" class="register-link">Don't have an account? <span>Apply here</span></a>
     </section>
 
-    <!-- RESET PASSWORD SECTION -->
     <section class="auth-card hidden" id="reset-section">
         <h2>Reset Password</h2>
-        <p class="sub-text">Enter your email address and we'll send you a secure link to reset your password.</p>
+        <p class="sub-text">Enter your email address below and we'll send you a secure link to reset your password.</p>
+        
         <div class="message-box" id="reset-message"></div>
         
-        <form id="reset-form">
+        <form id="reset-form" onsubmit="event.preventDefault(); attemptPasswordReset();">
             <div class="form-group">
-                <label for="reset-email">Email Address</label>
-                <input type="email" id="reset-email" required placeholder="your@email.com" autocomplete="email">
+                <label>Email Address</label>
+                <input type="email" id="reset-email" required placeholder="your@email.com">
             </div>
             <button type="submit" class="btn-primary" id="reset-btn">Send Reset Link</button>
         </form>
 
-        <a href="#" class="register-link" id="back-to-login-btn">Back to <span>Secure Log In</span></a>
+        <a href="#" class="register-link" onclick="toggleResetForm(); return false;">Back to <span>Secure Log In</span></a>
     </section>
 
-    <!-- SET NEW PASSWORD SECTION -->
     <section class="auth-card hidden" id="update-section">
         <h2>Set New Password</h2>
         <p class="sub-text">Welcome back! Please enter your new secure password below.</p>
+        
         <div class="message-box" id="update-message"></div>
         
-        <form id="update-form">
+        <form id="update-form" onsubmit="event.preventDefault(); updatePassword();">
             <div class="form-group">
-                <label for="new-password">New Password</label>
+                <label>New Password</label>
                 <div class="password-wrapper">
-                    <input type="password" id="new-password" required placeholder="••••••••" minlength="6" autocomplete="new-password">
-                    <button type="button" class="toggle-password" id="toggle-new-pw" aria-label="Toggle password visibility">
-                        <svg id="eye-open-new" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <svg id="eye-slash-new" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    <input type="password" id="new-password" required placeholder="••••••••" minlength="6">
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new-password', this)" title="Show Password">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     </button>
                 </div>
             </div>
@@ -184,147 +130,98 @@
         </form>
     </section>
 
-    <!-- ✅ Load Supabase FIRST, then run all logic after it's ready -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ── CONFIG ──────────────────────────────────────────────────────────
-        const SUPABASE_URL = 'https://lskwzcvexyxjncttvimf.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+        // Directly initialize Supabase exactly like your working version
+        const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // ✅ Supabase is now guaranteed to be available since script is placed after the CDN tag
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // ── HELPERS ─────────────────────────────────────────────────────────
-        function showMessage(elementId, text, isError) {
-            const el = document.getElementById(elementId);
-            el.style.display = 'block';
-            el.style.backgroundColor = isError ? '#fee2e2' : '#e0f2fe';
-            el.style.color = isError ? '#DC2626' : 'var(--navy-blue)';
-            el.textContent = text;
+        /* === UI HELPERS === */
+        function showMessage(text, type, elementId) {
+            const msgDiv = document.getElementById(elementId);
+            msgDiv.style.display = 'block';
+            msgDiv.className = `message-box ${type}`; 
+            msgDiv.innerText = text;
         }
 
-        function hideMessage(elementId) {
-            document.getElementById(elementId).style.display = 'none';
-        }
-
-        function setLoading(btnId, loading, defaultText) {
-            const btn = document.getElementById(btnId);
-            btn.disabled = loading;
-            btn.innerHTML = loading
-                ? `<span class="spinner"></span> Please wait...`
-                : defaultText;
-        }
-
-        function toggleEye(inputId, openIconId, slashIconId) {
+        function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
-            const isPassword = input.type === 'password';
-            input.type = isPassword ? 'text' : 'password';
-            document.getElementById(openIconId).style.display = isPassword ? 'none' : 'inline';
-            document.getElementById(slashIconId).style.display = isPassword ? 'inline' : 'none';
-        }
+            const eyeOpen = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            const eyeSlashed = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
 
-        function showSection(id) {
-            ['login-section', 'reset-section', 'update-section'].forEach(s => {
-                document.getElementById(s).classList.toggle('hidden', s !== id);
-            });
-        }
-
-        // ── INIT: Check URL hash for password recovery link ─────────────────
-        window.addEventListener('DOMContentLoaded', () => {
-            const hash = window.location.hash;
-            if (hash && hash.includes('type=recovery')) {
-                showSection('update-section');
+            if (input.type === "password") {
+                input.type = "text";
+                btn.innerHTML = eyeSlashed;
+            } else {
+                input.type = "password";
+                btn.innerHTML = eyeOpen;
             }
+        }
 
-            // ── FORM SUBMIT LISTENERS (no inline onsubmit needed) ────────────
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                attemptLogin();
-            });
+        function toggleResetForm() {
+            document.getElementById('login-section').classList.toggle('hidden');
+            document.getElementById('reset-section').classList.toggle('hidden');
+            document.getElementById('auth-message').style.display = 'none';
+            document.getElementById('reset-message').style.display = 'none';
+            
+            const loginEmail = document.getElementById('login-email').value;
+            if(loginEmail) document.getElementById('reset-email').value = loginEmail;
+        }
 
-            document.getElementById('reset-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                attemptPasswordReset();
-            });
-
-            document.getElementById('update-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                updatePassword();
-            });
-
-            // ── BUTTON LISTENERS ─────────────────────────────────────────────
-            document.getElementById('forgot-pw-btn').addEventListener('click', function() {
-                hideMessage('auth-message');
-                hideMessage('reset-message');
-                // Pre-fill reset email from login email field
-                document.getElementById('reset-email').value = document.getElementById('login-email').value;
-                showSection('reset-section');
-            });
-
-            document.getElementById('back-to-login-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                hideMessage('auth-message');
-                hideMessage('reset-message');
-                showSection('login-section');
-            });
-
-            document.getElementById('toggle-login-pw').addEventListener('click', function() {
-                toggleEye('login-password', 'eye-open-login', 'eye-slash-login');
-            });
-
-            document.getElementById('toggle-new-pw').addEventListener('click', function() {
-                toggleEye('new-password', 'eye-open-new', 'eye-slash-new');
-            });
+        // Check if returning from a password reset email
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash && window.location.hash.includes('type=recovery')) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('reset-section').classList.add('hidden');
+                document.getElementById('update-section').classList.remove('hidden');
+            }
         });
 
-        // ── LOGIN ────────────────────────────────────────────────────────────
+        /* === LOGIN LOGIC === */
         async function attemptLogin() {
-            setLoading('login-btn', true, 'Secure Log In');
-            hideMessage('auth-message');
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true;
+            showMessage('Authenticating securely...', 'info', 'auth-message');
 
             try {
-                const email    = document.getElementById('login-email').value.trim();
+                const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
 
                 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) throw new Error('Invalid email or password. Please try again.');
+                if (error) throw error; // Will be caught below
 
-                const { data: profile, error: profileError } = await supabase
-                    .from('profiles')
-                    .select('role, status')
-                    .eq('id', data.user.id)
-                    .single();
-
-                if (profileError || !profile) throw new Error('Profile not found. Please contact support.');
+                const { data: profile, error: profileError } = await supabase.from('profiles').select('role, status').eq('id', data.user.id).single();
+                if (profileError || !profile) throw new Error("Profile not found in database.");
 
                 if (profile.role !== 'admin' && profile.status === 'pending') {
                     await supabase.auth.signOut();
-                    throw new Error('Your account is pending Admin approval. Please check back later.');
+                    throw new Error("Your account is pending Admin approval. Please check back later.");
                 }
 
-                showMessage('auth-message', '✅ Success! Redirecting you now...', false);
-
-                const redirectUrl = new URLSearchParams(window.location.search).get('redirect');
-
-                setTimeout(() => {
-                    if (redirectUrl)                    window.location.href = redirectUrl;
-                    else if (profile.role === 'admin')  window.location.href = 'admin-dashboard.html';
-                    else if (profile.role === 'teacher') window.location.href = 'teacher-dashboard.html';
-                    else                                window.location.href = 'student-dashboard.html';
-                }, 800);
+                showMessage('Success! Redirecting...', 'success', 'auth-message');
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectUrl = urlParams.get('redirect');
+                
+                if (redirectUrl) window.location.href = redirectUrl;
+                else if (profile.role === 'admin') window.location.href = "admin-dashboard.html";
+                else if (profile.role === 'teacher') window.location.href = "teacher-dashboard.html";
+                else window.location.href = "student-dashboard.html";
 
             } catch (err) {
-                showMessage('auth-message', err.message, true);
-                setLoading('login-btn', false, 'Secure Log In');
+                showMessage(err.message, 'error', 'auth-message');
+            } finally {
+                btn.disabled = false;
             }
         }
 
-        // ── REQUEST PASSWORD RESET EMAIL ─────────────────────────────────────
+        /* === PASSWORD RESET LOGIC === */
         async function attemptPasswordReset() {
-            setLoading('reset-btn', true, 'Send Reset Link');
-            hideMessage('reset-message');
-
-            const email = document.getElementById('reset-email').value.trim();
+            const btn = document.getElementById('reset-btn');
+            const email = document.getElementById('reset-email').value;
+            
+            btn.disabled = true;
+            showMessage('Checking database...', 'info', 'reset-message');
 
             try {
                 const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -333,35 +230,36 @@
 
                 if (error) throw error;
 
-                showMessage('reset-message', '📧 If an account exists for that email, a reset link has been sent. Check your inbox (and spam folder).', false);
-
+                showMessage('A secure password reset link has been sent to your inbox. Please check your email.', 'success', 'reset-message');
+                
             } catch (err) {
-                showMessage('reset-message', 'Error: ' + err.message, true);
+                showMessage(err.message, 'error', 'reset-message');
             } finally {
-                setLoading('reset-btn', false, 'Send Reset Link');
+                btn.disabled = false;
             }
         }
 
-        // ── UPDATE PASSWORD (after clicking reset email link) ────────────────
+        /* === UPDATE NEW PASSWORD LOGIC === */
         async function updatePassword() {
-            setLoading('update-btn', true, 'Update Password');
-            hideMessage('update-message');
-
+            const btn = document.getElementById('update-btn');
             const newPassword = document.getElementById('new-password').value;
+            
+            btn.disabled = true;
+            showMessage('Updating your password...', 'info', 'update-message');
 
             try {
                 const { error } = await supabase.auth.updateUser({ password: newPassword });
                 if (error) throw error;
 
-                showMessage('update-message', '✅ Password updated! Redirecting to login...', false);
-
+                showMessage('Password updated successfully! Redirecting you to login...', 'success', 'update-message');
+                
                 setTimeout(() => {
-                    window.location.href = window.location.pathname;
-                }, 2500);
+                    window.location.href = window.location.pathname; 
+                }, 2000);
 
-            } catch (err) {
-                showMessage('update-message', 'Error: ' + err.message, true);
-                setLoading('update-btn', false, 'Update Password');
+            } catch(err) {
+                showMessage(err.message, 'error', 'update-message');
+                btn.disabled = false;
             }
         }
     </script>
