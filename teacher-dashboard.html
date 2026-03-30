@@ -90,14 +90,12 @@
         .stat-num { font-family: 'Poppins', sans-serif; font-size: 2.25rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
         .stat-card.brand-surface .stat-num { color: var(--text-dark); }
 
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-
         .panel { background: var(--surface); border-radius: 24px; overflow: hidden; box-shadow: 0 10px 40px var(--shadow-color); animation: fadeUp 0.4s ease both; transition: background-color 0.3s ease; margin-bottom: 2rem;}
         .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem 1rem; border-bottom: 1px solid var(--border); }
         .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
         .panel-body { padding: 1.5rem 2rem; }
 
-        /* === NEW: COURSE CREATOR STYLES === */
+        /* === COURSE CREATOR STYLES === */
         .course-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;}
         .form-group { margin-bottom: 1.2rem; }
         .form-group.full-width { grid-column: 1 / -1; }
@@ -108,15 +106,20 @@
         .curriculum-builder { background: var(--bg-light); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top: 1rem;}
         .module-box { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); animation: fadeUp 0.3s ease;}
         .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;}
-        .module-header h4 { font-family: 'Poppins'; font-size: 1.1rem; color: var(--brand-navy); margin: 0; width: 100%;}
         .section-title-input { width: 80%; border: none; background: transparent; font-family: 'Poppins'; font-size: 1.1rem; font-weight: bold; color: var(--brand-navy); outline: none; border-bottom: 2px dashed transparent; transition: 0.2s;}
         .section-title-input:focus { border-bottom: 2px dashed var(--accent-cyan); }
         
         .lesson-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem;}
         .lesson-item { display: flex; flex-direction: column; gap: 8px; background: var(--bg-light); padding: 1rem; border-radius: 8px; border: 1px dashed var(--border-bright); animation: fadeUp 0.3s ease;}
-        .lesson-inputs { display: flex; gap: 10px; width: 100%; align-items: center;}
-        .lesson-item input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); outline: none; font-size: 0.85rem;}
+        
+        /* The Dual-Upload Inputs */
+        .lesson-inputs { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; align-items: center;}
+        .lesson-inputs > * { flex: 1; min-width: 200px; }
+        .lesson-inputs select { max-width: 250px; padding: 8px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem;}
+        .lesson-item input { padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); outline: none; font-size: 0.85rem;}
+        .lesson-item input[type="file"] { padding: 5px; background: var(--surface); cursor: pointer; }
         .lesson-item input:focus { border-color: var(--accent-cyan); }
+        .delete-lesson-btn { flex: 0 !important; min-width: 40px !important; }
         
         .btn-outline { background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.2s;}
         .btn-outline:hover { background: rgba(0, 160, 223, 0.1); }
@@ -137,7 +140,6 @@
 
         @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
         
-        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr; } }
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
@@ -150,7 +152,7 @@
             .welcome-text p { display: none; }
             .course-form-grid { grid-template-columns: 1fr; }
         }
-        @media (max-width: 576px) { .stats-grid { grid-template-columns: 1fr; } .topbar { flex-wrap: wrap; gap: 1rem; } .lesson-inputs { flex-direction: column; } }
+        @media (max-width: 576px) { .stats-grid { grid-template-columns: 1fr; } .lesson-inputs { flex-direction: column; align-items: stretch;} .delete-lesson-btn { width: 100%;} }
     </style>
 </head>
 <body>
@@ -202,7 +204,6 @@
         </div>
         <div class="topbar-right">
             <button class="icon-btn" onclick="cycleTheme()"><span id="theme-icon">💻</span></button>
-            <div class="icon-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><div class="bell-badge">1</div></div>
         </div>
     </header>
 
@@ -227,7 +228,7 @@
                 <div class="panel-head">
                     <div class="panel-title">My Published Courses</div>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="my-courses-list">
                     <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Fetching your courses...</p>
                 </div>
             </div>
@@ -261,7 +262,7 @@
                     </div>
 
                     <h4 style="color: var(--brand-navy); margin-top: 2rem; margin-bottom: 1rem; font-family: 'Poppins';">2. Curriculum Builder</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Organize your course into modules (Sections) and add video lessons to each.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Organize your course into modules (Sections) and upload video lessons to each.</p>
                     
                     <div class="curriculum-builder" id="curriculum-container">
                         </div>
@@ -299,10 +300,12 @@ function switchTab(sectionId) {
     document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
     document.getElementById(sectionId).style.display = 'block';
     
-    // Update nav active states
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
-    if(sectionId === 'dashboard-overview') document.getElementById('nav-dashboard').classList.add('active');
+    if(sectionId === 'dashboard-overview') {
+        document.getElementById('nav-dashboard').classList.add('active');
+        fetchMyCourses();
+    }
     
     if(window.innerWidth <= 992) toggleSidebar();
 }
@@ -333,8 +336,7 @@ window.addEventListener('load', async () => {
         document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
     }
 
-    // Start with one empty section
-    addSection();
+    addSection(); // Start with one empty section
 });
 
 window.forceLogout = async () => {
@@ -362,24 +364,54 @@ function addSection() {
         </div>
     `;
     container.insertAdjacentHTML('beforeend', sectionHtml);
-    addLesson(sectionCount); // Give them 1 empty lesson slot by default
+    addLesson(sectionCount); 
 }
 
 function addLesson(sectionId) {
     const list = document.getElementById(`lesson-list-${sectionId}`);
-    const lessonId = Date.now(); // unique ID for removal
+    const lessonId = Date.now(); 
+    
+    // NEW: Dual-Input Structure (URL or File Upload)
     const lessonHtml = `
         <li class="lesson-item" id="lesson-${lessonId}">
             <div class="lesson-inputs">
                 <svg width="16" height="16" fill="var(--accent-cyan)" viewBox="0 0 20 20" style="flex-shrink:0;"><path d="M4 4l12 6-12 6z"/></svg> 
-                <input type="text" class="lesson-title-input" placeholder="Video Title (e.g. Setting up your environment)" required>
-                <input type="url" class="lesson-url-input" placeholder="Video Link (YouTube, Vimeo, etc.)" required>
-                <button type="button" class="btn-outline danger" style="border:none;" onclick="removeElement('lesson-${lessonId}')">✕</button>
+                
+                <input type="text" class="lesson-title-input" placeholder="Video Title..." required style="flex: 2;">
+                
+                <select class="lesson-type-select" onchange="toggleVideoInput(this)">
+                    <option value="url">External Link (YouTube/Vimeo)</option>
+                    <option value="upload">Direct Upload (MP4)</option>
+                </select>
+
+                <input type="url" class="lesson-url-input" placeholder="Paste Video Link..." required>
+                <input type="file" class="lesson-file-input" accept="video/mp4,video/webm,video/mov" style="display:none;">
+
+                <button type="button" class="btn-outline danger delete-lesson-btn" style="border:none;" onclick="removeElement('lesson-${lessonId}')">✕</button>
             </div>
         </li>
     `;
     list.insertAdjacentHTML('beforeend', lessonHtml);
 }
+
+// Switches between the Text Input (URL) and the File Input (Upload)
+window.toggleVideoInput = function(selectElement) {
+    const parent = selectElement.closest('.lesson-inputs');
+    const urlInput = parent.querySelector('.lesson-url-input');
+    const fileInput = parent.querySelector('.lesson-file-input');
+
+    if (selectElement.value === 'url') {
+        urlInput.style.display = 'block';
+        urlInput.required = true;
+        fileInput.style.display = 'none';
+        fileInput.required = false;
+    } else {
+        urlInput.style.display = 'none';
+        urlInput.required = false;
+        fileInput.style.display = 'block';
+        fileInput.required = true;
+    }
+};
 
 function removeElement(elementId) {
     document.getElementById(elementId).remove();
@@ -395,7 +427,6 @@ async function saveCourse() {
     const fileInput = document.getElementById('course-image');
     const saveBtn = document.getElementById('save-btn');
 
-    // Basic Validation
     if(!title || !price || !desc) { showToast("Please fill in all course details.", "error"); return; }
     if(fileInput.files.length === 0) { showToast("A course cover image is required.", "error"); return; }
 
@@ -403,21 +434,22 @@ async function saveCourse() {
     if(sections.length === 0) { showToast("You must add at least one section.", "error"); return; }
 
     saveBtn.disabled = true;
-    saveBtn.textContent = "⏳ Uploading & Saving Curriculum...";
-
+    
     try {
         // 1. Upload Cover Image
+        saveBtn.textContent = "⏳ Uploading Cover Image...";
         const file = fileInput.files[0];
         const ext = file.name.split('.').pop();
-        const fileName = `course_${Date.now()}.${ext}`;
+        const fileName = `course_img_${Date.now()}.${ext}`;
         
         const { error: imgErr } = await sb.storage.from('course_images').upload(fileName, file);
-        if (imgErr) throw new Error("Failed to upload image: " + imgErr.message);
+        if (imgErr) throw new Error("Cover image upload failed: " + imgErr.message);
         
         const { data: urlData } = sb.storage.from('course_images').getPublicUrl(fileName);
         const imageUrl = urlData.publicUrl;
 
-        // 2. Create the Main Course (The Trunk)
+        // 2. Create the Main Course
+        saveBtn.textContent = "⏳ Creating Course Curriculum...";
         const { data: courseData, error: courseErr } = await sb.from('courses').insert({
             title: title,
             description: desc,
@@ -430,7 +462,7 @@ async function saveCourse() {
         if (courseErr) throw new Error("Failed to save course details.");
         const newCourseId = courseData.id;
 
-        // 3. Loop through UI Sections & Save (The Branches)
+        // 3. Loop through UI Sections & Lessons
         for (let i = 0; i < sections.length; i++) {
             const sectionNode = sections[i];
             const sectionTitle = sectionNode.querySelector('.section-title-input').value || `Section ${i+1}`;
@@ -444,34 +476,52 @@ async function saveCourse() {
             if (secErr) throw new Error("Failed to save sections.");
             const newSectionId = secData.id;
 
-            // 4. Loop through UI Lessons & Save (The Leaves)
+            // 4. Process Lessons inside this section
             const lessons = sectionNode.querySelectorAll('.lesson-item');
             for (let j = 0; j < lessons.length; j++) {
                 const lessonNode = lessons[j];
                 const lesTitle = lessonNode.querySelector('.lesson-title-input').value || `Lesson ${j+1}`;
-                const lesUrl = lessonNode.querySelector('.lesson-url-input').value || "";
+                const uploadType = lessonNode.querySelector('.lesson-type-select').value;
+                
+                let finalVideoUrl = "";
 
-                if(lesUrl) { // Only save if there is a URL
+                if (uploadType === 'url') {
+                    finalVideoUrl = lessonNode.querySelector('.lesson-url-input').value;
+                } else if (uploadType === 'upload') {
+                    const videoFileNode = lessonNode.querySelector('.lesson-file-input');
+                    if (videoFileNode.files.length > 0) {
+                        const vidFile = videoFileNode.files[0];
+                        const vidExt = vidFile.name.split('.').pop();
+                        const vidName = `video_${Date.now()}_${i}_${j}.${vidExt}`;
+                        
+                        // Notify user since large videos take time
+                        saveBtn.textContent = `⏳ Uploading Video: ${lesTitle}... Please wait.`;
+                        
+                        const { error: vidErr } = await sb.storage.from('course_videos').upload(vidName, vidFile);
+                        if (vidErr) throw new Error("Video upload failed for lesson: " + lesTitle);
+                        
+                        const { data: vidUrlData } = sb.storage.from('course_videos').getPublicUrl(vidName);
+                        finalVideoUrl = vidUrlData.publicUrl;
+                    }
+                }
+
+                if(finalVideoUrl) {
                     await sb.from('course_lessons').insert({
                         section_id: newSectionId,
                         title: lesTitle,
-                        video_url: lesUrl,
+                        video_url: finalVideoUrl,
                         sequence_order: j + 1
                     });
                 }
             }
         }
 
-        // Success!
         showToast("Course Published Successfully!", "success");
-        
-        // Reset Form & UI
         document.getElementById('course-builder-form').reset();
         document.getElementById('curriculum-container').innerHTML = '';
         sectionCount = 0;
-        addSection(); // add blank start
-
-        // Redirect to Dashboard Overview
+        addSection(); 
+        
         setTimeout(() => switchTab('dashboard-overview'), 1500);
 
     } catch (err) {
@@ -481,6 +531,37 @@ async function saveCourse() {
         saveBtn.disabled = false;
         saveBtn.textContent = "🚀 Save & Publish Course";
     }
+}
+
+async function fetchMyCourses() {
+    if(!currentInstructorId) return;
+    try {
+        const { data, error } = await sb.from('courses').select('*').eq('instructor_id', currentInstructorId).order('created_at', { ascending: false });
+        if(error) throw error;
+        
+        document.getElementById('stat-courses').textContent = data.length;
+        
+        const list = document.getElementById('my-courses-list');
+        if(data.length === 0) {
+            list.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>You haven't published any courses yet.</p>";
+            return;
+        }
+        
+        let html = '<div style="display:flex; flex-direction:column; gap:15px;">';
+        data.forEach(c => {
+            html += `
+            <div style="display:flex; align-items:center; gap:15px; padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-light);">
+                <img src="${c.image_url}" style="width:100px; height:60px; object-fit:cover; border-radius:8px;">
+                <div style="flex:1;">
+                    <h4 style="color:var(--brand-navy); margin-bottom:5px;">${c.title}</h4>
+                    <span style="font-size:0.8rem; font-weight:bold; color:var(--accent-cyan);">₦${Number(c.price).toLocaleString()}</span>
+                </div>
+            </div>`;
+        });
+        html += '</div>';
+        list.innerHTML = html;
+        
+    } catch(e) { console.error(e); }
 }
 </script>
 </body>
