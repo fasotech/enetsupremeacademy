@@ -89,6 +89,16 @@
         .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
         .panel-body { padding: 1.5rem 2rem; }
 
+        /* TABLES FOR STUDENTS */
+        .table-responsive { width: 100%; overflow-x: auto; }
+        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        .data-tbl th { padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); }
+        .data-tbl td { padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .data-tbl tbody tr:hover { background: var(--bg-light); }
+        .user-cell { display: flex; align-items: center; gap: 1rem; }
+        .uav { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem; color: #fff; background: var(--accent-cyan); flex-shrink: 0;}
+
+        /* CREATOR FORMS */
         .course-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;}
         .form-group { margin-bottom: 1.2rem; }
         .form-group.full-width { grid-column: 1 / -1; }
@@ -123,6 +133,8 @@
         .btn-outline:hover { background: rgba(0, 160, 223, 0.1); }
         .btn-outline.danger { border-color: var(--danger); color: var(--danger); }
         .btn-outline.danger:hover { background: rgba(238, 93, 80, 0.1); }
+        .btn-outline.success { border-color: var(--success); color: var(--success); }
+        .btn-outline.success:hover { background: rgba(5, 205, 153, 0.1); }
         
         .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: 0.2s; background: var(--accent-cyan); color: #fff; border: none; }
         .btn-primary:hover { background: #0088bd; }
@@ -173,6 +185,10 @@
     <a class="nav-item" href="#" onclick="startNewCourse(); return false;" id="nav-creator">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Course Creator
     </a>
+
+    <a class="nav-item" href="#" onclick="switchTab('students-section'); return false;" id="nav-students">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> My Students
+    </a>
     
     <div class="nav-label">Resources</div>
     <a class="nav-item" href="community.html">
@@ -208,8 +224,8 @@
                 <div class="stat-card brand-blue" onclick="startNewCourse()">
                     <div class="stat-lbl">Active Courses</div><div class="stat-num" id="stat-courses">0</div>
                 </div>
-                <div class="stat-card brand-orange">
-                    <div class="stat-lbl">Total Students</div><div class="stat-num">0</div>
+                <div class="stat-card brand-orange" onclick="switchTab('students-section')">
+                    <div class="stat-lbl">Total Students Enrolled</div><div class="stat-num" id="stat-students">0</div>
                 </div>
                 <div class="stat-card brand-yellow">
                     <div class="stat-lbl">Course Revenue</div><div class="stat-num">₦0.00</div>
@@ -229,6 +245,20 @@
             </div>
         </div>
 
+        <div class="panel view-section" id="students-section" style="display: none;">
+            <div class="panel-head">
+                <div class="panel-title">Student Roster & Analytics</div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-tbl">
+                    <thead><tr><th>Student Info</th><th>Enrolled Course</th><th>Enrollment Date</th></tr></thead>
+                    <tbody id="students-table-body">
+                        <tr><td colspan="3"><p style="text-align:center; color: var(--text-muted); padding: 1rem;">Loading students...</p></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="panel view-section" id="creator-section" style="display: none;">
             <div class="panel-head">
                 <div class="panel-title" id="form-main-title">Course Creator & Manager</div>
@@ -244,8 +274,8 @@
                             <input type="text" id="course-title" placeholder="e.g., Master Python for Data Science" required>
                         </div>
                         <div class="form-group">
-                            <label>Price (₦) *</label>
-                            <input type="number" id="course-price" placeholder="e.g., 15000" required min="0">
+                            <label>Price (₦) * <span style="font-weight:normal; color:var(--text-muted);">(Set to 0 for FREE)</span></label>
+                            <input type="number" id="course-price" placeholder="e.g., 0" required min="0">
                         </div>
                         <div class="form-group full-width">
                             <label>Course Description *</label>
@@ -282,7 +312,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// THEME & SIDEBAR
+// ── THEME & SIDEBAR ──
 const themes = ['system', 'light', 'dark'];
 const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
 function cycleTheme() {
@@ -296,13 +326,14 @@ function applyTheme(theme) {
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
 
-// Tab Switcher
+// ── TAB SWITCHER ──
 function switchTab(sectionId) {
     document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
     document.getElementById(sectionId).style.display = 'block';
     
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
     if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
+    if(sectionId === 'students-section') document.getElementById('nav-students').classList.add('active');
     if(sectionId === 'dashboard-overview') {
         document.getElementById('nav-dashboard').classList.add('active');
         fetchMyCourses();
@@ -320,7 +351,19 @@ function showToast(msg, type='info') {
     setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000);
 }
 
-// SUPABASE INIT & SESSION
+// ── SHARE LINK FEATURE ──
+function copyShareLink(courseId) {
+    // Generate a link directly to the tracks/storefront page. 
+    // Once you build a dedicated course page, you can update this URL.
+    const url = window.location.origin + '/tracks.html';
+    navigator.clipboard.writeText(url).then(() => {
+        showToast("Storefront link copied to clipboard! Share it with your audience.", "success");
+    }).catch(err => {
+        showToast("Failed to copy link.", "error");
+    });
+}
+
+// ── SUPABASE INIT & SESSION ──
 const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
 let currentInstructorId = null;
 
@@ -334,7 +377,9 @@ window.addEventListener('load', async () => {
     if (profile && profile.first_name) {
         document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
     }
+    
     fetchMyCourses();
+    fetchMyStudents();
 });
 
 window.forceLogout = async () => {
@@ -368,7 +413,6 @@ function addLesson(sectionId, defaultTitle = "", defaultUrl = "") {
     const list = document.getElementById(`lesson-list-${sectionId}`);
     const lessonId = Date.now() + Math.floor(Math.random() * 1000); 
     
-    // UI upgraded to hold text notes and file uploads
     const lessonHtml = `
         <li class="lesson-item" id="lesson-${lessonId}">
             <div class="lesson-inputs">
@@ -408,9 +452,7 @@ window.toggleVideoInput = function(selectElement) {
     }
 };
 
-function removeElement(elementId) {
-    document.getElementById(elementId).remove();
-}
+function removeElement(elementId) { document.getElementById(elementId).remove(); }
 
 /* =========================================
    READ, UPDATE, DELETE LOGIC (CRUD)
@@ -432,15 +474,18 @@ async function fetchMyCourses() {
         
         let html = '<div style="display:flex; flex-direction:column; gap:15px;">';
         data.forEach(c => {
+            const priceDisplay = Number(c.price) === 0 ? "FREE" : `₦${Number(c.price).toLocaleString()}`;
+            
             html += `
             <div style="display:flex; align-items:center; gap:15px; padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-light); flex-wrap: wrap;">
                 <img src="${c.image_url}" style="width:120px; height:80px; object-fit:cover; border-radius:8px;">
                 <div style="flex:1; min-width: 200px;">
                     <h4 style="color:var(--brand-navy); margin-bottom:5px;">${c.title}</h4>
-                    <span style="font-size:0.8rem; font-weight:bold; color:var(--accent-cyan);">₦${Number(c.price).toLocaleString()}</span>
+                    <span style="font-size:0.8rem; font-weight:bold; color:var(--accent-cyan); background: rgba(0, 160, 223, 0.1); padding: 2px 8px; border-radius: 4px;">${priceDisplay}</span>
                     <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Published: ${new Date(c.created_at).toLocaleDateString()}</div>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                    <button class="btn-outline success" onclick="copyShareLink('${c.id}')">🔗 Share</button>
                     <a href="learn.html?course=${c.id}" target="_blank" class="btn-outline" style="text-decoration:none; display:inline-flex; align-items:center;">👁️ Preview</a>
                     <button class="btn-outline" onclick="editCourse('${c.id}')">✏️ Edit</button>
                     <button class="btn-outline danger" onclick="deleteCourse('${c.id}')">🗑️ Delete</button>
@@ -450,6 +495,62 @@ async function fetchMyCourses() {
         html += '</div>';
         list.innerHTML = html;
     } catch(e) { console.error(e); }
+}
+
+async function fetchMyStudents() {
+    if(!currentInstructorId) return;
+    try {
+        // 1. Get all courses this instructor owns
+        const { data: courses } = await sb.from('courses').select('id, title').eq('instructor_id', currentInstructorId);
+        if(!courses || courses.length === 0) return;
+        
+        const courseIds = courses.map(c => c.id);
+        
+        // 2. Get enrollments for these courses
+        const { data: enrollments, error } = await sb.from('enrollments')
+            .select('enrolled_at, profiles(first_name, last_name, email), courses(title)')
+            .in('course_id', courseIds)
+            .order('enrolled_at', { ascending: false });
+            
+        if(error) throw error;
+        
+        document.getElementById('stat-students').textContent = enrollments.length;
+        
+        const tbody = document.getElementById('students-table-body');
+        if(enrollments.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3"><p style="text-align:center; color: var(--text-muted); padding: 1rem;">No students enrolled yet.</p></td></tr>`;
+            return;
+        }
+
+        let html = '';
+        enrollments.forEach(en => {
+            const fName = en.profiles?.first_name || 'Student';
+            const lName = en.profiles?.last_name || '';
+            const fullName = `${fName} ${lName}`.trim();
+            const initial = fName.charAt(0).toUpperCase();
+            const date = new Date(en.enrolled_at).toLocaleDateString();
+            
+            html += `
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="uav">${initial}</div>
+                            <div>
+                                <div class="uname">${fullName}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">${en.profiles?.email || 'No email'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="font-weight: 500; color: var(--brand-navy);">${en.courses?.title || 'Unknown Course'}</td>
+                    <td>${date}</td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+
+    } catch(err) {
+        console.error("Error fetching students:", err);
+    }
 }
 
 window.editCourse = async function(courseId) {
@@ -486,7 +587,6 @@ window.editCourse = async function(courseId) {
             const secLessons = lessons.filter(l => l.section_id === sec.id);
             secLessons.forEach(les => {
                 addLesson(currentSecId, les.title, les.video_url);
-                // Note: For simplicity in MVP editing, teachers will need to re-upload PDFs when editing.
             });
         });
 
@@ -530,6 +630,7 @@ window.deleteCourse = async function(courseId) {
             if(error) throw error;
             showToast("Course deleted successfully.", "success");
             fetchMyCourses();
+            fetchMyStudents(); // Refresh count if needed
         } catch (err) {
             showToast("Delete failed: " + err.message, "error");
         }
@@ -546,7 +647,7 @@ async function saveCourse() {
     const fileInput = document.getElementById('course-image');
     const saveBtn = document.getElementById('save-btn');
 
-    if(!title || !price || !desc) { showToast("Please fill in all course details.", "error"); return; }
+    if(!title || price === "" || !desc) { showToast("Please fill in all course details.", "error"); return; }
     if(!isUpdate && fileInput.files.length === 0) { showToast("A course cover image is required.", "error"); return; }
 
     const sections = document.querySelectorAll('.module-box');
@@ -568,13 +669,13 @@ async function saveCourse() {
         }
 
         let targetCourseId = editCourseId;
-        const coursePayload = { title, description: desc, price, instructor_id: currentInstructorId, is_published: true };
+        const coursePayload = { title, description: desc, price: Number(price), instructor_id: currentInstructorId, is_published: true };
         if(imageUrl) coursePayload.image_url = imageUrl;
 
         if (isUpdate) {
             saveBtn.textContent = "⏳ Updating Course...";
             await sb.from('courses').update(coursePayload).eq('id', targetCourseId);
-            await sb.from('course_sections').delete().eq('course_id', targetCourseId); // Wipe old curriculum to cleanly replace
+            await sb.from('course_sections').delete().eq('course_id', targetCourseId); 
         } else {
             saveBtn.textContent = "⏳ Creating Course...";
             const { data: courseData } = await sb.from('courses').insert(coursePayload).select().single();
@@ -602,7 +703,6 @@ async function saveCourse() {
                 let finalVideoUrl = "";
                 let finalMaterialUrl = null;
 
-                // Handle Video
                 if (uploadType === 'url') {
                     finalVideoUrl = lessonNode.querySelector('.lesson-url-input').value;
                 } else if (uploadType === 'upload') {
@@ -617,7 +717,6 @@ async function saveCourse() {
                     }
                 }
 
-                // Handle PDF/Doc Material Upload
                 const materialFileNode = lessonNode.querySelector('.lesson-material-input');
                 if (materialFileNode.files.length > 0) {
                     const matFile = materialFileNode.files[0];
