@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENET SUPREME | Learning Theater</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Forced Dark Mode for Theater */
+            --bg-dark: #07080F; 
+            --surface-dark: #13151F;
+            --surface-hover: rgba(255, 255, 255, 0.05); 
+            --border-dark: rgba(255, 255, 255, 0.1); 
+            --text-main: #F0F0FF; 
+            --text-muted: #A0AEC0; 
+            
+            /* Brand Colors */
+            --brand-navy: #02014a;
+            --accent-cyan: #00a0df;
+            --brand-yellow: #fcd116;
+            --danger: #EE5D50;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'DM Sans', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        /* === HEADER === */
+        header { background: var(--surface-dark); border-bottom: 1px solid var(--border-dark); padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 100;}
+        .header-left { display: flex; align-items: center; gap: 1.5rem; }
+        .back-btn { color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; transition: color 0.2s; padding-right: 1.5rem; border-right: 1px solid var(--border-dark);}
+        .back-btn:hover { color: var(--accent-cyan); }
+        .course-title-header { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.1rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px;}
+        
+        /* === MAIN LAYOUT === */
+        .theater-container { display: flex; flex: 1; overflow: hidden; }
+
+        /* === LEFT: VIDEO & CONTENT === */
+        .video-section { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-dark); }
+        
+        .player-wrapper { width: 100%; background: #000; position: relative; padding-top: 56.25%; /* 16:9 Aspect Ratio */ }
+        .player-wrapper iframe, .player-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; outline: none;}
+        
+        .course-details { padding: 2.5rem; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .details-title { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); }
+        
+        .tabs { display: flex; gap: 2rem; border-bottom: 1px solid var(--border-dark); margin-bottom: 2rem; }
+        .tab { padding: 1rem 0; color: var(--text-muted); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.2s; }
+        .tab:hover { color: var(--text-main); }
+        .tab.active { color: var(--text-main); border-bottom-color: var(--accent-cyan); }
+
+        .tab-content { color: var(--text-muted); line-height: 1.7; font-size: 1rem; }
+        
+        /* === RIGHT: CURRICULUM SIDEBAR === */
+        .curriculum-sidebar { width: 400px; background: var(--surface-dark); border-left: 1px solid var(--border-dark); display: flex; flex-direction: column; flex-shrink: 0; transition: transform 0.3s ease;}
+        .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-dark); display: flex; justify-content: space-between; align-items: center;}
+        .sidebar-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; }
+        .close-sidebar-btn { display: none; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        
+        .curriculum-list { flex: 1; overflow-y: auto; }
+        
+        /* Section Accordion */
+        .section-group { border-bottom: 1px solid var(--border-dark); }
+        .section-header { padding: 1rem 1.5rem; background: rgba(255,255,255,0.02); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;}
+        .section-header:hover { background: var(--surface-hover); }
+        .section-title { font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+        .section-stats { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        .chevron { transition: transform 0.3s; }
+        .section-group.active .chevron { transform: rotate(180deg); }
+        
+        /* Lessons */
+        .lesson-container { display: none; background: var(--surface-dark); }
+        .section-group.active .lesson-container { display: block; }
+        
+        .lesson-item { padding: 1rem 1.5rem 1rem 2.5rem; cursor: pointer; display: flex; gap: 12px; transition: background 0.2s; border-left: 3px solid transparent;}
+        .lesson-item:hover { background: var(--surface-hover); }
+        .lesson-item.active { background: rgba(0, 160, 223, 0.1); border-left-color: var(--accent-cyan); }
+        .lesson-item.active .lesson-name { color: var(--text-main); font-weight: 600; }
+        
+        .lesson-icon { color: var(--text-muted); margin-top: 2px; flex-shrink: 0; }
+        .lesson-item.active .lesson-icon { color: var(--accent-cyan); }
+        .lesson-name { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;}
+        
+        /* Mobile Toggle */
+        .mobile-sidebar-toggle { display: none; background: var(--surface-dark); border: 1px solid var(--border-dark); color: var(--text-main); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; margin: 1rem 2.5rem; width: max-content; }
+
+        /* Loading & Error States */
+        .state-box { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 2rem; text-align: center; }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-cyan); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 1rem;}
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .curriculum-sidebar { position: fixed; right: 0; top: 64px; bottom: 0; z-index: 200; transform: translateX(100%); }
+            .curriculum-sidebar.open { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+            .mobile-sidebar-toggle { display: flex; align-items: center; gap: 8px;}
+            .close-sidebar-btn { display: block; }
+            .course-title-header { max-width: 300px; }
+        }
+        @media (max-width: 600px) {
+            .course-title-header { display: none; }
+            .back-btn { border-right: none; }
+            .curriculum-sidebar { width: 100%; }
+            .course-details { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="student-dashboard.html" class="back-btn" id="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                Dashboard
+            </a>
+            <div class="course-title-header" id="header-title">Loading Course...</div>
+        </div>
+    </header>
+
+    <div class="theater-container">
+        
+        <main class="video-section" id="main-content">
+            
+            <div class="player-wrapper" id="player-container">
+                <div class="state-box">
+                    <div class="spinner"></div>
+                    <p style="color: var(--text-muted);">Initializing secure video engine...</p>
+                </div>
+            </div>
+
+            <button class="mobile-sidebar-toggle" onclick="toggleSidebar()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                Course Content
+            </button>
+
+            <div class="course-details">
+                <h1 class="details-title" id="current-lesson-title">Loading Lesson...</h1>
+                
+                <div class="tabs">
+                    <div class="tab active">Overview</div>
+                    <div class="tab" onclick="alert('Q&A feature coming soon!')">Q&A</div>
+                    <div class="tab" onclick="alert('Notes feature coming soon!')">Notes</div>
+                </div>
+
+                <div class="tab-content" id="course-description">
+                    <p>Loading course information...</p>
+                </div>
+            </div>
+        </main>
+
+        <aside class="curriculum-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Course Content</h3>
+                <button class="close-sidebar-btn" onclick="toggleSidebar()">✕</button>
+            </div>
+            <div class="curriculum-list" id="curriculum-list">
+                <div style="padding: 2rem; text-align: center; color: var(--text-muted);">Fetching curriculum...</div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // SUPABASE INIT
+        const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
+
+        let courseData = null;
+        let curriculum = [];
+        let allLessonsFlat = []; // Easy lookup array
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Accordion Toggle
+        function toggleSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            el.classList.toggle('active');
+        }
+
+        // Smart Video Parser
+        function renderVideo(url, title) {
+            const container = document.getElementById('player-container');
+            document.getElementById('current-lesson-title').textContent = title;
+            
+            if (!url) {
+                container.innerHTML = `
+                    <div class="state-box" style="background: #111;">
+                        <svg width="48" height="48" fill="var(--text-muted)" viewBox="0 0 24 24" style="margin-bottom:1rem;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                        <h3 style="color: var(--text-main);">Video not available</h3>
+                        <p style="color: var(--text-muted); font-size:0.85rem; margin-top:0.5rem;">The instructor has not attached a video file for this lesson.</p>
+                    </div>`;
+                return;
+            }
+
+            // Is it YouTube?
+            if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+                let videoId = '';
+                if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
+                else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+                
+                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autohide=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            } 
+            // Is it Vimeo?
+            else if (url.includes('vimeo.com/')) {
+                const videoId = url.split('vimeo.com/')[1].split('?')[0];
+                container.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            } 
+            // Assume Direct MP4/WebM Upload
+            else {
+                container.innerHTML = `
+                    <video controls controlsList="nodownload" preload="auto">
+                        <source src="${url}" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>`;
+            }
+        }
+
+        // Change Lesson Logic
+        window.playLesson = function(lessonId) {
+            // Update UI classes
+            document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
+            const activeEl = document.getElementById(`lesson-li-${lessonId}`);
+            if (activeEl) activeEl.classList.add('active');
+
+            // Find data and render
+            const lesson = allLessonsFlat.find(l => l.id === lessonId);
+            if (lesson) renderVideo(lesson.video_url, lesson.title);
+
+            // Close sidebar on mobile after clicking
+            if(window.innerWidth <= 1024) toggleSidebar();
+        };
+
+        // Initialization Logic
+        window.addEventListener('load', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('course');
+
+            try {
+                // 1. Auth Check (Must be logged in to view theater)
+                const { data: { session } } = await sb.auth.getSession();
+                if (!session) { window.location.href = "login.html"; return; }
+
+                // Determine user role to set the correct "Back" button link
+                const { data: profile } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
+                if (profile && (profile.role.includes('teacher') || profile.role.includes('instructor'))) {
+                    document.getElementById('back-link').href = "teacher-dashboard.html";
+                } else if (profile && profile.role === 'admin') {
+                    document.getElementById('back-link').href = "admin-dashboard.html";
+                }
+
+                // Demo state if testing without URL
+                if (!courseId) {
+                    throw new Error("No course selected. Please launch a course from your Dashboard.");
+                }
+
+                // 2. Fetch Course Details
+                const { data: course, error: cErr } = await sb.from('courses').select('*').eq('id', courseId).single();
+                if (cErr) throw new Error("Course not found or access denied.");
+                courseData = course;
+
+                document.getElementById('header-title').textContent = course.title;
+                document.getElementById('course-description').innerHTML = course.description.replace(/\n/g, '<br>');
+
+                // 3. Fetch Sections & Lessons safely without complex joins
+                const { data: sections, error: sErr } = await sb.from('course_sections').select('*').eq('course_id', courseId).order('sequence_order', {ascending: true});
+                if (sErr) throw sErr;
+
+                if (!sections || sections.length === 0) {
+                    throw new Error("This course is currently empty. The instructor has not uploaded any content yet.");
+                }
+
+                const sectionIds = sections.map(s => s.id);
+                const { data: lessons, error: lErr } = await sb.from('course_lessons').select('*').in('section_id', sectionIds).order('sequence_order', {ascending: true});
+                if (lErr) throw lErr;
+
+                allLessonsFlat = lessons || [];
+
+                // 4. Build the Curriculum UI
+                const sidebarList = document.getElementById('curriculum-list');
+                let html = '';
+
+                sections.forEach((sec, index) => {
+                    const secLessons = allLessonsFlat.filter(l => l.section_id === sec.id);
+                    // Open the first section by default
+                    const isActive = index === 0 ? 'active' : ''; 
+
+                    html += `
+                    <div class="section-group ${isActive}" id="sec-group-${sec.id}">
+                        <div class="section-header" onclick="toggleSection('sec-group-${sec.id}')">
+                            <div>
+                                <div class="section-title">Section ${sec.sequence_order}: ${sec.title}</div>
+                                <div class="section-stats">${secLessons.length} lessons</div>
+                            </div>
+                            <svg class="chevron" width="16" height="16" fill="var(--text-muted)" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                        </div>
+                        <div class="lesson-container">
+                    `;
+
+                    secLessons.forEach((les, lIndex) => {
+                        html += `
+                            <div class="lesson-item" id="lesson-li-${les.id}" onclick="playLesson('${les.id}')">
+                                <svg class="lesson-icon" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <div class="lesson-name">${les.sequence_order}. ${les.title}</div>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div></div>`;
+                });
+
+                sidebarList.innerHTML = html;
+
+                // 5. Auto-Play First Lesson
+                if (allLessonsFlat.length > 0) {
+                    playLesson(allLessonsFlat[0].id);
+                } else {
+                    document.getElementById('player-container').innerHTML = `
+                        <div class="state-box" style="background: #111;">
+                            <h3 style="color: var(--text-main);">No lessons available</h3>
+                            <p style="color: var(--text-muted);">The instructor has created sections but hasn't uploaded videos yet.</p>
+                        </div>`;
+                }
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('player-container').innerHTML = `
+                    <div class="state-box" style="background: #111;">
+                        <svg width="48" height="48" fill="var(--danger)" viewBox="0 0 24 24" style="margin-bottom:1rem;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                        <h3 style="color: var(--text-main);">System Error</h3>
+                        <p style="color: var(--text-muted); font-size:0.85rem; margin-top:0.5rem; max-width:80%;">${err.message}</p>
+                    </div>`;
+                document.getElementById('curriculum-list').innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: var(--danger);">Failed to load data.</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
