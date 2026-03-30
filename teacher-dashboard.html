@@ -95,7 +95,6 @@
         .panel { background: var(--surface); border-radius: 24px; overflow: hidden; box-shadow: 0 10px 40px var(--shadow-color); animation: fadeUp 0.4s ease both; transition: background-color 0.3s ease; margin-bottom: 2rem;}
         .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem 1rem; border-bottom: 1px solid var(--border); }
         .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
-        .panel-cnt { font-size: 0.75rem; font-weight: 700; background: var(--bg-light); color: var(--accent-cyan); padding: 4px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; border: 1px solid var(--border); }
         .panel-body { padding: 1.5rem 2rem; }
 
         /* === NEW: COURSE CREATOR STYLES === */
@@ -107,33 +106,34 @@
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-cyan); }
         
         .curriculum-builder { background: var(--bg-light); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top: 1rem;}
-        .module-box { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02);}
+        .module-box { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); animation: fadeUp 0.3s ease;}
         .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;}
-        .module-header h4 { font-family: 'Poppins'; font-size: 1rem; color: var(--brand-navy); }
+        .module-header h4 { font-family: 'Poppins'; font-size: 1.1rem; color: var(--brand-navy); margin: 0; width: 100%;}
+        .section-title-input { width: 80%; border: none; background: transparent; font-family: 'Poppins'; font-size: 1.1rem; font-weight: bold; color: var(--brand-navy); outline: none; border-bottom: 2px dashed transparent; transition: 0.2s;}
+        .section-title-input:focus { border-bottom: 2px dashed var(--accent-cyan); }
         
-        .lesson-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;}
-        .lesson-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-light); padding: 0.8rem 1rem; border-radius: 6px; border: 1px dashed var(--border-bright); font-size: 0.85rem;}
-        .lesson-item-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-dark);}
-        .lesson-item-title svg { color: var(--accent-cyan); }
+        .lesson-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1rem;}
+        .lesson-item { display: flex; flex-direction: column; gap: 8px; background: var(--bg-light); padding: 1rem; border-radius: 8px; border: 1px dashed var(--border-bright); animation: fadeUp 0.3s ease;}
+        .lesson-inputs { display: flex; gap: 10px; width: 100%; align-items: center;}
+        .lesson-item input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); outline: none; font-size: 0.85rem;}
+        .lesson-item input:focus { border-color: var(--accent-cyan); }
         
-        .btn-outline { background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        .btn-outline { background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.2s;}
         .btn-outline:hover { background: rgba(0, 160, 223, 0.1); }
+        .btn-outline.danger { border-color: var(--danger); color: var(--danger); }
+        .btn-outline.danger:hover { background: rgba(238, 93, 80, 0.1); }
         
         .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 12px 24px; border-radius: 8px; cursor: pointer; transition: 0.2s; background: var(--accent-cyan); color: #fff; border: none; }
         .btn-primary:hover { background: #0088bd; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* TABLES */
-        .table-responsive { width: 100%; overflow-x: auto; }
-        .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
-        .data-tbl th { padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); }
-        .data-tbl td { padding: 1.25rem 2rem; font-size: 0.9rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .data-tbl tbody tr:hover { background: var(--bg-light); }
-        
-        .user-cell { display: flex; align-items: center; gap: 1rem; }
-        .uav { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .uname { font-size: 0.95rem; font-weight: 700; color: var(--text-dark); }
-        .btn-admin { display: inline-flex; align-items: center; gap: 4px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: 0.2s; white-space: nowrap; text-decoration: none; background: rgba(0, 160, 223, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 160, 223, 0.2); }
-        .btn-admin:hover { background: var(--accent-cyan); color: #fff; }
+        /* Toast notification */
+        .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
+        .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
+        .toast.success{border-left:4px solid var(--success)}
+        .toast.error{border-left:4px solid var(--danger)}
+        @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
         @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
         
@@ -150,10 +150,12 @@
             .welcome-text p { display: none; }
             .course-form-grid { grid-template-columns: 1fr; }
         }
-        @media (max-width: 576px) { .stats-grid { grid-template-columns: 1fr; } .topbar { flex-wrap: wrap; gap: 1rem; } }
+        @media (max-width: 576px) { .stats-grid { grid-template-columns: 1fr; } .topbar { flex-wrap: wrap; gap: 1rem; } .lesson-inputs { flex-direction: column; } }
     </style>
 </head>
 <body>
+
+<div class="toast-wrap" id="toast-wrap"></div>
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
@@ -167,16 +169,12 @@
     </div>
 
     <div class="nav-label">Main Menu</div>
-    <a class="nav-item active" href="teacher-dashboard.html">
+    <a class="nav-item" href="#" onclick="switchTab('dashboard-overview'); return false;" id="nav-dashboard">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard
     </a>
     
-    <a class="nav-item" href="#" onclick="switchTab('creator-section'); return false;">
+    <a class="nav-item active" href="#" onclick="switchTab('creator-section'); return false;" id="nav-creator">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Course Creator
-    </a>
-    
-    <a class="nav-item" href="#" onclick="switchTab('grading-section'); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Submissions
     </a>
     
     <div class="nav-label">Resources</div>
@@ -209,18 +207,29 @@
     </header>
 
     <main class="content">
-        <div class="stats-grid">
-            <div class="stat-card brand-blue" onclick="switchTab('creator-section')">
-                <div class="stat-lbl">Active Courses</div><div class="stat-num">2</div>
+        <div id="dashboard-overview" class="view-section" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card brand-blue" onclick="switchTab('creator-section')">
+                    <div class="stat-lbl">Active Courses</div><div class="stat-num" id="stat-courses">0</div>
+                </div>
+                <div class="stat-card brand-orange">
+                    <div class="stat-lbl">Total Students</div><div class="stat-num">0</div>
+                </div>
+                <div class="stat-card brand-yellow">
+                    <div class="stat-lbl">Course Revenue</div><div class="stat-num">₦0.00</div>
+                </div>
+                <div class="stat-card brand-surface">
+                    <div class="stat-lbl">Avg. Rating</div><div class="stat-num">0.0 ★</div>
+                </div>
             </div>
-            <div class="stat-card brand-orange">
-                <div class="stat-lbl">Total Students</div><div class="stat-num">142</div>
-            </div>
-            <div class="stat-card brand-yellow">
-                <div class="stat-lbl">Course Revenue</div><div class="stat-num">₦0.00</div>
-            </div>
-            <div class="stat-card brand-surface">
-                <div class="stat-lbl">Avg. Rating</div><div class="stat-num">4.8 ★</div>
+            
+            <div class="panel">
+                <div class="panel-head">
+                    <div class="panel-title">My Published Courses</div>
+                </div>
+                <div class="panel-body">
+                    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Fetching your courses...</p>
+                </div>
             </div>
         </div>
 
@@ -229,85 +238,40 @@
                 <div class="panel-title">Course Creator & Manager</div>
             </div>
             <div class="panel-body">
-                <form onsubmit="event.preventDefault(); alert('Course structure saved! (Database connection coming in Phase 2)');">
+                <form id="course-builder-form">
                     
                     <h4 style="color: var(--brand-navy); margin-bottom: 1rem; font-family: 'Poppins';">1. Course Details</h4>
                     <div class="course-form-grid">
                         <div class="form-group">
-                            <label>Course Title</label>
-                            <input type="text" placeholder="e.g., Master Python for Data Science" required>
+                            <label>Course Title *</label>
+                            <input type="text" id="course-title" placeholder="e.g., Master Python for Data Science" required>
                         </div>
                         <div class="form-group">
-                            <label>Price (₦)</label>
-                            <input type="number" placeholder="e.g., 15000" required>
+                            <label>Price (₦) *</label>
+                            <input type="number" id="course-price" placeholder="e.g., 15000" required min="0">
                         </div>
                         <div class="form-group full-width">
-                            <label>Course Description</label>
-                            <textarea placeholder="What will students learn? Why should they take this course?" rows="4" required></textarea>
+                            <label>Course Description *</label>
+                            <textarea id="course-desc" placeholder="What will students learn? Why should they take this course?" rows="4" required></textarea>
                         </div>
                         <div class="form-group full-width">
-                            <label>Course Cover Image</label>
-                            <input type="file" accept="image/*">
+                            <label>Course Cover Image *</label>
+                            <input type="file" id="course-image" accept="image/*" required>
                         </div>
                     </div>
 
                     <h4 style="color: var(--brand-navy); margin-top: 2rem; margin-bottom: 1rem; font-family: 'Poppins';">2. Curriculum Builder</h4>
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Organize your course into modules (Sections) and add video lessons to each.</p>
                     
-                    <div class="curriculum-builder">
-                        <div class="module-box">
-                            <div class="module-header">
-                                <h4>Section 1: Introduction to Python</h4>
-                                <button type="button" class="btn-outline" style="border:none; color: var(--danger);">🗑️ Delete Section</button>
-                            </div>
-                            <ul class="lesson-list">
-                                <li class="lesson-item">
-                                    <div class="lesson-item-title">
-                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg> 
-                                        1. Welcome to the Course
-                                    </div>
-                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Preview Enabled</span>
-                                </li>
-                                <li class="lesson-item">
-                                    <div class="lesson-item-title">
-                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"/></svg> 
-                                        2. Setting up your environment
-                                    </div>
-                                </li>
-                            </ul>
-                            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                <input type="text" placeholder="New Lesson Title..." style="flex: 1; padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border); outline: none;">
-                                <input type="url" placeholder="Video URL (YouTube/Vimeo/Drive)..." style="flex: 1; padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border); outline: none;">
-                                <button type="button" class="btn-outline">+ Add Video</button>
-                            </div>
+                    <div class="curriculum-builder" id="curriculum-container">
                         </div>
+                    
+                    <button type="button" class="btn-outline" onclick="addSection()" style="width: 100%; padding: 12px; margin-top: 1rem; border-style: dashed;">+ Add New Section</button>
 
-                        <button type="button" class="btn-outline" style="width: 100%; padding: 12px; margin-top: 1rem; border-style: dashed;">+ Add New Section</button>
-                    </div>
-
-                    <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
-                        <button type="submit" class="btn-primary">Save & Publish Course</button>
+                    <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                        <button type="button" class="btn-primary" id="save-btn" onclick="saveCourse()">🚀 Save & Publish Course</button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="panel view-section" id="grading-section" style="display: none;">
-            <div class="panel-head">
-                <div class="panel-title">Student Submissions</div>
-            </div>
-            <div class="table-responsive">
-                <table class="data-tbl">
-                    <thead><tr><th>Student Name</th><th>Course</th><th>Assignment</th><th>Action</th></tr></thead>
-                    <tbody>
-                        <tr>
-                            <td><div class="user-cell"><div class="uav" style="background: linear-gradient(135deg, #2441EA, #5C75FF);">AO</div><div class="uname">Abie Okpara</div></div></td>
-                            <td>Data Analytics</td>
-                            <td>SQL Final Query Project</td>
-                            <td><button class="btn-admin">Mark & Grade</button></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -330,31 +294,194 @@ function applyTheme(theme) {
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
 
-// Simple Tab Switcher
+// Tab Switcher
 function switchTab(sectionId) {
     document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
     document.getElementById(sectionId).style.display = 'block';
+    
+    // Update nav active states
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
+    if(sectionId === 'dashboard-overview') document.getElementById('nav-dashboard').classList.add('active');
+    
     if(window.innerWidth <= 992) toggleSidebar();
+}
+
+// Toast Notifications
+function showToast(msg, type='info') {
+    const wrap = document.getElementById('toast-wrap');
+    const icons = {success: '✅', error: '❌', info: 'ℹ️'};
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+    wrap.appendChild(t);
+    setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000);
 }
 
 // SUPABASE INIT & SESSION
 const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
+let currentInstructorId = null;
 
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = "login.html"; return; }
     
+    currentInstructorId = session.user.id;
     const { data: profile } = await sb.from('profiles').select('first_name').eq('id', session.user.id).single();
     if (profile && profile.first_name) {
         document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
     }
+
+    // Start with one empty section
+    addSection();
 });
 
 window.forceLogout = async () => {
     try { await sb.auth.signOut(); } catch (err) {}
     finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; }
 };
+
+/* =========================================
+   DYNAMIC CURRICULUM BUILDER LOGIC
+========================================= */
+let sectionCount = 0;
+
+function addSection() {
+    sectionCount++;
+    const container = document.getElementById('curriculum-container');
+    const sectionHtml = `
+        <div class="module-box" id="section-${sectionCount}">
+            <div class="module-header">
+                <input type="text" class="section-title-input" placeholder="e.g. Section ${sectionCount}: Introduction" required>
+                <button type="button" class="btn-outline danger" style="border:none;" onclick="removeElement('section-${sectionCount}')">✕ Remove</button>
+            </div>
+            <ul class="lesson-list" id="lesson-list-${sectionCount}">
+                </ul>
+            <button type="button" class="btn-outline" onclick="addLesson(${sectionCount})">+ Add Video Lesson</button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', sectionHtml);
+    addLesson(sectionCount); // Give them 1 empty lesson slot by default
+}
+
+function addLesson(sectionId) {
+    const list = document.getElementById(`lesson-list-${sectionId}`);
+    const lessonId = Date.now(); // unique ID for removal
+    const lessonHtml = `
+        <li class="lesson-item" id="lesson-${lessonId}">
+            <div class="lesson-inputs">
+                <svg width="16" height="16" fill="var(--accent-cyan)" viewBox="0 0 20 20" style="flex-shrink:0;"><path d="M4 4l12 6-12 6z"/></svg> 
+                <input type="text" class="lesson-title-input" placeholder="Video Title (e.g. Setting up your environment)" required>
+                <input type="url" class="lesson-url-input" placeholder="Video Link (YouTube, Vimeo, etc.)" required>
+                <button type="button" class="btn-outline danger" style="border:none;" onclick="removeElement('lesson-${lessonId}')">✕</button>
+            </div>
+        </li>
+    `;
+    list.insertAdjacentHTML('beforeend', lessonHtml);
+}
+
+function removeElement(elementId) {
+    document.getElementById(elementId).remove();
+}
+
+/* =========================================
+   DEEP DATABASE SAVING LOGIC (LMS CORE)
+========================================= */
+async function saveCourse() {
+    const title = document.getElementById('course-title').value.trim();
+    const price = document.getElementById('course-price').value;
+    const desc = document.getElementById('course-desc').value.trim();
+    const fileInput = document.getElementById('course-image');
+    const saveBtn = document.getElementById('save-btn');
+
+    // Basic Validation
+    if(!title || !price || !desc) { showToast("Please fill in all course details.", "error"); return; }
+    if(fileInput.files.length === 0) { showToast("A course cover image is required.", "error"); return; }
+
+    const sections = document.querySelectorAll('.module-box');
+    if(sections.length === 0) { showToast("You must add at least one section.", "error"); return; }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = "⏳ Uploading & Saving Curriculum...";
+
+    try {
+        // 1. Upload Cover Image
+        const file = fileInput.files[0];
+        const ext = file.name.split('.').pop();
+        const fileName = `course_${Date.now()}.${ext}`;
+        
+        const { error: imgErr } = await sb.storage.from('course_images').upload(fileName, file);
+        if (imgErr) throw new Error("Failed to upload image: " + imgErr.message);
+        
+        const { data: urlData } = sb.storage.from('course_images').getPublicUrl(fileName);
+        const imageUrl = urlData.publicUrl;
+
+        // 2. Create the Main Course (The Trunk)
+        const { data: courseData, error: courseErr } = await sb.from('courses').insert({
+            title: title,
+            description: desc,
+            price: price,
+            image_url: imageUrl,
+            instructor_id: currentInstructorId,
+            is_published: true
+        }).select().single();
+
+        if (courseErr) throw new Error("Failed to save course details.");
+        const newCourseId = courseData.id;
+
+        // 3. Loop through UI Sections & Save (The Branches)
+        for (let i = 0; i < sections.length; i++) {
+            const sectionNode = sections[i];
+            const sectionTitle = sectionNode.querySelector('.section-title-input').value || `Section ${i+1}`;
+            
+            const { data: secData, error: secErr } = await sb.from('course_sections').insert({
+                course_id: newCourseId,
+                title: sectionTitle,
+                sequence_order: i + 1
+            }).select().single();
+
+            if (secErr) throw new Error("Failed to save sections.");
+            const newSectionId = secData.id;
+
+            // 4. Loop through UI Lessons & Save (The Leaves)
+            const lessons = sectionNode.querySelectorAll('.lesson-item');
+            for (let j = 0; j < lessons.length; j++) {
+                const lessonNode = lessons[j];
+                const lesTitle = lessonNode.querySelector('.lesson-title-input').value || `Lesson ${j+1}`;
+                const lesUrl = lessonNode.querySelector('.lesson-url-input').value || "";
+
+                if(lesUrl) { // Only save if there is a URL
+                    await sb.from('course_lessons').insert({
+                        section_id: newSectionId,
+                        title: lesTitle,
+                        video_url: lesUrl,
+                        sequence_order: j + 1
+                    });
+                }
+            }
+        }
+
+        // Success!
+        showToast("Course Published Successfully!", "success");
+        
+        // Reset Form & UI
+        document.getElementById('course-builder-form').reset();
+        document.getElementById('curriculum-container').innerHTML = '';
+        sectionCount = 0;
+        addSection(); // add blank start
+
+        // Redirect to Dashboard Overview
+        setTimeout(() => switchTab('dashboard-overview'), 1500);
+
+    } catch (err) {
+        console.error(err);
+        showToast(err.message, "error");
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "🚀 Save & Publish Course";
+    }
+}
 </script>
 </body>
 </html>
