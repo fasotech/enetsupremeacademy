@@ -21,7 +21,6 @@
             --orange: #FF7A00; --yellow: #FFC107; --danger: #EE5D50; --success: #05CD99;
             --royal-blue: #2441EA; --bg-light: #F4F7FE; --surface: #FFFFFF;
             --surface-hover: rgba(36, 65, 234, 0.04); --border: #E9EDF7;
-            /* FIX 1: --border-bright was referenced but never defined */
             --border-bright: #D0D9F0;
             --text-dark: #2B3674; --text-muted: #A3AED0; --text-gray: #707EAE; 
             --topbar-bg: rgba(244, 247, 254, 0.9); --shadow-color: rgba(17, 38, 146, 0.05);
@@ -289,7 +288,6 @@
                 <div class="panel-title" id="form-main-title">Course Creator & Manager</div>
             </div>
             <div class="panel-body">
-                <!-- FIX 2: Removed <form> tag wrapping — using div instead to prevent accidental native submit -->
                 <div id="course-builder-form">
                     <input type="hidden" id="editing-course-id" value="">
 
@@ -336,7 +334,6 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
                             <h4 style="color: var(--brand-navy); font-family: 'Poppins'; margin: 0;">📝 Quiz Builder</h4>
                             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                                <!-- FIX 3: AI status indicator shown separately — doesn't block UI -->
                                 <div class="ai-status" id="ai-status-bar">
                                     <div class="ai-spinner"></div>
                                     <span id="ai-status-text">AI is generating questions...</span>
@@ -353,7 +350,6 @@
 
                     <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
                         <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Cancel Edit</button>
-                        <!-- FIX 4: saveCourse exposed on window, button type="button" to prevent any form submit -->
                         <button type="button" class="btn-primary" id="save-btn" onclick="window.saveCourse()">🚀 Save & Publish Course</button>
                     </div>
                 </div>
@@ -388,7 +384,7 @@ function switchTab(sectionId) {
     if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
     if(sectionId === 'students-section') {
         document.getElementById('nav-students').classList.add('active');
-        fetchMyStudents(); // FIX 5: load students lazily only when tab is opened
+        fetchMyStudents();
     }
     if(sectionId === 'dashboard-overview') {
         document.getElementById('nav-dashboard').classList.add('active');
@@ -423,8 +419,6 @@ const sb = window.supabase.createClient(
 );
 let currentInstructorId = null;
 
-// FIX 6: Separated session init from data fetching — page loads instantly,
-// data fetches run independently with individual error handling.
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
     
@@ -458,8 +452,6 @@ window.addEventListener('load', async () => {
         } catch(e) { console.warn('Profile fetch failed', e); }
     }
 
-    // FIX 7: Run both fetches in parallel but with independent error handling
-    // so one failure doesn't block the other.
     fetchMyCourses().catch(e => console.error('fetchMyCourses failed:', e));
     fetchMyStudents().catch(e => console.error('fetchMyStudents failed:', e));
 });
@@ -482,12 +474,9 @@ function toggleQuizBuilder() {
     }
 }
 
-// FIX 8: addQuizQuestion exposed on window so inline onclick can find it
 window.addQuizQuestion = function(qText = '', optA = '', optB = '', optC = '', optD = '', correctIdx = 0) {
     const container = document.getElementById('quiz-questions-container');
     const qId = 'q_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
-    
-    // Escape values to prevent XSS / attribute-breaking
     const esc = (s) => String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
     const html = `
@@ -519,8 +508,7 @@ window.addQuizQuestion = function(qText = '', optA = '', optB = '', optC = '', o
     container.insertAdjacentHTML('beforeend', html);
 }
 
-// FIX 9: generateAIQuiz — added 20s timeout, non-blocking UI status bar,
-// graceful fallback if edge function unavailable, exposed on window
+// THE ROBUST AI GENERATOR WITH ERROR HANDLING AND FALLBACK
 window.generateAIQuiz = async function() {
     const title = document.getElementById('course-title').value.trim();
     const desc = document.getElementById('course-desc').value.trim();
@@ -537,23 +525,39 @@ window.generateAIQuiz = async function() {
     btn.disabled = true;
     btn.innerHTML = "⏳ Generating...";
     statusBar.classList.add('visible');
-    statusText.textContent = 'AI is thinking about your course...';
+    statusText.textContent = 'Connecting to Supabase Edge Function...';
 
-    // 20-second timeout to prevent indefinite hangs
+    // Timeout safety net
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 20000);
 
     try {
+        // Step 1: Tell Supabase to run our Edge Function
         const { data, error } = await sb.functions.invoke('generate-quiz', {
             body: { title, description: desc }
         });
 
         clearTimeout(timeoutId);
 
-        if (error) throw error;
-        if (!data || data.error) throw new Error((data && data.error) || 'No data returned from AI.');
-        if (!Array.isArray(data.questions) || data.questions.length === 0) throw new Error('AI returned no questions.');
+        // Step 2: Intercept any errors returned by the Edge Function
+        if (error) {
+            console.error("Function Invoke Error:", error);
+            throw new Error("Cannot reach the Edge Function. Did you name it 'generate-quiz' exactly?");
+        }
+        
+        if (!data) {
+            throw new Error("Edge Function returned an empty response. Check your NVIDIA API Key.");
+        }
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
 
+        if (!Array.isArray(data.questions) || data.questions.length === 0) {
+            throw new Error('AI returned a response, but it was not a valid list of questions.');
+        }
+
+        // Step 3: Success! Render the questions to the screen
         document.getElementById('quiz-questions-container').innerHTML = '';
         data.questions.forEach(q => {
             window.addQuizQuestion(q.question, q.options[0], q.options[1], q.options[2], q.options[3], q.correctIndex);
@@ -562,19 +566,21 @@ window.generateAIQuiz = async function() {
         showToast(`${data.questions.length} questions generated by AI!`, "success");
     } catch (err) {
         clearTimeout(timeoutId);
-        console.error('AI Quiz generation error:', err);
+        console.error('AI Quiz Generation Crash Log:', err);
 
+        // Explicit Error Handling
         if (err.name === 'AbortError') {
-            showToast("AI timed out. Please try again or add questions manually.", "error");
+            showToast("AI timed out. The server took too long to respond.", "error");
         } else {
-            // FIX 10: Fallback — if edge function is broken, don't crash the page.
-            // Add one blank question so the instructor can still work.
-            showToast("AI generation failed: " + (err.message || 'Unknown error') + ". Add questions manually.", "error");
-            if (document.getElementById('quiz-questions-container').children.length === 0) {
-                window.addQuizQuestion(); // ensure there's always at least one usable question box
-            }
+            showToast("AI Error: " + err.message, "error");
+        }
+        
+        // Manual Fallback: Ensure the teacher has at least one blank question to work with
+        if (document.getElementById('quiz-questions-container').children.length === 0) {
+            window.addQuizQuestion();
         }
     } finally {
+        // Reset UI Buttons
         btn.disabled = false;
         btn.innerHTML = "✨ Auto-Generate with AI";
         statusBar.classList.remove('visible');
@@ -586,7 +592,6 @@ window.generateAIQuiz = async function() {
 ========================================= */
 let sectionCount = 0;
 
-// FIX 11: addSection exposed on window
 window.addSection = function(defaultTitle = "") {
     sectionCount++;
     const container = document.getElementById('curriculum-container');
@@ -605,7 +610,6 @@ window.addSection = function(defaultTitle = "") {
     return id;
 }
 
-// FIX 12: addLesson exposed on window
 window.addLesson = function(sectionId, defaultTitle = "", defaultUrl = "") {
     const list = document.getElementById(`lesson-list-${sectionId}`);
     if (!list) { console.warn(`lesson-list-${sectionId} not found`); return; }
@@ -776,7 +780,6 @@ window.editCourse = async function(courseId) {
         const { data: sections, error: sErr } = await sb.from('course_sections').select('*').eq('course_id', courseId).order('sequence_order', {ascending: true});
         if (sErr) throw sErr;
 
-        // FIX 13: Guard against empty sections before mapping
         const sectionIds = (sections || []).map(s => s.id);
         let lessons = [];
         if (sectionIds.length > 0) {
@@ -837,7 +840,6 @@ window.editCourse = async function(courseId) {
 }
 
 window.startNewCourse = function() {
-    // Reset all fields
     document.getElementById('course-title').value = '';
     document.getElementById('course-price').value = '';
     document.getElementById('course-desc').value = '';
@@ -882,7 +884,6 @@ window.deleteCourse = async function(courseId) {
     }
 }
 
-// FIX 14: saveCourse explicitly on window so onclick="window.saveCourse()" always finds it
 window.saveCourse = async function() {
     const editCourseId = document.getElementById('editing-course-id').value;
     const isUpdate = editCourseId !== "";
@@ -893,7 +894,6 @@ window.saveCourse = async function() {
     const fileInput = document.getElementById('course-image');
     const saveBtn = document.getElementById('save-btn');
 
-    // Validation
     if (!title) { showToast("Please enter a course title.", "error"); return; }
     if (price === "" || price === null) { showToast("Please enter a price (use 0 for free).", "error"); return; }
     if (!desc) { showToast("Please enter a course description.", "error"); return; }
@@ -902,7 +902,6 @@ window.saveCourse = async function() {
     const sections = document.querySelectorAll('.module-box');
     if (sections.length === 0) { showToast("You must add at least one section.", "error"); return; }
 
-    // Collect Quiz Data
     const requiresQuiz = document.getElementById('require-quiz-toggle').checked;
     let quizData = [];
     if (requiresQuiz) {
@@ -958,17 +957,23 @@ window.saveCourse = async function() {
         
         if (imageUrl) coursePayload.image_url = imageUrl;
 
-        if (isUpdate) {
-            saveBtn.textContent = "⏳ Updating Course...";
-            const { error: updErr } = await sb.from('courses').update(coursePayload).eq('id', targetCourseId);
-            if (updErr) throw updErr;
-            // Delete old sections; cascade will remove lessons
-            await sb.from('course_sections').delete().eq('course_id', targetCourseId); 
-        } else {
-            saveBtn.textContent = "⏳ Creating Course...";
-            const { data: courseData, error: insErr } = await sb.from('courses').insert(coursePayload).select().single();
-            if (insErr) throw insErr;
-            targetCourseId = courseData.id;
+        try {
+            if (isUpdate) {
+                saveBtn.textContent = "⏳ Updating Course...";
+                const { error: updErr } = await sb.from('courses').update(coursePayload).eq('id', targetCourseId);
+                if (updErr) throw updErr;
+                await sb.from('course_sections').delete().eq('course_id', targetCourseId); 
+            } else {
+                saveBtn.textContent = "⏳ Creating Course...";
+                const { data: courseData, error: insErr } = await sb.from('courses').insert(coursePayload).select().single();
+                if (insErr) throw insErr;
+                targetCourseId = courseData.id;
+            }
+        } catch (dbErr) {
+            if (dbErr.message && (dbErr.message.includes("requires_quiz") || dbErr.message.includes("quiz_data") || dbErr.message.includes("column"))) {
+                 throw new Error("DATABASE OUTDATED: You must run the SQL script in Supabase to add the Quiz columns before publishing!");
+            }
+            throw dbErr;
         }
 
         saveBtn.textContent = "⏳ Saving Curriculum...";
@@ -1020,7 +1025,6 @@ window.saveCourse = async function() {
                     }
                 }
 
-                // Only insert if there's a video URL
                 if (finalVideoUrl) {
                     const { error: lesErr } = await sb.from('course_lessons').insert({
                         section_id: newSectionId,
