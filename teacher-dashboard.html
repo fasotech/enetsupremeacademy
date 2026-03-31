@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENET SUPREME ACADEMY | Instructor Dashboard</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link href="[https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap)" rel="stylesheet">
     
     <script>
         const savedTheme = localStorage.getItem('enet_theme') || 'system';
@@ -89,6 +89,7 @@
         .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
         .panel-body { padding: 1.5rem 2rem; }
 
+        /* TABLES FOR STUDENTS */
         .table-responsive { width: 100%; overflow-x: auto; }
         .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         .data-tbl th { padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); }
@@ -324,7 +325,7 @@
                     <div id="quiz-builder-section" style="display: none; background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-bright); margin-bottom: 2rem; box-shadow: 0 4px 15px var(--shadow-color);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
                             <h4 style="color: var(--brand-navy); font-family: 'Poppins'; margin: 0;">📝 Quiz Builder</h4>
-                            <button type="button" class="btn-outline" onclick="mockAIGenerate()" id="btn-ai-gen">✨ Auto-Generate with AI</button>
+                            <button type="button" class="btn-outline" onclick="generateAIQuiz()" id="btn-ai-gen">✨ Auto-Generate with AI</button>
                         </div>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Students must score 100% on these questions to unlock their certificate.</p>
                         
@@ -344,7 +345,7 @@
     </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="[https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2](https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2)"></script>
 <script>
 // ── THEME & SIDEBAR ──
 const themes = ['system', 'light', 'dark'];
@@ -395,7 +396,7 @@ function copyShareLink(courseId) {
 }
 
 // ── SUPABASE INIT & SESSION ──
-const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
+const sb = window.supabase.createClient('[https://lskwzcvexyxjncttvimf.supabase.co](https://lskwzcvexyxjncttvimf.supabase.co)', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
 let currentInstructorId = null;
 
 window.addEventListener('load', async () => {
@@ -429,14 +430,13 @@ window.forceLogout = async () => {
 };
 
 /* =========================================
-   QUIZ BUILDER LOGIC
+   REAL AI QUIZ BUILDER LOGIC
 ========================================= */
 function toggleQuizBuilder() {
     const isChecked = document.getElementById('require-quiz-toggle').checked;
     const section = document.getElementById('quiz-builder-section');
     section.style.display = isChecked ? 'block' : 'none';
     
-    // Automatically add one question if empty
     if (isChecked && document.getElementById('quiz-questions-container').children.length === 0) {
         addQuizQuestion();
     }
@@ -478,22 +478,46 @@ function addQuizQuestion(qText = '', optA = '', optB = '', optC = '', optD = '',
     container.insertAdjacentHTML('beforeend', html);
 }
 
-// Simulated AI Generation for UI demonstration
-function mockAIGenerate() {
+// THE REAL AI GENERATION FUNCTION
+async function generateAIQuiz() {
+    const title = document.getElementById('course-title').value.trim();
+    const desc = document.getElementById('course-desc').value.trim();
+
+    if (!title || !desc) {
+        showToast("Please fill out the Course Title and Description first so the AI knows what to ask!", "error");
+        return;
+    }
+
     const btn = document.getElementById('btn-ai-gen');
-    btn.innerHTML = "⏳ Analyzing course content...";
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ AI is thinking...";
     btn.disabled = true;
     
-    setTimeout(() => {
-        document.getElementById('quiz-questions-container').innerHTML = ''; // clear current
-        addQuizQuestion("What is the primary language used for styling a webpage?", "HTML", "CSS", "JavaScript", "Python", 1);
-        addQuizQuestion("Which HTML tag is used to display an image?", "<img>", "<picture>", "<src>", "<image>", 0);
-        addQuizQuestion("What does JSON stand for?", "Java Standard Output Network", "JavaScript Object Notation", "JavaScript Oriented Node", "Java Syntax Object Name", 1);
-        
-        btn.innerHTML = "✨ Auto-Generate with AI";
-        btn.disabled = false;
+    try {
+        // Call your new Supabase Edge Function securely
+        const { data, error } = await sb.functions.invoke('generate-quiz', {
+            body: { title: title, description: desc }
+        });
+
+        if (error) throw error;
+        if (data.error) throw new Error(data.error);
+
+        // Clear current questions
+        document.getElementById('quiz-questions-container').innerHTML = ''; 
+
+        // Inject the NVIDIA Llama-3 generated questions!
+        data.questions.forEach(q => {
+            addQuizQuestion(q.question, q.options[0], q.options[1], q.options[2], q.options[3], q.correctIndex);
+        });
+
         showToast("Questions successfully generated by AI!", "success");
-    }, 2500);
+    } catch (err) {
+        console.error(err);
+        showToast("AI Generation failed: " + err.message, "error");
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
 }
 
 
