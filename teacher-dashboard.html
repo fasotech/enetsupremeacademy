@@ -89,7 +89,6 @@
         .panel-title { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
         .panel-body { padding: 1.5rem 2rem; }
 
-        /* TABLES FOR STUDENTS */
         .table-responsive { width: 100%; overflow-x: auto; }
         .data-tbl { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         .data-tbl th { padding: 1rem 2rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); }
@@ -128,6 +127,16 @@
         .lesson-extras textarea:focus { border-color: var(--accent-cyan); outline: none;}
         .material-upload-box { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 6px; background: var(--surface); padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
         .material-upload-box label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+
+        /* QUIZ BUILDER STYLES */
+        .quiz-question-box { background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; position: relative;}
+        .quiz-question-box input[type="text"] { width: 100%; padding: 8px 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid var(--border); outline: none; font-size: 0.9rem;}
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;}
+        .quiz-option { display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 8px; border-radius: 6px; border: 1px solid var(--border);}
+        .quiz-option input[type="radio"] { width: 16px; height: 16px; margin: 0; cursor: pointer; accent-color: var(--accent-cyan);}
+        .quiz-option input[type="text"] { margin-bottom: 0; border: none; background: transparent; padding: 4px; box-shadow: none !important;}
+        .quiz-option input[type="text"]:focus { border-bottom: 1px solid var(--accent-cyan); border-radius: 0;}
+        .remove-q-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.2rem;}
         
         .btn-outline { background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 5px;}
         .btn-outline:hover { background: rgba(0, 160, 223, 0.1); }
@@ -160,7 +169,13 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .course-form-grid { grid-template-columns: 1fr; }
         }
-        @media (max-width: 576px) { .stats-grid { grid-template-columns: 1fr; } .lesson-inputs { flex-direction: column; align-items: stretch;} .delete-lesson-btn { width: 100%;} .lesson-extras { padding-left: 0; } }
+        @media (max-width: 576px) { 
+            .stats-grid { grid-template-columns: 1fr; } 
+            .lesson-inputs { flex-direction: column; align-items: stretch;} 
+            .delete-lesson-btn { width: 100%;} 
+            .lesson-extras { padding-left: 0; } 
+            .quiz-options { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -299,6 +314,25 @@
                     
                     <button type="button" class="btn-outline" onclick="addSection()" style="width: 100%; padding: 12px; margin-top: 1rem; border-style: dashed;">+ Add New Section</button>
 
+                    <div class="form-group full-width" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 1.05rem; color: var(--brand-navy);">
+                            <input type="checkbox" id="require-quiz-toggle" onchange="toggleQuizBuilder()" style="width: 18px; height: 18px; cursor: pointer;">
+                            Enable Final Quiz (Required for Certificate)
+                        </label>
+                    </div>
+
+                    <div id="quiz-builder-section" style="display: none; background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-bright); margin-bottom: 2rem; box-shadow: 0 4px 15px var(--shadow-color);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                            <h4 style="color: var(--brand-navy); font-family: 'Poppins'; margin: 0;">📝 Quiz Builder</h4>
+                            <button type="button" class="btn-outline" onclick="mockAIGenerate()" id="btn-ai-gen">✨ Auto-Generate with AI</button>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Students must score 100% on these questions to unlock their certificate.</p>
+                        
+                        <div id="quiz-questions-container"></div>
+                        
+                        <button type="button" class="btn-outline" onclick="addQuizQuestion()" style="width: 100%; padding: 10px; border-style: dashed; margin-top: 10px;">+ Add Manual Question</button>
+                    </div>
+
                     <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
                         <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Cancel Edit</button>
                         <button type="button" class="btn-primary" id="save-btn" onclick="saveCourse()">🚀 Save & Publish Course</button>
@@ -351,10 +385,7 @@ function showToast(msg, type='info') {
     setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000);
 }
 
-// ── SHARE LINK FEATURE ──
 function copyShareLink(courseId) {
-    // Generate a link directly to the tracks/storefront page. 
-    // Once you build a dedicated course page, you can update this URL.
     const url = window.location.origin + '/tracks.html';
     navigator.clipboard.writeText(url).then(() => {
         showToast("Storefront link copied to clipboard! Share it with your audience.", "success");
@@ -369,13 +400,23 @@ let currentInstructorId = null;
 
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
+    
+    const ghostId = localStorage.getItem('enet_impersonate_id');
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = "login.html"; return; }
     
-    currentInstructorId = session.user.id;
-    const { data: profile } = await sb.from('profiles').select('first_name').eq('id', session.user.id).single();
-    if (profile && profile.first_name) {
-        document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
+    if (ghostId) {
+        currentInstructorId = ghostId;
+        const { data: profile } = await sb.from('profiles').select('*').eq('id', ghostId).single();
+        if (profile) document.getElementById('welcome-msg').innerHTML = `<span style="color: var(--danger);">[GHOST MODE]</span> Viewing as ${profile.first_name}`;
+        
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.innerHTML = `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Exit Ghost Mode`;
+        logoutBtn.onclick = () => { localStorage.removeItem('enet_impersonate_id'); window.close(); };
+    } else {
+        currentInstructorId = session.user.id;
+        const { data: profile } = await sb.from('profiles').select('first_name').eq('id', session.user.id).single();
+        if (profile && profile.first_name) document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
     }
     
     fetchMyCourses();
@@ -386,6 +427,75 @@ window.forceLogout = async () => {
     try { await sb.auth.signOut(); } catch (err) {}
     finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; }
 };
+
+/* =========================================
+   QUIZ BUILDER LOGIC
+========================================= */
+function toggleQuizBuilder() {
+    const isChecked = document.getElementById('require-quiz-toggle').checked;
+    const section = document.getElementById('quiz-builder-section');
+    section.style.display = isChecked ? 'block' : 'none';
+    
+    // Automatically add one question if empty
+    if (isChecked && document.getElementById('quiz-questions-container').children.length === 0) {
+        addQuizQuestion();
+    }
+}
+
+let quizQCount = 0;
+
+function addQuizQuestion(qText = '', optA = '', optB = '', optC = '', optD = '', correctIdx = 0) {
+    quizQCount++;
+    const container = document.getElementById('quiz-questions-container');
+    const qId = Date.now() + Math.floor(Math.random() * 1000);
+    
+    const html = `
+        <div class="quiz-question-box" id="quiz-q-${qId}">
+            <button type="button" class="remove-q-btn" onclick="document.getElementById('quiz-q-${qId}').remove()">✕</button>
+            <input type="text" class="q-text" placeholder="Enter question text here..." value="${qText}" required>
+            
+            <div class="quiz-options">
+                <label class="quiz-option">
+                    <input type="radio" name="correct-${qId}" value="0" ${correctIdx === 0 ? 'checked' : ''}>
+                    <input type="text" class="q-opt" placeholder="Option A" value="${optA}" required>
+                </label>
+                <label class="quiz-option">
+                    <input type="radio" name="correct-${qId}" value="1" ${correctIdx === 1 ? 'checked' : ''}>
+                    <input type="text" class="q-opt" placeholder="Option B" value="${optB}" required>
+                </label>
+                <label class="quiz-option">
+                    <input type="radio" name="correct-${qId}" value="2" ${correctIdx === 2 ? 'checked' : ''}>
+                    <input type="text" class="q-opt" placeholder="Option C" value="${optC}" required>
+                </label>
+                <label class="quiz-option">
+                    <input type="radio" name="correct-${qId}" value="3" ${correctIdx === 3 ? 'checked' : ''}>
+                    <input type="text" class="q-opt" placeholder="Option D" value="${optD}" required>
+                </label>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--accent-cyan);">Select the radio button next to the correct answer.</span>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+
+// Simulated AI Generation for UI demonstration
+function mockAIGenerate() {
+    const btn = document.getElementById('btn-ai-gen');
+    btn.innerHTML = "⏳ Analyzing course content...";
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        document.getElementById('quiz-questions-container').innerHTML = ''; // clear current
+        addQuizQuestion("What is the primary language used for styling a webpage?", "HTML", "CSS", "JavaScript", "Python", 1);
+        addQuizQuestion("Which HTML tag is used to display an image?", "<img>", "<picture>", "<src>", "<image>", 0);
+        addQuizQuestion("What does JSON stand for?", "Java Standard Output Network", "JavaScript Object Notation", "JavaScript Oriented Node", "Java Syntax Object Name", 1);
+        
+        btn.innerHTML = "✨ Auto-Generate with AI";
+        btn.disabled = false;
+        showToast("Questions successfully generated by AI!", "success");
+    }, 2500);
+}
+
 
 /* =========================================
    DYNAMIC CURRICULUM BUILDER LOGIC
@@ -500,13 +610,10 @@ async function fetchMyCourses() {
 async function fetchMyStudents() {
     if(!currentInstructorId) return;
     try {
-        // 1. Get all courses this instructor owns
         const { data: courses } = await sb.from('courses').select('id, title').eq('instructor_id', currentInstructorId);
         if(!courses || courses.length === 0) return;
         
         const courseIds = courses.map(c => c.id);
-        
-        // 2. Get enrollments for these courses
         const { data: enrollments, error } = await sb.from('enrollments')
             .select('enrolled_at, profiles(first_name, last_name, email), courses(title)')
             .in('course_id', courseIds)
@@ -548,9 +655,7 @@ async function fetchMyStudents() {
         });
         tbody.innerHTML = html;
 
-    } catch(err) {
-        console.error("Error fetching students:", err);
-    }
+    } catch(err) { console.error(err); }
 }
 
 window.editCourse = async function(courseId) {
@@ -575,6 +680,22 @@ window.editCourse = async function(courseId) {
         document.getElementById('cover-required-marker').style.display = 'none';
         document.getElementById('edit-image-preview-container').style.display = 'block';
         document.getElementById('edit-image-preview').src = course.image_url;
+
+        // Populate Quiz Data
+        document.getElementById('quiz-questions-container').innerHTML = '';
+        if (course.requires_quiz) {
+            document.getElementById('require-quiz-toggle').checked = true;
+            document.getElementById('quiz-builder-section').style.display = 'block';
+            
+            if (course.quiz_data && course.quiz_data.length > 0) {
+                course.quiz_data.forEach(q => {
+                    addQuizQuestion(q.question, q.options[0], q.options[1], q.options[2], q.options[3], q.correctIndex);
+                });
+            }
+        } else {
+            document.getElementById('require-quiz-toggle').checked = false;
+            document.getElementById('quiz-builder-section').style.display = 'none';
+        }
 
         document.getElementById('curriculum-container').innerHTML = '';
         sectionCount = 0;
@@ -604,6 +725,11 @@ window.startNewCourse = function() {
     document.getElementById('course-builder-form').reset();
     document.getElementById('editing-course-id').value = "";
     document.getElementById('curriculum-container').innerHTML = '';
+    
+    document.getElementById('quiz-questions-container').innerHTML = '';
+    document.getElementById('require-quiz-toggle').checked = false;
+    document.getElementById('quiz-builder-section').style.display = 'none';
+
     sectionCount = 0;
     
     document.getElementById('course-image').required = true;
@@ -630,7 +756,7 @@ window.deleteCourse = async function(courseId) {
             if(error) throw error;
             showToast("Course deleted successfully.", "success");
             fetchMyCourses();
-            fetchMyStudents(); // Refresh count if needed
+            fetchMyStudents(); 
         } catch (err) {
             showToast("Delete failed: " + err.message, "error");
         }
@@ -653,6 +779,32 @@ async function saveCourse() {
     const sections = document.querySelectorAll('.module-box');
     if(sections.length === 0) { showToast("You must add at least one section.", "error"); return; }
 
+    // Collect Quiz Data
+    const requiresQuiz = document.getElementById('require-quiz-toggle').checked;
+    let quizData = [];
+    if (requiresQuiz) {
+        const quizBoxes = document.querySelectorAll('.quiz-question-box');
+        if(quizBoxes.length === 0) { showToast("Please add at least one quiz question.", "error"); return; }
+        
+        let hasEmptyFields = false;
+        quizBoxes.forEach(box => {
+            const qText = box.querySelector('.q-text').value.trim();
+            const opts = Array.from(box.querySelectorAll('.q-opt')).map(i => i.value.trim());
+            const checkedRadio = box.querySelector('input[type="radio"]:checked');
+            
+            if(!qText || opts.includes("") || !checkedRadio) { hasEmptyFields = true; }
+            else {
+                quizData.push({
+                    question: qText,
+                    options: opts,
+                    correctIndex: parseInt(checkedRadio.value)
+                });
+            }
+        });
+        
+        if(hasEmptyFields) { showToast("Please fill in all quiz questions and select the correct answers.", "error"); return; }
+    }
+
     saveBtn.disabled = true;
     
     try {
@@ -669,7 +821,16 @@ async function saveCourse() {
         }
 
         let targetCourseId = editCourseId;
-        const coursePayload = { title, description: desc, price: Number(price), instructor_id: currentInstructorId, is_published: true };
+        const coursePayload = { 
+            title, 
+            description: desc, 
+            price: Number(price), 
+            instructor_id: currentInstructorId, 
+            is_published: true,
+            requires_quiz: requiresQuiz,
+            quiz_data: quizData
+        };
+        
         if(imageUrl) coursePayload.image_url = imageUrl;
 
         if (isUpdate) {
