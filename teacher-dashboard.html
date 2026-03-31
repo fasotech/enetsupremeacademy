@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENET SUPREME ACADEMY | Instructor Dashboard</title>
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link href="[https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap)" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script>
         const savedTheme = localStorage.getItem('enet_theme') || 'system';
@@ -359,7 +359,7 @@
     </main>
 </div>
 
-<script src="[https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2](https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2)"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ── THEME & SIDEBAR ──
 const themes = ['system', 'light', 'dark'];
@@ -411,20 +411,11 @@ function copyShareLink(courseId) {
     });
 }
 
-// ── SUPABASE INIT & SESSION ──
-const SUPA_URL = '[https://lskwzcvexyxjncttvimf.supabase.co](https://lskwzcvexyxjncttvimf.supabase.co)';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
-let _sbInstance = null;
-
-function getSupabase() {
-    if (typeof window.supabase === 'undefined') {
-        throw new Error("Cannot connect to the database. Please check your internet connection.");
-    }
-    if (!_sbInstance) {
-        _sbInstance = window.supabase.createClient(SUPA_URL, SUPA_KEY);
-    }
-    return _sbInstance;
-}
+// ── SUPABASE INIT & SESSION (GLOBAL) ──
+const sb = window.supabase.createClient(
+    'https://lskwzcvexyxjncttvimf.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
+);
 
 let currentInstructorId = null;
 
@@ -433,7 +424,7 @@ window.addEventListener('load', async () => {
     
     let session = null;
     try {
-        const { data } = await getSupabase().auth.getSession();
+        const { data } = await sb.auth.getSession();
         session = data.session;
     } catch (err) {
         console.error('Session check failed:', err);
@@ -446,7 +437,7 @@ window.addEventListener('load', async () => {
     if (ghostId) {
         currentInstructorId = ghostId;
         try {
-            const { data: profile } = await getSupabase().from('profiles').select('*').eq('id', ghostId).single();
+            const { data: profile } = await sb.from('profiles').select('*').eq('id', ghostId).single();
             if (profile) document.getElementById('welcome-msg').innerHTML = `<span style="color: var(--danger);">[GHOST MODE]</span> Viewing as ${profile.first_name}`;
         } catch(e) { console.warn('Ghost profile fetch failed', e); }
 
@@ -456,7 +447,7 @@ window.addEventListener('load', async () => {
     } else {
         currentInstructorId = session.user.id;
         try {
-            const { data: profile } = await getSupabase().from('profiles').select('first_name').eq('id', session.user.id).single();
+            const { data: profile } = await sb.from('profiles').select('first_name').eq('id', session.user.id).single();
             if (profile && profile.first_name) document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
         } catch(e) { console.warn('Profile fetch failed', e); }
     }
@@ -466,7 +457,7 @@ window.addEventListener('load', async () => {
 });
 
 window.forceLogout = async () => {
-    try { await getSupabase().auth.signOut(); } catch (err) {}
+    try { await sb.auth.signOut(); } catch (err) {}
     finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; }
 };
 
@@ -517,6 +508,7 @@ window.addQuizQuestion = function(qText = '', optA = '', optB = '', optC = '', o
     container.insertAdjacentHTML('beforeend', html);
 }
 
+// DIRECT FETCH TO EDGE FUNCTION FOR PROPER ERROR HANDLING
 window.generateAIQuiz = async function() {
     const title = document.getElementById('course-title').value.trim();
     const desc = document.getElementById('course-desc').value.trim();
@@ -535,28 +527,27 @@ window.generateAIQuiz = async function() {
     statusBar.classList.add('visible');
     statusText.textContent = 'Connecting to AI Server...';
 
-    const sb = getSupabase();
-
     try {
-        // Securely invoke the edge function.
-        // If the Edge function crashes but returns an { error: "msg" } JSON, 
-        // Supabase automatically parses it into `data.error`.
-        const { data, error } = await sb.functions.invoke('generate-quiz', {
-            body: { title, description: desc }
+        const { data: { session } } = await sb.auth.getSession();
+        const token = session ? session.access_token : '';
+
+        // Direct fetch call to expose the raw server errors
+        const response = await fetch('https://lskwzcvexyxjncttvimf.supabase.co/functions/v1/generate-quiz', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ title, description: desc })
         });
 
-        // 1. If Supabase itself completely failed to reach the server
-        if (error) {
-            throw new Error("Cannot reach the Edge Function. Did you name it 'generate-quiz' exactly?");
-        }
-        
-        // 2. If the Deno script caught an error and safely returned it
-        if (data && data.error) {
-            throw new Error(data.error);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || `Server error: ${response.status}`);
         }
 
-        // 3. Ensure the format is valid
-        if (!data || !data.questions || !Array.isArray(data.questions)) {
+        if (!data.questions || !Array.isArray(data.questions)) {
             throw new Error('AI returned an invalid response format.');
         }
 
@@ -568,8 +559,11 @@ window.generateAIQuiz = async function() {
         showToast(`${data.questions.length} questions generated by AI!`, "success");
     } catch (err) {
         console.error('AI Quiz Generation Error:', err);
+        
+        // Show exact error message to user
         showToast("AI Error: " + err.message, "error");
         
+        // Fallback: Make sure there's at least one box so they aren't stuck
         if (document.getElementById('quiz-questions-container').children.length === 0) {
             window.addQuizQuestion();
         }
@@ -660,7 +654,7 @@ window.removeElement = function(elementId) {
 async function fetchMyCourses() {
     if (!currentInstructorId) return;
     try {
-        const { data, error } = await getSupabase().from('courses')
+        const { data, error } = await sb.from('courses')
             .select('*')
             .eq('instructor_id', currentInstructorId)
             .order('created_at', { ascending: false });
@@ -704,7 +698,7 @@ async function fetchMyCourses() {
 async function fetchMyStudents() {
     if (!currentInstructorId) return;
     try {
-        const { data: courses, error: cErr } = await getSupabase().from('courses')
+        const { data: courses, error: cErr } = await sb.from('courses')
             .select('id, title')
             .eq('instructor_id', currentInstructorId);
         if (cErr) throw cErr;
@@ -716,7 +710,7 @@ async function fetchMyStudents() {
         }
         
         const courseIds = courses.map(c => c.id);
-        const { data: enrollments, error } = await getSupabase().from('enrollments')
+        const { data: enrollments, error } = await sb.from('enrollments')
             .select('enrolled_at, profiles(first_name, last_name, email), courses(title)')
             .in('course_id', courseIds)
             .order('enrolled_at', { ascending: false });
@@ -766,7 +760,6 @@ async function fetchMyStudents() {
 window.editCourse = async function(courseId) {
     try {
         showToast("Loading course data...", "info");
-        const sb = getSupabase();
         
         const { data: course, error: cErr } = await sb.from('courses').select('*').eq('id', courseId).single();
         if (cErr) throw cErr;
@@ -868,7 +861,7 @@ window.cancelEdit = function() {
 window.deleteCourse = async function(courseId) {
     if (confirm("Are you sure you want to delete this course? This action cannot be undone.")) {
         try {
-            const { error } = await getSupabase().from('courses').delete().eq('id', courseId);
+            const { error } = await sb.from('courses').delete().eq('id', courseId);
             if (error) throw error;
             showToast("Course deleted successfully.", "success");
             fetchMyCourses();
@@ -879,7 +872,6 @@ window.deleteCourse = async function(courseId) {
 }
 
 window.saveCourse = async function() {
-    const sb = getSupabase();
     const editCourseId = document.getElementById('editing-course-id').value;
     const isUpdate = editCourseId !== "";
 
