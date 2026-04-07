@@ -6,7 +6,6 @@
     <title>ENET SUPREME ACADEMY | Student Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- jsPDF + html2canvas for certificate PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -109,12 +108,15 @@
         .course-list{display:flex;flex-direction:column;gap:1rem;}
         .course-item{display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg-light);transition:.2s;flex-wrap:wrap;}
         .course-item:hover{border-color:var(--accent-cyan);}
+        /* Highlight completed courses with a green left border */
+        .course-item.is-done{border-left:4px solid var(--success);}
         .course-img{width:120px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--border);}
         .course-info{flex:1;min-width:200px;}
         .course-title{font-family:'Poppins';font-size:1rem;font-weight:700;color:var(--text-dark);margin-bottom:.2rem;}
         .progress-container{margin-top:.8rem;}
         .progress-bar-wrap{width:100%;background:var(--border);border-radius:10px;height:8px;overflow:hidden;margin-bottom:4px;}
         .progress-fill{background:var(--accent-cyan);height:100%;border-radius:10px;transition:width .5s ease;width:0%;}
+        .progress-fill.done{background:var(--success);}
         .progress-text{font-size:.75rem;color:var(--text-muted);font-weight:600;}
         .course-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
 
@@ -307,7 +309,6 @@
     </header>
 
     <main class="content">
-        <!-- Pending banner -->
         <div class="pending-banner" id="pending-approval-banner" style="display:none;">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <div>
@@ -316,7 +317,6 @@
             </div>
         </div>
 
-        <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card brand-blue">
                 <div class="stat-lbl">Enrolled Courses</div>
@@ -332,7 +332,6 @@
             </div>
         </div>
 
-        <!-- Event Perks -->
         <div class="panel perks-panel" id="event-perks-panel" style="display:none;">
             <div class="panel-head">
                 <div class="panel-title">🎁 Member Perks — Free Event Courses</div>
@@ -344,9 +343,7 @@
             </div>
         </div>
 
-        <!-- Main grid -->
         <div class="dashboard-grid">
-            <!-- Learning Tracks + Grades tabs -->
             <div class="panel" style="margin-bottom:0;">
                 <div class="tab-bar">
                     <button class="tab-btn active" onclick="switchTab('courses',this)">📚 My Learning Tracks</button>
@@ -370,7 +367,6 @@
                 </div>
             </div>
 
-            <!-- Certificates -->
             <div class="panel" style="margin-bottom:0;">
                 <div class="panel-head">
                     <div class="panel-title">🏆 My Certificates</div>
@@ -383,9 +379,7 @@
     </main>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     CERTIFICATE MODAL
-════════════════════════════════════════════ -->
+<!-- CERTIFICATE MODAL -->
 <div class="cert-modal-overlay" id="cert-modal">
     <div class="cert-modal-inner">
         <button class="close-cert-btn" onclick="closeCertModal()">✕</button>
@@ -420,9 +414,7 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     ASSIGNMENT SUBMIT MODAL
-════════════════════════════════════════════ -->
+<!-- ASSIGNMENT SUBMIT MODAL -->
 <div class="assign-modal-overlay" id="assign-modal">
     <div class="assign-modal">
         <div class="assign-modal-head">
@@ -505,7 +497,7 @@ function showToast(msg,type='success'){
 // ============================================================
 const sb = window.supabase.createClient(
     'https://lskwzcvexyxjncttvimf.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleXh4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
 );
 
 let currentUser = null;
@@ -557,7 +549,6 @@ window.addEventListener('load', async ()=>{
     fetchGrades();
     fetchSubmittedAssignments();
 
-    // Drag & drop
     const zone=document.getElementById('upload-zone');
     zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
     zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
@@ -576,12 +567,26 @@ window.forceLogout = async ()=>{
 };
 
 // ============================================================
-// CERTIFICATE HELPERS (FIX)
+// COMPLETION DETECTION — ROBUST
+// A course counts as "done" when ANY of these is true:
+//   1. progressPercent === 100 AND totalLessons > 0
+//   2. completedLessons >= totalLessons AND totalLessons > 0  (handles 2/1 edge case)
+//   3. completedLessons > 0 AND totalLessons === 1            (single-lesson courses)
+//   4. A certificate already exists in DB for this course
+// ============================================================
+function isCourseCompleted(completedLessons, totalLessons, progressPercent, alreadyHasCert){
+    if(alreadyHasCert) return true;
+    if(totalLessons > 0 && completedLessons >= totalLessons) return true;
+    if(totalLessons > 0 && progressPercent >= 100) return true;
+    return false;
+}
+
+// ============================================================
+// CERTIFICATE HELPERS
 // ============================================================
 async function ensureCertificate(studentId, courseId, certMap){
     if(certMap[courseId]) return certMap[courseId];
 
-    // Create cert
     const newCertId='ENET-'+Math.random().toString(36).substr(2,9).toUpperCase();
     const now=new Date().toISOString();
     const {error} = await sb.from('certificates').insert({
@@ -591,7 +596,7 @@ async function ensureCertificate(studentId, courseId, certMap){
         issued_at: now
     });
     if(error){
-        // handle duplicate gracefully — re-fetch
+        // Duplicate — re-fetch
         const {data:existing} = await sb.from('certificates').select('certificate_id,issued_at').eq('student_id',studentId).eq('course_id',courseId).single();
         if(existing){ certMap[courseId]=existing; return existing; }
         return null;
@@ -655,7 +660,7 @@ async function fetchStudentData(){
         isFullMember=(enrollments||[]).some(en=>en.courses&&!en.courses.is_event_course);
         fetchEventPerks(enrolledCourseIds);
 
-        // Build cert map
+        // Build cert map (existing certs in DB)
         const {data:existingCerts}=await sb.from('certificates').select('course_id,certificate_id,issued_at').eq('student_id',currentUser.id);
         let certMap={};
         (existingCerts||[]).forEach(c=>certMap[c.course_id]=c);
@@ -687,17 +692,26 @@ async function fetchStudentData(){
                     const lessonIds=lessons.map(l=>l.id);
                     const {data:prog}=await sb.from('lesson_progress').select('id').eq('student_id',currentUser.id).in('lesson_id',lessonIds);
                     if(prog) completedLessons=prog.length;
-                    progressPercent=Math.round((completedLessons/totalLessons)*100);
+                    // Cap completed at total for display purposes (handles 2/1 edge case)
+                    const displayCompleted=Math.min(completedLessons,totalLessons);
+                    progressPercent=Math.round((displayCompleted/totalLessons)*100);
                 }
             }
 
-            const isDone=progressPercent===100&&totalLessons>0;
+            // ROBUST completion check — also checks if cert already exists in DB
+            const alreadyHasCert=!!certMap[c.id];
+            const isDone=isCourseCompleted(completedLessons, totalLessons, progressPercent, alreadyHasCert);
+
+            // For display, cap progress at 100%
+            const displayPercent=isDone?100:progressPercent;
+            const displayCompleted=isDone?totalLessons:Math.min(completedLessons,totalLessons);
+
             let certBtnHtml='';
             let dlBtnHtml='';
 
             if(isDone){
                 fullyCompletedCount++;
-                // AUTO-HEAL: ensure cert exists in DB
+                // Auto-create cert if missing
                 const cert=await ensureCertificate(currentUser.id,c.id,certMap);
                 if(cert){
                     const safe=c.title.replace(/'/g,"\\'");
@@ -709,14 +723,18 @@ async function fetchStudentData(){
 
             const eventTag=c.is_event_course?`<span style="font-size:.7rem;background:rgba(0,160,223,.1);color:var(--accent-cyan);padding:2px 8px;border-radius:4px;font-weight:700;margin-left:6px;">🎁 Event</span>`:'';
 
+            // Show "✓ Completed" badge on the card if done
+            const completedBadge=isDone?`<span style="display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.3);padding:3px 10px;border-radius:20px;margin-top:.4rem;">✓ Completed</span>`:'';
+
             coursesHtml+=`
-            <div class="course-item">
+            <div class="course-item${isDone?' is-done':''}">
                 <img src="${c.image_url}" class="course-img" alt="${c.title}" onerror="this.style.background='var(--border)'">
                 <div class="course-info">
                     <h4 class="course-title">${c.title}${eventTag}</h4>
+                    ${completedBadge}
                     <div class="progress-container">
-                        <div class="progress-bar-wrap"><div class="progress-fill" style="width:${progressPercent}%;"></div></div>
-                        <div class="progress-text">${progressPercent}% Completed (${completedLessons}/${totalLessons} lessons)</div>
+                        <div class="progress-bar-wrap"><div class="progress-fill${isDone?' done':''}" style="width:${displayPercent}%;"></div></div>
+                        <div class="progress-text">${displayPercent}% Completed (${displayCompleted}/${totalLessons} lessons)</div>
                     </div>
                 </div>
                 <div class="course-actions">
@@ -732,7 +750,7 @@ async function fetchStudentData(){
         container.innerHTML=coursesHtml;
         document.getElementById('stat-completed').textContent=fullyCompletedCount;
 
-        // Certs panel
+        // Reload full cert panel
         const {data:certs}=await sb.from('certificates').select('*,courses(title)').eq('student_id',currentUser.id).order('issued_at',{ascending:false});
         document.getElementById('stat-certs').textContent=certs?certs.length:0;
         renderCertsPanel(certs||[]);
@@ -784,7 +802,6 @@ async function fetchGrades(){
         }
 
         container.innerHTML=grades.map(g=>{
-            const score=g.score;
             const grade=g.grade||'—';
             let cls='A';
             if(grade==='B') cls='B';
@@ -798,7 +815,7 @@ async function fetchGrades(){
                     <p>${g.courses?.title||''} ${date?'• '+date:''}</p>
                     ${g.feedback?`<div class="grade-feedback">"${g.feedback}"</div>`:''}
                 </div>
-                <div class="grade-score">${score!=null?score+'/100':'—'}</div>
+                <div class="grade-score">${g.score!=null?g.score+'/100':'—'}</div>
             </div>`;
         }).join('');
     }catch(err){console.error('Grades error:',err);}
@@ -907,7 +924,6 @@ async function submitAssignment(){
     try{
         let fileUrls=[];
 
-        // Upload files to Supabase Storage
         for(const file of selectedFiles){
             const ext=file.name.split('.').pop();
             const safeName=`${currentUser.id}/${Date.now()}_${Math.random().toString(36).substr(2,5)}.${ext}`;
@@ -957,7 +973,6 @@ function closeCertModal(){
     document.getElementById('cert-modal').classList.remove('show');
 }
 
-// PDF Download using html2canvas + jsPDF
 async function downloadCertPDF(){
     const btn=document.getElementById('dl-cert-btn');
     btn.disabled=true;
@@ -981,10 +996,8 @@ async function downloadCertPDF(){
     }
 }
 
-// Quick download without opening modal
 async function quickDownloadCert(courseTitle,date,certId){
     openCertModal(courseTitle,date,certId);
-    // Small delay to let modal render, then download
     setTimeout(()=>downloadCertPDF(),600);
 }
 </script>
