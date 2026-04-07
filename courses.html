@@ -48,7 +48,7 @@
         .udemy-card { cursor: pointer; display: flex; flex-direction: column; transition: 0.2s; background: transparent; border: 1px solid transparent; padding: 0.5rem; border-radius: 8px;}
         .udemy-card:hover { background: #f8f9fa; border-color: var(--border); }
         
-        .udemy-img-wrapper { position: relative; width: 100%; padding-top: 56.25%; /* 16:9 Aspect Ratio */ overflow: hidden; border: 1px solid var(--border); border-radius: 4px; background: var(--navy-blue);}
+        .udemy-img-wrapper { position: relative; width: 100%; padding-top: 56.25%; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; background: var(--navy-blue);}
         .udemy-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         
         .udemy-content { padding: 0.5rem 0; display: flex; flex-direction: column; flex: 1;}
@@ -65,6 +65,7 @@
         .badges { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;}
         .badge-bestseller { background: #eceb98; color: #3d3c0a; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; text-transform: capitalize;}
         .badge-premium { background: #ecd5fa; color: #4b0082; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
+        .badge-event { background: var(--accent-cyan); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
 
         /* === PAYMENT MODAL === */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 1, 74, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;}
@@ -93,6 +94,12 @@
         .footer-logo span { color: var(--brand-yellow); }
         .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
 
+        /* Toast notification */
+        .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
+        .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.1);font-size:.9rem;font-weight:600;color:var(--text-main);pointer-events:all;animation:toastIn .3s ease;}
+        @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
+
         @media (max-width: 950px) { 
             .mobile-menu-btn { display: block; }
             .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
@@ -105,6 +112,8 @@
     </style>
 </head>
 <body>
+
+    <div class="toast-wrap" id="toast-wrap"></div>
 
     <header>
         <nav>
@@ -155,153 +164,191 @@
             
             <a href="#" id="whatsapp-link" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.013-.967-.253-.099-.439-.149-.621.149-.183.297-.762.967-.933 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
-            Message Admin for Access
-        </a>
-    </div>
-</div>
-
-<footer>
-    <div class="footer-container">
-        <div>
-            <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: #d1d7dc;">info@enetsupreme.com.ng | +234 8062 770 265</p>
-        </div>
-        <div style="color: #d1d7dc; font-size: 0.9rem; text-align: right;">
-            <p>Suite 58 Georgewill/Clifford Plaza</p>
-            <p>Choba Junction, Port Harcourt</p>
+                Message Admin for Access
+            </a>
         </div>
     </div>
-</footer>
 
-<script>
-    // ── SUPABASE CONFIG (SAFE LAZY INITIALIZATION) ──
-    const SUPA_URL = 'https://lskwzcvexyxjncttvimf.supabase.co';
-    const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
+    <footer>
+        <div class="footer-container">
+            <div>
+                <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #d1d7dc;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+            </div>
+            <div style="color: #d1d7dc; font-size: 0.9rem; text-align: right;">
+                <p>Suite 58 Georgewill/Clifford Plaza</p>
+                <p>Choba Junction, Port Harcourt</p>
+            </div>
+        </div>
+    </footer>
 
-    function getSupabase() {
-        if (typeof window.supabase === 'undefined') {
-            throw new Error("Cannot connect to the database. Please check your internet connection.");
-        }
-        return window.supabase.createClient(SUPA_URL, SUPA_KEY);
-    }
+    <script>
+        const SUPA_URL = 'https://lskwzcvexyxjncttvimf.supabase.co';
+        const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
 
-    let activeSession = null;
-    let userEmail = "";
-
-    async function checkSession() {
-        try {
-            const sb = getSupabase();
-            const { data: { session } } = await sb.auth.getSession();
-            activeSession = session;
-            
-            if (session) {
-                userEmail = session.user.email;
-                const navBtn = document.getElementById('nav-login-btn');
-                navBtn.innerText = "Dashboard";
-                
-                // Route to correct dashboard based on role
-                const { data: profile } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
-                if (profile && profile.role === 'admin') navBtn.href = "admin-dashboard.html";
-                else if (profile && (profile.role === 'teacher' || profile.role === 'instructor')) navBtn.href = "teacher-dashboard.html";
-                else navBtn.href = "student-dashboard.html";
+        function getSupabase() {
+            if (typeof window.supabase === 'undefined') {
+                throw new Error("Cannot connect to the database. Please check your internet connection.");
             }
-        } catch (err) {
-            console.error("Session check failed:", err);
+            return window.supabase.createClient(SUPA_URL, SUPA_KEY);
         }
-    }
 
-    // Simulating Udemy's random review counts for social proof
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+        let activeSession = null;
+        let userEmail = "";
 
-    async function fetchAllCourses() {
-        const container = document.getElementById('course-container');
-        try {
-            const sb = getSupabase();
-            const { data: courses, error } = await sb
-                .from('courses')
-                .select('*, profiles(first_name, last_name)')
-                .eq('is_published', true)
-                .order('created_at', { ascending: false });
+        function showToast(msg) {
+            const wrap = document.getElementById('toast-wrap');
+            const t = document.createElement('div');
+            t.className = `toast`;
+            t.innerHTML = `<span>✅</span><span>${msg}</span>`;
+            wrap.appendChild(t);
+            setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000);
+        }
 
-            if (error) throw error;
-            container.innerHTML = '';
+        async function checkSession() {
+            try {
+                const sb = getSupabase();
+                const { data: { session } } = await sb.auth.getSession();
+                activeSession = session;
+                
+                if (session) {
+                    userEmail = session.user.email;
+                    const navBtn = document.getElementById('nav-login-btn');
+                    navBtn.innerText = "Dashboard";
+                    
+                    const { data: profile } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
+                    if (profile && profile.role === 'admin') navBtn.href = "admin-dashboard.html";
+                    else if (profile && (profile.role === 'teacher' || profile.role === 'instructor')) navBtn.href = "teacher-dashboard.html";
+                    else navBtn.href = "student-dashboard.html";
+                }
+            } catch (err) { console.error("Session check failed:", err); }
+        }
 
-            if (!courses || courses.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: var(--text-gray); font-size: 1.1rem;">No courses available right now. Check back soon!</div>`;
+        function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        async function fetchAllCourses() {
+            const container = document.getElementById('course-container');
+            try {
+                const sb = getSupabase();
+                const { data: courses, error } = await sb
+                    .from('courses')
+                    .select('*, profiles(first_name, last_name)')
+                    .eq('is_published', true)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                container.innerHTML = '';
+
+                if (!courses || courses.length === 0) {
+                    container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: var(--text-gray); font-size: 1.1rem;">No courses available right now. Check back soon!</div>`;
+                    return;
+                }
+
+                courses.forEach(course => {
+                    const fName = course.profiles?.first_name || 'Academy';
+                    const lName = course.profiles?.last_name || 'Instructor';
+                    const instructorName = `${fName} ${lName}`.trim();
+                    const cleanTitle = course.title.replace(/'/g, "\\'");
+                    const cleanPrice = Number(course.price) === 0 ? "FREE" : `₦${Number(course.price).toLocaleString()}`;
+                    
+                    // The new Event Course logic
+                    const isEvent = course.is_event_course === true;
+                    
+                    const ratingScore = (Math.random() * (5.0 - 4.2) + 4.2).toFixed(1);
+                    const reviewCount = getRandomInt(12, 3000).toLocaleString();
+                    
+                    const card = document.createElement('div');
+                    card.className = 'udemy-card';
+                    card.onclick = () => initiateEnrollment(course.id, cleanTitle, cleanPrice, isEvent);
+                    
+                    // Change visual text if they are logged in and it's an event
+                    let priceDisplayHTML = `<div class="udemy-price">${cleanPrice}</div>`;
+                    if (activeSession && isEvent) {
+                        priceDisplayHTML = `<div class="udemy-price" style="color: var(--success);">🎁 FREE for Members</div>`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="udemy-img-wrapper">
+                            <img src="${course.image_url}" alt="${course.title}" class="udemy-img">
+                        </div>
+                        <div class="udemy-content">
+                            <h3 class="udemy-title">${course.title}</h3>
+                            <div class="udemy-instructor">${instructorName}</div>
+                            <div class="udemy-rating">
+                                <span class="rating-number">${ratingScore}</span>
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-count">(${reviewCount})</span>
+                            </div>
+                            ${priceDisplayHTML}
+                            <div class="badges">
+                                <span class="badge-premium">Premium</span>
+                                ${isEvent ? '<span class="badge-event">Exclusive Event</span>' : ''}
+                                ${Number(ratingScore) >= 4.8 ? '<span class="badge-bestseller">Bestseller</span>' : ''}
+                            </div>
+                        </div>`;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: #dc2626; font-weight:bold;">Failed to load courses. Please check your internet connection.</div>`;
+                console.error(err);
+            }
+        }
+
+        // === ENROLLMENT GATEWAY LOGIC ===
+        async function initiateEnrollment(courseId, courseTitle, coursePrice, isEvent) {
+            if (!activeSession) {
+                window.location.href = `login.html?redirect=courses.html`;
                 return;
             }
 
-            courses.forEach(course => {
-                const fName = course.profiles?.first_name || 'Academy';
-                const lName = course.profiles?.last_name || 'Instructor';
-                const instructorName = `${fName} ${lName}`.trim();
-                
-                // Escape quotes so the onclick function doesn't break
-                const cleanTitle = course.title.replace(/'/g, "\\'");
-                const cleanPrice = Number(course.price) === 0 ? "FREE" : `₦${Number(course.price).toLocaleString()}`;
-                
-                // Generate Udemy-style mock rating
-                const ratingScore = (Math.random() * (5.0 - 4.2) + 4.2).toFixed(1);
-                const reviewCount = getRandomInt(12, 3000).toLocaleString();
-                
-                const card = document.createElement('div');
-                card.className = 'udemy-card';
-                card.onclick = () => initiateEnrollment(course.id, cleanTitle, cleanPrice);
-                
-                card.innerHTML = `
-                    <div class="udemy-img-wrapper">
-                        <img src="${course.image_url}" alt="${course.title}" class="udemy-img">
-                    </div>
-                    <div class="udemy-content">
-                        <h3 class="udemy-title">${course.title}</h3>
-                        <div class="udemy-instructor">${instructorName}</div>
-                        <div class="udemy-rating">
-                            <span class="rating-number">${ratingScore}</span>
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-count">(${reviewCount})</span>
-                        </div>
-                        <div class="udemy-price">${cleanPrice}</div>
-                        <div class="badges">
-                            <span class="badge-premium">Premium</span>
-                            ${Number(ratingScore) >= 4.8 ? '<span class="badge-bestseller">Bestseller</span>' : ''}
-                        </div>
-                    </div>`;
-                container.appendChild(card);
-            });
-        } catch (err) {
-            container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: #dc2626; font-weight:bold;">Failed to load courses. Please check your internet connection.</div>`;
-            console.error(err);
-        }
-    }
+            // Member Perk Override: Instantly claim the course!
+            if (isEvent) {
+                try {
+                    const sb = getSupabase();
+                    
+                    // Check if they already own it first
+                    const { data: existing } = await sb.from('enrollments').select('id').eq('student_id', activeSession.user.id).eq('course_id', courseId);
+                    if (existing && existing.length > 0) {
+                        showToast(`You already own "${courseTitle}"! Check your dashboard.`);
+                        setTimeout(() => window.location.href = "student-dashboard.html", 2000);
+                        return;
+                    }
 
-    // === ENROLLMENT GATEWAY LOGIC ===
-    function initiateEnrollment(courseId, courseTitle, coursePrice) {
-        if (!activeSession) {
-            // Not logged in! Redirect to login and bounce back
-            window.location.href = `login.html?redirect=courses.html`;
-            return;
+                    const { error } = await sb.from('enrollments').insert({
+                        student_id: activeSession.user.id,
+                        course_id: courseId,
+                        enrollment_type: 'free_perk'
+                    });
+                    if (error) throw error;
+                    
+                    showToast(`🎁 Successfully claimed "${courseTitle}" for FREE! Redirecting...`);
+                    setTimeout(() => window.location.href = "student-dashboard.html", 2000);
+                    return; // Stop here, don't show the payment modal
+                } catch (err) {
+                    console.error("Claim error:", err);
+                    alert("Failed to claim event course automatically. Please contact support.");
+                    return;
+                }
+            }
+
+            // Regular Main Course Flow (WhatsApp Payment)
+            document.getElementById('modal-course-title').textContent = courseTitle;
+            document.getElementById('modal-course-price').textContent = `${coursePrice}`;
+            
+            const adminPhone = "2348162337303";
+            const message = encodeURIComponent(`Hello Admin, I have just paid ${coursePrice} for the course: "${courseTitle}". My registered email is ${userEmail}. Please grant me access.`);
+            document.getElementById('whatsapp-link').href = `https://wa.me/${adminPhone}?text=${message}`;
+
+            togglePaymentModal();
         }
 
-        // Pop up the Payment Verification Modal
-        document.getElementById('modal-course-title').textContent = courseTitle;
-        document.getElementById('modal-course-price').textContent = `${coursePrice}`;
-        
-        const adminPhone = "2348162337303";
-        const message = encodeURIComponent(`Hello Admin, I have just paid ${coursePrice} for the course: "${courseTitle}". My registered email is ${userEmail}. Please grant me access.`);
-        document.getElementById('whatsapp-link').href = `https://wa.me/${adminPhone}?text=${message}`;
+        function togglePaymentModal() { document.getElementById('paymentOverlay').classList.toggle('show'); }
+        function closePaymentModal(event) { if(event.target.id === 'paymentOverlay') togglePaymentModal(); }
 
-        togglePaymentModal();
-    }
-
-    function togglePaymentModal() { document.getElementById('paymentOverlay').classList.toggle('show'); }
-    function closePaymentModal(event) { if(event.target.id === 'paymentOverlay') togglePaymentModal(); }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        checkSession();
-        fetchAllCourses();
-    });
-</script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkSession(); // Must await this so activeSession is populated before rendering courses
+            fetchAllCourses();
+        });
+    </script>
 </body>
 </html>
