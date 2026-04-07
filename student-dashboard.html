@@ -80,7 +80,6 @@
         .pending-banner a{color:var(--accent-cyan);font-weight:700;text-decoration:none;}
         .pending-banner a:hover{text-decoration:underline;}
 
-        /* ── NEW: Enrolled-but-pending info banner ── */
         .enrolled-pending-banner{background:linear-gradient(135deg,rgba(0,160,223,.07),rgba(0,160,223,.02));border:1px solid rgba(0,160,223,.25);border-left:4px solid var(--accent-cyan);border-radius:16px;padding:1.25rem 1.75rem;margin-top:2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem;}
         .enrolled-pending-banner svg{flex-shrink:0;color:var(--accent-cyan);margin-top:2px;}
         .enrolled-pending-banner h4{font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-dark);margin-bottom:.25rem;}
@@ -118,10 +117,10 @@
         .progress-fill{background:var(--accent-cyan);height:100%;border-radius:10px;transition:width .5s ease;}
         .progress-fill.done{background:var(--success);}
         .progress-text{font-size:.75rem;color:var(--text-muted);font-weight:600;}
-        .course-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+        .course-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0; min-width: 160px;}
 
         /* BUTTONS */
-        .btn-continue{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--brand-navy);color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.9rem;transition:.2s;white-space:nowrap;border:none;cursor:pointer;}
+        .btn-continue{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--brand-navy);color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.9rem;transition:.2s;white-space:nowrap;border:none;cursor:pointer;width:100%;}
         .btn-continue:hover{opacity:.88;transform:translateY(-2px);}
         .btn-completed{background:var(--success)!important;color:#000!important;}
         .btn-completed:hover{background:#04b386!important;}
@@ -310,12 +309,6 @@
     </header>
 
     <main class="content">
-        <!--
-          BANNER LOGIC (controlled by JS):
-          1. status==='approved'              → no banner (fully approved, show everything)
-          2. status==='pending' + enrollments → enrolled-pending-banner (can learn, show courses)
-          3. status==='pending' + no enrollments → pending-banner (no access yet)
-        -->
         <div class="pending-banner" id="pending-approval-banner" style="display:none;">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <div>
@@ -394,7 +387,6 @@
     </main>
 </div>
 
-<!-- CERTIFICATE MODAL -->
 <div class="cert-modal-overlay" id="cert-modal">
     <div class="cert-modal-inner">
         <button class="close-cert-btn" onclick="closeCertModal()">✕</button>
@@ -429,7 +421,6 @@
     </div>
 </div>
 
-<!-- ASSIGNMENT SUBMIT MODAL -->
 <div class="assign-modal-overlay" id="assign-modal">
     <div class="assign-modal">
         <div class="assign-modal-head">
@@ -485,13 +476,13 @@ function showToast(msg,type='success'){const wrap=document.getElementById('toast
 // ─────────────────────────────────────────────
 const sb = window.supabase.createClient(
     'https://lskwzcvexyxjncttvimf.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleXh4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
 );
 
 let currentUser = null;
 let userProfile = null;
-let isApprovedMember = false; // profile.status === 'approved'
-let hasEnrollments = false;   // has at least one enrollment (admin-granted OR paid)
+let isApprovedMember = false; 
+let hasEnrollments = false;   
 let isFullMember = false;
 let selectedFiles = [];
 
@@ -507,15 +498,13 @@ window.addEventListener('load', async () => {
     if (!session) { window.location.href = 'login.html'; return; }
 
     if (ghostId) {
-        // ── GHOST / ADMIN PREVIEW MODE ──
         currentUser = { id: ghostId };
         const { data: profile } = await sb.from('profiles').select('*').eq('id', ghostId).single();
         userProfile = profile;
         isApprovedMember = profile?.status === 'approved';
 
         if (profile) {
-            document.getElementById('welcome-msg').innerHTML =
-                `<span style="color:var(--danger);">[GHOST]</span> ${profile.first_name || 'Student'}`;
+            document.getElementById('welcome-msg').innerHTML = `<span style="color:var(--danger);">[GHOST]</span> ${profile.first_name || 'Student'}`;
         }
 
         const lb = document.getElementById('logoutBtn');
@@ -523,7 +512,6 @@ window.addEventListener('load', async () => {
         lb.onclick = () => { localStorage.removeItem('enet_impersonate_id'); window.close(); };
 
     } else {
-        // ── REAL STUDENT LOGIN ──
         currentUser = session.user;
         const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
         userProfile = profile;
@@ -533,43 +521,30 @@ window.addEventListener('load', async () => {
         }
     }
 
-    // Fetch enrollments FIRST — determines which banner to show
-    const { data: enrollCheck } = await sb
-        .from('enrollments')
-        .select('id')
-        .eq('student_id', currentUser.id)
-        .limit(1);
-
+    const { data: enrollCheck } = await sb.from('enrollments').select('id').eq('student_id', currentUser.id).limit(1);
     hasEnrollments = (enrollCheck && enrollCheck.length > 0);
 
-    // ── APPROVAL BADGE ──
     const badge = document.getElementById('approval-status-badge');
     badge.style.display = 'inline-flex';
 
     if (isApprovedMember) {
         badge.className = 'approval-badge approved';
         document.getElementById('approval-status-text').textContent = '✓ Approved Member';
-        // No banners needed
     } else if (hasEnrollments) {
-        // Enrolled by admin but profile not yet "approved" — still let them learn
         badge.className = 'approval-badge pending';
         document.getElementById('approval-status-text').textContent = '⚠ Activation Pending';
         document.getElementById('enrolled-pending-banner').style.display = 'flex';
-        // Treat as functionally approved so courses load
-        isApprovedMember = true; // ← KEY FIX: bypass the gate since they have enrollments
+        isApprovedMember = true; 
     } else {
-        // Truly pending — no courses granted yet
         badge.className = 'approval-badge pending';
         document.getElementById('approval-status-text').textContent = 'Pending Approval';
         document.getElementById('pending-approval-banner').style.display = 'flex';
     }
 
-    // Always load data — gating happens inside fetchStudentData based on enrollments
     fetchStudentData();
     fetchGrades();
     fetchSubmittedAssignments();
 
-    // Drag & drop for assignment upload
     const zone = document.getElementById('upload-zone');
     zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
     zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
@@ -582,7 +557,7 @@ window.forceLogout = async () => {
 };
 
 // ─────────────────────────────────────────────
-// CERTIFICATE HELPERS
+// CERTIFICATE HELPERS (AUTO HEALING)
 // ─────────────────────────────────────────────
 async function ensureCertificate(studentId, courseId, certMap) {
     if (certMap[courseId]) return certMap[courseId];
@@ -593,7 +568,6 @@ async function ensureCertificate(studentId, courseId, certMap) {
         certificate_id: newCertId, issued_at: now
     });
     if (error) {
-        // Race condition: duplicate — re-fetch
         const { data: existing } = await sb.from('certificates')
             .select('certificate_id,issued_at')
             .eq('student_id', studentId).eq('course_id', courseId).single();
@@ -664,7 +638,6 @@ async function fetchStudentData() {
         isFullMember = (enrollments || []).some(en => en.courses && !en.courses.is_event_course);
         fetchEventPerks(enrolledCourseIds);
 
-        // Build existing cert map
         const { data: existingCerts } = await sb.from('certificates')
             .select('course_id, certificate_id, issued_at')
             .eq('student_id', currentUser.id);
@@ -709,7 +682,6 @@ async function fetchStudentData() {
                 }
             }
 
-            // Completed if: lessons done OR cert already exists
             const alreadyHasCert = !!certMap[c.id];
             const isDone = alreadyHasCert || (totalLessons > 0 && completedLessons >= totalLessons);
 
@@ -723,6 +695,8 @@ async function fetchStudentData() {
                 if (cert) {
                     const safe = c.title.replace(/'/g, "\\'");
                     const dStr = new Date(cert.issued_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    // The Inline Certificate Buttons for Completed Courses
                     certBtnHtml = `<button onclick="openCertModal('${safe}','${dStr}','${cert.certificate_id}')" class="btn-cert">🎓 View Certificate</button>`;
                     dlBtnHtml = `<button onclick="quickDownloadCert('${safe}','${dStr}','${cert.certificate_id}')" class="btn-download">⬇️ Download PDF</button>`;
                 }
@@ -748,7 +722,7 @@ async function fetchStudentData() {
                     </div>
                 </div>
                 <div class="course-actions">
-                    <a href="learn.html?course=${c.id}" class="btn-continue ${isDone ? 'btn-completed' : ''}">${isDone ? '✓ Review' : 'Continue ➔'}</a>
+                    <a href="learn.html?course=${c.id}" class="btn-continue ${isDone ? 'btn-completed' : ''}">${isDone ? '✓ Review Course' : 'Continue ➔'}</a>
                     ${certBtnHtml}
                     ${dlBtnHtml}
                     <button onclick="openAssignModal('${c.id}','${c.title.replace(/'/g, "\\'")}')" class="btn-assign">📝 Submit Assignment</button>
@@ -760,7 +734,6 @@ async function fetchStudentData() {
         container.innerHTML = coursesHtml;
         document.getElementById('stat-completed').textContent = fullyCompletedCount;
 
-        // Certs panel
         const { data: certs } = await sb.from('certificates')
             .select('*, courses(title)').eq('student_id', currentUser.id).order('issued_at', { ascending: false });
         document.getElementById('stat-certs').textContent = certs ? certs.length : 0;
