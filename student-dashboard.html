@@ -161,7 +161,7 @@
 
         /* Toast */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
-        .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.1);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;}
+        .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.1);font-size:.9rem;font-weight:600;color:var(--text-main);pointer-events:all;animation:toastIn .3s ease;}
         .toast.error{border-left-color:var(--danger);}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
@@ -244,7 +244,6 @@
             </div>
         </div>
         <div class="topbar-right">
-            <!-- Approval status indicator -->
             <div class="approval-badge pending" id="approval-status-badge" style="display:none;">
                 <span class="dot"></span>
                 <span id="approval-status-text">Pending Approval</span>
@@ -257,7 +256,6 @@
     </header>
 
     <main class="content">
-        <!-- Pending approval banner — hidden by default, shown for non-approved students -->
         <div class="pending-banner" id="pending-approval-banner" style="display:none;">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -283,7 +281,6 @@
             </div>
         </div>
 
-        <!-- EVENT COURSES PANEL — only shown to APPROVED students with unclaimed perks -->
         <div class="panel perks-panel" id="event-perks-panel" style="display: none;">
             <div class="panel-head">
                 <div class="panel-title">🎁 Member Perks — Free Event Courses</div>
@@ -319,7 +316,6 @@
     </main>
 </div>
 
-<!-- CERTIFICATE MODAL -->
 <div class="cert-modal-overlay" id="cert-modal">
     <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
         <button class="close-cert-btn" onclick="closeCertModal()">✕</button>
@@ -420,7 +416,9 @@ window.addEventListener('load', async () => {
         currentUser = { id: ghostId };
         const { data: profile } = await sb.from('profiles').select('*').eq('id', ghostId).single();
         userProfile = profile;
-        isApprovedMember = profile?.is_approved === true;
+        
+        // FIXED CHECK: Admin dashboard approves by setting status to 'approved'
+        isApprovedMember = profile?.status === 'approved';
 
         if (profile) {
             document.getElementById('welcome-msg').innerHTML =
@@ -443,8 +441,8 @@ window.addEventListener('load', async () => {
         const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
         userProfile = profile;
 
-        // THE KEY CHECK: is this student approved by admin?
-        isApprovedMember = profile?.is_approved === true;
+        // FIXED CHECK: Admin dashboard approves by setting status to 'approved'
+        isApprovedMember = profile?.status === 'approved';
 
         if (profile?.first_name) {
             document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
