@@ -21,18 +21,23 @@
             --light-gray: #EAECF0;
             --background: #F8F9FA;
             --white: #FFFFFF;
+            --border: #E5E7EB;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        /* === HIDE ALL GOOGLE TRANSLATE UI === */
-        .goog-te-banner-frame, .goog-te-balloon-frame { display: none !important; }
-        body { top: 0 !important; }
-        .goog-tooltip, .goog-tooltip:hover { display: none !important; }
-        .goog-text-highlight { background: none !important; box-shadow: none !important; }
+        /* === HIDE ALL GOOGLE TRANSLATE UI CHROME === */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        .goog-te-gadget { display: none !important; }
         #google_translate_element { display: none !important; }
+        body { top: 0px !important; }
         .skiptranslate { display: none !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+        /* Kill the banner iframe that pushes page down */
+        iframe.goog-te-banner-frame { display: none !important; }
 
         /* === HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
@@ -105,6 +110,12 @@
         .lang-close-btn { background: var(--navy-blue); color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: 0.15s; }
         .lang-close-btn:hover { background: var(--navy-light); }
 
+        /* Translating indicator */
+        .translating-toast { display: none; position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--navy-blue); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; z-index: 99999; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .translating-toast.show { display: flex; }
+        .translating-spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         /* === HERO === */
         .hero-container { max-width: 1300px; margin: 0 auto; padding: 5rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; min-height: 85vh; }
         .hero-content { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -127,7 +138,7 @@
         .blob-bg { position: absolute; width: 85%; height: 85%; background-color: var(--accent-cyan); opacity: 0.15; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; z-index: 1; transform: rotate(-5deg); }
         .main-image { position: relative; z-index: 2; width: 90%; height: auto; max-height: 650px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: contain; background-color: white; padding: 2rem; border-bottom: 5px solid var(--brand-yellow); }
 
-        /* === STORE (UDEMY STYLE) === */
+        /* === STORE === */
         .store-section { background-color: var(--background); padding: 5rem 1.5rem; border-top: 1px solid var(--light-gray); }
         .container { max-width: 1200px; margin: 0 auto; }
         .section-header-title { font-size: 2rem; color: var(--navy-blue); font-weight: 800; margin-bottom: 2rem; text-align: left;}
@@ -135,16 +146,21 @@
         
         .course-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; border: 1px solid var(--border); border-top: 4px solid var(--accent-cyan); }
         .course-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top-color: var(--brand-yellow); }
+        .course-card.is-event-card { border-top-color: #7c3aed; }
+        .course-card.is-event-card:hover { border-top-color: #6d28d9; }
         .course-img { width: 100%; height: 180px; background-color: var(--navy-blue); object-fit: cover; }
         .course-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
-        
-        .course-instructor { font-size: 0.75rem; font-weight: 700; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;}
         .course-title { font-size: 1.15rem; margin-bottom: 0.8rem; color: var(--navy-blue); line-height: 1.4; flex: 1; font-weight: 800; }
         .course-desc { color: var(--text-gray); font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .event-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 10px; border-radius: 20px; background: rgba(124,58,237,0.1); color: #7c3aed; border: 1px solid rgba(124,58,237,0.3); margin-bottom: 0.5rem; width: fit-content; }
+        .member-free-tag { display: inline-block; font-size: 0.75rem; font-weight: 700; color: #059669; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5,150,105,0.3); padding: 3px 10px; border-radius: 20px; margin-left: 8px; }
+
         .course-price { font-size: 1.25rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 1rem; text-shadow: 1px 1px 1px rgba(0,0,0,0.1);}
-        
         .purchase-btn { width: 100%; background-color: var(--navy-blue); color: var(--white); border: none; padding: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: background 0.3s; }
         .purchase-btn:hover { background-color: var(--navy-light); }
+        .purchase-btn.event-claim-btn { background-color: #059669; }
+        .purchase-btn.event-claim-btn:hover { background-color: #047857; }
         .view-all-btn { display: block; width: max-content; margin: 0 auto; padding: 1rem 2.5rem; border: 2px solid var(--navy-blue); color: var(--navy-blue); font-weight: 800; border-radius: 8px; text-decoration: none; transition: 0.2s;}
         .view-all-btn:hover { background: var(--navy-blue); color: var(--white); }
 
@@ -244,12 +260,20 @@
             .stat-number { font-size: 3rem; }
             .section-header-title { font-size: 1.6rem; text-align: center;}
             .payment-modal { padding: 1.5rem; }
+            .lang-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 
-<div id="google_translate_element"></div>
+<!-- Hidden GT element — required for the API to work -->
+<div id="google_translate_element" style="display:none;visibility:hidden;position:absolute;"></div>
+
+<!-- Translating indicator -->
+<div class="translating-toast" id="translating-toast">
+    <div class="translating-spinner"></div>
+    <span id="translating-label">Translating page...</span>
+</div>
 
 <header>
     <nav>
@@ -320,6 +344,7 @@
     </div>
 </section>
 
+<!-- PAYMENT MODAL -->
 <div class="modal-overlay" id="paymentOverlay" onclick="closePaymentModal(event)">
     <div class="payment-modal" onclick="event.stopPropagation()">
         <button class="payment-close" onclick="togglePaymentModal()">✕</button>
@@ -388,7 +413,7 @@
             <p>Join the ENET Supreme Community Hub — where students, teachers, and mentors post updates, share resources, ask questions, and cheer each other on. It's your academy social feed.</p>
             <div class="community-cta">
                 <a href="community.html" class="btn btn-community" style="background:var(--accent-cyan);border-color:var(--accent-cyan);">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 11.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                     Open Community Feed
                 </a>
             </div>
@@ -406,7 +431,7 @@
     <div class="container footer-container">
         <div>
             <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
-            <p style="margin-top: 1rem;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cea7a0a8a18eaba0abbabdbbbebcaba3abe0ada1a3e0a0a9">[email&#160;protected]</a> | +234 8062 770 265</p>
+            <p style="margin-top: 1rem;">enetsupremeacademy@gmail.com | +234 8062 770 265</p>
         </div>
         <div style="color: #cbd5e1; font-size: 0.9rem;">
             <p>Suite 58 Georgewill/Clifford Plaza</p>
@@ -416,10 +441,14 @@
     </div>
 </footer>
 
+<!-- LANGUAGE MODAL -->
 <div class="lang-modal-overlay" id="langModalOverlay" onclick="handleOverlayClick(event)">
     <div class="lang-modal" id="langModal">
         <div class="lang-modal-head">
-            <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Choose your language</h3>
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Choose your language
+            </h3>
             <button class="lang-modal-close" onclick="closeLangModal()">✕</button>
         </div>
         <div class="lang-search-bar">
@@ -442,110 +471,292 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<!-- =============================================
+     GOOGLE TRANSLATE — Must load BEFORE our code
+     The callback fires when the GT API is ready
+============================================= -->
+<script>
+    // Called by Google when the API is fully loaded
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
-            includedLanguages: 'en,fr,es,pt,de,it,nl,ru,pl,tr,ar,fa,ur,hi,bn,sw,ha,yo,ig,pcm,zh-CN,zh-TW,ja,ko,vi,id,ms,th,fil,am',
-            autoDisplay: false
+            includedLanguages: 'en,fr,es,pt,de,it,nl,ru,pl,tr,ar,fa,ur,hi,bn,sw,ha,yo,ig,zh-CN,zh-TW,ja,ko,vi,id,ms,th,fil,am',
+            autoDisplay: false,
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
         }, 'google_translate_element');
+        
+        console.log('[GT] Google Translate initialized');
+        window._gtReady = true;
+
+        // If a language was selected before GT was ready, apply it now
+        if (window._pendingLang) {
+            setTimeout(() => applyGoogleTranslate(window._pendingLang), 500);
+            window._pendingLang = null;
+        }
     }
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 
 <script>
+    /* =============================================
+       ROBUST TRANSLATOR ENGINE
+    ============================================= */
     function esc(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
 
+    // The REAL translation function — polls for the GT select box
+    function applyGoogleTranslate(langCode) {
+        if (langCode === 'en') {
+            // Resetting to English: use cookie approach
+            resetGoogleTranslateCookie();
+            return;
+        }
+
+        const toast = document.getElementById('translating-toast');
+        document.getElementById('translating-label').textContent = 'Translating page...';
+        toast.classList.add('show');
+
+        let attempts = 0;
+        const maxAttempts = 40; // 4 seconds total
+
+        function tryApply() {
+            attempts++;
+            // Google Translate injects a <select class="goog-te-combo"> into the page
+            const gtSelect = document.querySelector('select.goog-te-combo');
+
+            if (gtSelect) {
+                gtSelect.value = langCode;
+                // Dispatch both change and input events for reliability
+                gtSelect.dispatchEvent(new Event('change'));
+                gtSelect.dispatchEvent(new Event('input'));
+                console.log(`[GT] Language set to: ${langCode} after ${attempts} attempt(s)`);
+                setTimeout(() => toast.classList.remove('show'), 1500);
+            } else if (attempts < maxAttempts) {
+                setTimeout(tryApply, 100);
+            } else {
+                console.warn('[GT] Could not find goog-te-combo after 4s. GT may be blocked.');
+                toast.classList.remove('show');
+            }
+        }
+
+        tryApply();
+    }
+
+    // Reset to English by clearing the GT cookie and reloading
+    function resetGoogleTranslateCookie() {
+        // Method 1: Delete the googtrans cookie
+        const cookieDomain = '.' + window.location.hostname;
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${cookieDomain}`;
+        document.cookie = `googtrans=/en/en; path=/`;
+
+        // Method 2: Use the select box if available
+        const gtSelect = document.querySelector('select.goog-te-combo');
+        if (gtSelect) {
+            gtSelect.value = 'en';
+            gtSelect.dispatchEvent(new Event('change'));
+        }
+
+        // Method 3: Reload if the above didn't work (last resort)
+        setTimeout(() => {
+            const currentUrl = window.location.href;
+            if (currentUrl.includes('#googtrans') || document.querySelector('.goog-te-banner-frame')) {
+                window.location.reload();
+            }
+        }, 800);
+
+        console.log('[GT] Reset to English');
+    }
+
+    /* =============================================
+       LANGUAGE DATA & MODAL
+    ============================================= */
     const LANG_GROUPS = [
-        { group: '🌍 African Languages', langs: [{ code: 'ha',  flag: '🇳🇬', name: 'Hausa', native: 'Harshen Hausa' }, { code: 'yo',  flag: '🇳🇬', name: 'Yoruba', native: 'Yorùbá' }, { code: 'ig',  flag: '🇳🇬', name: 'Igbo', native: 'Asụsụ Igbo' }, { code: 'pcm', flag: '🇳🇬', name: 'Nigerian Pidgin',native: 'Naija' }, { code: 'sw',  flag: '🇰🇪', name: 'Swahili', native: 'Kiswahili' }, { code: 'am',  flag: '🇪🇹', name: 'Amharic', native: 'አማርኛ' }] },
-        { group: '🌐 European Languages', langs: [{ code: 'fr',  flag: '🇫🇷', name: 'French', native: 'Français' }, { code: 'es',  flag: '🇪🇸', name: 'Spanish', native: 'Español' }, { code: 'pt',  flag: '🇧🇷', name: 'Portuguese', native: 'Português' }, { code: 'de',  flag: '🇩🇪', name: 'German', native: 'Deutsch' }, { code: 'it',  flag: '🇮🇹', name: 'Italian', native: 'Italiano' }, { code: 'nl',  flag: '🇳🇱', name: 'Dutch', native: 'Nederlands' }, { code: 'ru',  flag: '🇷🇺', name: 'Russian', native: 'Русский' }, { code: 'pl',  flag: '🇵🇱', name: 'Polish', native: 'Polski' }, { code: 'tr',  flag: '🇹🇷', name: 'Turkish', native: 'Türkçe' }] },
-        { group: '🕌 Middle East & South Asia', langs: [{ code: 'ar',  flag: '🇸🇦', name: 'Arabic', native: 'العربية' }, { code: 'fa',  flag: '🇮🇷', name: 'Persian', native: 'فارسی' }, { code: 'ur',  flag: '🇵🇰', name: 'Urdu', native: 'اردو' }, { code: 'hi',  flag: '🇮🇳', name: 'Hindi', native: 'हिन्दी' }, { code: 'bn',  flag: '🇧🇩', name: 'Bengali', native: 'বাংলা' }] },
-        { group: '🌏 East & Southeast Asia', langs: [{ code: 'zh-CN', flag: '🇨🇳', name: 'Chinese (Simplified)', native: '中文(简体)' }, { code: 'zh-TW', flag: '🇹🇼', name: 'Chinese (Traditional)', native: '中文(繁體)' }, { code: 'ja', flag: '🇯🇵', name: 'Japanese', native: '日本語' }, { code: 'ko', flag: '🇰🇷', name: 'Korean', native: '한국어' }, { code: 'vi', flag: '🇻🇳', name: 'Vietnamese', native: 'Tiếng Việt' }, { code: 'id', flag: '🇮🇩', name: 'Indonesian', native: 'Bahasa Indonesia' }, { code: 'ms', flag: '🇲🇾', name: 'Malay', native: 'Bahasa Melayu' }, { code: 'th', flag: '🇹🇭', name: 'Thai', native: 'ภาษาไทย' }, { code: 'fil', flag: '🇵🇭', name: 'Filipino', native: 'Filipino' }] }
+        { group: '🌍 African Languages', langs: [
+            { code: 'ha',  flag: '🇳🇬', name: 'Hausa',           native: 'Harshen Hausa' },
+            { code: 'yo',  flag: '🇳🇬', name: 'Yoruba',          native: 'Yorùbá' },
+            { code: 'ig',  flag: '🇳🇬', name: 'Igbo',            native: 'Asụsụ Igbo' },
+            { code: 'sw',  flag: '🇰🇪', name: 'Swahili',         native: 'Kiswahili' },
+            { code: 'am',  flag: '🇪🇹', name: 'Amharic',         native: 'አማርኛ' }
+        ]},
+        { group: '🌐 European Languages', langs: [
+            { code: 'fr',  flag: '🇫🇷', name: 'French',          native: 'Français' },
+            { code: 'es',  flag: '🇪🇸', name: 'Spanish',         native: 'Español' },
+            { code: 'pt',  flag: '🇧🇷', name: 'Portuguese',      native: 'Português' },
+            { code: 'de',  flag: '🇩🇪', name: 'German',          native: 'Deutsch' },
+            { code: 'it',  flag: '🇮🇹', name: 'Italian',         native: 'Italiano' },
+            { code: 'nl',  flag: '🇳🇱', name: 'Dutch',           native: 'Nederlands' },
+            { code: 'ru',  flag: '🇷🇺', name: 'Russian',         native: 'Русский' },
+            { code: 'pl',  flag: '🇵🇱', name: 'Polish',          native: 'Polski' },
+            { code: 'tr',  flag: '🇹🇷', name: 'Turkish',         native: 'Türkçe' }
+        ]},
+        { group: '🕌 Middle East & South Asia', langs: [
+            { code: 'ar',  flag: '🇸🇦', name: 'Arabic',          native: 'العربية' },
+            { code: 'fa',  flag: '🇮🇷', name: 'Persian',         native: 'فارسی' },
+            { code: 'ur',  flag: '🇵🇰', name: 'Urdu',            native: 'اردو' },
+            { code: 'hi',  flag: '🇮🇳', name: 'Hindi',           native: 'हिन्दी' },
+            { code: 'bn',  flag: '🇧🇩', name: 'Bengali',         native: 'বাংলা' }
+        ]},
+        { group: '🌏 East & Southeast Asia', langs: [
+            { code: 'zh-CN', flag: '🇨🇳', name: 'Chinese (Simplified)',  native: '中文(简体)' },
+            { code: 'zh-TW', flag: '🇹🇼', name: 'Chinese (Traditional)', native: '中文(繁體)' },
+            { code: 'ja',  flag: '🇯🇵', name: 'Japanese',        native: '日本語' },
+            { code: 'ko',  flag: '🇰🇷', name: 'Korean',          native: '한국어' },
+            { code: 'vi',  flag: '🇻🇳', name: 'Vietnamese',      native: 'Tiếng Việt' },
+            { code: 'id',  flag: '🇮🇩', name: 'Indonesian',      native: 'Bahasa Indonesia' },
+            { code: 'ms',  flag: '🇲🇾', name: 'Malay',           native: 'Bahasa Melayu' },
+            { code: 'th',  flag: '🇹🇭', name: 'Thai',            native: 'ภาษาไทย' },
+            { code: 'fil', flag: '🇵🇭', name: 'Filipino',        native: 'Filipino' }
+        ]}
     ];
 
-    let currentLangCode = 'en'; let currentLangName = 'English'; let currentLangFlag = '🌐';
+    const TOTAL_LANGS = LANG_GROUPS.reduce((a, g) => a + g.langs.length, 0);
+    let currentLangCode = 'en';
+    let currentLangName = 'English';
+    let currentLangFlag = '🌐';
 
     function buildLangGrid(filter) {
         const scroll = document.getElementById('langGridScroll');
         const q = (filter || '').toLowerCase().trim();
-        let html = ''; let totalShown = 0;
+        let html = '';
+        let totalShown = 0;
+
         LANG_GROUPS.forEach(group => {
-            const matches = group.langs.filter(l => !q || l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q) || l.code.toLowerCase().includes(q));
+            const matches = group.langs.filter(l =>
+                !q || l.name.toLowerCase().includes(q) || l.native.toLowerCase().includes(q) || l.code.toLowerCase().includes(q)
+            );
             if (matches.length === 0) return;
             totalShown += matches.length;
             html += `<div class="lang-group-label">${group.group}</div><div class="lang-grid">`;
             matches.forEach(l => {
                 const sel = l.code === currentLangCode ? 'selected' : '';
-                html += `<button class="lang-item ${sel}" onclick="selectLang('${l.code}','${l.name}','${l.flag}')"><span class="li-flag">${l.flag}</span><span class="li-text"><span class="li-name">${l.name}</span><span class="li-native">${l.native}</span></span><svg class="li-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button>`;
+                html += `
+                    <button class="lang-item ${sel}" onclick="selectLang('${l.code}','${esc(l.name)}','${l.flag}')">
+                        <span class="li-flag">${l.flag}</span>
+                        <span class="li-text">
+                            <span class="li-name">${l.name}</span>
+                            <span class="li-native">${l.native}</span>
+                        </span>
+                        <svg class="li-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>`;
             });
             html += `</div>`;
         });
-        if (totalShown === 0) html = `<div class="lang-no-results">No languages found for "<strong>${esc(filter)}</strong>"</div>`;
+
+        if (totalShown === 0) {
+            html = `<div style="padding:2rem;text-align:center;color:#9ca3af;">No languages found for "<strong>${esc(filter)}</strong>"</div>`;
+        }
+
         scroll.innerHTML = html;
-        document.getElementById('langCountLabel').textContent = q ? `${totalShown} result${totalShown !== 1 ? 's' : ''}` : `${LANG_GROUPS.reduce((a,g)=>a+g.langs.length,0)} languages available`;
+        document.getElementById('langCountLabel').textContent = q
+            ? `${totalShown} result${totalShown !== 1 ? 's' : ''}`
+            : `${TOTAL_LANGS} languages available`;
     }
 
-    function filterLangs(val) { buildLangGrid(val); document.getElementById('langSearchClear').classList.toggle('show', val.length > 0); }
-    function clearLangSearch() { document.getElementById('langSearchInput').value = ''; document.getElementById('langSearchClear').classList.remove('show'); buildLangGrid(''); }
-    function openLangModal() { buildLangGrid(''); document.getElementById('langModalOverlay').classList.add('show'); document.body.style.overflow = 'hidden'; setTimeout(() => document.getElementById('langSearchInput').focus(), 300); }
-    function closeLangModal() { document.getElementById('langModalOverlay').classList.remove('show'); document.body.style.overflow = ''; clearLangSearch(); }
-    function handleOverlayClick(e) { if (e.target === document.getElementById('langModalOverlay')) closeLangModal(); }
+    function filterLangs(val) {
+        buildLangGrid(val);
+        document.getElementById('langSearchClear').classList.toggle('show', val.length > 0);
+    }
+
+    function clearLangSearch() {
+        document.getElementById('langSearchInput').value = '';
+        document.getElementById('langSearchClear').classList.remove('show');
+        buildLangGrid('');
+    }
+
+    function openLangModal() {
+        buildLangGrid('');
+        document.getElementById('langModalOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('langSearchInput').focus(), 300);
+    }
+
+    function closeLangModal() {
+        document.getElementById('langModalOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+        clearLangSearch();
+    }
+
+    function handleOverlayClick(e) {
+        if (e.target === document.getElementById('langModalOverlay')) closeLangModal();
+    }
+
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLangModal(); });
 
     function selectLang(code, name, flag) {
-        currentLangCode = code; currentLangName = name; currentLangFlag = flag;
-        const btn = document.getElementById('translatorBtn');
-        document.getElementById('translatorBtnLabel').textContent = name;
-        btn.classList.add('active-lang-btn');
+        currentLangCode = code;
+        currentLangName = name;
+        currentLangFlag = flag;
+
+        // Update button UI
+        document.getElementById('translatorBtnLabel').textContent = flag + ' ' + name;
+        document.getElementById('translatorBtn').classList.add('active-lang-btn');
         document.getElementById('currentFlagDisplay').textContent = flag;
         document.getElementById('currentLangDisplay').textContent = name;
+
         buildLangGrid(document.getElementById('langSearchInput').value);
-        doGoogleTranslate(code);
-        setTimeout(closeLangModal, 320);
+
+        // Apply the translation
+        if (window._gtReady) {
+            applyGoogleTranslate(code);
+        } else {
+            // GT not loaded yet — queue it
+            window._pendingLang = code;
+            console.log('[GT] Queued translation for:', code);
+        }
+
+        setTimeout(closeLangModal, 350);
     }
 
     function resetToEnglish() {
-        currentLangCode = 'en'; currentLangName = 'English'; currentLangFlag = '🌐';
-        const btn = document.getElementById('translatorBtn');
+        currentLangCode = 'en';
+        currentLangName = 'English';
+        currentLangFlag = '🌐';
+
         document.getElementById('translatorBtnLabel').textContent = 'Language';
-        btn.classList.remove('active-lang-btn');
+        document.getElementById('translatorBtn').classList.remove('active-lang-btn');
         document.getElementById('currentFlagDisplay').textContent = '🌐';
         document.getElementById('currentLangDisplay').textContent = 'English';
+
         buildLangGrid(document.getElementById('langSearchInput').value);
-        doGoogleTranslate('en');
-        setTimeout(closeLangModal, 320);
+        applyGoogleTranslate('en');
+
+        setTimeout(closeLangModal, 350);
     }
 
-    function doGoogleTranslate(lang) {
-        function tryTranslate(attempts) {
-            const select = document.querySelector('.goog-te-combo');
-            if (select) { select.value = lang; select.dispatchEvent(new Event('change')); } 
-            else if (attempts > 0) { setTimeout(() => tryTranslate(attempts - 1), 300); }
-        }
-        tryTranslate(20);
-    }
-
-    /* === SUPABASE / COURSE / PAYMENT LOGIC === */
+    /* =============================================
+       SUPABASE / COURSE / ENROLLMENT / PAYMENT
+    ============================================= */
     const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     let activeSession = null;
     let userEmail = "";
+    let isApprovedMember = false;
 
     async function checkSession() {
         const { data: { session } } = await supabase.auth.getSession();
         activeSession = session;
+
         if (session) {
             userEmail = session.user.email;
+
+            // Fetch profile to check role and approved status
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role, is_approved')
+                .eq('id', session.user.id)
+                .single();
+
+            // An approved member = is_approved is true
+            isApprovedMember = profile?.is_approved === true;
+
+            let dashboardPage = 'student-dashboard.html';
+            if (profile?.role === 'admin') dashboardPage = 'admin-dashboard.html';
+            if (profile?.role === 'teacher' || profile?.role === 'instructor') dashboardPage = 'teacher-dashboard.html';
+
             const heroBtn = document.getElementById('hero-auth-btn');
             const navBtn = document.getElementById('nav-login-btn');
-            
-            const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
-            let dashboardPage = 'student-dashboard.html';
-            if (profile && profile.role === 'admin') dashboardPage = 'admin-dashboard.html';
-            if (profile && (profile.role === 'teacher' || profile.role === 'instructor')) dashboardPage = 'teacher-dashboard.html';
-            
             if (heroBtn) { heroBtn.innerText = "Access My Dashboard"; heroBtn.href = dashboardPage; }
             if (navBtn) { navBtn.innerText = "Dashboard"; navBtn.href = dashboardPage; }
         }
@@ -554,46 +765,111 @@
     async function renderCourses() {
         const container = document.getElementById('course-container');
         if (!container) return;
-        
+
         try {
             const { data: courses, error } = await supabase
                 .from('courses')
                 .select('*, profiles(first_name, last_name)')
                 .eq('is_published', true)
                 .order('created_at', { ascending: false })
-                .limit(6); 
+                .limit(6);
 
             if (error) throw error;
             container.innerHTML = '';
-            
+
             if (courses.length === 0) {
                 container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;">No premium tracks available at the moment. Check back soon!</p>';
                 return;
             }
-            
+
             courses.forEach(course => {
+                const isEvent = course.is_event_course === true;
                 const fName = course.profiles?.first_name || 'Academy';
                 const lName = course.profiles?.last_name || 'Instructor';
                 const instructorName = `${fName} ${lName}`.trim();
-                
-                const cleanTitle = course.title.replace(/'/g, "\\'");
-                const cleanPrice = Number(course.price) === 0 ? "FREE" : `₦${Number(course.price).toLocaleString()}`;
+                const rawPrice = Number(course.price);
+
+                // Determine what price to show and what button to show
+                let priceHtml = '';
+                let buttonHtml = '';
+
+                if (isEvent) {
+                    if (activeSession && isApprovedMember) {
+                        // Approved member → FREE claim
+                        priceHtml = `
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom: 1rem;">
+                                <span style="font-size:1.3rem; font-weight:800; color:#059669;">FREE</span>
+                                <span style="font-size:0.75rem; color:#6b7280; text-decoration:line-through;">${rawPrice > 0 ? '₦'+rawPrice.toLocaleString() : ''}</span>
+                                <span class="member-free-tag">✓ Member Benefit</span>
+                            </div>`;
+                        buttonHtml = `<button class="purchase-btn event-claim-btn" onclick="claimEventCourse('${course.id}', '${course.title.replace(/'/g,"\\'")}')">🎟️ Claim Free Access</button>`;
+                    } else if (activeSession && !isApprovedMember) {
+                        // Logged in but NOT approved → show price, pay
+                        priceHtml = `<div class="course-price">${rawPrice === 0 ? 'FREE' : '₦' + rawPrice.toLocaleString()}</div>`;
+                        buttonHtml = `<button class="purchase-btn" onclick="initiateEnrollment('${course.id}', '${course.title.replace(/'/g,"\\'")}', '${rawPrice === 0 ? "FREE" : "₦"+rawPrice.toLocaleString()}')">Enroll Now</button>`;
+                    } else {
+                        // Not logged in → show price, redirect to login
+                        priceHtml = `<div class="course-price">${rawPrice === 0 ? 'FREE' : '₦' + rawPrice.toLocaleString()}</div>`;
+                        buttonHtml = `<button class="purchase-btn" onclick="initiateEnrollment('${course.id}', '${course.title.replace(/'/g,"\\'")}', '${rawPrice === 0 ? "FREE" : "₦"+rawPrice.toLocaleString()}')">Enroll Now</button>`;
+                    }
+                } else {
+                    // Normal course
+                    priceHtml = `<div class="course-price">${rawPrice === 0 ? 'FREE' : '₦' + rawPrice.toLocaleString()}</div>`;
+                    buttonHtml = `<button class="purchase-btn" onclick="initiateEnrollment('${course.id}', '${course.title.replace(/'/g,"\\'")}', '${rawPrice === 0 ? "FREE" : "₦"+rawPrice.toLocaleString()}')">Enroll Now</button>`;
+                }
+
+                const eventPillHtml = isEvent ? `<div class="event-pill">🎟️ Event Course</div>` : '';
 
                 const card = document.createElement('div');
-                card.className = 'course-card';
+                card.className = `course-card${isEvent ? ' is-event-card' : ''}`;
                 card.innerHTML = `
-                    <img src="${course.image_url}" alt="${course.title}" class="course-img">
+                    <img src="${course.image_url || ''}" alt="${course.title}" class="course-img">
                     <div class="course-content">
                         <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-gray); text-transform: uppercase; margin-bottom: 0.5rem;">Instructor: ${instructorName}</div>
-                        <h3 style="font-size: 1.15rem; margin-bottom: 0.8rem; color: var(--navy-blue); flex: 1; font-weight: 800;">${course.title}</h3>
-                        <p style="color: var(--text-gray); font-size: 0.85rem; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${course.description}</p>
-                        <div style="font-size: 1.25rem; font-weight: 800; color: var(--brand-yellow); margin-bottom: 1rem;">${cleanPrice}</div>
-                        <button class="purchase-btn" onclick="initiateEnrollment('${course.id}', '${cleanTitle}', '${cleanPrice}')">Enroll Now</button>
+                        ${eventPillHtml}
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-desc">${course.description}</p>
+                        ${priceHtml}
+                        ${buttonHtml}
                     </div>`;
                 container.appendChild(card);
             });
         } catch (err) {
-            container.innerHTML = '<p style="text-align:center;color:var(--danger);grid-column:1/-1;">Failed to load courses. Please check your connection.</p>';
+            container.innerHTML = '<p style="text-align:center;color:#dc2626;grid-column:1/-1;">Failed to load courses. Please check your connection.</p>';
+        }
+    }
+
+    // Approved member claims an event course instantly
+    async function claimEventCourse(courseId, courseTitle) {
+        if (!activeSession) { window.location.href = 'login.html?redirect=index.html'; return; }
+
+        try {
+            // Check if already enrolled
+            const { data: existing } = await supabase
+                .from('enrollments')
+                .select('id')
+                .eq('user_id', activeSession.user.id)
+                .eq('course_id', courseId)
+                .single();
+
+            if (existing) {
+                alert(`You're already enrolled in "${courseTitle}"! Head to your dashboard to access it.`);
+                return;
+            }
+
+            // Insert enrollment
+            const { error } = await supabase.from('enrollments').insert({
+                user_id: activeSession.user.id,
+                course_id: courseId,
+                enrolled_at: new Date().toISOString()
+            });
+
+            if (error) throw error;
+
+            alert(`🎉 You now have free access to "${courseTitle}"! Go to your dashboard to start learning.`);
+            window.location.href = 'student-dashboard.html';
+        } catch (err) {
+            alert('Something went wrong: ' + err.message);
         }
     }
 
@@ -601,26 +877,39 @@
         const container = document.getElementById('preview-posts-container');
         if (!container) return;
         try {
-            const { data: posts, error } = await supabase.from('posts').select('*, profiles(*)').order('created_at', { ascending: false }).limit(3);
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select('*, profiles(*)')
+                .order('created_at', { ascending: false })
+                .limit(3);
+
             if (error) throw error;
+
             if (!posts || posts.length === 0) {
                 container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">No recent posts yet. Join the community to start a discussion!</p>';
                 return;
             }
+
             const avatarClasses = ['av-purple', 'av-teal', 'av-red'];
             let html = '';
+
             posts.forEach((post, index) => {
                 const fName = post.profiles?.first_name || 'User';
                 const lName = post.profiles?.last_name || '';
                 const initial = fName.charAt(0).toUpperCase();
                 const fullName = `${fName} ${lName}`.trim();
                 const role = (post.profiles?.role || 'student').toUpperCase();
+
                 let contentPreview = 'Shared an image/file';
-                if (post.content && post.content.trim() !== '') contentPreview = post.content.length > 60 ? post.content.substring(0, 60) + '...' : post.content;
+                if (post.content && post.content.trim() !== '') {
+                    contentPreview = post.content.length > 60 ? post.content.substring(0, 60) + '...' : post.content;
+                }
+
                 const avClass = avatarClasses[index % avatarClasses.length];
                 let roleColor = '#b3b3b3';
                 if (role === 'ADMIN') roleColor = 'var(--brand-yellow)';
                 if (role === 'TEACHER' || role === 'INSTRUCTOR') roleColor = 'var(--accent-cyan)';
+
                 html += `
                     <div class="preview-post">
                         <div class="preview-avatar ${avClass}">${initial}</div>
@@ -630,23 +919,23 @@
                         </div>
                     </div>`;
             });
+
             container.innerHTML = html;
         } catch (err) {
             container.innerHTML = '<p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; padding: 1rem; text-align: center;">Log in to view the live community discussions!</p>';
         }
     }
 
-    // === ENROLLMENT GATEWAY LOGIC ===
+    // Payment modal — for non-approved visitors
     function initiateEnrollment(courseId, courseTitle, coursePrice) {
         if (!activeSession) {
-            // Not logged in! Redirect to login and bounce back to courses.html
             window.location.href = `login.html?redirect=courses.html`;
             return;
         }
 
         document.getElementById('modal-course-title').textContent = courseTitle;
         document.getElementById('modal-course-price').textContent = `${coursePrice}`;
-        
+
         const adminPhone = "2348162337303";
         const message = encodeURIComponent(`Hello Admin, I have just paid ${coursePrice} for the course: "${courseTitle}". My registered email is ${userEmail}. Please grant me access.`);
         document.getElementById('whatsapp-link').href = `https://wa.me/${adminPhone}?text=${message}`;
@@ -655,11 +944,11 @@
     }
 
     function togglePaymentModal() { document.getElementById('paymentOverlay').classList.toggle('show'); }
-    function closePaymentModal(event) { if(event.target.id === 'paymentOverlay') togglePaymentModal(); }
+    function closePaymentModal(event) { if (event.target.id === 'paymentOverlay') togglePaymentModal(); }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        checkSession();
-        renderCourses();
+    document.addEventListener('DOMContentLoaded', async () => {
+        await checkSession();   // must run first so isApprovedMember is set
+        renderCourses();        // then render courses with correct buttons
         fetchLiveCommunityFeed();
     });
 </script>
