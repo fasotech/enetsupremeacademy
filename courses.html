@@ -51,11 +51,11 @@
         .catalog-header { font-size: 2rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; font-family: 'Times New Roman', Times, serif; letter-spacing: -0.5px;}
         .catalog-subheader { font-size: 1rem; color: var(--text-gray); margin-bottom: 2rem; }
 
-        /* Member perks callout banner — only visible to approved members */
-        .member-perks-callout { display: none; background: linear-gradient(135deg, rgba(5,205,153,0.08), rgba(0,160,223,0.05)); border: 1px solid rgba(5,205,153,0.25); border-left: 4px solid var(--success); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; }
+        /* Member perks callout banner */
+        .member-perks-callout { display: none; background: linear-gradient(135deg, rgba(0,160,223,0.08), rgba(0,160,223,0.02)); border: 1px solid rgba(0,160,223,0.25); border-left: 4px solid var(--accent-cyan); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; }
         .member-perks-callout.show { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
         .member-perks-callout p { font-size: 0.9rem; color: var(--text-main); flex: 1; }
-        .member-perks-callout strong { color: #028a6a; }
+        .member-perks-callout strong { color: var(--navy-blue); }
         .member-perks-callout a { color: var(--accent-cyan); font-weight: 700; text-decoration: none; }
         .member-perks-callout a:hover { text-decoration: underline; }
 
@@ -87,13 +87,11 @@
         
         .udemy-price { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-top: 0.2rem;}
         .udemy-price.member-free { color: var(--success); }
-        .udemy-price .original-price { font-size: 0.8rem; text-decoration: line-through; color: var(--text-gray); font-weight: 400; margin-right: 4px; }
         
         .badges { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;}
         .badge-bestseller { background: #eceb98; color: #3d3c0a; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; text-transform: capitalize;}
         .badge-premium { background: #ecd5fa; color: #4b0082; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
         .badge-event-public { background: #fff3cd; color: #856404; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
-        .badge-event-member { background: rgba(5,205,153,0.15); color: #028a6a; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
 
         /* === PAYMENT MODAL === */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 1, 74, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;}
@@ -117,10 +115,10 @@
         .whatsapp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background-color: #25d366; color: #fff; border: none; padding: 1.2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 800; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); cursor: pointer;}
         .whatsapp-btn:hover { background-color: #1ebc5a; transform: translateY(-3px); }
 
-        /* Toast notification */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
         .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.1);font-size:.9rem;font-weight:600;color:var(--text-main);pointer-events:all;animation:toastIn .3s ease;}
         .toast.error{border-left-color: var(--danger);}
+        .toast.info{border-left-color: var(--accent-cyan);}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
@@ -129,16 +127,8 @@
         .footer-logo span { color: var(--brand-yellow); }
         .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
 
-        @media (max-width: 950px) { 
-            .mobile-menu-btn { display: block; }
-            .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
-            .nav-links.show { display: flex; } 
-        }
-        @media (max-width: 600px) {
-            .payment-modal { padding: 1.5rem; }
-            .footer-container { flex-direction: column; text-align: center; gap: 1rem; }
-            .filter-tabs { gap: 0.5rem; }
-        }
+        @media (max-width: 950px) { .mobile-menu-btn { display: block; } .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; } .nav-links.show { display: flex; } }
+        @media (max-width: 600px) { .payment-modal { padding: 1.5rem; } .footer-container { flex-direction: column; text-align: center; gap: 1rem; } }
     </style>
 </head>
 <body>
@@ -154,7 +144,7 @@
                 <a href="index.html">Home</a>
                 <a href="courses.html" class="active">Courses</a>
                 <a href="community.html">Community</a>
-                <span class="member-pill" id="member-pill" style="display:none;"><span class="dot"></span> Approved Member</span>
+                <span class="member-pill" id="member-pill" style="display:none;"><span class="dot"></span> Full Member</span>
                 <a href="login.html" id="nav-login-btn">Log In / Academy</a>
             </div>
         </nav>
@@ -162,26 +152,24 @@
 
     <section class="catalog-section">
         <h1 class="catalog-header">What to learn next</h1>
-        <p class="catalog-subheader">Browse all premium tracks. Approved members unlock event courses for free.</p>
+        <p class="catalog-subheader" id="catalog-subheader">Browse all premium tracks and exclusive event courses.</p>
         
         <div class="member-perks-callout" id="member-perks-callout">
-            <span style="font-size: 1.5rem;">🎁</span>
+            <span style="font-size: 1.5rem;">🎓</span>
             <p>
-                <strong>You're an Approved Member!</strong> Courses marked with a green ribbon are yours at <strong>no extra cost</strong>.
-                Click any event course to claim it instantly — it goes straight to your <a href="student-dashboard.html">dashboard</a>.
+                <strong>Welcome to the Academy!</strong> Because you own a Main Course, you are a <strong>Full Member</strong>!
+                You can claim any Event Course below for FREE.
             </p>
         </div>
 
         <div class="filter-tabs">
             <button class="filter-tab active" onclick="filterCourses('all', this)">All Courses</button>
             <button class="filter-tab" onclick="filterCourses('regular', this)">Main Courses</button>
-            <button class="filter-tab" onclick="filterCourses('event', this)">🎁 Event Courses</button>
+            <button class="filter-tab" onclick="filterCourses('event', this)">⭐ Event Courses</button>
         </div>
 
         <div class="course-grid" id="course-container">
-            <div style="grid-column: 1 / -1; text-align: left; padding: 2rem 0; color: var(--text-gray); font-size: 1.1rem; font-weight: 500;">
-                Loading courses securely...
-            </div>
+            <div style="grid-column: 1 / -1; padding: 2rem 0; color: var(--text-gray); font-size: 1.1rem;">Loading courses...</div>
         </div>
     </section>
 
@@ -190,14 +178,9 @@
             <button class="payment-close" onclick="togglePaymentModal()">✕</button>
             <h2>Secure Enrollment Gateway</h2>
             <h3 id="modal-course-title">Course Title</h3>
-            
-            <p style="color: var(--text-gray); margin-bottom: 1.5rem; font-size: 0.95rem;">To gain instant access to your learning dashboard, please complete your payment using the official Academy account below.</p>
-            
+            <p style="color: var(--text-gray); margin-bottom: 1.5rem; font-size: 0.95rem;">To gain instant access, please complete your payment using the official Academy account below.</p>
             <div class="payment-box">
-                <h4>
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                    Bank Transfer Details
-                </h4>
+                <h4><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Bank Transfer Details</h4>
                 <div class="bank-details">
                     <p>Bank Name: <strong>OPay</strong></p>
                     <p>Account Number: <span class="highlight" style="font-size: 1.2rem;">08162337303</span></p>
@@ -205,10 +188,8 @@
                     <p style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem;">Total Amount: <strong id="modal-course-price" style="font-size: 1.3rem; color: var(--brand-yellow);">₦0</strong></p>
                 </div>
             </div>
-
             <p style="font-size: 0.85rem; color: #dc2626; font-weight: bold; margin-bottom: 1rem;">Have you made the payment?</p>
-            
-            <a href="#" id="whatsapp-link" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+            <a href="#" id="whatsapp-link" class="whatsapp-btn" target="_blank">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.013-.967-.253-.099-.439-.149-.621.149-.183.297-.762.967-.933 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
                 Message Admin for Access
             </a>
@@ -234,9 +215,8 @@
         const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
         let activeSession = null;
-        let userProfile = null;
-        let isApprovedMember = false; 
-        let userEmail = '';
+        let isFullMember = false; // True ONLY if they own a Main Course
+        let enrolledCourseIds = [];
         let allCourses = []; 
         let currentFilter = 'all';
 
@@ -244,12 +224,9 @@
             const wrap = document.getElementById('toast-wrap');
             const t = document.createElement('div');
             t.className = `toast ${type}`;
-            t.innerHTML = `<span>${type === 'error' ? '❌' : '✅'}</span><span>${msg}</span>`;
+            t.innerHTML = `<span>${type === 'error' ? '❌' : (type === 'info' ? 'ℹ️' : '✅')}</span><span>${msg}</span>`;
             wrap.appendChild(t);
-            setTimeout(() => {
-                t.style.animation = 'toastOut .3s ease forwards';
-                setTimeout(() => t.remove(), 320);
-            }, 4000);
+            setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000);
         }
 
         async function checkSession() {
@@ -259,33 +236,32 @@
 
                 if (!session) return;
 
-                userEmail = session.user.email;
-
-                // FIX: Checking 'status' instead of 'is_approved' to match Admin Dashboard logic
-                const { data: profile } = await sb
-                    .from('profiles')
-                    .select('role, status, first_name')
-                    .eq('id', session.user.id)
-                    .single();
-
-                userProfile = profile;
-                isApprovedMember = profile?.status === 'approved'; // This aligns with legacy users!
-
                 const navBtn = document.getElementById('nav-login-btn');
                 navBtn.innerText = 'Dashboard';
 
+                // Check enrollments to see if they are a FULL member (own at least 1 Main Course)
+                const { data: enrollments } = await sb.from('enrollments')
+                    .select('course_id, courses(is_event_course)')
+                    .eq('student_id', session.user.id);
+                
+                if (enrollments) {
+                    enrolledCourseIds = enrollments.map(e => e.course_id);
+                    // A Full Member has at least one course where 'is_event_course' is false or null
+                    isFullMember = enrollments.some(e => e.courses && e.courses.is_event_course !== true);
+                }
+
+                const { data: profile } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
                 if (profile?.role === 'admin') navBtn.href = 'admin-dashboard.html';
                 else if (profile?.role === 'teacher' || profile?.role === 'instructor') navBtn.href = 'teacher-dashboard.html';
                 else navBtn.href = 'student-dashboard.html';
 
-                if (isApprovedMember) {
+                // Only show the perks banner if they are a Full Member
+                if (isFullMember) {
                     document.getElementById('member-perks-callout').classList.add('show');
                     document.getElementById('member-pill').style.display = 'inline-flex';
+                    document.getElementById('catalog-subheader').style.display = 'none';
                 }
-
-            } catch (err) {
-                console.error('Session check failed:', err);
-            }
+            } catch (err) { console.error('Session check failed:', err); }
         }
 
         function filterCourses(type, btn) {
@@ -308,16 +284,10 @@
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-
                 allCourses = courses || [];
                 renderCourseCards(allCourses);
-
             } catch (err) {
-                container.innerHTML =
-                    `<div style="grid-column: 1 / -1; padding: 2rem 0; color: #dc2626; font-weight: bold;">
-                        Failed to load courses. Please check your internet connection.
-                    </div>`;
-                console.error(err);
+                container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: #dc2626;">Failed to load courses.</div>`;
             }
         }
 
@@ -330,15 +300,14 @@
             if (currentFilter === 'regular') filtered = courses.filter(c => c.is_event_course !== true);
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: var(--text-gray);">No courses found in this category.</div>`;
+                container.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem 0; color: var(--text-gray);">No courses found.</div>`;
                 return;
             }
 
             filtered.forEach(course => {
-                const fName = course.profiles?.first_name || 'Academy';
-                const lName = course.profiles?.last_name || 'Instructor';
-                const instructorName = `${fName} ${lName}`.trim();
+                const instructorName = `${course.profiles?.first_name || 'Academy'} ${course.profiles?.last_name || ''}`.trim();
                 const isEvent = course.is_event_course === true;
+                const isOwned = enrolledCourseIds.includes(course.id);
                 const rawPrice = Number(course.price);
 
                 const ratingScore = getRandomFloat(4.2, 5.0);
@@ -346,45 +315,38 @@
 
                 const card = document.createElement('div');
                 card.className = 'udemy-card';
-                card.dataset.type = isEvent ? 'event' : 'regular';
 
                 let priceHTML = '';
                 let ribbonHTML = '';
+                let actionType = 'pay'; 
 
-                if (isEvent) {
-                    if (isApprovedMember) {
-                        priceHTML = `<div class="udemy-price member-free">
-                            🎁 FREE for Members
-                            ${rawPrice > 0 ? `<span class="original-price" style="display:block;font-size:0.75rem;">was ₦${rawPrice.toLocaleString()}</span>` : ''}
-                        </div>`;
-                        ribbonHTML = `<div class="event-ribbon">Free for You</div>`;
-                    } else {
-                        const displayPrice = rawPrice === 0 ? 'FREE' : `₦${rawPrice.toLocaleString()}`;
-                        priceHTML = `<div class="udemy-price">${displayPrice}</div>`;
-                        ribbonHTML = `<div class="event-ribbon" style="background: var(--brand-yellow); color: #000;">Event</div>`;
-                    }
+                // THE SECURE GATEWAY LOGIC
+                if (isOwned) {
+                    // They already own this specific course (Main or Event)
+                    priceHTML = `<div class="udemy-price member-free">✓ Enrolled</div>`;
+                    ribbonHTML = `<div class="event-ribbon" style="background: var(--accent-cyan); color: #fff;">Access Granted</div>`;
+                    actionType = 'dashboard';
+                } else if (isEvent && isFullMember) {
+                    // It's an Event course, and they are a Full Member (they own a Main Course)
+                    priceHTML = `<div class="udemy-price member-free">🎁 FREE for Members</div>`;
+                    ribbonHTML = `<div class="event-ribbon">Free for You</div>`;
+                    actionType = 'claim';
                 } else {
+                    // Everything else requires payment (Main Courses, or Event Courses for non-members)
                     const displayPrice = rawPrice === 0 ? 'FREE' : `₦${rawPrice.toLocaleString()}`;
                     priceHTML = `<div class="udemy-price">${displayPrice}</div>`;
+                    if (isEvent) ribbonHTML = `<div class="event-ribbon" style="background: var(--brand-yellow); color: #000;">Event Course</div>`;
                 }
 
                 let badgesHTML = '<div class="badges"><span class="badge-premium">Premium</span>';
-                if (isEvent) {
-                    badgesHTML += isApprovedMember
-                        ? `<span class="badge-event-member">✓ Member Perk</span>`
-                        : `<span class="badge-event-public">Event Course</span>`;
-                }
-                if (parseFloat(ratingScore) >= 4.8) badgesHTML += `<span class="badge-bestseller">Bestseller</span>`;
+                if (isEvent) badgesHTML += `<span class="badge-event-public">Event Course</span>`;
                 badgesHTML += '</div>';
 
                 const safeTitle = course.title.replace(/'/g, "\\'");
                 const safePrice = rawPrice === 0 ? 'FREE' : `₦${rawPrice.toLocaleString()}`;
 
                 card.innerHTML = `
-                    <div class="udemy-img-wrapper">
-                        <img src="${course.image_url}" alt="${course.title}" class="udemy-img" onerror="this.style.background='var(--navy-blue)'">
-                        ${ribbonHTML}
-                    </div>
+                    <div class="udemy-img-wrapper"><img src="${course.image_url}" class="udemy-img" onerror="this.style.background='var(--navy-blue)'">${ribbonHTML}</div>
                     <div class="udemy-content">
                         <h3 class="udemy-title">${course.title}</h3>
                         <div class="udemy-instructor">${instructorName}</div>
@@ -397,65 +359,39 @@
                         ${badgesHTML}
                     </div>`;
 
-                card.onclick = () => initiateEnrollment(course.id, safeTitle, safePrice, isEvent);
+                card.onclick = () => handleCourseClick(course.id, safeTitle, safePrice, isEvent, actionType);
                 container.appendChild(card);
             });
         }
 
-        async function initiateEnrollment(courseId, courseTitle, coursePrice, isEvent) {
-            if (!activeSession) {
-                window.location.href = `login.html?redirect=courses.html`;
+        async function handleCourseClick(courseId, courseTitle, coursePrice, isEvent, actionType) {
+            // 1. Go to Dashboard
+            if (actionType === 'dashboard') {
+                window.location.href = "student-dashboard.html";
                 return;
             }
 
-            if (isEvent && isApprovedMember) {
-                await claimEventCourseFromCatalog(courseId, courseTitle);
+            // 2. Claim Free Event Course
+            if (actionType === 'claim') {
+                try {
+                    const { error } = await sb.from('enrollments').insert({ student_id: activeSession.user.id, course_id: courseId, enrollment_type: 'member_perk' });
+                    if (error) throw error;
+                    showToast(`🎉 "${courseTitle}" claimed for FREE! Redirecting...`);
+                    setTimeout(() => window.location.href = 'student-dashboard.html', 1500);
+                } catch (err) { showToast('Could not claim course.', 'error'); }
                 return;
             }
 
-            const displayPrice = coursePrice === 'FREE' ? 'FREE' : coursePrice;
+            // 3. Payment Required
             document.getElementById('modal-course-title').textContent = courseTitle;
-            document.getElementById('modal-course-price').textContent = displayPrice;
+            document.getElementById('modal-course-price').textContent = coursePrice;
 
-            const adminPhone = '2348162337303';
-            const message = encodeURIComponent(
-                `Hello Admin, I have just paid ${displayPrice} for the course: "${courseTitle}". My registered email is ${userEmail}. Please grant me access.`
-            );
-            document.getElementById('whatsapp-link').href = `https://wa.me/${adminPhone}?text=${message}`;
-
+            const userText = activeSession ? activeSession.user.email : 'a guest visitor';
+            const courseType = isEvent ? "Event Course" : "Main Course";
+            const message = encodeURIComponent(`Hello Admin, I am ${userText} and I want to pay ${coursePrice} for the ${courseType}: "${courseTitle}". How do I proceed to get access?`);
+            document.getElementById('whatsapp-link').href = `https://wa.me/2348162337303?text=${message}`;
+            
             togglePaymentModal();
-        }
-
-        async function claimEventCourseFromCatalog(courseId, courseTitle) {
-            try {
-                const { data: existing } = await sb
-                    .from('enrollments')
-                    .select('id')
-                    .eq('student_id', activeSession.user.id)
-                    .eq('course_id', courseId)
-                    .maybeSingle();
-
-                if (existing) {
-                    showToast(`You already have "${courseTitle}" on your dashboard!`);
-                    setTimeout(() => window.location.href = 'student-dashboard.html', 2000);
-                    return;
-                }
-
-                const { error } = await sb.from('enrollments').insert({
-                    student_id: activeSession.user.id,
-                    course_id: courseId,
-                    enrollment_type: 'member_perk'
-                });
-
-                if (error) throw error;
-
-                showToast(`🎉 "${courseTitle}" claimed for FREE! Redirecting to dashboard...`);
-                setTimeout(() => window.location.href = 'student-dashboard.html', 2200);
-
-            } catch (err) {
-                console.error('Claim error:', err);
-                showToast('Could not claim course. Please try again or contact support.', 'error');
-            }
         }
 
         function togglePaymentModal() { document.getElementById('paymentOverlay').classList.toggle('show'); }
