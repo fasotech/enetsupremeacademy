@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <script>
         const savedTheme = localStorage.getItem('enet_theme') || 'system';
         if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -17,30 +16,26 @@
             document.documentElement.setAttribute('data-theme', 'light');
         }
     </script>
-
     <style>
         :root {
-            --orange: #FF7A00; --yellow: #FFC107; --danger: #EE5D50; --success: #05CD99;
-            --royal-blue: #2441EA; --bg-light: #F4F7FE; --surface: #FFFFFF;
-            --surface-hover: rgba(36, 65, 234, 0.04); --border: #E9EDF7;
-            --text-dark: #2B3674; --text-muted: #A3AED0; --text-gray: #707EAE;
-            --topbar-bg: rgba(244, 247, 254, 0.9); --shadow-color: rgba(17, 38, 146, 0.05);
-            --brand-navy: #02014a;
-            --accent-cyan: #00a0df;
-            --brand-yellow: #fcd116;
+            --orange:#FF7A00;--yellow:#FFC107;--danger:#EE5D50;--success:#05CD99;
+            --royal-blue:#2441EA;--bg-light:#F4F7FE;--surface:#FFFFFF;
+            --surface-hover:rgba(36,65,234,0.04);--border:#E9EDF7;
+            --text-dark:#2B3674;--text-muted:#A3AED0;--text-gray:#707EAE;
+            --topbar-bg:rgba(244,247,254,0.9);--shadow-color:rgba(17,38,146,0.05);
+            --brand-navy:#02014a;--accent-cyan:#00a0df;--brand-yellow:#fcd116;
         }
         [data-theme="dark"] {
-            --royal-blue: #00a0df; --bg-light: #07080F; --surface: #13151F;
-            --surface-hover: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.08);
-            --text-dark: #F0F0FF; --text-muted: #7B7D9A; --text-gray: #A0AEC0;
-            --topbar-bg: rgba(7,8,15,0.9); --shadow-color: rgba(0,0,0,0.4);
-            --brand-navy: #13151F;
+            --royal-blue:#00a0df;--bg-light:#07080F;--surface:#13151F;
+            --surface-hover:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.08);
+            --text-dark:#F0F0FF;--text-muted:#7B7D9A;--text-gray:#A0AEC0;
+            --topbar-bg:rgba(7,8,15,0.9);--shadow-color:rgba(0,0,0,0.4);
+            --brand-navy:#13151F;
         }
-
         *{box-sizing:border-box;margin:0;padding:0;font-family:'DM Sans',sans-serif;}
         body{background:var(--bg-light);color:var(--text-gray);min-height:100vh;display:flex;overflow-x:hidden;transition:background-color .3s,color .3s;}
 
-        /* ── SIDEBAR ── */
+        /* SIDEBAR */
         .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(2,1,74,.4);backdrop-filter:blur(4px);z-index:90;opacity:0;transition:opacity .3s;}
         .sidebar-overlay.show{display:block;opacity:1;}
         .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--surface);display:flex;flex-direction:column;z-index:100;box-shadow:4px 0 24px var(--shadow-color);border-right:1px solid var(--border);transition:transform .3s,background-color .3s;}
@@ -61,7 +56,7 @@
         .logout-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);padding:.85rem 1.25rem;border-radius:12px;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s;}
         .logout-btn:hover{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2);}
 
-        /* ── LAYOUT ── */
+        /* LAYOUT */
         .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s;}
         .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2.5rem;transition:background-color .3s;border-bottom:1px solid var(--border);}
         .topbar-left{display:flex;align-items:center;gap:1rem;}
@@ -77,7 +72,7 @@
         .approval-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
         .content{padding:0 2.5rem 2.5rem;flex:1;}
 
-        /* ── BANNER ── */
+        /* BANNERS */
         .pending-banner{background:linear-gradient(135deg,rgba(255,193,7,.08),rgba(255,193,7,.03));border:1px solid rgba(255,193,7,.25);border-left:4px solid var(--brand-yellow);border-radius:16px;padding:1.25rem 1.75rem;margin-top:2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem;}
         .pending-banner svg{flex-shrink:0;color:#b08800;margin-top:2px;}
         .pending-banner h4{font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-dark);margin-bottom:.25rem;}
@@ -85,7 +80,13 @@
         .pending-banner a{color:var(--accent-cyan);font-weight:700;text-decoration:none;}
         .pending-banner a:hover{text-decoration:underline;}
 
-        /* ── STATS ── */
+        /* ── NEW: Enrolled-but-pending info banner ── */
+        .enrolled-pending-banner{background:linear-gradient(135deg,rgba(0,160,223,.07),rgba(0,160,223,.02));border:1px solid rgba(0,160,223,.25);border-left:4px solid var(--accent-cyan);border-radius:16px;padding:1.25rem 1.75rem;margin-top:2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem;}
+        .enrolled-pending-banner svg{flex-shrink:0;color:var(--accent-cyan);margin-top:2px;}
+        .enrolled-pending-banner h4{font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-dark);margin-bottom:.25rem;}
+        .enrolled-pending-banner p{font-size:.85rem;color:var(--text-gray);line-height:1.5;}
+
+        /* STATS */
         .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem;margin-top:2rem;}
         .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s,box-shadow .2s;}
         .stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px var(--shadow-color);}
@@ -97,30 +98,29 @@
         .stat-num{font-family:'Poppins',sans-serif;font-size:2.25rem;font-weight:700;line-height:1;margin-bottom:.25rem;}
         .stat-card.brand-surface .stat-num{color:var(--text-dark);}
 
-        /* ── PANELS / GRID ── */
+        /* PANELS */
         .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:2rem;}
         .panel{background:var(--surface);border-radius:24px;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);animation:fadeUp .4s ease both;transition:background-color .3s;margin-bottom:2rem;width:100%;}
         .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem;border-bottom:1px solid var(--border);}
         .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark);}
         .panel-body{padding:1.5rem 2rem;}
 
-        /* ── COURSES ── */
+        /* COURSES */
         .course-list{display:flex;flex-direction:column;gap:1rem;}
         .course-item{display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg-light);transition:.2s;flex-wrap:wrap;}
         .course-item:hover{border-color:var(--accent-cyan);}
-        /* Highlight completed courses with a green left border */
         .course-item.is-done{border-left:4px solid var(--success);}
         .course-img{width:120px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--border);}
         .course-info{flex:1;min-width:200px;}
         .course-title{font-family:'Poppins';font-size:1rem;font-weight:700;color:var(--text-dark);margin-bottom:.2rem;}
         .progress-container{margin-top:.8rem;}
         .progress-bar-wrap{width:100%;background:var(--border);border-radius:10px;height:8px;overflow:hidden;margin-bottom:4px;}
-        .progress-fill{background:var(--accent-cyan);height:100%;border-radius:10px;transition:width .5s ease;width:0%;}
+        .progress-fill{background:var(--accent-cyan);height:100%;border-radius:10px;transition:width .5s ease;}
         .progress-fill.done{background:var(--success);}
         .progress-text{font-size:.75rem;color:var(--text-muted);font-weight:600;}
         .course-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
 
-        /* ── BUTTONS ── */
+        /* BUTTONS */
         .btn-continue{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--brand-navy);color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.9rem;transition:.2s;white-space:nowrap;border:none;cursor:pointer;}
         .btn-continue:hover{opacity:.88;transform:translateY(-2px);}
         .btn-completed{background:var(--success)!important;color:#000!important;}
@@ -132,17 +132,17 @@
         .btn-assign{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:rgba(0,160,223,.12);color:var(--accent-cyan);border:1px solid rgba(0,160,223,.3);text-decoration:none;padding:8px 16px;border-radius:8px;font-weight:600;font-size:.85rem;transition:.2s;cursor:pointer;width:100%;}
         .btn-assign:hover{background:var(--accent-cyan);color:#fff;}
 
-        /* ── PERKS ── */
+        /* PERKS */
         .perks-panel{border-top:4px solid var(--accent-cyan);background:linear-gradient(145deg,var(--bg-light),var(--surface));}
         .perks-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(5,205,153,.1);color:var(--success);border:1px solid rgba(5,205,153,.25);padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:700;}
 
-        /* ── CERT ITEMS ── */
+        /* CERT ITEMS */
         .cert-item{display:flex;justify-content:space-between;align-items:center;padding:1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg-light);margin-bottom:1rem;flex-wrap:wrap;gap:1rem;}
         .cert-info h4{color:var(--text-dark);margin-bottom:.2rem;font-family:'Poppins';}
         .cert-info p{font-size:.8rem;color:var(--text-muted);}
         .cert-item-btns{display:flex;flex-direction:column;gap:6px;min-width:150px;}
 
-        /* ── CERTIFICATE MODAL ── */
+        /* CERTIFICATE MODAL */
         .cert-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity .3s;}
         .cert-modal-overlay.show{display:flex;opacity:1;}
         .cert-modal-inner{display:flex;flex-direction:column;align-items:center;position:relative;max-height:90vh;overflow-y:auto;}
@@ -169,19 +169,19 @@
         .dl-cert-btn:hover{background:#04b386;}
         .dl-cert-btn:disabled{opacity:.6;cursor:not-allowed;}
 
-        /* ── ASSIGNMENT MODAL ── */
+        /* ASSIGNMENT MODAL */
         .assign-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:1rem;}
         .assign-modal-overlay.show{display:flex;}
-        .assign-modal{background:var(--surface);border-radius:24px;width:100%;max-width:640px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .35s ease;overflow:hidden;}
-        .assign-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2rem;border-bottom:1px solid var(--border);}
+        .assign-modal{background:var(--surface);border-radius:24px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .35s ease;}
+        .assign-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1;}
         .assign-modal-head h3{font-family:'Poppins';font-weight:700;color:var(--text-dark);font-size:1.15rem;}
         .assign-modal-body{padding:1.5rem 2rem 2rem;}
         .form-group{margin-bottom:1.25rem;}
         .form-label{display:block;font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem;}
-        .form-input,.form-textarea,.form-select{width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-size:.9rem;color:var(--text-dark);outline:none;transition:.2s;font-family:'DM Sans',sans-serif;}
-        .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 3px rgba(0,160,223,.1);}
+        .form-input,.form-textarea{width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-size:.9rem;color:var(--text-dark);outline:none;transition:.2s;font-family:'DM Sans',sans-serif;}
+        .form-input:focus,.form-textarea:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 3px rgba(0,160,223,.1);}
         .form-textarea{resize:vertical;min-height:80px;}
-        .upload-zone{border:2px dashed var(--border);border-radius:12px;padding:2rem;text-align:center;cursor:pointer;transition:.2s;background:var(--bg-light);position:relative;}
+        .upload-zone{border:2px dashed var(--border);border-radius:12px;padding:2rem;text-align:center;cursor:pointer;transition:.2s;background:var(--bg-light);position:relative;overflow:hidden;}
         .upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent-cyan);background:rgba(0,160,223,.05);}
         .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
         .upload-zone-icon{font-size:2.5rem;margin-bottom:.75rem;}
@@ -196,7 +196,7 @@
         .btn-submit-assign:hover{opacity:.9;transform:translateY(-1px);}
         .btn-submit-assign:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 
-        /* ── GRADES PANEL ── */
+        /* GRADES */
         .grade-badge{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;font-family:'Poppins';font-weight:800;font-size:1rem;flex-shrink:0;}
         .grade-badge.A{background:rgba(5,205,153,.15);color:#027a5f;}
         .grade-badge.B{background:rgba(0,160,223,.15);color:#0077a8;}
@@ -209,15 +209,16 @@
         .grade-score{font-family:'Poppins';font-weight:700;font-size:1.1rem;color:var(--text-dark);text-align:right;flex-shrink:0;}
         .grade-feedback{font-size:.78rem;color:var(--text-gray);font-style:italic;margin-top:.3rem;}
 
-        /* ── TABS ── */
-        .tab-bar{display:flex;gap:.5rem;padding:1rem 2rem 0;border-bottom:1px solid var(--border);}
-        .tab-btn{padding:.6rem 1.2rem;border-radius:8px 8px 0 0;border:none;background:none;font-weight:600;font-size:.85rem;cursor:pointer;color:var(--text-muted);transition:.2s;border-bottom:3px solid transparent;margin-bottom:-1px;}
+        /* TABS */
+        .tab-bar{display:flex;gap:.5rem;padding:1rem 2rem 0;border-bottom:1px solid var(--border);overflow-x:auto;}
+        .tab-bar::-webkit-scrollbar{display:none;}
+        .tab-btn{padding:.6rem 1.2rem;border-radius:8px 8px 0 0;border:none;background:none;font-weight:600;font-size:.85rem;cursor:pointer;color:var(--text-muted);transition:.2s;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap;}
         .tab-btn.active{color:var(--accent-cyan);border-bottom-color:var(--accent-cyan);}
         .tab-btn:hover{color:var(--accent-cyan);}
         .tab-pane{display:none;}
         .tab-pane.active{display:block;}
 
-        /* ── MISC ── */
+        /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none;}
         .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.1);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;}
         .toast.error{border-left-color:var(--danger);}
@@ -269,18 +270,18 @@
     </div>
     <div class="nav-label">Main Menu</div>
     <a class="nav-item active" href="student-dashboard.html">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
     </a>
     <a class="nav-item" href="courses.html">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> Browse Courses
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>Browse Courses
     </a>
     <div class="nav-label">Resources</div>
     <a class="nav-item" href="community.html">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Community Hub
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>Community Hub
     </a>
     <div class="sidebar-foot">
         <button class="logout-btn" id="logoutBtn" onclick="forceLogout()">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Log Out
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log Out
         </button>
     </div>
 </aside>
@@ -297,9 +298,9 @@
             </div>
         </div>
         <div class="topbar-right">
-            <div class="approval-badge pending" id="approval-status-badge" style="display:none;">
+            <div class="approval-badge" id="approval-status-badge" style="display:none;">
                 <span class="dot"></span>
-                <span id="approval-status-text">Pending Approval</span>
+                <span id="approval-status-text">Loading...</span>
             </div>
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle theme"><span id="theme-icon">💻</span></button>
             <a href="courses.html" class="icon-btn" title="Browse Courses">
@@ -309,11 +310,25 @@
     </header>
 
     <main class="content">
+        <!--
+          BANNER LOGIC (controlled by JS):
+          1. status==='approved'              → no banner (fully approved, show everything)
+          2. status==='pending' + enrollments → enrolled-pending-banner (can learn, show courses)
+          3. status==='pending' + no enrollments → pending-banner (no access yet)
+        -->
         <div class="pending-banner" id="pending-approval-banner" style="display:none;">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <div>
                 <h4>⏳ Awaiting Admin Approval</h4>
                 <p>Your account is registered but not yet approved. Once the admin approves your enrollment, you'll get <strong>full access to your purchased tracks</strong>. <a href="https://wa.me/2348162337303" target="_blank">Message Admin on WhatsApp</a> to speed up your approval.</p>
+            </div>
+        </div>
+
+        <div class="enrolled-pending-banner" id="enrolled-pending-banner" style="display:none;">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div>
+                <h4>📚 Courses Granted — Account Activation Pending</h4>
+                <p>Your courses are ready and you can start learning right away! Your account profile is still pending admin approval for full platform access. <a href="https://wa.me/2348162337303" target="_blank" style="color:var(--accent-cyan);font-weight:700;text-decoration:none;">Contact Admin</a> to complete your activation.</p>
             </div>
         </div>
 
@@ -385,9 +400,9 @@
         <button class="close-cert-btn" onclick="closeCertModal()">✕</button>
         <div class="cert-document" id="printable-cert">
             <div class="cert-logos">
-                <img src="logo1.png" alt="Academy Logo 1" onerror="this.style.display='none'">
-                <img src="Logo2.png" alt="Academy Logo 2" onerror="this.style.display='none'">
-                <img src="logo3.png" alt="Academy Logo 3" onerror="this.style.display='none'">
+                <img src="logo1.png" alt="Logo 1" onerror="this.style.display='none'">
+                <img src="Logo2.png" alt="Logo 2" onerror="this.style.display='none'">
+                <img src="logo3.png" alt="Logo 3" onerror="this.style.display='none'">
             </div>
             <div class="cert-header">Certificate of Completion</div>
             <div class="cert-sub">ENET SUPREME ACADEMY</div>
@@ -402,7 +417,7 @@
                     <p style="font-size:.7rem;margin-top:5px;">Verify at: enetsupreme.com.ng/verify</p>
                 </div>
                 <div class="sig-container">
-                    <img src="adminsignature.png" alt="Admin Signature" class="sig-img" onerror="this.style.display='none'">
+                    <img src="adminsignature.png" alt="Signature" class="sig-img" onerror="this.style.display='none'">
                     <div class="cert-sig-line">Academy Director</div>
                 </div>
             </div>
@@ -433,68 +448,41 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Description / Notes</label>
-                <textarea class="form-textarea" id="assign-desc" placeholder="Add any notes, questions, or context for your instructor..."></textarea>
+                <textarea class="form-textarea" id="assign-desc" placeholder="Add any notes or context for your instructor..."></textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Upload Files <span style="font-weight:400;color:var(--text-muted);">(docx, xlsx, pdf, jpg, png, mp4, zip — max 50MB each)</span></label>
+                <label class="form-label">Upload Files <span style="font-weight:400;color:var(--text-muted);">(docx, xlsx, pdf, images, mp4, zip — max 50MB)</span></label>
                 <div class="upload-zone" id="upload-zone">
                     <input type="file" id="assign-files" multiple
                         accept=".docx,.doc,.xlsx,.xls,.pdf,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.zip,.rar,.txt,.csv"
                         onchange="handleFileSelect(this.files)">
                     <div class="upload-zone-icon">📁</div>
                     <p><strong>Click or drag & drop</strong> files here</p>
-                    <p style="font-size:.8rem;margin-top:.25rem;">Supports: Word, Excel, PDF, Images, Videos, ZIP</p>
+                    <p style="font-size:.8rem;margin-top:.25rem;">Word, Excel, PDF, Images, Video, ZIP</p>
                 </div>
                 <div class="file-preview" id="file-preview"></div>
             </div>
-            <button class="btn-submit-assign" id="submit-assign-btn" onclick="submitAssignment()">
-                🚀 Submit Assignment
-            </button>
+            <button class="btn-submit-assign" id="submit-assign-btn" onclick="submitAssignment()">🚀 Submit Assignment</button>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ============================================================
-// THEME & SIDEBAR
-// ============================================================
-const themes = ['system','light','dark'];
-const themeIcons = {'system':'💻','light':'☀️','dark':'🌙'};
+// ─────────────────────────────────────────────
+// THEME & UI HELPERS
+// ─────────────────────────────────────────────
+const themes=['system','light','dark'];
+const themeIcons={system:'💻',light:'☀️',dark:'🌙'};
+function cycleTheme(){const c=localStorage.getItem('enet_theme')||'system';const n=themes[(themes.indexOf(c)+1)%themes.length];localStorage.setItem('enet_theme',n);applyTheme(n);}
+function applyTheme(t){document.getElementById('theme-icon').textContent=themeIcons[t];document.documentElement.setAttribute('data-theme',t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
+function switchTab(tab,btn){document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');btn.classList.add('active');}
+function showToast(msg,type='success'){const wrap=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span>${type==='error'?'❌':'✅'}</span><span>${msg}</span>`;wrap.appendChild(t);setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},4000);}
 
-function cycleTheme(){
-    let cur = localStorage.getItem('enet_theme')||'system';
-    let next = themes[(themes.indexOf(cur)+1)%themes.length];
-    localStorage.setItem('enet_theme',next);
-    applyTheme(next);
-}
-function applyTheme(theme){
-    document.getElementById('theme-icon').textContent = themeIcons[theme];
-    const dark = theme==='dark'||(theme==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-}
-function toggleSidebar(){
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('show');
-}
-function switchTab(tab,btn){
-    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById('tab-'+tab).classList.add('active');
-    btn.classList.add('active');
-}
-function showToast(msg,type='success'){
-    const wrap=document.getElementById('toast-wrap');
-    const t=document.createElement('div');
-    t.className=`toast ${type}`;
-    t.innerHTML=`<span>${type==='error'?'❌':'✅'}</span><span>${msg}</span>`;
-    wrap.appendChild(t);
-    setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},4000);
-}
-
-// ============================================================
+// ─────────────────────────────────────────────
 // SUPABASE
-// ============================================================
+// ─────────────────────────────────────────────
 const sb = window.supabase.createClient(
     'https://lskwzcvexyxjncttvimf.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleXh4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
@@ -502,279 +490,303 @@ const sb = window.supabase.createClient(
 
 let currentUser = null;
 let userProfile = null;
-let isApprovedMember = false;
+let isApprovedMember = false; // profile.status === 'approved'
+let hasEnrollments = false;   // has at least one enrollment (admin-granted OR paid)
 let isFullMember = false;
 let selectedFiles = [];
 
-// ============================================================
+// ─────────────────────────────────────────────
 // BOOT
-// ============================================================
-window.addEventListener('load', async ()=>{
-    applyTheme(localStorage.getItem('enet_theme')||'system');
+// ─────────────────────────────────────────────
+window.addEventListener('load', async () => {
+    applyTheme(localStorage.getItem('enet_theme') || 'system');
 
     const ghostId = localStorage.getItem('enet_impersonate_id');
-    const { data:{ session } } = await sb.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
 
-    if(!session){ window.location.href='login.html'; return; }
+    if (!session) { window.location.href = 'login.html'; return; }
 
-    if(ghostId){
-        currentUser = {id:ghostId};
-        const {data:profile} = await sb.from('profiles').select('*').eq('id',ghostId).single();
-        userProfile=profile;
-        isApprovedMember=profile?.status==='approved';
-        if(profile) document.getElementById('welcome-msg').innerHTML=`<span style="color:var(--danger);">[GHOST MODE]</span> Viewing as ${profile.first_name}`;
-        const lb=document.getElementById('logoutBtn');
-        lb.innerHTML=`<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Exit Ghost Mode`;
-        lb.onclick=()=>{localStorage.removeItem('enet_impersonate_id');window.close();};
+    if (ghostId) {
+        // ── GHOST / ADMIN PREVIEW MODE ──
+        currentUser = { id: ghostId };
+        const { data: profile } = await sb.from('profiles').select('*').eq('id', ghostId).single();
+        userProfile = profile;
+        isApprovedMember = profile?.status === 'approved';
+
+        if (profile) {
+            document.getElementById('welcome-msg').innerHTML =
+                `<span style="color:var(--danger);">[GHOST]</span> ${profile.first_name || 'Student'}`;
+        }
+
+        const lb = document.getElementById('logoutBtn');
+        lb.innerHTML = `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Exit Ghost Mode`;
+        lb.onclick = () => { localStorage.removeItem('enet_impersonate_id'); window.close(); };
+
     } else {
+        // ── REAL STUDENT LOGIN ──
         currentUser = session.user;
-        const {data:profile} = await sb.from('profiles').select('*').eq('id',currentUser.id).single();
-        userProfile=profile;
-        isApprovedMember=profile?.status==='approved';
-        if(profile?.first_name) document.getElementById('welcome-msg').textContent=`Welcome back, ${profile.first_name}!`;
+        const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+        userProfile = profile;
+        isApprovedMember = profile?.status === 'approved';
+        if (profile?.first_name) {
+            document.getElementById('welcome-msg').textContent = `Welcome back, ${profile.first_name}!`;
+        }
     }
 
-    const badge=document.getElementById('approval-status-badge');
-    badge.style.display='inline-flex';
-    if(isApprovedMember){
-        badge.className='approval-badge approved';
-        document.getElementById('approval-status-text').textContent='✓ Approved Member';
+    // Fetch enrollments FIRST — determines which banner to show
+    const { data: enrollCheck } = await sb
+        .from('enrollments')
+        .select('id')
+        .eq('student_id', currentUser.id)
+        .limit(1);
+
+    hasEnrollments = (enrollCheck && enrollCheck.length > 0);
+
+    // ── APPROVAL BADGE ──
+    const badge = document.getElementById('approval-status-badge');
+    badge.style.display = 'inline-flex';
+
+    if (isApprovedMember) {
+        badge.className = 'approval-badge approved';
+        document.getElementById('approval-status-text').textContent = '✓ Approved Member';
+        // No banners needed
+    } else if (hasEnrollments) {
+        // Enrolled by admin but profile not yet "approved" — still let them learn
+        badge.className = 'approval-badge pending';
+        document.getElementById('approval-status-text').textContent = '⚠ Activation Pending';
+        document.getElementById('enrolled-pending-banner').style.display = 'flex';
+        // Treat as functionally approved so courses load
+        isApprovedMember = true; // ← KEY FIX: bypass the gate since they have enrollments
     } else {
-        badge.className='approval-badge pending';
-        document.getElementById('approval-status-text').textContent='Pending Approval';
-        document.getElementById('pending-approval-banner').style.display='flex';
+        // Truly pending — no courses granted yet
+        badge.className = 'approval-badge pending';
+        document.getElementById('approval-status-text').textContent = 'Pending Approval';
+        document.getElementById('pending-approval-banner').style.display = 'flex';
     }
 
+    // Always load data — gating happens inside fetchStudentData based on enrollments
     fetchStudentData();
     fetchGrades();
     fetchSubmittedAssignments();
 
-    const zone=document.getElementById('upload-zone');
-    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
-    zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
-    zone.addEventListener('drop',e=>{
-        e.preventDefault();
-        zone.classList.remove('drag-over');
-        handleFileSelect(e.dataTransfer.files);
-    });
+    // Drag & drop for assignment upload
+    const zone = document.getElementById('upload-zone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFileSelect(e.dataTransfer.files); });
 });
 
-window.forceLogout = async ()=>{
-    try{await sb.auth.signOut();}catch(e){}finally{
-        localStorage.clear();sessionStorage.clear();
-        window.location.href='index.html';
-    }
+window.forceLogout = async () => {
+    try { await sb.auth.signOut(); } catch (e) {}
+    finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; }
 };
 
-// ============================================================
-// COMPLETION DETECTION — ROBUST
-// A course counts as "done" when ANY of these is true:
-//   1. progressPercent === 100 AND totalLessons > 0
-//   2. completedLessons >= totalLessons AND totalLessons > 0  (handles 2/1 edge case)
-//   3. completedLessons > 0 AND totalLessons === 1            (single-lesson courses)
-//   4. A certificate already exists in DB for this course
-// ============================================================
-function isCourseCompleted(completedLessons, totalLessons, progressPercent, alreadyHasCert){
-    if(alreadyHasCert) return true;
-    if(totalLessons > 0 && completedLessons >= totalLessons) return true;
-    if(totalLessons > 0 && progressPercent >= 100) return true;
-    return false;
-}
-
-// ============================================================
+// ─────────────────────────────────────────────
 // CERTIFICATE HELPERS
-// ============================================================
-async function ensureCertificate(studentId, courseId, certMap){
-    if(certMap[courseId]) return certMap[courseId];
-
-    const newCertId='ENET-'+Math.random().toString(36).substr(2,9).toUpperCase();
-    const now=new Date().toISOString();
-    const {error} = await sb.from('certificates').insert({
-        student_id: studentId,
-        course_id: courseId,
-        certificate_id: newCertId,
-        issued_at: now
+// ─────────────────────────────────────────────
+async function ensureCertificate(studentId, courseId, certMap) {
+    if (certMap[courseId]) return certMap[courseId];
+    const newCertId = 'ENET-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    const now = new Date().toISOString();
+    const { error } = await sb.from('certificates').insert({
+        student_id: studentId, course_id: courseId,
+        certificate_id: newCertId, issued_at: now
     });
-    if(error){
-        // Duplicate — re-fetch
-        const {data:existing} = await sb.from('certificates').select('certificate_id,issued_at').eq('student_id',studentId).eq('course_id',courseId).single();
-        if(existing){ certMap[courseId]=existing; return existing; }
+    if (error) {
+        // Race condition: duplicate — re-fetch
+        const { data: existing } = await sb.from('certificates')
+            .select('certificate_id,issued_at')
+            .eq('student_id', studentId).eq('course_id', courseId).single();
+        if (existing) { certMap[courseId] = existing; return existing; }
         return null;
     }
-    const cert={certificate_id:newCertId, issued_at:now};
-    certMap[courseId]=cert;
+    const cert = { certificate_id: newCertId, issued_at: now };
+    certMap[courseId] = cert;
     return cert;
 }
 
-// ============================================================
+// ─────────────────────────────────────────────
 // EVENT PERKS
-// ============================================================
-async function fetchEventPerks(enrolledCourseIds){
-    if(!isFullMember||!isApprovedMember){ document.getElementById('event-perks-panel').style.display='none'; return; }
-    try{
-        const {data:eventCourses,error}=await sb.from('courses').select('*').eq('is_published',true).eq('is_event_course',true);
-        if(error) throw error;
-        const unclaimed=(eventCourses||[]).filter(c=>!enrolledCourseIds.includes(c.id));
-        const panel=document.getElementById('event-perks-panel');
-        if(!unclaimed.length){panel.style.display='none';return;}
-        panel.style.display='block';
-        document.getElementById('event-courses-container').innerHTML=unclaimed.map(c=>{
-            const safeTitle=c.title.replace(/'/g,"\\'");
-            const orig=Number(c.price)>0?`<span style="text-decoration:line-through;color:var(--text-muted);font-size:.8rem;">₦${Number(c.price).toLocaleString()}</span>`:'';
+// ─────────────────────────────────────────────
+async function fetchEventPerks(enrolledCourseIds) {
+    if (!isFullMember || !isApprovedMember) { document.getElementById('event-perks-panel').style.display = 'none'; return; }
+    try {
+        const { data: eventCourses, error } = await sb.from('courses').select('*').eq('is_published', true).eq('is_event_course', true);
+        if (error) throw error;
+        const unclaimed = (eventCourses || []).filter(c => !enrolledCourseIds.includes(c.id));
+        const panel = document.getElementById('event-perks-panel');
+        if (!unclaimed.length) { panel.style.display = 'none'; return; }
+        panel.style.display = 'block';
+        document.getElementById('event-courses-container').innerHTML = unclaimed.map(c => {
+            const safe = c.title.replace(/'/g, "\\'");
+            const orig = Number(c.price) > 0 ? `<span style="text-decoration:line-through;color:var(--text-muted);font-size:.8rem;">₦${Number(c.price).toLocaleString()}</span>` : '';
             return `<div class="course-item" style="border-color:rgba(5,205,153,.3);">
                 <img src="${c.image_url}" class="course-img" alt="${c.title}" onerror="this.style.background='var(--border)'">
                 <div class="course-info">
                     <h4 class="course-title">${c.title}</h4>
-                    <p style="font-size:.8rem;color:var(--text-gray);">${c.description||''}</p>
+                    <p style="font-size:.8rem;color:var(--text-gray);">${c.description || ''}</p>
                     <div style="display:flex;align-items:center;gap:8px;margin-top:.3rem;">${orig}<span style="font-size:.8rem;font-weight:800;color:var(--success);">FREE for Members</span></div>
                 </div>
-                <button onclick="claimEventCourse('${c.id}','${safeTitle}')" class="btn-continue" style="background:var(--success);color:#000;">🎁 Claim Free</button>
+                <button onclick="claimEventCourse('${c.id}','${safe}')" class="btn-continue" style="background:var(--success);color:#000;">🎁 Claim Free</button>
             </div>`;
         }).join('');
-    }catch(err){console.error('Perks error:',err);}
+    } catch (err) { console.error('Perks error:', err); }
 }
 
-window.claimEventCourse=async(courseId,title)=>{
-    if(!isApprovedMember||!isFullMember){showToast('You must be a Full Member to claim free courses.','error');return;}
-    if(!confirm(`Claim "${title}" for FREE?`)) return;
-    try{
-        const {data:ex}=await sb.from('enrollments').select('id').eq('student_id',currentUser.id).eq('course_id',courseId).maybeSingle();
-        if(ex){showToast(`You already have "${title}" on your dashboard!`);fetchStudentData();return;}
-        const {error}=await sb.from('enrollments').insert({student_id:currentUser.id,course_id:courseId,enrollment_type:'member_perk'});
-        if(error) throw error;
+window.claimEventCourse = async (courseId, title) => {
+    if (!isApprovedMember) { showToast('Please wait for account approval.', 'error'); return; }
+    if (!confirm(`Claim "${title}" for FREE?`)) return;
+    try {
+        const { data: ex } = await sb.from('enrollments').select('id').eq('student_id', currentUser.id).eq('course_id', courseId).maybeSingle();
+        if (ex) { showToast(`Already enrolled!`); fetchStudentData(); return; }
+        const { error } = await sb.from('enrollments').insert({ student_id: currentUser.id, course_id: courseId, enrollment_type: 'member_perk' });
+        if (error) throw error;
         showToast(`"${title}" added for free! 🎉`);
         fetchStudentData();
-    }catch(err){console.error(err);showToast('Failed to claim course.','error');}
+    } catch (err) { showToast('Failed to claim.', 'error'); }
 };
 
-// ============================================================
+// ─────────────────────────────────────────────
 // MAIN DATA FETCH
-// ============================================================
-async function fetchStudentData(){
-    try{
-        const {data:enrollments,error:enErr}=await sb.from('enrollments').select('course_id,enrolled_at,courses(*)').eq('student_id',currentUser.id);
-        if(enErr) throw enErr;
+// ─────────────────────────────────────────────
+async function fetchStudentData() {
+    try {
+        const { data: enrollments, error: enErr } = await sb
+            .from('enrollments')
+            .select('course_id, enrolled_at, courses(*)')
+            .eq('student_id', currentUser.id);
 
-        const enrolledCourseIds=(enrollments||[]).map(en=>en.course_id);
-        document.getElementById('stat-enrolled').textContent=enrollments?enrollments.length:0;
-        isFullMember=(enrollments||[]).some(en=>en.courses&&!en.courses.is_event_course);
+        if (enErr) throw enErr;
+
+        const enrolledCourseIds = (enrollments || []).map(en => en.course_id);
+        document.getElementById('stat-enrolled').textContent = enrollments ? enrollments.length : 0;
+
+        isFullMember = (enrollments || []).some(en => en.courses && !en.courses.is_event_course);
         fetchEventPerks(enrolledCourseIds);
 
-        // Build cert map (existing certs in DB)
-        const {data:existingCerts}=await sb.from('certificates').select('course_id,certificate_id,issued_at').eq('student_id',currentUser.id);
-        let certMap={};
-        (existingCerts||[]).forEach(c=>certMap[c.course_id]=c);
+        // Build existing cert map
+        const { data: existingCerts } = await sb.from('certificates')
+            .select('course_id, certificate_id, issued_at')
+            .eq('student_id', currentUser.id);
+        let certMap = {};
+        (existingCerts || []).forEach(c => certMap[c.course_id] = c);
 
-        const container=document.getElementById('enrolled-courses-container');
+        const container = document.getElementById('enrolled-courses-container');
 
-        if(!enrollments||!enrollments.length){
-            container.innerHTML=`<div style="text-align:center;padding:2rem;"><p style="color:var(--text-muted);margin-bottom:1rem;">You haven't enrolled in any courses yet.</p><a href="courses.html" class="btn-continue" style="background:var(--accent-cyan);">Browse Academy Courses</a></div>`;
-            document.getElementById('stat-completed').textContent='0';
-            document.getElementById('stat-certs').textContent='0';
+        if (!enrollments || !enrollments.length) {
+            container.innerHTML = `<div style="text-align:center;padding:2rem;">
+                <div style="font-size:3rem;margin-bottom:1rem;">📚</div>
+                <p style="color:var(--text-muted);margin-bottom:1rem;">No courses enrolled yet. The admin will assign courses to your account.</p>
+                <a href="courses.html" class="btn-continue" style="background:var(--accent-cyan);">Browse Courses</a>
+            </div>`;
+            document.getElementById('stat-completed').textContent = '0';
+            document.getElementById('stat-certs').textContent = '0';
+            document.getElementById('certificates-container').innerHTML = `<p style="text-align:center;color:var(--text-muted);padding:2rem;">Complete a course to earn your certificate! 🏆</p>`;
             return;
         }
 
-        let coursesHtml='<div class="course-list">';
-        let fullyCompletedCount=0;
+        let coursesHtml = '<div class="course-list">';
+        let fullyCompletedCount = 0;
 
-        for(const en of enrollments){
-            const c=en.courses;
-            if(!c) continue;
+        for (const en of enrollments) {
+            const c = en.courses;
+            if (!c) continue;
 
-            const {data:sections}=await sb.from('course_sections').select('id').eq('course_id',c.id);
-            let totalLessons=0,completedLessons=0,progressPercent=0;
+            const { data: sections } = await sb.from('course_sections').select('id').eq('course_id', c.id);
+            let totalLessons = 0, completedLessons = 0, progressPercent = 0;
 
-            if(sections&&sections.length>0){
-                const secIds=sections.map(s=>s.id);
-                const {data:lessons}=await sb.from('course_lessons').select('id').in('section_id',secIds);
-                if(lessons&&lessons.length>0){
-                    totalLessons=lessons.length;
-                    const lessonIds=lessons.map(l=>l.id);
-                    const {data:prog}=await sb.from('lesson_progress').select('id').eq('student_id',currentUser.id).in('lesson_id',lessonIds);
-                    if(prog) completedLessons=prog.length;
-                    // Cap completed at total for display purposes (handles 2/1 edge case)
-                    const displayCompleted=Math.min(completedLessons,totalLessons);
-                    progressPercent=Math.round((displayCompleted/totalLessons)*100);
+            if (sections && sections.length > 0) {
+                const secIds = sections.map(s => s.id);
+                const { data: lessons } = await sb.from('course_lessons').select('id').in('section_id', secIds);
+                if (lessons && lessons.length > 0) {
+                    totalLessons = lessons.length;
+                    const lessonIds = lessons.map(l => l.id);
+                    const { data: prog } = await sb.from('lesson_progress')
+                        .select('id').eq('student_id', currentUser.id).in('lesson_id', lessonIds);
+                    if (prog) completedLessons = prog.length;
+                    const cappedCompleted = Math.min(completedLessons, totalLessons);
+                    progressPercent = Math.round((cappedCompleted / totalLessons) * 100);
                 }
             }
 
-            // ROBUST completion check — also checks if cert already exists in DB
-            const alreadyHasCert=!!certMap[c.id];
-            const isDone=isCourseCompleted(completedLessons, totalLessons, progressPercent, alreadyHasCert);
+            // Completed if: lessons done OR cert already exists
+            const alreadyHasCert = !!certMap[c.id];
+            const isDone = alreadyHasCert || (totalLessons > 0 && completedLessons >= totalLessons);
 
-            // For display, cap progress at 100%
-            const displayPercent=isDone?100:progressPercent;
-            const displayCompleted=isDone?totalLessons:Math.min(completedLessons,totalLessons);
+            const displayPercent = isDone ? 100 : progressPercent;
+            const displayCompleted = isDone ? totalLessons : Math.min(completedLessons, totalLessons);
 
-            let certBtnHtml='';
-            let dlBtnHtml='';
-
-            if(isDone){
+            let certBtnHtml = '', dlBtnHtml = '';
+            if (isDone) {
                 fullyCompletedCount++;
-                // Auto-create cert if missing
-                const cert=await ensureCertificate(currentUser.id,c.id,certMap);
-                if(cert){
-                    const safe=c.title.replace(/'/g,"\\'");
-                    const dStr=new Date(cert.issued_at).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-                    certBtnHtml=`<button onclick="openCertModal('${safe}','${dStr}','${cert.certificate_id}')" class="btn-cert">🎓 View Certificate</button>`;
-                    dlBtnHtml=`<button onclick="quickDownloadCert('${safe}','${dStr}','${cert.certificate_id}')" class="btn-download">⬇️ Download PDF</button>`;
+                const cert = await ensureCertificate(currentUser.id, c.id, certMap);
+                if (cert) {
+                    const safe = c.title.replace(/'/g, "\\'");
+                    const dStr = new Date(cert.issued_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    certBtnHtml = `<button onclick="openCertModal('${safe}','${dStr}','${cert.certificate_id}')" class="btn-cert">🎓 View Certificate</button>`;
+                    dlBtnHtml = `<button onclick="quickDownloadCert('${safe}','${dStr}','${cert.certificate_id}')" class="btn-download">⬇️ Download PDF</button>`;
                 }
             }
 
-            const eventTag=c.is_event_course?`<span style="font-size:.7rem;background:rgba(0,160,223,.1);color:var(--accent-cyan);padding:2px 8px;border-radius:4px;font-weight:700;margin-left:6px;">🎁 Event</span>`:'';
+            const eventTag = c.is_event_course
+                ? `<span style="font-size:.7rem;background:rgba(0,160,223,.1);color:var(--accent-cyan);padding:2px 8px;border-radius:4px;font-weight:700;margin-left:6px;">🎁 Event</span>` : '';
 
-            // Show "✓ Completed" badge on the card if done
-            const completedBadge=isDone?`<span style="display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.3);padding:3px 10px;border-radius:20px;margin-top:.4rem;">✓ Completed</span>`:'';
+            const completedBadge = isDone
+                ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.3);padding:3px 10px;border-radius:20px;margin-top:.4rem;">✓ Completed</span>` : '';
 
-            coursesHtml+=`
-            <div class="course-item${isDone?' is-done':''}">
+            coursesHtml += `
+            <div class="course-item${isDone ? ' is-done' : ''}">
                 <img src="${c.image_url}" class="course-img" alt="${c.title}" onerror="this.style.background='var(--border)'">
                 <div class="course-info">
                     <h4 class="course-title">${c.title}${eventTag}</h4>
                     ${completedBadge}
                     <div class="progress-container">
-                        <div class="progress-bar-wrap"><div class="progress-fill${isDone?' done':''}" style="width:${displayPercent}%;"></div></div>
+                        <div class="progress-bar-wrap">
+                            <div class="progress-fill${isDone ? ' done' : ''}" style="width:${displayPercent}%;"></div>
+                        </div>
                         <div class="progress-text">${displayPercent}% Completed (${displayCompleted}/${totalLessons} lessons)</div>
                     </div>
                 </div>
                 <div class="course-actions">
-                    <a href="learn.html?course=${c.id}" class="btn-continue ${isDone?'btn-completed':''}">${isDone?'✓ Review':'Continue ➔'}</a>
+                    <a href="learn.html?course=${c.id}" class="btn-continue ${isDone ? 'btn-completed' : ''}">${isDone ? '✓ Review' : 'Continue ➔'}</a>
                     ${certBtnHtml}
                     ${dlBtnHtml}
-                    <button onclick="openAssignModal('${c.id}','${c.title.replace(/'/g,"\\'")}')" class="btn-assign">📝 Submit Assignment</button>
+                    <button onclick="openAssignModal('${c.id}','${c.title.replace(/'/g, "\\'")}')" class="btn-assign">📝 Submit Assignment</button>
                 </div>
             </div>`;
         }
 
-        coursesHtml+='</div>';
-        container.innerHTML=coursesHtml;
-        document.getElementById('stat-completed').textContent=fullyCompletedCount;
+        coursesHtml += '</div>';
+        container.innerHTML = coursesHtml;
+        document.getElementById('stat-completed').textContent = fullyCompletedCount;
 
-        // Reload full cert panel
-        const {data:certs}=await sb.from('certificates').select('*,courses(title)').eq('student_id',currentUser.id).order('issued_at',{ascending:false});
-        document.getElementById('stat-certs').textContent=certs?certs.length:0;
-        renderCertsPanel(certs||[]);
+        // Certs panel
+        const { data: certs } = await sb.from('certificates')
+            .select('*, courses(title)').eq('student_id', currentUser.id).order('issued_at', { ascending: false });
+        document.getElementById('stat-certs').textContent = certs ? certs.length : 0;
+        renderCertsPanel(certs || []);
 
-    }catch(err){
-        console.error('Dashboard error:',err);
-        document.getElementById('enrolled-courses-container').innerHTML=`<p style="color:var(--danger);text-align:center;padding:1rem;">Error loading dashboard. Please refresh.</p>`;
+    } catch (err) {
+        console.error('Dashboard error:', err);
+        document.getElementById('enrolled-courses-container').innerHTML =
+            `<p style="color:var(--danger);text-align:center;padding:1rem;">⚠ Error loading courses. Please refresh the page.</p>`;
     }
 }
 
-function renderCertsPanel(certs){
-    const container=document.getElementById('certificates-container');
-    if(!certs.length){
-        container.innerHTML=`<p style="text-align:center;color:var(--text-muted);padding:2rem;">Finish a course 100% to earn your first certificate! 🏆</p>`;
+function renderCertsPanel(certs) {
+    const container = document.getElementById('certificates-container');
+    if (!certs.length) {
+        container.innerHTML = `<p style="text-align:center;color:var(--text-muted);padding:2rem;">Complete a course 100% to earn your first certificate! 🏆</p>`;
         return;
     }
-    container.innerHTML=certs.map(cert=>{
-        const date=new Date(cert.issued_at).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-        const safe=(cert.courses?.title||'').replace(/'/g,"\\'");
+    container.innerHTML = certs.map(cert => {
+        const date = new Date(cert.issued_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        const safe = (cert.courses?.title || '').replace(/'/g, "\\'");
         return `<div class="cert-item">
             <div class="cert-info">
-                <h4>${cert.courses?.title||'Course'}</h4>
+                <h4>${cert.courses?.title || 'Course'}</h4>
                 <p>Issued: ${date}</p>
-                <p>ID: ${cert.certificate_id}</p>
+                <p style="font-size:.72rem;margin-top:2px;">ID: ${cert.certificate_id}</p>
             </div>
             <div class="cert-item-btns">
                 <button class="btn-cert" onclick="openCertModal('${safe}','${date}','${cert.certificate_id}')">🎓 View</button>
@@ -784,221 +796,190 @@ function renderCertsPanel(certs){
     }).join('');
 }
 
-// ============================================================
+// ─────────────────────────────────────────────
 // GRADES
-// ============================================================
-async function fetchGrades(){
-    try{
-        const {data:grades,error}=await sb.from('assignment_submissions')
-            .select('*,courses(title)')
-            .eq('student_id',currentUser.id)
-            .not('grade','is',null)
-            .order('graded_at',{ascending:false});
+// ─────────────────────────────────────────────
+async function fetchGrades() {
+    try {
+        const { data: grades, error } = await sb.from('assignment_submissions')
+            .select('*, courses(title)').eq('student_id', currentUser.id)
+            .not('grade', 'is', null).order('graded_at', { ascending: false });
 
-        const container=document.getElementById('grades-container');
-        if(error||!grades||!grades.length){
-            container.innerHTML=`<div style="text-align:center;padding:2rem;"><div style="font-size:2.5rem;margin-bottom:1rem;">📊</div><p style="color:var(--text-muted);">No grades yet. Submit assignments to get graded by your instructor.</p></div>`;
+        const container = document.getElementById('grades-container');
+        if (error || !grades || !grades.length) {
+            container.innerHTML = `<div style="text-align:center;padding:2rem;"><div style="font-size:2.5rem;margin-bottom:1rem;">📊</div><p style="color:var(--text-muted);">No grades yet. Submit assignments to get graded by your instructor.</p></div>`;
             return;
         }
-
-        container.innerHTML=grades.map(g=>{
-            const grade=g.grade||'—';
-            let cls='A';
-            if(grade==='B') cls='B';
-            else if(grade==='C') cls='C';
-            else if(grade==='D'||grade==='F') cls='D';
-            const date=g.graded_at?new Date(g.graded_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+        container.innerHTML = grades.map(g => {
+            const grade = g.grade || '—';
+            let cls = grade.startsWith('A') ? 'A' : grade.startsWith('B') ? 'B' : grade.startsWith('C') ? 'C' : 'D';
+            const date = g.graded_at ? new Date(g.graded_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
             return `<div class="grade-item">
                 <div class="grade-badge ${cls}">${grade}</div>
                 <div class="grade-info">
-                    <h5>${g.title||'Assignment'}</h5>
-                    <p>${g.courses?.title||''} ${date?'• '+date:''}</p>
-                    ${g.feedback?`<div class="grade-feedback">"${g.feedback}"</div>`:''}
+                    <h5>${g.title || 'Assignment'}</h5>
+                    <p>${g.courses?.title || ''} ${date ? '• ' + date : ''}</p>
+                    ${g.feedback ? `<div class="grade-feedback">"${g.feedback}"</div>` : ''}
                 </div>
-                <div class="grade-score">${g.score!=null?g.score+'/100':'—'}</div>
+                <div class="grade-score">${g.score != null ? g.score + '/100' : '—'}</div>
             </div>`;
         }).join('');
-    }catch(err){console.error('Grades error:',err);}
+    } catch (err) { console.error('Grades error:', err); }
 }
 
-// ============================================================
-// SUBMITTED ASSIGNMENTS LIST
-// ============================================================
-async function fetchSubmittedAssignments(){
-    try{
-        const {data:subs,error}=await sb.from('assignment_submissions')
-            .select('*,courses(title)')
-            .eq('student_id',currentUser.id)
-            .order('submitted_at',{ascending:false});
+// ─────────────────────────────────────────────
+// SUBMITTED ASSIGNMENTS
+// ─────────────────────────────────────────────
+async function fetchSubmittedAssignments() {
+    try {
+        const { data: subs, error } = await sb.from('assignment_submissions')
+            .select('*, courses(title)').eq('student_id', currentUser.id).order('submitted_at', { ascending: false });
 
-        const container=document.getElementById('assignments-submitted-container');
-        if(error||!subs||!subs.length){
-            container.innerHTML=`<div style="text-align:center;padding:2rem;"><div style="font-size:2.5rem;margin-bottom:1rem;">📝</div><p style="color:var(--text-muted);">No assignments submitted yet. Use the Submit Assignment button on any course.</p></div>`;
+        const container = document.getElementById('assignments-submitted-container');
+        if (error || !subs || !subs.length) {
+            container.innerHTML = `<div style="text-align:center;padding:2rem;"><div style="font-size:2.5rem;margin-bottom:1rem;">📝</div><p style="color:var(--text-muted);">No assignments submitted yet. Use the "Submit Assignment" button on any course card.</p></div>`;
             return;
         }
-
-        const statusColors={'pending':'#b08800','graded':'#027a5f','reviewed':'#0077a8'};
-        container.innerHTML=subs.map(s=>{
-            const date=new Date(s.submitted_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-            const status=s.grade?'graded':(s.reviewed_at?'reviewed':'pending');
-            const color=statusColors[status]||statusColors.pending;
-            const filesArr=s.file_urls||[];
+        const sc = { pending: '#b08800', graded: '#027a5f', reviewed: '#0077a8' };
+        container.innerHTML = subs.map(s => {
+            const date = new Date(s.submitted_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const status = s.grade ? 'graded' : (s.reviewed_at ? 'reviewed' : 'pending');
+            const color = sc[status];
+            const filesArr = s.file_urls || [];
             return `<div class="grade-item" style="flex-direction:column;align-items:stretch;gap:.5rem;">
                 <div style="display:flex;align-items:center;gap:.75rem;">
                     <span style="font-size:1.5rem;">📄</span>
                     <div style="flex:1;">
-                        <h5 style="color:var(--text-dark);font-weight:600;">${s.title||'Assignment'}</h5>
-                        <p style="font-size:.75rem;color:var(--text-muted);">${s.courses?.title||''} • ${date}</p>
+                        <h5 style="color:var(--text-dark);font-weight:600;">${s.title || 'Assignment'}</h5>
+                        <p style="font-size:.75rem;color:var(--text-muted);">${s.courses?.title || ''} • ${date}</p>
                     </div>
-                    <span style="font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44;">${status.charAt(0).toUpperCase()+status.slice(1)}</span>
-                    ${s.grade?`<span style="font-family:'Poppins';font-weight:800;color:${color};">${s.grade}${s.score!=null?' ('+s.score+')':''}</span>`:''}
+                    <span style="font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;background:${color}22;color:${color};border:1px solid ${color}44;">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                    ${s.grade ? `<span style="font-family:'Poppins';font-weight:800;color:${color};">${s.grade}${s.score != null ? ' (' + s.score + ')' : ''}</span>` : ''}
                 </div>
-                ${s.description?`<p style="font-size:.8rem;color:var(--text-gray);padding-left:2.25rem;">${s.description}</p>`:''}
-                ${filesArr.length?`<div style="padding-left:2.25rem;display:flex;flex-wrap:wrap;gap:.5rem;">${filesArr.map(url=>{
-                    const name=url.split('/').pop().split('?')[0];
+                ${s.description ? `<p style="font-size:.8rem;color:var(--text-gray);padding-left:2.25rem;">${s.description}</p>` : ''}
+                ${filesArr.length ? `<div style="padding-left:2.25rem;display:flex;flex-wrap:wrap;gap:.5rem;">${filesArr.map(url => {
+                    const name = url.split('/').pop().split('?')[0];
                     return `<a href="${url}" target="_blank" class="file-chip" style="text-decoration:none;">${fileIcon(name)}<span class="file-chip-name">${name}</span></a>`;
-                }).join('')}</div>`:''}
+                }).join('')}</div>` : ''}
             </div>`;
         }).join('');
-    }catch(err){console.error('Subs error:',err);}
+    } catch (err) { console.error('Subs error:', err); }
 }
 
-function fileIcon(name){
-    const ext=(name.split('.').pop()||'').toLowerCase();
-    const map={doc:'📄',docx:'📄',pdf:'📕',xls:'📊',xlsx:'📊',ppt:'📋',pptx:'📋',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',mp4:'🎬',mov:'🎬',zip:'🗜️',rar:'🗜️'};
-    return `<span class="file-chip-icon">${map[ext]||'📎'}</span>`;
+function fileIcon(name) {
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    const map = { doc: '📄', docx: '📄', pdf: '📕', xls: '📊', xlsx: '📊', ppt: '📋', pptx: '📋', jpg: '🖼️', jpeg: '🖼️', png: '🖼️', gif: '🖼️', mp4: '🎬', mov: '🎬', zip: '🗜️', rar: '🗜️' };
+    return `<span class="file-chip-icon">${map[ext] || '📎'}</span>`;
 }
 
-// ============================================================
+// ─────────────────────────────────────────────
 // ASSIGNMENT MODAL
-// ============================================================
-function openAssignModal(courseId,courseName){
-    document.getElementById('assign-course-id').value=courseId;
-    document.getElementById('assign-course-name').value=courseName;
-    document.getElementById('assign-title').value='';
-    document.getElementById('assign-desc').value='';
-    selectedFiles=[];
+// ─────────────────────────────────────────────
+function openAssignModal(courseId, courseName) {
+    document.getElementById('assign-course-id').value = courseId;
+    document.getElementById('assign-course-name').value = courseName;
+    document.getElementById('assign-title').value = '';
+    document.getElementById('assign-desc').value = '';
+    selectedFiles = [];
     renderFilePreview();
     document.getElementById('assign-modal').classList.add('show');
 }
-function closeAssignModal(){
-    document.getElementById('assign-modal').classList.remove('show');
-}
+function closeAssignModal() { document.getElementById('assign-modal').classList.remove('show'); }
 
-function handleFileSelect(files){
-    const allowed=['docx','doc','xlsx','xls','pdf','ppt','pptx','jpg','jpeg','png','gif','webp','mp4','mov','zip','rar','txt','csv'];
-    Array.from(files).forEach(f=>{
-        const ext=f.name.split('.').pop().toLowerCase();
-        if(!allowed.includes(ext)){showToast(`File type .${ext} not supported.`,'error');return;}
-        if(f.size>50*1024*1024){showToast(`${f.name} exceeds 50MB limit.`,'error');return;}
-        if(!selectedFiles.find(x=>x.name===f.name&&x.size===f.size)) selectedFiles.push(f);
+function handleFileSelect(files) {
+    const allowed = ['docx', 'doc', 'xlsx', 'xls', 'pdf', 'ppt', 'pptx', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'zip', 'rar', 'txt', 'csv'];
+    Array.from(files).forEach(f => {
+        const ext = f.name.split('.').pop().toLowerCase();
+        if (!allowed.includes(ext)) { showToast(`.${ext} files not supported.`, 'error'); return; }
+        if (f.size > 50 * 1024 * 1024) { showToast(`${f.name} exceeds 50MB.`, 'error'); return; }
+        if (!selectedFiles.find(x => x.name === f.name && x.size === f.size)) selectedFiles.push(f);
     });
     renderFilePreview();
 }
-function removeFile(idx){
-    selectedFiles.splice(idx,1);
-    renderFilePreview();
-}
-function renderFilePreview(){
-    const container=document.getElementById('file-preview');
-    if(!selectedFiles.length){container.innerHTML='';return;}
-    container.innerHTML=selectedFiles.map((f,i)=>`
+function removeFile(idx) { selectedFiles.splice(idx, 1); renderFilePreview(); }
+function renderFilePreview() {
+    const c = document.getElementById('file-preview');
+    c.innerHTML = selectedFiles.map((f, i) => `
         <div class="file-chip">
             ${fileIcon(f.name)}
-            <span class="file-chip-name">${f.name} <span style="color:var(--text-muted);">(${(f.size/1024/1024).toFixed(2)}MB)</span></span>
+            <span class="file-chip-name">${f.name} <span style="color:var(--text-muted);">(${(f.size / 1024 / 1024).toFixed(2)}MB)</span></span>
             <span class="file-chip-remove" onclick="removeFile(${i})">✕</span>
         </div>`).join('');
 }
 
-async function submitAssignment(){
-    const courseId=document.getElementById('assign-course-id').value;
-    const title=document.getElementById('assign-title').value.trim();
-    const desc=document.getElementById('assign-desc').value.trim();
+async function submitAssignment() {
+    const courseId = document.getElementById('assign-course-id').value;
+    const title = document.getElementById('assign-title').value.trim();
+    const desc = document.getElementById('assign-desc').value.trim();
+    if (!title) { showToast('Please enter an assignment title.', 'error'); return; }
 
-    if(!title){showToast('Please enter an assignment title.','error');return;}
+    const btn = document.getElementById('submit-assign-btn');
+    btn.disabled = true; btn.textContent = '⏳ Uploading...';
 
-    const btn=document.getElementById('submit-assign-btn');
-    btn.disabled=true;
-    btn.textContent='⏳ Uploading...';
-
-    try{
-        let fileUrls=[];
-
-        for(const file of selectedFiles){
-            const ext=file.name.split('.').pop();
-            const safeName=`${currentUser.id}/${Date.now()}_${Math.random().toString(36).substr(2,5)}.${ext}`;
-            const {data:upData,error:upErr}=await sb.storage.from('assignments').upload(safeName,file,{upsert:false});
-            if(upErr) throw new Error(`Upload failed for ${file.name}: ${upErr.message}`);
-            const {data:urlData}=sb.storage.from('assignments').getPublicUrl(safeName);
+    try {
+        let fileUrls = [];
+        for (const file of selectedFiles) {
+            const ext = file.name.split('.').pop();
+            const safeName = `${currentUser.id}/${Date.now()}_${Math.random().toString(36).substr(2, 5)}.${ext}`;
+            const { error: upErr } = await sb.storage.from('assignments').upload(safeName, file, { upsert: false });
+            if (upErr) throw new Error(`Upload failed for ${file.name}: ${upErr.message}`);
+            const { data: urlData } = sb.storage.from('assignments').getPublicUrl(safeName);
             fileUrls.push(urlData.publicUrl);
         }
-
-        const {error:insertErr}=await sb.from('assignment_submissions').insert({
-            student_id: currentUser.id,
-            course_id: courseId,
-            title: title,
-            description: desc||null,
-            file_urls: fileUrls,
-            submitted_at: new Date().toISOString()
+        const { error: insertErr } = await sb.from('assignment_submissions').insert({
+            student_id: currentUser.id, course_id: courseId,
+            title, description: desc || null,
+            file_urls: fileUrls, submitted_at: new Date().toISOString()
         });
-
-        if(insertErr) throw insertErr;
-
-        showToast('Assignment submitted successfully! 🎉');
+        if (insertErr) throw insertErr;
+        showToast('Assignment submitted! 🎉');
         closeAssignModal();
         fetchSubmittedAssignments();
         fetchGrades();
-
-    }catch(err){
-        console.error('Submit error:',err);
-        showToast('Failed to submit: '+err.message,'error');
-    }finally{
-        btn.disabled=false;
-        btn.textContent='🚀 Submit Assignment';
+    } catch (err) {
+        console.error('Submit error:', err);
+        showToast('Failed: ' + err.message, 'error');
+    } finally {
+        btn.disabled = false; btn.textContent = '🚀 Submit Assignment';
     }
 }
 
-// ============================================================
-// CERTIFICATE MODAL
-// ============================================================
-function openCertModal(courseTitle,date,certId){
-    const fullName=userProfile?`${userProfile.first_name||''} ${userProfile.last_name||''}`.trim():'Student';
-    document.getElementById('cert-student-name').textContent=fullName||'Dedicated Student';
-    document.getElementById('cert-course-title').textContent=courseTitle;
-    document.getElementById('cert-date').textContent=date;
-    document.getElementById('cert-id-text').textContent=certId;
+// ─────────────────────────────────────────────
+// CERTIFICATE MODAL + PDF DOWNLOAD
+// ─────────────────────────────────────────────
+function openCertModal(courseTitle, date, certId) {
+    const fullName = userProfile ? `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() : 'Student';
+    document.getElementById('cert-student-name').textContent = fullName || 'Dedicated Student';
+    document.getElementById('cert-course-title').textContent = courseTitle;
+    document.getElementById('cert-date').textContent = date;
+    document.getElementById('cert-id-text').textContent = certId;
     document.getElementById('cert-modal').classList.add('show');
 }
-function closeCertModal(){
-    document.getElementById('cert-modal').classList.remove('show');
-}
+function closeCertModal() { document.getElementById('cert-modal').classList.remove('show'); }
 
-async function downloadCertPDF(){
-    const btn=document.getElementById('dl-cert-btn');
-    btn.disabled=true;
-    btn.textContent='⏳ Generating...';
-    try{
-        const el=document.getElementById('printable-cert');
-        const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false});
-        const imgData=canvas.toDataURL('image/png');
-        const {jsPDF}=window.jspdf;
-        const pdf=new jsPDF({orientation:'landscape',unit:'px',format:[canvas.width/2,canvas.height/2]});
-        pdf.addImage(imgData,'PNG',0,0,canvas.width/2,canvas.height/2);
-        const name=document.getElementById('cert-id-text').textContent;
-        pdf.save(`Certificate_${name}.pdf`);
-        showToast('Certificate downloaded successfully! 🎓');
-    }catch(err){
-        console.error('PDF error:',err);
-        showToast('Download failed. Try printing instead.','error');
-    }finally{
-        btn.disabled=false;
-        btn.textContent='⬇️ Download PDF';
+async function downloadCertPDF() {
+    const btn = document.getElementById('dl-cert-btn');
+    btn.disabled = true; btn.textContent = '⏳ Generating...';
+    try {
+        const el = document.getElementById('printable-cert');
+        const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [canvas.width / 2, canvas.height / 2] });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+        pdf.save(`Certificate_${document.getElementById('cert-id-text').textContent}.pdf`);
+        showToast('Certificate downloaded! 🎓');
+    } catch (err) {
+        console.error('PDF error:', err);
+        showToast('Download failed — try the Print button instead.', 'error');
+    } finally {
+        btn.disabled = false; btn.textContent = '⬇️ Download PDF';
     }
 }
 
-async function quickDownloadCert(courseTitle,date,certId){
-    openCertModal(courseTitle,date,certId);
-    setTimeout(()=>downloadCertPDF(),600);
+async function quickDownloadCert(courseTitle, date, certId) {
+    openCertModal(courseTitle, date, certId);
+    setTimeout(() => downloadCertPDF(), 700);
 }
 </script>
 </body>

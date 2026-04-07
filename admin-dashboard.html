@@ -6,7 +6,6 @@
     <title>ENET SUPREME ACADEMY | Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script>
         const _st = localStorage.getItem('enet_theme') || 'system';
         document.documentElement.setAttribute('data-theme',
@@ -14,19 +13,19 @@
     </script>
     <style>
         :root {
-            --brand-navy: #02014a; --navy-light: #0d2a8f; --brand-yellow: #fcd116;
-            --yellow-hover: #e0b800; --accent-cyan: #00a0df;
-            --danger: #EE5D50; --success: #05CD99;
-            --bg-light: #F4F7FE; --surface: #FFFFFF; --surface-hover: rgba(0,160,223,0.05);
-            --border: #E9EDF7; --border-bright: #D1D9EB;
-            --text-dark: #02014a; --text-muted: #8A98C9; --text-gray: #475467;
-            --topbar-bg: rgba(244,247,254,0.92); --shadow-color: rgba(2,1,74,0.06);
+            --brand-navy:#02014a;--navy-light:#0d2a8f;--brand-yellow:#fcd116;
+            --yellow-hover:#e0b800;--accent-cyan:#00a0df;
+            --danger:#EE5D50;--success:#05CD99;
+            --bg-light:#F4F7FE;--surface:#FFFFFF;--surface-hover:rgba(0,160,223,0.05);
+            --border:#E9EDF7;--border-bright:#D1D9EB;
+            --text-dark:#02014a;--text-muted:#8A98C9;--text-gray:#475467;
+            --topbar-bg:rgba(244,247,254,0.92);--shadow-color:rgba(2,1,74,0.06);
         }
         [data-theme="dark"] {
-            --bg-light: #07080F; --surface: #13151F; --surface-hover: rgba(255,255,255,0.05);
-            --border: rgba(255,255,255,0.08); --border-bright: rgba(255,255,255,0.15);
-            --text-dark: #F0F0FF; --text-muted: #7B7D9A; --text-gray: #A0AEC0;
-            --topbar-bg: rgba(7,8,15,0.92); --shadow-color: rgba(0,0,0,0.4);
+            --bg-light:#07080F;--surface:#13151F;--surface-hover:rgba(255,255,255,0.05);
+            --border:rgba(255,255,255,0.08);--border-bright:rgba(255,255,255,0.15);
+            --text-dark:#F0F0FF;--text-muted:#7B7D9A;--text-gray:#A0AEC0;
+            --topbar-bg:rgba(7,8,15,0.92);--shadow-color:rgba(0,0,0,0.4);
         }
         *{box-sizing:border-box;margin:0;padding:0}
         body{background:var(--bg-light);color:var(--text-gray);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
@@ -47,7 +46,7 @@
         .nav-item svg{flex-shrink:0;width:20px;height:20px;opacity:.8}
         .nav-item.active svg{opacity:1;color:var(--accent-cyan)}
         .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--brand-yellow);color:var(--brand-navy);border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
-        
+
         /* MAIN */
         .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s}
         .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2.5rem;border-bottom:1px solid var(--border)}
@@ -60,36 +59,21 @@
         .search-wrap:focus-within{width:310px;border-color:var(--accent-cyan)}
         .search-wrap input{background:none;border:none;outline:none;color:var(--text-dark);font-family:'DM Sans',sans-serif;font-size:.85rem;width:100%}
         .search-wrap input::placeholder{color:var(--text-muted)}
-        .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
+        .icon-btn{cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
         .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
-        .notification-wrapper{position:relative}
-        .bell-badge{position:absolute;top:-2px;right:-2px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid var(--surface)}
-        .notification-dropdown{position:absolute;top:120%;right:0;width:340px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px var(--shadow-color);display:none;flex-direction:column;z-index:1000;animation:scaleIn .18s ease}
-        .notification-dropdown.show{display:flex}
-        .notif-header{padding:1.2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-        .notif-header h4{font-family:'Poppins',sans-serif;font-size:.95rem;color:var(--text-dark)}
-        .notif-header span{font-size:.7rem;background:rgba(0,160,223,0.1);color:var(--accent-cyan);padding:3px 8px;border-radius:12px;font-weight:700}
-        .notif-body{max-height:400px;overflow-y:auto}
-        .notif-item{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .2s}
-        .notif-item:hover{background:var(--surface-hover)}
-        .notif-icon{width:36px;height:36px;border-radius:50%;background:var(--bg-light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
-        .notif-content p{font-size:.8rem;color:var(--text-dark);margin-bottom:4px;line-height:1.4}
-        .notif-content p strong{color:var(--brand-navy); font-weight: 700;}
-        .notif-empty{padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
         .live-dot{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:4px 10px;border-radius:20px;white-space:nowrap}
         .live-dot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--success);animation:livePulse 1.5s ease-in-out infinite}
-        .header-logout-btn { display: flex; align-items: center; gap: 6px; background: rgba(238,93,80,0.1); color: var(--danger); border: 1px solid rgba(238,93,80,0.2); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; font-family: 'DM Sans', sans-serif;}
-        .header-logout-btn:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 10px rgba(238,93,80,0.3); transform: translateY(-2px);}
+        .header-logout-btn{display:flex;align-items:center;gap:6px;background:rgba(238,93,80,0.1);color:var(--danger);border:1px solid rgba(238,93,80,0.2);padding:8px 16px;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:0.2s;font-family:'DM Sans',sans-serif}
+        .header-logout-btn:hover{background:var(--danger);color:#fff;transform:translateY(-2px)}
 
         /* CONTENT */
         .content{padding:0 2.5rem 2.5rem;flex:1}
-        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
+        .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem}
         .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
         .stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px var(--shadow-color)}
         .stat-card.ring{outline:3px solid var(--accent-cyan);outline-offset:-3px;transform:translateY(-6px)}
         .stat-card.brand-blue{background:var(--brand-navy);color:#fff}
         .stat-card.brand-orange{background:var(--accent-cyan);color:#fff}
-        .stat-card.brand-yellow{background:var(--brand-yellow);color:var(--brand-navy)}
         .stat-card.brand-surface{background:var(--surface);color:var(--brand-navy);border:1px solid var(--border);border-top:4px solid var(--danger)}
         .stat-lbl{font-size:.85rem;font-weight:500;opacity:.9;margin-bottom:.5rem}
         .stat-card.brand-surface .stat-lbl{color:var(--text-gray)}
@@ -99,7 +83,7 @@
         .stat-card:hover .stat-arrow,.stat-card.ring .stat-arrow{opacity:.4;transform:scale(1.15) rotate(-10deg)}
 
         /* PANELS */
-        .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
+        .dashboard-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
         .panel{background:var(--surface);border-radius:24px;margin-bottom:2rem;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);animation:fadeUp .4s ease both;transition:background .3s}
         .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem;flex-wrap:wrap;gap:.75rem}
         .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark)}
@@ -144,31 +128,27 @@
         .btn-danger:hover{background:var(--danger);color:#fff}
         .btn-admin{background:rgba(0,160,223,0.1);color:var(--accent-cyan);border-color:rgba(0,160,223,0.2)}
         .btn-admin:hover{background:var(--accent-cyan);color:#fff}
-        .btn-unadmin{background:rgba(252,209,22,0.2);color:var(--brand-navy);border-color:rgba(252,209,22,0.3)}
-        .btn-unadmin:hover{background:var(--brand-yellow);color:var(--brand-navy)}
         .btn-deact{background:var(--bg-light);color:var(--text-gray);border-color:var(--border)}
         .btn-deact:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
         .btn-activate{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
         .btn-activate:hover{background:var(--success);color:#fff}
-        .btn-edit{background:rgba(252,209,22,0.2);color:#7a6500;border-color:rgba(252,209,22,0.4)}
-        .btn-edit:hover{background:var(--brand-yellow);color:var(--brand-navy)}
-        
-        .btn-ghost-mode {background: var(--brand-navy); color: #fff; grid-column: span 2; margin-top: 0.5rem; justify-content: center; padding: 0.85rem;}
-        .btn-ghost-mode:hover {background: var(--navy-light); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(2,1,74,0.2);}
-        .btn-primary{background:var(--accent-cyan);color:#fff;border-color:var(--accent-cyan);font-size:.95rem;padding:.75rem 2rem}
+        .btn-primary{background:var(--accent-cyan);color:#fff;border-color:var(--accent-cyan)}
         .btn-primary:hover{background:#0088bd}
-
-        /* NEW: Grant Course select styling */
-        .grant-course-wrap { background: rgba(0, 160, 223, 0.05); border: 1px solid rgba(0, 160, 223, 0.2); padding: 1rem; border-radius: 12px; grid-column: span 2; margin-top: 1rem; }
-        .grant-course-wrap select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; background: var(--surface); color: var(--text-dark); outline: none; }
-        .grant-course-wrap select:focus { border-color: var(--accent-cyan); }
-        .grant-course-wrap button { width: 100%; justify-content: center; background: var(--accent-cyan); color: #fff; }
+        .btn-ghost-mode{background:var(--brand-navy);color:#fff;grid-column:span 2;margin-top:.5rem;justify-content:center;padding:.85rem}
+        .btn-ghost-mode:hover{background:var(--navy-light);transform:translateY(-2px);box-shadow:0 5px 15px rgba(2,1,74,0.2)}
         .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--brand-navy);background:var(--brand-yellow);border:1px solid rgba(252,209,22,0.5);padding:6px 12px;border-radius:8px}
+
+        /* ── GRANT COURSE SECTION ── */
+        .grant-section{background:rgba(0,160,223,.05);border:1px solid rgba(0,160,223,.2);padding:1rem;border-radius:12px;grid-column:span 2;margin-top:1rem}
+        .grant-section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-cyan);margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+        .grant-select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;background:var(--surface);color:var(--text-dark);outline:none;font-family:'DM Sans',sans-serif;font-size:.9rem}
+        .grant-select:focus{border-color:var(--accent-cyan)}
+        .grant-note{font-size:.75rem;color:var(--text-muted);margin-bottom:.75rem;line-height:1.4}
 
         /* DRAWER */
         .drawer-backdrop{position:fixed;inset:0;background:rgba(2,1,74,0.5);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
         .drawer-backdrop.open{opacity:1;pointer-events:all}
-        .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+        .drawer{position:fixed;right:0;top:0;bottom:0;width:460px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
         .drawer.open{transform:translateX(0)}
         .drawer-header{padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg-light)}
         .drawer-header-left{display:flex;align-items:center;gap:.75rem}
@@ -190,30 +170,28 @@
         .detail-val{font-size:.92rem;font-weight:600;color:var(--text-dark);word-break:break-all}
         .drawer-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
         .drawer-action-grid .btn{justify-content:center;padding:.75rem 1rem;font-size:.85rem}
-        .drawer-action-grid .btn.full{grid-column:span 2}
 
+        /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
         .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
         .toast.success{border-left:4px solid var(--success)}
         .toast.error{border-left:4px solid var(--danger)}
         .toast.info{border-left:4px solid var(--accent-cyan)}
-        @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
-        
+
         .empty-cell{padding:4rem 2rem;text-align:center}
         .empty-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
         .empty-ttl{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem}
         .empty-sub{font-size:.85rem;color:var(--text-muted)}
-
-        /* SKELETON */
         .skeleton{height:14px;border-radius:8px;background:linear-gradient(90deg,var(--border) 25%,var(--border-bright) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:inline-block;width:100%}
         .skeleton.sm{width:65%}.skeleton.xs{width:42%}
+
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
         @keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
         @keyframes livePulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+        @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
-        @media(max-width:1200px){.dashboard-grid{grid-template-columns:1fr}}
         @media(max-width:992px){
             .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
             .main-wrap{margin-left:0}.mobile-toggle{display:flex}
@@ -224,12 +202,8 @@
         }
         @media(max-width:576px){
             .stats-grid{grid-template-columns:1fr}
-            .topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}
-            .topbar-right{width:100%;justify-content:space-between;flex-wrap:wrap;gap:10px}
-            .search-wrap{width:100%;order:3;margin-top:5px}
             .drawer{width:100vw}.detail-grid{grid-template-columns:1fr}
             .drawer-action-grid{grid-template-columns:1fr}
-            .drawer-action-grid .btn.full{grid-column:span 1}
         }
     </style>
 </head>
@@ -286,7 +260,7 @@
             </div>
             <div class="live-dot" title="Real-time sync active">LIVE</div>
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle theme"><span id="theme-icon">💻</span></button>
-            <button class="header-logout-btn" id="logoutBtnTop" title="Log out of Admin Dashboard">
+            <button class="header-logout-btn" id="logoutBtnTop">
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Log Out
             </button>
@@ -329,16 +303,16 @@
             </div>
         </div>
 
-        <div class="dashboard-grid" style="grid-template-columns: 1fr;">
+        <div class="dashboard-grid">
             <div class="panel users">
                 <div class="panel-head">
                     <div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div>
                 </div>
                 <div class="tab-bar">
-                    <button class="tab-btn active" onclick="switchTab('all')"      id="tab-all">All Users</button>
-                    <button class="tab-btn"         onclick="switchTab('students')" id="tab-students">Students</button>
-                    <button class="tab-btn"         onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
-                    <button class="tab-btn"         onclick="switchTab('admins')"   id="tab-admins">Admins</button>
+                    <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All Users</button>
+                    <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
+                    <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
+                    <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
                 </div>
                 <div class="table-responsive">
                     <table class="data-tbl">
@@ -367,11 +341,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ── THEME & SIDEBAR ──
 const _themes=['system','light','dark'];
 const _tIcons={system:'💻',light:'☀️',dark:'🌙'};
-function cycleTheme(){const cur=localStorage.getItem('enet_theme')||'system';const next=_themes[(_themes.indexOf(cur)+1)%_themes.length];localStorage.setItem('enet_theme',next);applyTheme(next);}
-function applyTheme(t){const el=document.getElementById('theme-icon');if(el)el.textContent=_tIcons[t];document.documentElement.setAttribute('data-theme',t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':t);}
-
+function cycleTheme(){const c=localStorage.getItem('enet_theme')||'system';const n=_themes[(_themes.indexOf(c)+1)%_themes.length];localStorage.setItem('enet_theme',n);applyTheme(n);}
+function applyTheme(t){const el=document.getElementById('theme-icon');if(el)el.textContent=_tIcons[t];document.documentElement.setAttribute('data-theme',t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');}
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show');}
 
@@ -379,7 +353,7 @@ function showToast(msg,type='info'){
     const wrap=document.getElementById('toast-wrap');
     const t=document.createElement('div');
     t.className=`toast ${type}`;
-    t.innerHTML=`<span>${type==='error'?'❌':'✅'}</span><span>${msg}</span>`;
+    t.innerHTML=`<span>${type==='error'?'❌':type==='success'?'✅':'ℹ️'}</span><span>${msg}</span>`;
     wrap.appendChild(t);
     setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},3500);
 }
@@ -390,177 +364,321 @@ function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
 
-let _data=[],_tab='all',_sb, _allCourses=[];
+let _data=[],_tab='all',_sb,_allCourses=[];
 const ROLE_ICONS={student:'🎒',teacher:'🎓',instructor:'🎓',admin:'🛡️'};
 
-// ── ADMIN GRANT COURSE LOGIC ──
+// ── GHOST MODE ──
 window.impersonateUser = function(userId, role) {
-    if(confirm("Enter Ghost Mode?")) {
+    if(confirm("Enter Ghost Mode to view this student's dashboard?")) {
         localStorage.setItem('enet_impersonate_id', userId);
-        window.open((role === 'teacher' || role === 'instructor') ? 'teacher-dashboard.html' : 'student-dashboard.html', '_blank');
+        window.open((role==='teacher'||role==='instructor')?'teacher-dashboard.html':'student-dashboard.html','_blank');
     }
-}
+};
 
+// ═══════════════════════════════════════════════════════════
+// KEY FIX: grantCourseAccess now ALSO approves the student
+// ═══════════════════════════════════════════════════════════
 window.grantCourseAccess = async function(userId) {
     const courseId = document.getElementById('grant-course-select').value;
-    if(!courseId) return showToast("Please select a course first.", "error");
+    if (!courseId) { showToast('Please select a course first.', 'error'); return; }
+
+    const btn = document.getElementById('grant-btn-' + userId);
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Granting...'; }
 
     try {
-        const {data: existing} = await _sb.from('enrollments').select('id').eq('student_id', userId).eq('course_id', courseId).maybeSingle();
-        if(existing) return showToast("Student is already enrolled in this course.", "info");
-
-        const {error} = await _sb.from('enrollments').insert({ student_id: userId, course_id: courseId, enrollment_type: 'admin_granted' });
-        if(error) throw error;
-        
-        showToast("Course successfully granted to student!", "success");
-        closeDrawer();
-    } catch (err) {
-        showToast("Failed to grant course: " + err.message, "error");
-    }
-}
-
-function openDrawer(userId){
-    const u=_data.find(x=>x.id===userId);
-    if(!u)return;
-    const r=getRole(u);
-    const isInactive=u.status==='inactive';
-    const isPending=u.status==='pending';
-    const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
-    let displayRole=r;
-    if(r.includes('teacher')||r.includes('instructor'))displayRole='teacher';
-    else if(r==='admin')displayRole='admin';
-    else displayRole='student';
-    
-    document.getElementById('drawer-role-icon').textContent = ROLE_ICONS[displayRole]||'👤';
-    document.getElementById('drawer-title').textContent=displayRole==='teacher'?'Teacher Profile':displayRole==='admin'?'Admin Profile':'Student Profile';
-    
-    let actions='';
-    if(isPending){
-        actions=`<button class="btn btn-approve full" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Registration</button>`;
-    } else {
-        actions=`${isInactive?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">▶ Activate</button>`:`<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend</button>`}`;
-        actions += `<button class="btn btn-ghost-mode" onclick="impersonateUser('${u.id}', '${displayRole}')">🔑 Login as User</button>`;
-        
-        if (displayRole === 'student') {
-            let options = '<option value="">-- Select Course to Grant --</option>';
-            _allCourses.forEach(c => { 
-                const tag = c.is_event_course ? '[EVENT]' : '[MAIN]';
-                options += `<option value="${c.id}">${tag} ${c.title}</option>`; 
-            });
-            
-            actions += `
-            <div class="grant-course-wrap">
-                <div class="detail-section-title" style="margin-bottom:5px;">📚 Grant Course Access</div>
-                <select id="grant-course-select">${options}</select>
-                <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="grantCourseAccess('${u.id}')">Enroll Student</button>
-            </div>`;
+        // 1. Check if already enrolled
+        const { data: existing } = await _sb.from('enrollments')
+            .select('id').eq('student_id', userId).eq('course_id', courseId).maybeSingle();
+        if (existing) {
+            showToast('Student is already enrolled in this course.', 'info');
+            if (btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
+            return;
         }
+
+        // 2. Enroll in course
+        const { error: enrollErr } = await _sb.from('enrollments').insert({
+            student_id: userId,
+            course_id: courseId,
+            enrollment_type: 'admin_granted'
+        });
+        if (enrollErr) throw enrollErr;
+
+        // 3. ── CRITICAL FIX ──
+        //    Auto-approve the student's profile so they can access the dashboard.
+        //    If their status was 'pending', enrolling them IS the approval action.
+        const user = _data.find(u => u.id === userId);
+        if (user && user.status !== 'approved') {
+            const { error: approveErr } = await _sb.from('profiles')
+                .update({ status: 'approved' })
+                .eq('id', userId);
+            if (approveErr) {
+                console.warn('Profile approval warning:', approveErr.message);
+                // Non-fatal — enrollment succeeded, just log
+            } else {
+                // Update local cache so the UI reflects the change
+                user.status = 'approved';
+                renderAll(_data);
+                showToast('✅ Course granted and student account approved!', 'success');
+            }
+        } else {
+            showToast('✅ Course successfully granted to student!', 'success');
+        }
+
+        closeDrawer();
+        loadProfiles(); // refresh list
+
+    } catch (err) {
+        console.error('Grant error:', err);
+        showToast('Failed to grant course: ' + err.message, 'error');
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
     }
-    
-    const avatarStyle=u.avatar_url?`background-image:url('${u.avatar_url}');background-size:cover;background-position:center;`:`background:${grad(u.id||nm)};`;
-    const avatarText=u.avatar_url?'':inits(u.first_name,u.last_name);
-    
-    document.getElementById('drawer-body').innerHTML=`<div class="d-avatar-wrap"><div class="d-avatar" style="${avatarStyle}${isInactive?'filter:grayscale(.7)':''}">${avatarText}</div><div><div class="d-name">${nm}</div><div class="d-email">${u.email||'No email'}</div></div><div class="d-badges"><span class="role-badge ${displayRole}">${r}</span><span class="status-badge ${isInactive?'inactive':isPending?'pending':'active'}">${isInactive?'Suspended':isPending?'Pending':'Active'}</span></div></div><div class="detail-section"><div class="detail-section-title">Account Details</div><div class="detail-grid"><div class="detail-item"><div class="detail-lbl">First Name</div><div class="detail-val">${u.first_name||'—'}</div></div><div class="detail-item"><div class="detail-lbl">Last Name</div><div class="detail-val">${u.last_name||'—'}</div></div><div class="detail-item full"><div class="detail-lbl">Phone Number</div><div class="detail-val">${u.phone||'Not provided'}</div></div></div></div><div class="detail-section"><div class="detail-section-title">Quick Actions</div><div class="drawer-action-grid">${actions}</div></div>`;
-    
+};
+
+// ── DRAWER ──
+function openDrawer(userId) {
+    const u = _data.find(x => x.id === userId);
+    if (!u) return;
+    const r = getRole(u);
+    const isInactive = u.status === 'inactive';
+    const isPending = u.status === 'pending';
+    const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
+
+    let displayRole = r.includes('teacher') || r.includes('instructor') ? 'teacher' : r === 'admin' ? 'admin' : 'student';
+    document.getElementById('drawer-role-icon').textContent = ROLE_ICONS[displayRole] || '👤';
+    document.getElementById('drawer-title').textContent = displayRole === 'teacher' ? 'Teacher Profile' : displayRole === 'admin' ? 'Admin Profile' : 'Student Profile';
+
+    let actions = '';
+    if (isPending) {
+        actions = `<button class="btn btn-approve" style="grid-column:span 2;justify-content:center;padding:.85rem;" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Account</button>`;
+    } else {
+        actions = isInactive
+            ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">▶ Activate</button>`
+            : `<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend</button>`;
+        actions += `<button class="btn btn-ghost-mode" onclick="impersonateUser('${u.id}','${displayRole}')">🔑 Login as User (Ghost)</button>`;
+    }
+
+    // Course grant section — only for students
+    let grantSection = '';
+    if (displayRole === 'student') {
+        let options = '<option value="">── Select a course ──</option>';
+        _allCourses.forEach(c => {
+            const tag = c.is_event_course ? '🎁 ' : '📚 ';
+            options += `<option value="${c.id}">${tag}${c.title}</option>`;
+        });
+
+        const statusNote = isPending
+            ? `<div class="grant-note" style="color:var(--success);font-weight:700;">💡 Granting a course will automatically approve this student's account.</div>`
+            : '';
+
+        grantSection = `
+        <div class="grant-section">
+            <div class="grant-section-title">📚 Grant Course Access</div>
+            ${statusNote}
+            <div class="grant-note">Student will be enrolled immediately and can start learning. ${isPending ? 'Their account will also be approved.' : ''}</div>
+            <select class="grant-select" id="grant-course-select">${options}</select>
+            <button class="btn btn-primary" id="grant-btn-${u.id}" style="width:100%;justify-content:center;padding:.75rem;" onclick="grantCourseAccess('${u.id}')">✓ Enroll Student</button>
+        </div>`;
+    }
+
+    const avatarStyle = u.avatar_url
+        ? `background-image:url('${u.avatar_url}');background-size:cover;background-position:center;`
+        : `background:${grad(u.id || nm)};`;
+    const avatarText = u.avatar_url ? '' : inits(u.first_name, u.last_name);
+
+    document.getElementById('drawer-body').innerHTML = `
+        <div class="d-avatar-wrap">
+            <div class="d-avatar" style="${avatarStyle}${isInactive ? 'filter:grayscale(.7)' : ''}">${avatarText}</div>
+            <div>
+                <div class="d-name">${nm}</div>
+                <div class="d-email">${u.email || 'No email'}</div>
+            </div>
+            <div class="d-badges">
+                <span class="role-badge ${displayRole}">${r}</span>
+                <span class="status-badge ${isInactive ? 'inactive' : isPending ? 'pending' : 'active'}">${isInactive ? 'Suspended' : isPending ? 'Pending' : 'Active'}</span>
+            </div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">Account Details</div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-lbl">First Name</div><div class="detail-val">${u.first_name || '—'}</div></div>
+                <div class="detail-item"><div class="detail-lbl">Last Name</div><div class="detail-val">${u.last_name || '—'}</div></div>
+                <div class="detail-item full"><div class="detail-lbl">Phone</div><div class="detail-val">${u.phone || 'Not provided'}</div></div>
+                <div class="detail-item full"><div class="detail-lbl">Registered</div><div class="detail-val">${fmtDate(u.created_at)}</div></div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">Quick Actions</div>
+            <div class="drawer-action-grid">${actions}</div>
+            ${grantSection}
+        </div>`;
+
     document.getElementById('drawerBg').classList.add('open');
     document.getElementById('userDrawer').classList.add('open');
 }
-function closeDrawer(){document.getElementById('drawerBg').classList.remove('open');document.getElementById('userDrawer').classList.remove('open');}
 
-window.statCardNav=function(tab){const card=document.getElementById('card-'+tab);if(card){card.classList.add('ring');setTimeout(()=>card.classList.remove('ring'),1200);}switchTab(tab);setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50);};
-window.quickNav=function(tab){closeSidebar();switchTab(tab);setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300);};
+function closeDrawer() {
+    document.getElementById('drawerBg').classList.remove('open');
+    document.getElementById('userDrawer').classList.remove('open');
+}
 
-function emptyRow(msg,cols,ico,sub){return`<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico||'📭'}</div><div class="empty-ttl">${msg}</div>${sub?`<div class="empty-sub">${sub}</div>`:''}</div></td></tr>`;}
+// ── NAVIGATION ──
+window.statCardNav = function(tab) {
+    const card = document.getElementById('card-' + tab);
+    if (card) { card.classList.add('ring'); setTimeout(() => card.classList.remove('ring'), 1200); }
+    switchTab(tab);
+    setTimeout(() => document.querySelector('.users').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+};
+window.quickNav = function(tab) { closeSidebar(); switchTab(tab); setTimeout(() => document.querySelector('.users').scrollIntoView({ behavior: 'smooth' }), 300); };
 
-function renderPending(data){
-    const pending=data.filter(u=>u.status==='pending');
-    const pc=pending.length;
-    let html='';
-    pending.forEach(u=>{
-        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
-        const r=getRole(u);let bc='student';
-        if(r.includes('teacher')||r.includes('instructor'))bc='teacher';
-        if(r==='admin')bc='admin';
-        html+=`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button></div></td></tr>`;
+function emptyRow(msg, cols, ico, sub) {
+    return `<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico || '📭'}</div><div class="empty-ttl">${msg}</div>${sub ? `<div class="empty-sub">${sub}</div>` : ''}</div></td></tr>`;
+}
+
+// ── RENDER FUNCTIONS ──
+function renderPending(data) {
+    const pending = data.filter(u => u.status === 'pending');
+    const pc = pending.length;
+    let html = '';
+    pending.forEach(u => {
+        const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
+        const r = getRole(u);
+        let bc = r.includes('teacher') || r.includes('instructor') ? 'teacher' : r === 'admin' ? 'admin' : 'student';
+        html += `<tr class="clickable" onclick="openDrawer('${u.id}')">
+            <td><div class="user-cell"><div class="uav" style="background:${grad(u.id || nm)}">${inits(u.first_name, u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id || '').slice(0, 8)}</div></div></div></td>
+            <td>${u.email || 'N/A'}</td>
+            <td><span class="role-badge ${bc}">${r}</span></td>
+            <td>${fmtDate(u.created_at)}</td>
+            <td onclick="event.stopPropagation()"><div class="actions">
+                <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
+                <button class="btn btn-admin" onclick="openDrawer('${u.id}')">📚 Grant Course</button>
+            </div></td>
+        </tr>`;
     });
-    document.getElementById('pending-users-list').innerHTML=html||emptyRow('All caught up!',5,'✅','No pending approvals.');
-    document.getElementById('pend-badge').textContent=pc;
-    document.getElementById('nav-pcount').textContent=pc;
-    document.getElementById('stat-pending').textContent=pc;
+    document.getElementById('pending-users-list').innerHTML = html || emptyRow('All caught up!', 5, '✅', 'No pending approvals.');
+    document.getElementById('pend-badge').textContent = pc;
+    document.getElementById('nav-pcount').textContent = pc;
+    document.getElementById('stat-pending').textContent = pc;
 }
 
-function renderStats(data){
-    let sc=0,tc=0;
-    data.forEach(u=>{if(u.status==='approved'||u.status==='inactive'){const r=getRole(u);if(r==='student'||r==='')sc++;else if(r.includes('teacher')||r.includes('instructor'))tc++;}});
-    document.getElementById('stat-students').textContent=sc;
-    document.getElementById('stat-teachers').textContent=tc;
-    localStorage.setItem('enet_stat_students',sc);
-    localStorage.setItem('enet_stat_teachers',tc);
+function renderStats(data) {
+    let sc = 0, tc = 0;
+    data.forEach(u => {
+        if (u.status === 'approved' || u.status === 'inactive') {
+            const r = getRole(u);
+            if (r === 'student' || r === '') sc++;
+            else if (r.includes('teacher') || r.includes('instructor')) tc++;
+        }
+    });
+    document.getElementById('stat-students').textContent = sc;
+    document.getElementById('stat-teachers').textContent = tc;
 }
 
-function renderUsers(data,tab){
-    const q=(document.getElementById('search-input').value||'').toLowerCase();
-    let rows=data.filter(u=>u.status==='approved'||u.status==='inactive');
-    if(tab==='students')rows=rows.filter(u=>{const r=getRole(u);return r==='student'||r==='';});
-    else if(tab==='teachers')rows=rows.filter(u=>{const r=getRole(u);return r.includes('teacher')||r.includes('instructor');});
-    else if(tab==='admins')rows=rows.filter(u=>getRole(u)==='admin');
-    if(q)rows=rows.filter(u=>{const nm=`${u.first_name||''} ${u.last_name||''}`.toLowerCase();return nm.includes(q)||(u.email||'').toLowerCase().includes(q);});
-    document.getElementById('users-badge').textContent=rows.length;
-    if(!rows.length){const msgs={students:'No students registered yet',teachers:'No teachers registered yet',admins:'No admins found',all:'No users found'};const icos={students:'🎒',teachers:'🎓',admins:'🛡️',all:'🔍'};document.getElementById('all-users-list').innerHTML=emptyRow(msgs[tab]||'No users found',6,icos[tab]||'🔍','');return;}
-    
-    document.getElementById('all-users-list').innerHTML=rows.map(u=>{
-        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
-        const r=getRole(u);const isInactive=u.status==='inactive';
-        let bc='student';if(r.includes('teacher')||r.includes('instructor'))bc='teacher';if(r==='admin')bc='admin';
-        let btns='';
-        if(r==='admin') btns=`<span class="system-owner-tag">Admin</span>`;
-        else btns+=isInactive?`<button class="btn btn-activate" onclick="event.stopPropagation();toggleUserStatus('${u.id}','approved')">▶ Activate</button>`:`<button class="btn btn-deact" onclick="event.stopPropagation();toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;
-        
-        return`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:.55':''}">${inits(u.first_name,u.last_name)}</div><div><div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td></tr>`;
+function renderUsers(data, tab) {
+    const q = (document.getElementById('search-input').value || '').toLowerCase();
+    let rows = data.filter(u => u.status === 'approved' || u.status === 'inactive');
+    if (tab === 'students') rows = rows.filter(u => { const r = getRole(u); return r === 'student' || r === ''; });
+    else if (tab === 'teachers') rows = rows.filter(u => { const r = getRole(u); return r.includes('teacher') || r.includes('instructor'); });
+    else if (tab === 'admins') rows = rows.filter(u => getRole(u) === 'admin');
+    if (q) rows = rows.filter(u => {
+        const nm = `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase();
+        return nm.includes(q) || (u.email || '').toLowerCase().includes(q);
+    });
+    document.getElementById('users-badge').textContent = rows.length;
+    if (!rows.length) {
+        const msgs = { students: 'No students yet', teachers: 'No teachers yet', admins: 'No admins found', all: 'No users found' };
+        const icos = { students: '🎒', teachers: '🎓', admins: '🛡️', all: '🔍' };
+        document.getElementById('all-users-list').innerHTML = emptyRow(msgs[tab] || 'No users found', 6, icos[tab] || '🔍', '');
+        return;
+    }
+    document.getElementById('all-users-list').innerHTML = rows.map(u => {
+        const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
+        const r = getRole(u);
+        const isInactive = u.status === 'inactive';
+        let bc = r.includes('teacher') || r.includes('instructor') ? 'teacher' : r === 'admin' ? 'admin' : 'student';
+        let btns = r === 'admin'
+            ? `<span class="system-owner-tag">Admin</span>`
+            : (isInactive
+                ? `<button class="btn btn-activate" onclick="event.stopPropagation();toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
+                : `<button class="btn btn-deact" onclick="event.stopPropagation();toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`);
+        return `<tr class="clickable" onclick="openDrawer('${u.id}')">
+            <td><div class="user-cell"><div class="uav" style="background:${grad(u.id || nm)};${isInactive ? 'filter:grayscale(1);opacity:.55' : ''}">${inits(u.first_name, u.last_name)}</div><div><div class="uname" style="${isInactive ? 'color:var(--text-muted)' : ''}">${nm}</div><div class="uid">#${(u.id || '').slice(0, 8)}</div></div></div></td>
+            <td>${u.email || 'N/A'}</td>
+            <td><span class="role-badge ${bc}">${r}</span></td>
+            <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${isInactive ? 'Suspended' : 'Active'}</span></td>
+            <td>${fmtDate(u.created_at)}</td>
+            <td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td>
+        </tr>`;
     }).join('');
 }
 
-function renderAll(data){renderPending(data);renderStats(data);renderUsers(data,_tab);}
-window.switchTab=function(tab){_tab=tab;['all','students','teachers','admins'].forEach(t=>{const el=document.getElementById('tab-'+t);if(el)el.classList.toggle('active',t===tab);});renderUsers(_data,tab);};
-window.filterUsers=function(){renderUsers(_data,_tab);};
+function renderAll(data) { renderPending(data); renderStats(data); renderUsers(data, _tab); }
 
-async function mutate(userId,updates){
-    const idx=_data.findIndex(u=>u.id===userId);
-    if(idx!==-1)Object.assign(_data[idx],updates);
+window.switchTab = function(tab) {
+    _tab = tab;
+    ['all', 'students', 'teachers', 'admins'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.classList.toggle('active', t === tab);
+    });
+    renderUsers(_data, tab);
+};
+window.filterUsers = function() { renderUsers(_data, _tab); };
+
+async function mutate(userId, updates) {
+    const idx = _data.findIndex(u => u.id === userId);
+    if (idx !== -1) Object.assign(_data[idx], updates);
     renderAll(_data);
-    const{error}=await _sb.from('profiles').update(updates).eq('id',userId);
-    if(error){showToast('Save failed: '+error.message,'error');loadProfiles();}
+    const { error } = await _sb.from('profiles').update(updates).eq('id', userId);
+    if (error) { showToast('Save failed: ' + error.message, 'error'); loadProfiles(); }
 }
 
-window.approveUser=async function(userId){await mutate(userId,{status:'approved'});showToast('User approved successfully!','success');};
-window.toggleUserStatus=async function(userId,newStatus){await mutate(userId,{status:newStatus});showToast(newStatus==='inactive'?'Account suspended.':'Account activated.','info');};
+window.approveUser = async function(userId) {
+    await mutate(userId, { status: 'approved' });
+    showToast('✅ Student account approved!', 'success');
+};
+window.toggleUserStatus = async function(userId, newStatus) {
+    await mutate(userId, { status: newStatus });
+    showToast(newStatus === 'inactive' ? 'Account suspended.' : 'Account activated.', 'info');
+};
 
-async function loadProfiles(){
-    try{
-        const{data,error}=await _sb.from('profiles').select('id,first_name,last_name,email,role,status,created_at,phone,avatar_url').order('created_at',{ascending:false}).limit(500);
-        if(error)throw error;
-        _data=data||[];
+// ── DATA LOADING ──
+async function loadProfiles() {
+    try {
+        const { data, error } = await _sb.from('profiles')
+            .select('id,first_name,last_name,email,role,status,created_at,phone,avatar_url')
+            .order('created_at', { ascending: false })
+            .limit(500);
+        if (error) throw error;
+        _data = data || [];
         renderAll(_data);
 
-        // Load courses for the grant dropdown
-        const {data: courses} = await _sb.from('courses').select('id,title,is_event_course').eq('is_published', true);
+        // Load all published courses for the grant dropdown
+        const { data: courses } = await _sb.from('courses')
+            .select('id,title,is_event_course')
+            .eq('is_published', true)
+            .order('title', { ascending: true });
         _allCourses = courses || [];
 
-    } catch(err){
-        showToast('Database connection error','error');
+    } catch (err) {
+        console.error('Load error:', err);
+        showToast('Database connection error', 'error');
     }
 }
 
-window.addEventListener('load',function(){
-    applyTheme(localStorage.getItem('enet_theme')||'system');
-    _sb=window.supabase.createClient(
+// ── BOOT ──
+window.addEventListener('load', function() {
+    applyTheme(localStorage.getItem('enet_theme') || 'system');
+    _sb = window.supabase.createClient(
         'https://lskwzcvexyxjncttvimf.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleXh4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
     );
     loadProfiles();
-    
-    document.getElementById('logoutBtn').addEventListener('click',async()=>{ await _sb.auth.signOut(); localStorage.clear(); window.location.href='index.html'; });
-    document.getElementById('logoutBtnTop').addEventListener('click',async()=>{ await _sb.auth.signOut(); localStorage.clear(); window.location.href='index.html'; });
+
+    document.getElementById('logoutBtnTop').addEventListener('click', async () => {
+        await _sb.auth.signOut();
+        localStorage.clear();
+        window.location.href = 'index.html';
+    });
 });
 </script>
 </body>
