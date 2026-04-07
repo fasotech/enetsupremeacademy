@@ -6,6 +6,7 @@
     <title>ENET SUPREME ACADEMY | Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script>
         const _st = localStorage.getItem('enet_theme') || 'system';
         document.documentElement.setAttribute('data-theme',
@@ -13,19 +14,19 @@
     </script>
     <style>
         :root {
-            --brand-navy:#02014a;--navy-light:#0d2a8f;--brand-yellow:#fcd116;
-            --yellow-hover:#e0b800;--accent-cyan:#00a0df;
-            --danger:#EE5D50;--success:#05CD99;
-            --bg-light:#F4F7FE;--surface:#FFFFFF;--surface-hover:rgba(0,160,223,0.05);
-            --border:#E9EDF7;--border-bright:#D1D9EB;
-            --text-dark:#02014a;--text-muted:#8A98C9;--text-gray:#475467;
-            --topbar-bg:rgba(244,247,254,0.92);--shadow-color:rgba(2,1,74,0.06);
+            --brand-navy: #02014a; --navy-light: #0d2a8f; --brand-yellow: #fcd116;
+            --yellow-hover: #e0b800; --accent-cyan: #00a0df;
+            --danger: #EE5D50; --success: #05CD99;
+            --bg-light: #F4F7FE; --surface: #FFFFFF; --surface-hover: rgba(0,160,223,0.05);
+            --border: #E9EDF7; --border-bright: #D1D9EB;
+            --text-dark: #02014a; --text-muted: #8A98C9; --text-gray: #475467;
+            --topbar-bg: rgba(244,247,254,0.92); --shadow-color: rgba(2,1,74,0.06);
         }
         [data-theme="dark"] {
-            --bg-light:#07080F;--surface:#13151F;--surface-hover:rgba(255,255,255,0.05);
-            --border:rgba(255,255,255,0.08);--border-bright:rgba(255,255,255,0.15);
-            --text-dark:#F0F0FF;--text-muted:#7B7D9A;--text-gray:#A0AEC0;
-            --topbar-bg:rgba(7,8,15,0.92);--shadow-color:rgba(0,0,0,0.4);
+            --bg-light: #07080F; --surface: #13151F; --surface-hover: rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.08); --border-bright: rgba(255,255,255,0.15);
+            --text-dark: #F0F0FF; --text-muted: #7B7D9A; --text-gray: #A0AEC0;
+            --topbar-bg: rgba(7,8,15,0.92); --shadow-color: rgba(0,0,0,0.4);
         }
         *{box-sizing:border-box;margin:0;padding:0}
         body{background:var(--bg-light);color:var(--text-gray);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
@@ -59,21 +60,37 @@
         .search-wrap:focus-within{width:310px;border-color:var(--accent-cyan)}
         .search-wrap input{background:none;border:none;outline:none;color:var(--text-dark);font-family:'DM Sans',sans-serif;font-size:.85rem;width:100%}
         .search-wrap input::placeholder{color:var(--text-muted)}
-        .icon-btn{cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
+        .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);box-shadow:0 4px 15px var(--shadow-color);font-size:1.1rem}
         .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
+        .notification-wrapper{position:relative}
+        .bell-badge{position:absolute;top:-2px;right:-2px;background:var(--danger);color:#fff;font-size:.6rem;font-weight:700;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid var(--surface)}
+        .notification-dropdown{position:absolute;top:120%;right:0;width:340px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px var(--shadow-color);display:none;flex-direction:column;z-index:1000;animation:scaleIn .18s ease}
+        .notification-dropdown.show{display:flex}
+        .notif-header{padding:1.2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+        .notif-header h4{font-family:'Poppins',sans-serif;font-size:.95rem;color:var(--text-dark)}
+        .notif-header span{font-size:.7rem;background:rgba(0,160,223,0.1);color:var(--accent-cyan);padding:3px 8px;border-radius:12px;font-weight:700}
+        .notif-body{max-height:400px;overflow-y:auto}
+        .notif-item{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:background .2s}
+        .notif-item:hover{background:var(--surface-hover)}
+        .notif-icon{width:36px;height:36px;border-radius:50%;background:var(--bg-light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+        .notif-content p{font-size:.8rem;color:var(--text-dark);margin-bottom:4px;line-height:1.4}
+        .notif-content p strong{color:var(--brand-navy); font-weight: 700;}
+        .notif-empty{padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem}
         .live-dot{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:4px 10px;border-radius:20px;white-space:nowrap}
         .live-dot::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--success);animation:livePulse 1.5s ease-in-out infinite}
-        .header-logout-btn{display:flex;align-items:center;gap:6px;background:rgba(238,93,80,0.1);color:var(--danger);border:1px solid rgba(238,93,80,0.2);padding:8px 16px;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:0.2s;font-family:'DM Sans',sans-serif}
-        .header-logout-btn:hover{background:var(--danger);color:#fff;transform:translateY(-2px)}
+
+        .header-logout-btn { display: flex; align-items: center; gap: 6px; background: rgba(238,93,80,0.1); color: var(--danger); border: 1px solid rgba(238,93,80,0.2); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; font-family: 'DM Sans', sans-serif;}
+        .header-logout-btn:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 10px rgba(238,93,80,0.3); transform: translateY(-2px);}
 
         /* CONTENT */
         .content{padding:0 2.5rem 2.5rem;flex:1}
-        .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem}
+        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
         .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
         .stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px var(--shadow-color)}
         .stat-card.ring{outline:3px solid var(--accent-cyan);outline-offset:-3px;transform:translateY(-6px)}
         .stat-card.brand-blue{background:var(--brand-navy);color:#fff}
         .stat-card.brand-orange{background:var(--accent-cyan);color:#fff}
+        .stat-card.brand-yellow{background:var(--brand-yellow);color:var(--brand-navy)}
         .stat-card.brand-surface{background:var(--surface);color:var(--brand-navy);border:1px solid var(--border);border-top:4px solid var(--danger)}
         .stat-lbl{font-size:.85rem;font-weight:500;opacity:.9;margin-bottom:.5rem}
         .stat-card.brand-surface .stat-lbl{color:var(--text-gray)}
@@ -83,7 +100,7 @@
         .stat-card:hover .stat-arrow,.stat-card.ring .stat-arrow{opacity:.4;transform:scale(1.15) rotate(-10deg)}
 
         /* PANELS */
-        .dashboard-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+        .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
         .panel{background:var(--surface);border-radius:24px;margin-bottom:2rem;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);animation:fadeUp .4s ease both;transition:background .3s}
         .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem;flex-wrap:wrap;gap:.75rem}
         .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark)}
@@ -105,6 +122,7 @@
         .data-tbl tbody tr:hover{background:var(--bg-light)}
         .data-tbl tbody tr.clickable{cursor:pointer}
         .data-tbl tbody tr.clickable:hover .uname{color:var(--accent-cyan)}
+
         .user-cell{display:flex;align-items:center;gap:1rem}
         .uav{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.1)}
         .uname{font-size:.95rem;font-weight:700;color:var(--text-dark);transition:color .2s}
@@ -120,6 +138,7 @@
         .status-badge.active{color:var(--success)}
         .status-badge.pending{color:var(--brand-yellow)}
         .status-badge.inactive{color:var(--text-muted)}
+
         .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
         .btn{display:inline-flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
         .btn-approve{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
@@ -128,27 +147,122 @@
         .btn-danger:hover{background:var(--danger);color:#fff}
         .btn-admin{background:rgba(0,160,223,0.1);color:var(--accent-cyan);border-color:rgba(0,160,223,0.2)}
         .btn-admin:hover{background:var(--accent-cyan);color:#fff}
+        .btn-unadmin{background:rgba(252,209,22,0.2);color:var(--brand-navy);border-color:rgba(252,209,22,0.3)}
+        .btn-unadmin:hover{background:var(--brand-yellow);color:var(--brand-navy)}
         .btn-deact{background:var(--bg-light);color:var(--text-gray);border-color:var(--border)}
         .btn-deact:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
         .btn-activate{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
         .btn-activate:hover{background:var(--success);color:#fff}
-        .btn-primary{background:var(--accent-cyan);color:#fff;border-color:var(--accent-cyan)}
+        .btn-edit{background:rgba(252,209,22,0.2);color:#7a6500;border-color:rgba(252,209,22,0.4)}
+        .btn-edit:hover{background:var(--brand-yellow);color:var(--brand-navy)}
+        
+        .btn-ghost-mode {background: var(--brand-navy); color: #fff; grid-column: span 2; margin-top: 0.5rem; justify-content: center; padding: 0.85rem;}
+        .btn-ghost-mode:hover {background: var(--navy-light); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(2,1,74,0.2);}
+
+        .btn-primary{background:var(--accent-cyan);color:#fff;border-color:var(--accent-cyan);font-size:.95rem;padding:.75rem 2rem}
         .btn-primary:hover{background:#0088bd}
-        .btn-ghost-mode{background:var(--brand-navy);color:#fff;grid-column:span 2;margin-top:.5rem;justify-content:center;padding:.85rem}
-        .btn-ghost-mode:hover{background:var(--navy-light);transform:translateY(-2px);box-shadow:0 5px 15px rgba(2,1,74,0.2)}
+        .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+        .btn-secondary{background:var(--bg-light);color:var(--text-gray);border-color:var(--border);font-size:.95rem;padding:.75rem 2rem}
+        .btn-secondary:hover{border-color:var(--accent-cyan);color:var(--accent-cyan)}
+
+        .master-tag{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px}
         .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--brand-navy);background:var(--brand-yellow);border:1px solid rgba(252,209,22,0.5);padding:6px 12px;border-radius:8px}
 
-        /* ── GRANT COURSE SECTION ── */
+        /* ── NEW: GRANT COURSE SECTION ── */
         .grant-section{background:rgba(0,160,223,.05);border:1px solid rgba(0,160,223,.2);padding:1rem;border-radius:12px;grid-column:span 2;margin-top:1rem}
         .grant-section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-cyan);margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
         .grant-select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;background:var(--surface);color:var(--text-dark);outline:none;font-family:'DM Sans',sans-serif;font-size:.9rem}
         .grant-select:focus{border-color:var(--accent-cyan)}
         .grant-note{font-size:.75rem;color:var(--text-muted);margin-bottom:.75rem;line-height:1.4}
 
+        .empty-cell{padding:4rem 2rem;text-align:center}
+        .empty-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
+        .empty-ttl{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem}
+        .empty-sub{font-size:.85rem;color:var(--text-muted)}
+
+        /* ACTIVITY */
+        .activity-list{padding:0 2rem 2rem;display:flex;flex-direction:column;gap:1.5rem}
+        .activity-item{display:flex;align-items:flex-start;gap:1rem;cursor:pointer;border-radius:12px;padding:.5rem;margin:-.5rem;transition:background .2s}
+        .activity-item:hover{background:var(--surface-hover)}
+        .act-av{width:36px;height:36px;border-radius:10px;background:var(--bg-light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+        .act-text p{font-size:.85rem;color:var(--text-dark);line-height:1.4}
+        .act-text p strong{color:var(--brand-navy); font-weight: 700;}
+        .act-time{font-size:.7rem;color:var(--text-muted);margin-top:4px;display:block}
+
+        /* ADS */
+        .ads-management-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1rem 2rem 2rem}
+        .ad-slot-form{background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem}
+        .ad-slot-form h4{color:var(--text-dark);font-family:'Poppins'}
+        .ad-preview-img{width:100%;height:150px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
+        .ad-slot-form textarea{width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;background:var(--surface);color:var(--text-dark);font-family:'DM Sans';outline:none}
+        .ad-slot-form input[type="url"]{padding:.8rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-dark);outline:none;width:100%}
+        .ad-slot-form textarea:focus,.ad-slot-form input[type="url"]:focus{border-color:var(--accent-cyan)}
+
+        /* BLOG MANAGER STYLES */
+        .blog-manager-section{padding:1.5rem 2rem 2rem}
+        .blog-tbl{width:100%;border-collapse:collapse;text-align:left}
+        .blog-tbl th{padding:1rem 1.25rem;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg-light)}
+        .blog-tbl td{padding:1.1rem 1.25rem;font-size:.875rem;color:var(--text-gray);border-bottom:1px solid var(--border);vertical-align:middle}
+        .blog-tbl tbody tr{transition:background .15s}
+        .blog-tbl tbody tr:hover{background:var(--bg-light)}
+        .blog-post-thumb{width:56px;height:40px;border-radius:8px;object-fit:cover;background:var(--bg-light);border:1px solid var(--border);flex-shrink:0}
+        .blog-post-thumb-placeholder{width:56px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--brand-navy),var(--navy-light));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+        .blog-post-cell{display:flex;align-items:center;gap:.85rem}
+        .blog-post-name{font-weight:700;color:var(--text-dark);font-size:.9rem;line-height:1.3;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .blog-post-excerpt{font-size:.75rem;color:var(--text-muted);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+
+        .blog-form-wrap{background:var(--bg-light);padding:2rem;border-radius:16px;border:1px solid var(--border)}
+        .blog-form-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
+        .blog-form-header h3{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark)}
+        .editing-pill{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--brand-navy);background:var(--brand-yellow);padding:4px 12px;border-radius:20px}
+
+        .form-group{margin-bottom:1.25rem}
+        .form-group label{display:block;font-size:.82rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem;letter-spacing:.02em}
+        .form-group input[type="text"]{width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-dark);outline:none;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s}
+        .form-group input[type="text"]:focus{border-color:var(--accent-cyan)}
+        .form-group input[type="file"]{width:100%;padding:.75rem;border-radius:10px;border:1.5px dashed var(--border);background:var(--surface);color:var(--text-gray);cursor:pointer}
+        .form-group input[type="file"]:hover{border-color:var(--accent-cyan)}
+
+        .cover-preview-wrap{position:relative;margin-top:.75rem}
+        .cover-preview{width:100%;height:180px;object-fit:cover;border-radius:10px;border:1px solid var(--border);display:none}
+        .cover-preview.show{display:block}
+        .cover-remove-btn{position:absolute;top:.5rem;right:.5rem;width:28px;height:28px;background:rgba(238,93,80,.85);border:none;border-radius:50%;color:#fff;cursor:pointer;font-size:.85rem;display:none;align-items:center;justify-content:center}
+        .cover-preview.show ~ .cover-remove-btn{display:flex}
+
+        .ql-toolbar{background:var(--surface);border-radius:10px 10px 0 0 !important;border-color:var(--border) !important}
+        .ql-container{font-family:'DM Sans',sans-serif !important;font-size:1rem !important;border-color:var(--border) !important;border-radius:0 0 10px 10px !important;min-height:280px}
+        .ql-editor{color:var(--text-dark);min-height:280px}
+        [data-theme="dark"] .ql-toolbar{background:var(--surface)}
+        [data-theme="dark"] .ql-stroke{stroke:var(--text-gray) !important}
+        [data-theme="dark"] .ql-fill{fill:var(--text-gray) !important}
+        [data-theme="dark"] .ql-picker{color:var(--text-gray) !important}
+
+        .blog-form-actions{display:flex;align-items:center;gap:.85rem;margin-top:1.5rem;flex-wrap:wrap}
+
+        /* Toast notification */
+        .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
+        .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
+        .toast.success{border-left:4px solid var(--success)}
+        .toast.error{border-left:4px solid var(--danger)}
+        .toast.info{border-left:4px solid var(--accent-cyan)}
+        @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
+
+        /* DELETE CONFIRM MODAL */
+        .modal-backdrop{position:fixed;inset:0;background:rgba(2,1,74,0.55);backdrop-filter:blur(6px);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s;display:flex;align-items:center;justify-content:center}
+        .modal-backdrop.open{opacity:1;pointer-events:all}
+        .modal{background:var(--surface);border-radius:24px;padding:2.5rem;max-width:420px;width:90%;box-shadow:0 20px 60px var(--shadow-color);border:1px solid var(--border);transform:scale(.95);transition:transform .25s;text-align:center}
+        .modal-backdrop.open .modal{transform:scale(1)}
+        .modal-ico{font-size:3rem;margin-bottom:1rem}
+        .modal h3{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem}
+        .modal p{font-size:.9rem;color:var(--text-gray);margin-bottom:2rem;line-height:1.6}
+        .modal-actions{display:flex;gap:1rem;justify-content:center}
+        .modal-actions .btn{padding:.8rem 2rem;font-size:.9rem}
+
         /* DRAWER */
         .drawer-backdrop{position:fixed;inset:0;background:rgba(2,1,74,0.5);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
         .drawer-backdrop.open{opacity:1;pointer-events:all}
-        .drawer{position:fixed;right:0;top:0;bottom:0;width:460px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+        .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
         .drawer.open{transform:translateX(0)}
         .drawer-header{padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg-light)}
         .drawer-header-left{display:flex;align-items:center;gap:.75rem}
@@ -170,28 +284,18 @@
         .detail-val{font-size:.92rem;font-weight:600;color:var(--text-dark);word-break:break-all}
         .drawer-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
         .drawer-action-grid .btn{justify-content:center;padding:.75rem 1rem;font-size:.85rem}
+        .drawer-action-grid .btn.full{grid-column:span 2}
 
-        /* TOAST */
-        .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
-        .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
-        .toast.success{border-left:4px solid var(--success)}
-        .toast.error{border-left:4px solid var(--danger)}
-        .toast.info{border-left:4px solid var(--accent-cyan)}
-
-        .empty-cell{padding:4rem 2rem;text-align:center}
-        .empty-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
-        .empty-ttl{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem}
-        .empty-sub{font-size:.85rem;color:var(--text-muted)}
+        /* SKELETON */
         .skeleton{height:14px;border-radius:8px;background:linear-gradient(90deg,var(--border) 25%,var(--border-bright) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;display:inline-block;width:100%}
         .skeleton.sm{width:65%}.skeleton.xs{width:42%}
-
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
         @keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
         @keyframes livePulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
-        @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
+        /* RESPONSIVE */
+        @media(max-width:1200px){.dashboard-grid{grid-template-columns:1fr}.ads-management-grid{grid-template-columns:1fr}}
         @media(max-width:992px){
             .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
             .main-wrap{margin-left:0}.mobile-toggle{display:flex}
@@ -202,14 +306,31 @@
         }
         @media(max-width:576px){
             .stats-grid{grid-template-columns:1fr}
+            .topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}
+            .topbar-right{width:100%;justify-content:space-between;flex-wrap:wrap;gap:10px}
+            .search-wrap{width:100%;order:3;margin-top:5px}
+            .ads-management-grid{padding:1rem}
             .drawer{width:100vw}.detail-grid{grid-template-columns:1fr}
             .drawer-action-grid{grid-template-columns:1fr}
+            .drawer-action-grid .btn.full{grid-column:span 1}
         }
     </style>
 </head>
 <body>
 
 <div class="toast-wrap" id="toast-wrap"></div>
+
+<div class="modal-backdrop" id="deleteModal">
+    <div class="modal">
+        <div class="modal-ico">🗑️</div>
+        <h3>Delete Blog Post?</h3>
+        <p id="deleteModal-msg">This action is permanent and cannot be undone. The post will be removed from the public blog immediately.</p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn btn-danger" id="deleteModal-confirm">Yes, Delete It</button>
+        </div>
+    </div>
+</div>
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <aside class="sidebar" id="sidebar">
@@ -234,11 +355,17 @@
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Community Hub
     </a>
     <div class="nav-label">Management</div>
+    <a class="nav-item" href="#" onclick="scrollToBlog();return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Blog Manager <span class="nav-badge" id="nav-blog-count">0</span>
+    </a>
     <a class="nav-item" href="#" onclick="quickNav('admins');return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admins
     </a>
     <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Pending <span class="nav-badge" id="nav-pcount">0</span>
+    </a>
+    <a class="nav-item" href="#" onclick="document.getElementById('ad-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Manage Ads
     </a>
 </aside>
 
@@ -260,7 +387,19 @@
             </div>
             <div class="live-dot" title="Real-time sync active">LIVE</div>
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle theme"><span id="theme-icon">💻</span></button>
-            <button class="header-logout-btn" id="logoutBtnTop">
+            
+            <div class="notification-wrapper">
+                <div class="icon-btn" onclick="toggleNotifications()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <div class="bell-badge" id="bell-badge">0</div>
+                </div>
+                <div class="notification-dropdown" id="notif-dropdown">
+                    <div class="notif-header"><h4>Academy Activity</h4><span id="notif-count">0 Recent</span></div>
+                    <div class="notif-body" id="notif-list"><div class="notif-empty">Loading...</div></div>
+                </div>
+            </div>
+
+            <button class="header-logout-btn" id="logoutBtnTop" title="Log out of Admin Dashboard">
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Log Out
             </button>
@@ -268,6 +407,7 @@
     </header>
 
     <main class="content">
+
         <div class="stats-grid">
             <div class="stat-card brand-blue" id="card-students" onclick="statCardNav('students')">
                 <div class="stat-lbl">Total Students</div>
@@ -280,6 +420,12 @@
                 <div class="stat-num" id="stat-teachers">—</div>
                 <div class="stat-hint">Click to view all teachers</div>
                 <div class="stat-arrow">🎓</div>
+            </div>
+            <div class="stat-card brand-yellow" onclick="scrollToBlog()">
+                <div class="stat-lbl">Blog Posts</div>
+                <div class="stat-num" id="stat-posts">—</div>
+                <div class="stat-hint">Manage your blog content</div>
+                <div class="stat-arrow">✍️</div>
             </div>
             <div class="stat-card brand-surface pend" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'})">
                 <div class="stat-lbl">Pending Reviews</div>
@@ -309,21 +455,130 @@
                     <div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div>
                 </div>
                 <div class="tab-bar">
-                    <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All Users</button>
-                    <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
-                    <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
-                    <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
+                    <button class="tab-btn active" onclick="switchTab('all')"      id="tab-all">All</button>
+                    <button class="tab-btn"         onclick="switchTab('students')" id="tab-students">Students</button>
+                    <button class="tab-btn"         onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
+                    <button class="tab-btn"         onclick="switchTab('admins')"   id="tab-admins">Admins</button>
                 </div>
                 <div class="table-responsive">
                     <table class="data-tbl">
                         <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
                         <tbody id="all-users-list">
                             <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
+                            <tr><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton xs"></span></td><td><span class="skeleton sm"></span></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <div class="panel activity">
+                <div class="panel-head"><div class="panel-title">Recent Activity</div></div>
+                <div class="activity-list" id="recent-activities-list">
+                    <p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">Loading pulse of the academy...</p>
+                </div>
+            </div>
         </div>
+
+        <div class="panel" id="blog-management-section">
+            <div class="panel-head">
+                <div>
+                    <span class="panel-title">Blog Manager</span>
+                    <span class="panel-cnt" id="blog-post-count">0 posts</span>
+                </div>
+                <button class="btn btn-primary" onclick="startNewPost()" id="new-post-btn" style="padding:.6rem 1.25rem;font-size:.85rem">
+                    ✍️ New Post
+                </button>
+            </div>
+
+            <div class="blog-manager-section" id="blog-list-section">
+                <div class="table-responsive">
+                    <table class="blog-tbl" id="blog-posts-table">
+                        <thead>
+                            <tr>
+                                <th>Post</th>
+                                <th>Published</th>
+                                <th>Status</th>
+                                <th style="text-align:right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blog-posts-list">
+                            <tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">⏳</div><div class="empty-ttl">Loading posts...</div></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="blog-manager-section" id="blog-form-section" style="display:none">
+                <div class="blog-form-wrap">
+                    <div class="blog-form-header">
+                        <h3 id="blog-form-title">✍️ Write New Post</h3>
+                        <div id="editing-indicator" style="display:none">
+                            <span class="editing-pill">✏️ Editing Post</span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="edit-post-id">
+
+                    <div class="form-group">
+                        <label>Post Title *</label>
+                        <input type="text" id="blog-title" placeholder="Enter an engaging title...">
+                    </div>
+                    <div class="form-group">
+                        <label>Short Excerpt / Summary</label>
+                        <input type="text" id="blog-excerpt" placeholder="A brief summary shown on the blog listing...">
+                    </div>
+                    <div class="form-group">
+                        <label>Cover Image</label>
+                        <input type="file" id="blog-cover" accept="image/*" onchange="previewCover(event)">
+                        <div class="cover-preview-wrap">
+                            <img id="cover-preview" class="cover-preview" alt="Cover preview">
+                            <button class="cover-remove-btn" onclick="removeCover()" title="Remove image">✕</button>
+                        </div>
+                        <p style="font-size:.75rem;color:var(--text-muted);margin-top:.4rem" id="existing-cover-note"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Post Content *</label>
+                        <div id="editor-container"></div>
+                    </div>
+
+                    <div class="blog-form-actions">
+                        <button class="btn btn-primary" onclick="submitBlogPost()" id="publish-blog-btn">🚀 Publish Post</button>
+                        <button class="btn btn-secondary" onclick="cancelBlogForm()">Cancel</button>
+                        <a href="blog.html" target="_blank" class="btn btn-admin" style="margin-left:auto;text-decoration:none">🌐 View Live Blog</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel" id="ad-management-section">
+            <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
+            <div class="ads-management-grid">
+                <div class="ad-slot-form" id="slot-1">
+                    <h4>Ad Slot 1</h4>
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,1)">
+                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-1" alt="Preview 1">
+                    <textarea placeholder="Ad Copy Text..." id="copy-1"></textarea>
+                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-1">
+                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(1)">Save Slot 1</button>
+                </div>
+                <div class="ad-slot-form" id="slot-2">
+                    <h4>Ad Slot 2</h4>
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,2)">
+                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-2" alt="Preview 2">
+                    <textarea placeholder="Ad Copy Text..." id="copy-2"></textarea>
+                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-2">
+                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(2)">Save Slot 2</button>
+                </div>
+                <div class="ad-slot-form" id="slot-3">
+                    <h4>Ad Slot 3</h4>
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,3)">
+                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-3" alt="Preview 3">
+                    <textarea placeholder="Ad Copy Text..." id="copy-3"></textarea>
+                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-3">
+                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(3)">Save Slot 3</button>
+                </div>
+            </div>
+        </div>
+
     </main>
 </div>
 
@@ -340,344 +595,615 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-// ── THEME & SIDEBAR ──
+/* ═══════════════════════════════
+   THEME
+═══════════════════════════════ */
 const _themes=['system','light','dark'];
 const _tIcons={system:'💻',light:'☀️',dark:'🌙'};
-function cycleTheme(){const c=localStorage.getItem('enet_theme')||'system';const n=_themes[(_themes.indexOf(c)+1)%_themes.length];localStorage.setItem('enet_theme',n);applyTheme(n);}
-function applyTheme(t){const el=document.getElementById('theme-icon');if(el)el.textContent=_tIcons[t];document.documentElement.setAttribute('data-theme',t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');}
+function cycleTheme(){const cur=localStorage.getItem('enet_theme')||'system';const next=_themes[(_themes.indexOf(cur)+1)%_themes.length];localStorage.setItem('enet_theme',next);applyTheme(next);}
+function applyTheme(t){const el=document.getElementById('theme-icon');if(el)el.textContent=_tIcons[t];document.documentElement.setAttribute('data-theme',t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':t);}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('enet_theme')==='system')document.documentElement.setAttribute('data-theme',e.matches?'dark':'light');});
+
+/* ═══════════════════════════════
+   SIDEBAR / NOTIFICATIONS
+═══════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show');}
+function toggleNotifications(){document.getElementById('notif-dropdown').classList.toggle('show');}
+document.addEventListener('click',e=>{const w=document.querySelector('.notification-wrapper');if(w&&!w.contains(e.target))document.getElementById('notif-dropdown').classList.remove('show');});
 
-function showToast(msg,type='info'){
+/* ═══════════════════════════════
+   TOAST
+═══════════════════════════════ */
+function showToast(msg,type='info',duration=3500){
     const wrap=document.getElementById('toast-wrap');
+    const icons={success:'✅',error:'❌',info:'ℹ️'};
     const t=document.createElement('div');
     t.className=`toast ${type}`;
-    t.innerHTML=`<span>${type==='error'?'❌':type==='success'?'✅':'ℹ️'}</span><span>${msg}</span>`;
+    t.innerHTML=`<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
     wrap.appendChild(t);
-    setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},3500);
+    setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},duration);
 }
 
+/* ═══════════════════════════════
+   DELETE MODAL
+═══════════════════════════════ */
+let _deleteCallback=null;
+function openDeleteModal(msg,cb){
+    document.getElementById('deleteModal-msg').textContent=msg;
+    _deleteCallback=cb;
+    document.getElementById('deleteModal').classList.add('open');
+}
+function closeDeleteModal(){document.getElementById('deleteModal').classList.remove('open');_deleteCallback=null;}
+document.getElementById('deleteModal-confirm').addEventListener('click',()=>{if(_deleteCallback)_deleteCallback();closeDeleteModal();});
+document.getElementById('deleteModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeDeleteModal();});
+
+/* ═══════════════════════════════
+   HELPERS
+═══════════════════════════════ */
 const GRADS=['linear-gradient(135deg,#02014a,#0d2a8f)','linear-gradient(135deg,#fcd116,#e0b800)','linear-gradient(135deg,#00a0df,#0088bd)'];
 function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length];}
 function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d);}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
+function emptyRow(msg,cols,ico,sub){return`<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico||'📭'}</div><div class="empty-ttl">${msg}</div>${sub?`<div class="empty-sub">${sub}</div>`:''}</div></td></tr>`;}
+function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
 let _data=[],_tab='all',_sb,_allCourses=[];
 const ROLE_ICONS={student:'🎒',teacher:'🎓',instructor:'🎓',admin:'🛡️'};
 
-// ── GHOST MODE ──
+/* ═══════════════════════════════
+   USER DRAWER & GHOST MODE
+═══════════════════════════════ */
 window.impersonateUser = function(userId, role) {
-    if(confirm("Enter Ghost Mode to view this student's dashboard?")) {
+    if(confirm("Enter Ghost Mode to view this student's dashboard? You will temporarily be logged into this user's dashboard to see exactly what they see. (To return, simply log out from their dashboard).")) {
         localStorage.setItem('enet_impersonate_id', userId);
-        window.open((role==='teacher'||role==='instructor')?'teacher-dashboard.html':'student-dashboard.html','_blank');
+        const targetDash = (role === 'teacher' || role === 'instructor') ? 'teacher-dashboard.html' : 'student-dashboard.html';
+        window.open(targetDash, '_blank');
     }
-};
+}
 
-// ═══════════════════════════════════════════════════════════
-// KEY FIX: grantCourseAccess now ALSO approves the student
-// ═══════════════════════════════════════════════════════════
 window.grantCourseAccess = async function(userId) {
     const courseId = document.getElementById('grant-course-select').value;
-    if (!courseId) { showToast('Please select a course first.', 'error'); return; }
+    if(!courseId) return showToast("Please select a course first.", "error");
 
     const btn = document.getElementById('grant-btn-' + userId);
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Granting...'; }
+    if(btn) { btn.disabled = true; btn.textContent = '⏳ Granting...'; }
 
     try {
-        // 1. Check if already enrolled
-        const { data: existing } = await _sb.from('enrollments')
-            .select('id').eq('student_id', userId).eq('course_id', courseId).maybeSingle();
-        if (existing) {
-            showToast('Student is already enrolled in this course.', 'info');
-            if (btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
+        const {data: existing} = await _sb.from('enrollments').select('id').eq('student_id', userId).eq('course_id', courseId).maybeSingle();
+        if(existing) {
+            showToast("Student is already enrolled in this course.", "info");
+            if(btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
             return;
         }
 
-        // 2. Enroll in course
-        const { error: enrollErr } = await _sb.from('enrollments').insert({
-            student_id: userId,
-            course_id: courseId,
-            enrollment_type: 'admin_granted'
-        });
-        if (enrollErr) throw enrollErr;
-
-        // 3. ── CRITICAL FIX ──
-        //    Auto-approve the student's profile so they can access the dashboard.
-        //    If their status was 'pending', enrolling them IS the approval action.
+        const {error: enrollErr} = await _sb.from('enrollments').insert({ student_id: userId, course_id: courseId, enrollment_type: 'admin_granted' });
+        if(enrollErr) throw enrollErr;
+        
+        // Auto-Approve the student if pending
         const user = _data.find(u => u.id === userId);
-        if (user && user.status !== 'approved') {
-            const { error: approveErr } = await _sb.from('profiles')
-                .update({ status: 'approved' })
-                .eq('id', userId);
-            if (approveErr) {
-                console.warn('Profile approval warning:', approveErr.message);
-                // Non-fatal — enrollment succeeded, just log
-            } else {
-                // Update local cache so the UI reflects the change
+        if(user && user.status !== 'approved') {
+            const {error: approveErr} = await _sb.from('profiles').update({ status: 'approved' }).eq('id', userId);
+            if(!approveErr) {
                 user.status = 'approved';
                 renderAll(_data);
-                showToast('✅ Course granted and student account approved!', 'success');
+                showToast("✅ Course granted and student account approved!", "success");
+            } else {
+                showToast("✅ Course granted!", "success");
             }
         } else {
-            showToast('✅ Course successfully granted to student!', 'success');
+            showToast("✅ Course successfully granted to student!", "success");
         }
-
         closeDrawer();
-        loadProfiles(); // refresh list
-
+        loadProfiles();
     } catch (err) {
         console.error('Grant error:', err);
-        showToast('Failed to grant course: ' + err.message, 'error');
+        showToast("Failed to grant course: " + err.message, "error");
     } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
+        if(btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
     }
-};
+}
 
-// ── DRAWER ──
-function openDrawer(userId) {
-    const u = _data.find(x => x.id === userId);
-    if (!u) return;
-    const r = getRole(u);
-    const isInactive = u.status === 'inactive';
-    const isPending = u.status === 'pending';
-    const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-
-    let displayRole = r.includes('teacher') || r.includes('instructor') ? 'teacher' : r === 'admin' ? 'admin' : 'student';
-    document.getElementById('drawer-role-icon').textContent = ROLE_ICONS[displayRole] || '👤';
-    document.getElementById('drawer-title').textContent = displayRole === 'teacher' ? 'Teacher Profile' : displayRole === 'admin' ? 'Admin Profile' : 'Student Profile';
-
-    let actions = '';
-    if (isPending) {
-        actions = `<button class="btn btn-approve" style="grid-column:span 2;justify-content:center;padding:.85rem;" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Account</button>`;
-    } else {
-        actions = isInactive
-            ? `<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">▶ Activate</button>`
-            : `<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend</button>`;
-        actions += `<button class="btn btn-ghost-mode" onclick="impersonateUser('${u.id}','${displayRole}')">🔑 Login as User (Ghost)</button>`;
+function openDrawer(userId){
+    const u=_data.find(x=>x.id===userId);
+    if(!u)return;
+    const r=getRole(u);
+    const isInactive=u.status==='inactive';
+    const isPending=u.status==='pending';
+    const isOwner=(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
+    const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
+    let displayRole=r;
+    if(r.includes('teacher')||r.includes('instructor'))displayRole='teacher';
+    else if(r==='admin')displayRole='admin';
+    else displayRole='student';
+    
+    document.getElementById('drawer-role-icon').textContent=ROLE_ICONS[displayRole]||'👤';
+    document.getElementById('drawer-title').textContent=displayRole==='teacher'?'Teacher Profile':displayRole==='admin'?'Admin Profile':'Student Profile';
+    
+    let actions='';
+    if(isPending){actions=`<button class="btn btn-approve full" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Registration</button><button class="btn btn-danger full" onclick="rejectUser('${u.id}');closeDrawer()">✕ Reject & Remove</button>`;}
+    else if(displayRole==='admin'){if(isOwner){actions=`<div class="system-owner-tag full" style="justify-content:center;padding:1rem;grid-column:span 2">👑 System Owner — Cannot be modified</div>`;}else{actions=`<button class="btn btn-unadmin" onclick="removeAdmin('${u.id}');closeDrawer()">↓ Demote to Student</button><button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`;}}
+    else{
+        actions=`<button class="btn btn-admin" onclick="makeAdmin('${u.id}');closeDrawer()">↑ Make Admin</button>${isInactive?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">▶ Activate Account</button>`:`<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`}`;
+        actions += `<button class="btn btn-ghost-mode" onclick="impersonateUser('${u.id}', '${displayRole}')">🔑 Remote Login as ${u.first_name || 'User'}</button>`;
     }
-
-    // Course grant section — only for students
+    
     let grantSection = '';
     if (displayRole === 'student') {
         let options = '<option value="">── Select a course ──</option>';
         _allCourses.forEach(c => {
-            const tag = c.is_event_course ? '🎁 ' : '📚 ';
-            options += `<option value="${c.id}">${tag}${c.title}</option>`;
+            const tag = c.is_event_course ? '🎁 [EVENT]' : '📚 [MAIN]';
+            options += `<option value="${c.id}">${tag} ${c.title}</option>`;
         });
-
         const statusNote = isPending
             ? `<div class="grant-note" style="color:var(--success);font-weight:700;">💡 Granting a course will automatically approve this student's account.</div>`
             : '';
-
         grantSection = `
         <div class="grant-section">
             <div class="grant-section-title">📚 Grant Course Access</div>
             ${statusNote}
-            <div class="grant-note">Student will be enrolled immediately and can start learning. ${isPending ? 'Their account will also be approved.' : ''}</div>
+            <div class="grant-note">Student will be enrolled immediately and can start learning.</div>
             <select class="grant-select" id="grant-course-select">${options}</select>
             <button class="btn btn-primary" id="grant-btn-${u.id}" style="width:100%;justify-content:center;padding:.75rem;" onclick="grantCourseAccess('${u.id}')">✓ Enroll Student</button>
         </div>`;
     }
 
-    const avatarStyle = u.avatar_url
-        ? `background-image:url('${u.avatar_url}');background-size:cover;background-position:center;`
-        : `background:${grad(u.id || nm)};`;
-    const avatarText = u.avatar_url ? '' : inits(u.first_name, u.last_name);
-
-    document.getElementById('drawer-body').innerHTML = `
-        <div class="d-avatar-wrap">
-            <div class="d-avatar" style="${avatarStyle}${isInactive ? 'filter:grayscale(.7)' : ''}">${avatarText}</div>
-            <div>
-                <div class="d-name">${nm}</div>
-                <div class="d-email">${u.email || 'No email'}</div>
-            </div>
-            <div class="d-badges">
-                <span class="role-badge ${displayRole}">${r}</span>
-                <span class="status-badge ${isInactive ? 'inactive' : isPending ? 'pending' : 'active'}">${isInactive ? 'Suspended' : isPending ? 'Pending' : 'Active'}</span>
-            </div>
-        </div>
-        <div class="detail-section">
-            <div class="detail-section-title">Account Details</div>
-            <div class="detail-grid">
-                <div class="detail-item"><div class="detail-lbl">First Name</div><div class="detail-val">${u.first_name || '—'}</div></div>
-                <div class="detail-item"><div class="detail-lbl">Last Name</div><div class="detail-val">${u.last_name || '—'}</div></div>
-                <div class="detail-item full"><div class="detail-lbl">Phone</div><div class="detail-val">${u.phone || 'Not provided'}</div></div>
-                <div class="detail-item full"><div class="detail-lbl">Registered</div><div class="detail-val">${fmtDate(u.created_at)}</div></div>
-            </div>
-        </div>
-        <div class="detail-section">
-            <div class="detail-section-title">Quick Actions</div>
-            <div class="drawer-action-grid">${actions}</div>
-            ${grantSection}
-        </div>`;
-
+    const avatarStyle=u.avatar_url?`background-image:url('${u.avatar_url}');background-size:cover;background-position:center;`:`background:${grad(u.id||nm)};`;
+    const avatarText=u.avatar_url?'':inits(u.first_name,u.last_name);
+    
+    document.getElementById('drawer-body').innerHTML=`<div class="d-avatar-wrap"><div class="d-avatar" style="${avatarStyle}${isInactive?'filter:grayscale(.7)':''}">${avatarText}</div><div><div class="d-name">${nm}</div><div class="d-email">${u.email||'No email on record'}</div></div><div class="d-badges"><span class="role-badge ${displayRole}">${r}</span><span class="status-badge ${isInactive?'inactive':isPending?'pending':'active'}">${isInactive?'Suspended':isPending?'Pending Approval':'Active'}</span></div></div><div class="detail-section"><div class="detail-section-title">Account Details</div><div class="detail-grid"><div class="detail-item"><div class="detail-lbl">First Name</div><div class="detail-val">${u.first_name||'—'}</div></div><div class="detail-item"><div class="detail-lbl">Last Name</div><div class="detail-val">${u.last_name||'—'}</div></div><div class="detail-item full"><div class="detail-lbl">Phone Number</div><div class="detail-val">${u.phone||'Not provided'}</div></div><div class="detail-item full"><div class="detail-lbl">Contact Address</div><div class="detail-val">${u.address||'Not provided'}</div></div><div class="detail-item"><div class="detail-lbl">Account Status</div><div class="detail-val" style="text-transform:capitalize">${isInactive?'Suspended':isPending?'Pending':'Active'}</div></div><div class="detail-item"><div class="detail-lbl">Date Joined</div><div class="detail-val">${fmtDate(u.created_at)}</div></div></div></div><div class="detail-section"><div class="detail-section-title">Quick Actions</div><div class="drawer-action-grid">${actions}</div></div>${grantSection}`;
+    
     document.getElementById('drawerBg').classList.add('open');
     document.getElementById('userDrawer').classList.add('open');
 }
+function closeDrawer(){document.getElementById('drawerBg').classList.remove('open');document.getElementById('userDrawer').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();}});
 
-function closeDrawer() {
-    document.getElementById('drawerBg').classList.remove('open');
-    document.getElementById('userDrawer').classList.remove('open');
-}
+/* ═══════════════════════════════
+   USER TABLES & STATS
+═══════════════════════════════ */
+window.statCardNav=function(tab){const card=document.getElementById('card-'+tab);if(card){card.classList.add('ring');setTimeout(()=>card.classList.remove('ring'),1200);}switchTab(tab);setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50);};
+window.quickNav=function(tab){closeSidebar();switchTab(tab);setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300);};
 
-// ── NAVIGATION ──
-window.statCardNav = function(tab) {
-    const card = document.getElementById('card-' + tab);
-    if (card) { card.classList.add('ring'); setTimeout(() => card.classList.remove('ring'), 1200); }
-    switchTab(tab);
-    setTimeout(() => document.querySelector('.users').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-};
-window.quickNav = function(tab) { closeSidebar(); switchTab(tab); setTimeout(() => document.querySelector('.users').scrollIntoView({ behavior: 'smooth' }), 300); };
-
-function emptyRow(msg, cols, ico, sub) {
-    return `<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico || '📭'}</div><div class="empty-ttl">${msg}</div>${sub ? `<div class="empty-sub">${sub}</div>` : ''}</div></td></tr>`;
-}
-
-// ── RENDER FUNCTIONS ──
-function renderPending(data) {
-    const pending = data.filter(u => u.status === 'pending');
-    const pc = pending.length;
-    let html = '';
-    pending.forEach(u => {
-        const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-        const r = getRole(u);
-        let bc = r.includes('teacher') || r.includes('instructor') ? 'teacher' : r === 'admin' ? 'admin' : 'student';
-        html += `<tr class="clickable" onclick="openDrawer('${u.id}')">
-            <td><div class="user-cell"><div class="uav" style="background:${grad(u.id || nm)}">${inits(u.first_name, u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id || '').slice(0, 8)}</div></div></div></td>
-            <td>${u.email || 'N/A'}</td>
-            <td><span class="role-badge ${bc}">${r}</span></td>
-            <td>${fmtDate(u.created_at)}</td>
-            <td onclick="event.stopPropagation()"><div class="actions">
-                <button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button>
-                <button class="btn btn-admin" onclick="openDrawer('${u.id}')">📚 Grant Course</button>
-            </div></td>
-        </tr>`;
+function renderPending(data){
+    const pending=data.filter(u=>u.status==='pending');
+    const pc=pending.length;
+    let html='';
+    pending.forEach(u=>{
+        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
+        const r=getRole(u);let bc='student';
+        if(r.includes('teacher')||r.includes('instructor'))bc='teacher';
+        if(r==='admin')bc='admin';
+        html+=`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button><button class="btn btn-danger" onclick="rejectUser('${u.id}')">✕ Reject</button></div></td></tr>`;
     });
-    document.getElementById('pending-users-list').innerHTML = html || emptyRow('All caught up!', 5, '✅', 'No pending approvals.');
-    document.getElementById('pend-badge').textContent = pc;
-    document.getElementById('nav-pcount').textContent = pc;
-    document.getElementById('stat-pending').textContent = pc;
+    document.getElementById('pending-users-list').innerHTML=html||emptyRow('All caught up!',5,'✅','No pending approvals.');
+    document.getElementById('pend-badge').textContent=pc;
+    document.getElementById('nav-pcount').textContent=pc;
+    document.getElementById('stat-pending').textContent=pc;
 }
 
-function renderStats(data) {
-    let sc = 0, tc = 0;
-    data.forEach(u => {
-        if (u.status === 'approved' || u.status === 'inactive') {
-            const r = getRole(u);
-            if (r === 'student' || r === '') sc++;
-            else if (r.includes('teacher') || r.includes('instructor')) tc++;
+function renderStats(data){
+    let sc=0,tc=0;
+    data.forEach(u=>{if(u.status==='approved'||u.status==='inactive'){const r=getRole(u);if(r==='student'||r==='')sc++;else if(r.includes('teacher')||r.includes('instructor'))tc++;}});
+    document.getElementById('stat-students').textContent=sc;
+    document.getElementById('stat-teachers').textContent=tc;
+    localStorage.setItem('enet_stat_students',sc);
+    localStorage.setItem('enet_stat_teachers',tc);
+}
+
+function renderUsers(data,tab){
+    const q=(document.getElementById('search-input').value||'').toLowerCase();
+    let rows=data.filter(u=>u.status==='approved'||u.status==='inactive');
+    if(tab==='students')rows=rows.filter(u=>{const r=getRole(u);return r==='student'||r==='';});
+    else if(tab==='teachers')rows=rows.filter(u=>{const r=getRole(u);return r.includes('teacher')||r.includes('instructor');});
+    else if(tab==='admins')rows=rows.filter(u=>getRole(u)==='admin');
+    if(q)rows=rows.filter(u=>{const nm=`${u.first_name||''} ${u.last_name||''}`.toLowerCase();return nm.includes(q)||(u.email||'').toLowerCase().includes(q);});
+    document.getElementById('users-badge').textContent=rows.length;
+    if(!rows.length){const msgs={students:'No students registered yet',teachers:'No teachers registered yet',admins:'No admins found',all:'No users found'};const icos={students:'🎒',teachers:'🎓',admins:'🛡️',all:'🔍'};document.getElementById('all-users-list').innerHTML=emptyRow(msgs[tab]||'No users found',6,icos[tab]||'🔍','');return;}
+    document.getElementById('all-users-list').innerHTML=rows.map(u=>{
+        const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
+        const r=getRole(u);const isAdmin=r==='admin';const isInactive=u.status==='inactive';
+        const isOwner=(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
+        let bc='student';if(r.includes('teacher')||r.includes('instructor'))bc='teacher';if(r==='admin')bc='admin';
+        let btns='';
+        if(isAdmin){if(isOwner)btns=`<span class="system-owner-tag">👑 System Owner</span>`;else btns=`<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="event.stopPropagation();removeAdmin('${u.id}')">↓ Demote</button>`;}
+        else{btns=`<button class="btn btn-admin" onclick="event.stopPropagation();makeAdmin('${u.id}')">↑ Admin</button>`;btns+=isInactive?`<button class="btn btn-activate" onclick="event.stopPropagation();toggleUserStatus('${u.id}','approved')">▶ Activate</button>`:`<button class="btn btn-deact" onclick="event.stopPropagation();toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;}
+        return`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:.55':''}">${inits(u.first_name,u.last_name)}</div><div><div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td></tr>`;
+    }).join('');
+}
+function renderAll(data){renderPending(data);renderStats(data);renderUsers(data,_tab);}
+window.switchTab=function(tab){_tab=tab;['all','students','teachers','admins'].forEach(t=>{const el=document.getElementById('tab-'+t);if(el)el.classList.toggle('active',t===tab);});renderUsers(_data,tab);};
+window.filterUsers=function(){renderUsers(_data,_tab);};
+
+async function mutate(userId,updates){const idx=_data.findIndex(u=>u.id===userId);if(idx!==-1)Object.assign(_data[idx],updates);renderAll(_data);const{error}=await _sb.from('profiles').update(updates).eq('id',userId);if(error){showToast('Save failed: '+error.message,'error');loadProfiles();}}
+async function mutateDelete(userId){_data=_data.filter(u=>u.id!==userId);renderAll(_data);const{error}=await _sb.from('profiles').delete().eq('id',userId);if(error){showToast('Delete failed: '+error.message,'error');loadProfiles();}}
+
+window.approveUser=async function(userId){await mutate(userId,{status:'approved'});showToast('User approved successfully!','success');};
+window.rejectUser=async function(userId){const u=_data.find(x=>x.id===userId);if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com')return;openDeleteModal('Reject and permanently remove this registration?',async()=>await mutateDelete(userId));};
+window.makeAdmin=async function(userId){openDeleteModal('Grant admin privileges to this user?',async()=>{await mutate(userId,{role:'admin'});showToast('Admin privileges granted.','success');});};
+window.removeAdmin=async function(userId){const u=_data.find(x=>x.id===userId);if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com'){showToast('System Owner cannot be demoted.','error');return;}openDeleteModal('Remove admin privileges? User will become a student.',async()=>{await mutate(userId,{role:'student'});showToast('Admin privileges removed.','info');});};
+window.toggleUserStatus=async function(userId,newStatus){const u=_data.find(x=>x.id===userId);if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com'&&newStatus==='inactive')return;const msg=newStatus==='inactive'?'Suspend this account?':'Reactivate this account?';openDeleteModal(msg,async()=>{await mutate(userId,{status:newStatus});showToast(newStatus==='inactive'?'Account suspended.':'Account activated.','info');});};
+
+/* ═══════════════════════════════
+   GLOBAL ACADEMY ACTIVITY RADAR
+═══════════════════════════════ */
+async function loadGlobalActivity() {
+    try {
+        const activities = [];
+
+        // 1. Pending Approvals (so we still get badge counts for them)
+        const pendingCount = _data.filter(u=>u.status==='pending').length;
+        
+        // 2. New Registrations
+        const { data: users } = await _sb.from('profiles').select('first_name, last_name, role, created_at').order('created_at', {ascending: false}).limit(5);
+        if (users) {
+            users.forEach(u => activities.push({
+                type: 'user', time: u.created_at, icon: '👤',
+                msg: `<strong>${u.first_name} ${u.last_name||''}</strong> registered as a ${u.role}.`
+            }));
+        }
+
+        // 3. New Courses Published
+        const { data: courses } = await _sb.from('courses').select('title, created_at, profiles(first_name, last_name)').eq('is_published', true).order('created_at', {ascending: false}).limit(5);
+        if (courses) {
+            courses.forEach(c => activities.push({
+                type: 'course', time: c.created_at, icon: '📚',
+                msg: `<strong>${c.profiles?.first_name || 'A Teacher'}</strong> published the course: "${c.title}".`
+            }));
+        }
+
+        // 4. Certificates / Completions
+        const { data: certs } = await _sb.from('certificates').select('issued_at, profiles(first_name, last_name), courses(title)').order('issued_at', {ascending: false}).limit(5);
+        if (certs) {
+            certs.forEach(c => activities.push({
+                type: 'cert', time: c.issued_at, icon: '🎓',
+                msg: `<strong>${c.profiles?.first_name || 'A Student'}</strong> completed the course: "${c.courses?.title}".`
+            }));
+        }
+
+        // 5. Community Posts
+        const { data: posts } = await _sb.from('posts').select('created_at, profiles(first_name, last_name)').order('created_at', {ascending: false}).limit(5);
+        if (posts) {
+            posts.forEach(p => activities.push({
+                type: 'post', time: p.created_at, icon: '💬',
+                msg: `<strong>${p.profiles?.first_name || 'Someone'}</strong> posted in the Community Hub.`
+            }));
+        }
+
+        // Sort by newest first
+        activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+        // Render Dropdown Notifications
+        const topNotifs = activities.slice(0, 15);
+        document.getElementById('notif-count').textContent = topNotifs.length + ' Recent';
+        document.getElementById('bell-badge').textContent = pendingCount > 0 ? pendingCount : topNotifs.length; // Show pending count priority, else recent count
+
+        let notifHtml = '';
+        topNotifs.forEach(act => {
+            notifHtml += `<div class="notif-item"><div class="notif-icon">${act.icon}</div><div class="notif-content"><p>${act.msg}</p><span class="act-time">${timeAgo(act.time)}</span></div></div>`;
+        });
+        document.getElementById('notif-list').innerHTML = notifHtml || '<div class="notif-empty">No recent activity.</div>';
+
+        // Render Recent Activity Panel
+        let actHtml = '';
+        activities.slice(0, 8).forEach(act => {
+            actHtml += `<div class="activity-item"><div class="act-av">${act.icon}</div><div class="act-text"><p>${act.msg}</p><span class="act-time">${timeAgo(act.time)}</span></div></div>`;
+        });
+        document.getElementById('recent-activities-list').innerHTML = actHtml || '<p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">No recent activity.</p>';
+
+    } catch (err) {
+        console.error("Failed to load global activity radar:", err);
+    }
+}
+
+
+async function loadProfiles(){
+    try{
+        const{data,error}=await _sb.from('profiles').select('id,first_name,last_name,email,role,status,created_at,phone,address,avatar_url').order('created_at',{ascending:false}).limit(500);
+        if(error)throw error;
+        _data=data||[];
+        renderAll(_data);
+        
+        const { data: courses } = await _sb.from('courses').select('id,title,is_event_course').eq('is_published', true).order('title', { ascending: true });
+        _allCourses = courses || [];
+
+        loadGlobalActivity(); // Fire radar on load
+    } catch(err){
+        document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5,'⚠️','Check console for details.');
+        document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6,'⚠️','Check console for details.');
+    }
+}
+
+async function loadExistingAds(){try{const{data:ads}=await _sb.from('ads').select('*').order('slot_id');if(ads){ads.forEach(ad=>{const p=document.getElementById(`preview-${ad.slot_id}`);const c=document.getElementById(`copy-${ad.slot_id}`);const l=document.getElementById(`link-${ad.slot_id}`);if(p)p.src=ad.image_url;if(c)c.value=ad.ads_copy||'';if(l)l.value=ad.advertiser_link||'';});}}catch(err){}}
+
+function subscribeRealtime(){
+    // Subscribe to all major tables to keep the radar live
+    _sb.channel('db-changes')
+        .on('postgres_changes',{event:'*',schema:'public',table:'profiles'},p=>{ loadProfiles(); })
+        .on('postgres_changes',{event:'*',schema:'public',table:'courses'},p=>{ loadGlobalActivity(); })
+        .on('postgres_changes',{event:'*',schema:'public',table:'certificates'},p=>{ loadGlobalActivity(); })
+        .on('postgres_changes',{event:'*',schema:'public',table:'posts'},p=>{ loadGlobalActivity(); })
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
+        .on('postgres_changes',{event:'UPDATE',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
+        .on('postgres_changes',{event:'DELETE',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
+        .subscribe();
+}
+
+/* ═══════════════════════════════════════════════
+   BLOG MANAGER — Full CRUD
+═══════════════════════════════════════════════ */
+let quillEditor;
+let _allPosts=[];
+let _isEditMode=false;
+let _removeCoverOnSave=false;
+
+function initQuill(){
+    if(quillEditor)return;
+    quillEditor=new Quill('#editor-container',{
+        theme:'snow',
+        placeholder:'Write your beautiful blog post here...',
+        modules:{
+            toolbar:[
+                [{header:[1,2,3,false]}],
+                ['bold','italic','underline','strike'],
+                [{list:'ordered'},{list:'bullet'}],
+                [{align:[]}],
+                ['link','image','blockquote','code-block'],
+                ['clean']
+            ]
         }
     });
-    document.getElementById('stat-students').textContent = sc;
-    document.getElementById('stat-teachers').textContent = tc;
 }
 
-function renderUsers(data, tab) {
-    const q = (document.getElementById('search-input').value || '').toLowerCase();
-    let rows = data.filter(u => u.status === 'approved' || u.status === 'inactive');
-    if (tab === 'students') rows = rows.filter(u => { const r = getRole(u); return r === 'student' || r === ''; });
-    else if (tab === 'teachers') rows = rows.filter(u => { const r = getRole(u); return r.includes('teacher') || r.includes('instructor'); });
-    else if (tab === 'admins') rows = rows.filter(u => getRole(u) === 'admin');
-    if (q) rows = rows.filter(u => {
-        const nm = `${u.first_name || ''} ${u.last_name || ''}`.toLowerCase();
-        return nm.includes(q) || (u.email || '').toLowerCase().includes(q);
-    });
-    document.getElementById('users-badge').textContent = rows.length;
-    if (!rows.length) {
-        const msgs = { students: 'No students yet', teachers: 'No teachers yet', admins: 'No admins found', all: 'No users found' };
-        const icos = { students: '🎒', teachers: '🎓', admins: '🛡️', all: '🔍' };
-        document.getElementById('all-users-list').innerHTML = emptyRow(msgs[tab] || 'No users found', 6, icos[tab] || '🔍', '');
+async function loadBlogPosts(){
+    try{
+        const{data,error}=await _sb.from('blog_posts').select('id,title,excerpt,cover_image,created_at,updated_at').order('created_at',{ascending:false});
+        if(error)throw error;
+        _allPosts=data||[];
+        renderBlogPostsList(_allPosts);
+        const cnt=_allPosts.length;
+        document.getElementById('blog-post-count').textContent=cnt+' post'+(cnt!==1?'s':'');
+        document.getElementById('stat-posts').textContent=cnt;
+        document.getElementById('nav-blog-count').textContent=cnt;
+    }catch(err){
+        document.getElementById('blog-posts-list').innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">⚠️</div><div class="empty-ttl">Could not load posts</div><div class="empty-sub">${err.message}</div></div></td></tr>`;
+    }
+}
+
+function renderBlogPostsList(posts){
+    const tbody=document.getElementById('blog-posts-list');
+    if(!posts||!posts.length){
+        tbody.innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">✍️</div><div class="empty-ttl">No blog posts yet</div><div class="empty-sub">Click "New Post" to publish your first article.</div></div></td></tr>`;
         return;
     }
-    document.getElementById('all-users-list').innerHTML = rows.map(u => {
-        const nm = `${u.first_name || 'User'} ${u.last_name || ''}`.trim();
-        const r = getRole(u);
-        const isInactive = u.status === 'inactive';
-        let bc = r.includes('teacher') || r.includes('instructor') ? 'teacher' : r === 'admin' ? 'admin' : 'student';
-        let btns = r === 'admin'
-            ? `<span class="system-owner-tag">Admin</span>`
-            : (isInactive
-                ? `<button class="btn btn-activate" onclick="event.stopPropagation();toggleUserStatus('${u.id}','approved')">▶ Activate</button>`
-                : `<button class="btn btn-deact" onclick="event.stopPropagation();toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`);
-        return `<tr class="clickable" onclick="openDrawer('${u.id}')">
-            <td><div class="user-cell"><div class="uav" style="background:${grad(u.id || nm)};${isInactive ? 'filter:grayscale(1);opacity:.55' : ''}">${inits(u.first_name, u.last_name)}</div><div><div class="uname" style="${isInactive ? 'color:var(--text-muted)' : ''}">${nm}</div><div class="uid">#${(u.id || '').slice(0, 8)}</div></div></div></td>
-            <td>${u.email || 'N/A'}</td>
-            <td><span class="role-badge ${bc}">${r}</span></td>
-            <td><span class="status-badge ${isInactive ? 'inactive' : 'active'}">${isInactive ? 'Suspended' : 'Active'}</span></td>
-            <td>${fmtDate(u.created_at)}</td>
-            <td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td>
+    tbody.innerHTML=posts.map(p=>{
+        const thumb=p.cover_image
+            ?`<img src="${p.cover_image}" class="blog-post-thumb" alt="" onerror="this.style.display='none'">`
+            :`<div class="blog-post-thumb-placeholder">📝</div>`;
+        const updated=p.updated_at&&p.updated_at!==p.created_at?`<span style="font-size:.7rem;color:var(--accent-cyan);margin-left:6px">(edited)</span>`:'';
+        return`<tr>
+            <td><div class="blog-post-cell">${thumb}<div><div class="blog-post-name" title="${escHtml(p.title)}">${escHtml(p.title)}</div><div class="blog-post-excerpt">${escHtml(p.excerpt||'No excerpt')}</div></div></div></td>
+            <td style="white-space:nowrap">${fmtDate(p.created_at)}${updated}</td>
+            <td><span class="status-badge active">Published</span></td>
+            <td style="text-align:right"><div class="actions" style="justify-content:flex-end">
+                <a href="blog.html?post=${p.id}" target="_blank" class="btn btn-admin" title="View on blog">🌐 View</a>
+                <button class="btn btn-edit" onclick="startEditPost('${p.id}')">✏️ Edit</button>
+                <button class="btn btn-danger" onclick="confirmDeletePost('${p.id}','${escAttr(p.title)}')">🗑️ Delete</button>
+            </div></td>
         </tr>`;
     }).join('');
 }
 
-function renderAll(data) { renderPending(data); renderStats(data); renderUsers(data, _tab); }
+function escHtml(s){const d=document.createElement('div');d.appendChild(document.createTextNode(s||''));return d.innerHTML;}
+function escAttr(s){return(s||'').replace(/'/g,"\\'");}
 
-window.switchTab = function(tab) {
-    _tab = tab;
-    ['all', 'students', 'teachers', 'admins'].forEach(t => {
-        const el = document.getElementById('tab-' + t);
-        if (el) el.classList.toggle('active', t === tab);
+window.startNewPost=function(){
+    _isEditMode=false;
+    _removeCoverOnSave=false;
+    document.getElementById('edit-post-id').value='';
+    document.getElementById('blog-title').value='';
+    document.getElementById('blog-excerpt').value='';
+    document.getElementById('blog-cover').value='';
+    document.getElementById('existing-cover-note').textContent='';
+    const preview=document.getElementById('cover-preview');
+    preview.src='';preview.classList.remove('show');
+    initQuill();
+    quillEditor.setContents([]);
+    document.getElementById('blog-form-title').textContent='✍️ Write New Post';
+    document.getElementById('editing-indicator').style.display='none';
+    document.getElementById('publish-blog-btn').textContent='🚀 Publish Post';
+    document.getElementById('new-post-btn').textContent='← Back to Posts';
+    document.getElementById('new-post-btn').onclick=cancelBlogForm;
+    showBlogForm();
+};
+
+window.startEditPost=async function(postId){
+    try{
+        const{data,error}=await _sb.from('blog_posts').select('*').eq('id',postId).single();
+        if(error)throw error;
+        _isEditMode=true;
+        _removeCoverOnSave=false;
+        document.getElementById('edit-post-id').value=data.id;
+        document.getElementById('blog-title').value=data.title||'';
+        document.getElementById('blog-excerpt').value=data.excerpt||'';
+        document.getElementById('blog-cover').value='';
+        const preview=document.getElementById('cover-preview');
+        if(data.cover_image){
+            preview.src=data.cover_image;
+            preview.classList.add('show');
+            document.getElementById('existing-cover-note').textContent='Current cover image shown above. Upload a new file to replace it, or click ✕ to remove it.';
+        }else{
+            preview.src='';preview.classList.remove('show');
+            document.getElementById('existing-cover-note').textContent='';
+        }
+        initQuill();
+        quillEditor.root.innerHTML=data.content||'';
+        document.getElementById('blog-form-title').textContent='Edit Post';
+        document.getElementById('editing-indicator').style.display='block';
+        document.getElementById('publish-blog-btn').textContent='💾 Save Changes';
+        document.getElementById('new-post-btn').textContent='← Back to Posts';
+        document.getElementById('new-post-btn').onclick=cancelBlogForm;
+        showBlogForm();
+        document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});
+    }catch(err){showToast('Failed to load post: '+err.message,'error');}
+};
+
+window.confirmDeletePost=function(postId,postTitle){
+    openDeleteModal(`Delete "${postTitle}"? This will permanently remove it from your public blog.`,async()=>{
+        await deleteBlogPost(postId);
     });
-    renderUsers(_data, tab);
 };
-window.filterUsers = function() { renderUsers(_data, _tab); };
 
-async function mutate(userId, updates) {
-    const idx = _data.findIndex(u => u.id === userId);
-    if (idx !== -1) Object.assign(_data[idx], updates);
-    renderAll(_data);
-    const { error } = await _sb.from('profiles').update(updates).eq('id', userId);
-    if (error) { showToast('Save failed: ' + error.message, 'error'); loadProfiles(); }
+async function deleteBlogPost(postId){
+    try{
+        const{error}=await _sb.from('blog_posts').delete().eq('id',postId);
+        if(error)throw error;
+        showToast('Post deleted successfully.','success');
+        await loadBlogPosts();
+        if(document.getElementById('edit-post-id').value===postId)cancelBlogForm();
+    }catch(err){showToast('Delete failed: '+err.message,'error');}
 }
 
-window.approveUser = async function(userId) {
-    await mutate(userId, { status: 'approved' });
-    showToast('✅ Student account approved!', 'success');
+function showBlogForm(){
+    document.getElementById('blog-list-section').style.display='none';
+    document.getElementById('blog-form-section').style.display='block';
+    document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});
+}
+
+window.cancelBlogForm=function(){
+    document.getElementById('blog-list-section').style.display='block';
+    document.getElementById('blog-form-section').style.display='none';
+    document.getElementById('new-post-btn').textContent='✍️ New Post';
+    document.getElementById('new-post-btn').onclick=startNewPost;
+    _isEditMode=false;
+    _removeCoverOnSave=false;
 };
-window.toggleUserStatus = async function(userId, newStatus) {
-    await mutate(userId, { status: newStatus });
-    showToast(newStatus === 'inactive' ? 'Account suspended.' : 'Account activated.', 'info');
+
+window.previewCover=function(event){
+    const file=event.target.files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+        const preview=document.getElementById('cover-preview');
+        preview.src=e.target.result;
+        preview.classList.add('show');
+        document.getElementById('existing-cover-note').textContent='';
+        _removeCoverOnSave=false;
+    };
+    reader.readAsDataURL(file);
 };
 
-// ── DATA LOADING ──
-async function loadProfiles() {
-    try {
-        const { data, error } = await _sb.from('profiles')
-            .select('id,first_name,last_name,email,role,status,created_at,phone,avatar_url')
-            .order('created_at', { ascending: false })
-            .limit(500);
-        if (error) throw error;
-        _data = data || [];
-        renderAll(_data);
+window.removeCover=function(){
+    const preview=document.getElementById('cover-preview');
+    preview.src='';preview.classList.remove('show');
+    document.getElementById('blog-cover').value='';
+    document.getElementById('existing-cover-note').textContent='Cover image will be removed when you save.';
+    _removeCoverOnSave=true;
+};
 
-        // Load all published courses for the grant dropdown
-        const { data: courses } = await _sb.from('courses')
-            .select('id,title,is_event_course')
-            .eq('is_published', true)
-            .order('title', { ascending: true });
-        _allCourses = courses || [];
+window.submitBlogPost=async function(){
+    const title=document.getElementById('blog-title').value.trim();
+    const excerpt=document.getElementById('blog-excerpt').value.trim();
+    const fileInput=document.getElementById('blog-cover');
+    const content=quillEditor.root.innerHTML;
+    const btn=document.getElementById('publish-blog-btn');
+    const postId=document.getElementById('edit-post-id').value;
 
-    } catch (err) {
-        console.error('Load error:', err);
-        showToast('Database connection error', 'error');
+    if(!title){showToast('Please enter a blog title.','error');return;}
+    if(content==='<p><br></p>'||!content.trim()){showToast('Please write some content.','error');return;}
+
+    btn.disabled=true;
+    btn.textContent=_isEditMode?'Saving changes...':'Publishing...';
+
+    try{
+        let coverUrl=undefined;
+        if(_removeCoverOnSave){
+            coverUrl=null;
+        } else if(fileInput.files.length>0){
+            const file=fileInput.files[0];
+            const ext=file.name.split('.').pop();
+            const fileName=`blog_${Date.now()}.${ext}`;
+            const{error:upErr}=await _sb.storage.from('blog_images').upload(fileName,file);
+            if(upErr)throw new Error('Image upload failed: '+upErr.message);
+            const{data:urlData}=_sb.storage.from('blog_images').getPublicUrl(fileName);
+            coverUrl=urlData.publicUrl;
+        }
+
+        if(_isEditMode&&postId){
+            const updates={title,excerpt,content,updated_at:new Date().toISOString()};
+            if(coverUrl!==undefined)updates.cover_image=coverUrl;
+            const{error}=await _sb.from('blog_posts').update(updates).eq('id',postId);
+            if(error)throw error;
+            showToast('Post updated successfully! Changes are live on the blog.','success');
+        } else {
+            const{data:userData}=await _sb.auth.getUser();
+            const insertData={title,excerpt,content};
+            if(coverUrl!==undefined&&coverUrl!==null)insertData.cover_image=coverUrl;
+            if(userData.user)insertData.author_id=userData.user.id;
+            const{error}=await _sb.from('blog_posts').insert([insertData]);
+            if(error)throw error;
+            showToast('Post published! It\'s now live on your blog.','success');
+        }
+
+        await loadBlogPosts();
+        cancelBlogForm();
+
+    }catch(err){
+        showToast('Failed: '+err.message,'error');
+        console.error(err);
+    }finally{
+        btn.disabled=false;
+        btn.textContent=_isEditMode?'💾 Save Changes':'🚀 Publish Post';
     }
-}
+};
 
-// ── BOOT ──
-window.addEventListener('load', function() {
-    applyTheme(localStorage.getItem('enet_theme') || 'system');
-    _sb = window.supabase.createClient(
+window.previewAdImage=function(event,slot){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>document.getElementById(`preview-${slot}`).src=e.target.result;r.readAsDataURL(f);};
+window.saveAd=async function(slotId){
+    const fi=document.querySelector(`#slot-${slotId} .ad-image-input`);
+    const adCopy=document.getElementById(`copy-${slotId}`).value;
+    const adLink=document.getElementById(`link-${slotId}`).value;
+    let imageUrl=document.getElementById(`preview-${slotId}`).src;
+    if(fi&&fi.files.length>0){const file=fi.files[0];const ext=file.name.split('.').pop();const name=`ad_slot_${slotId}_${Date.now()}.${ext}`;const{error:upErr}=await _sb.storage.from('community_images').upload(name,file,{upsert:true});if(upErr){showToast('Upload failed: '+upErr.message,'error');return;}const{data:ud}=_sb.storage.from('community_images').getPublicUrl(name);imageUrl=ud.publicUrl;}
+    const{error}=await _sb.from('ads').upsert({slot_id:slotId,image_url:imageUrl,ads_copy:adCopy,advertiser_link:adLink},{onConflict:'slot_id'});
+    if(error)showToast("Save failed. Is the 'ads' table set up?\n"+error.message,'error');
+    else showToast(`Ad Slot ${slotId} saved successfully!`,'success');
+};
+
+/* ═══════════════════════════════
+   INIT
+═══════════════════════════════ */
+window.addEventListener('load',function(){
+    const t=localStorage.getItem('enet_theme')||'system';
+    applyTheme(t);
+
+    const cs=localStorage.getItem('enet_stat_students');
+    const ct=localStorage.getItem('enet_stat_teachers');
+    if(cs!==null)document.getElementById('stat-students').textContent=cs;
+    if(ct!==null)document.getElementById('stat-teachers').textContent=ct;
+
+    _sb=window.supabase.createClient(
         'https://lskwzcvexyxjncttvimf.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleXh4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
     );
-    loadProfiles();
 
-    document.getElementById('logoutBtnTop').addEventListener('click', async () => {
-        await _sb.auth.signOut();
-        localStorage.clear();
-        window.location.href = 'index.html';
+    loadProfiles(); 
+    loadExistingAds();
+    loadBlogPosts();
+    subscribeRealtime();
+
+    document.getElementById('logoutBtn').addEventListener('click',async()=>{
+        try{await _sb.auth.signOut();}catch(e){}
+        localStorage.clear();sessionStorage.clear();
+        window.location.href='index.html';
+    });
+    document.getElementById('logoutBtnTop').addEventListener('click',async()=>{
+        try{await _sb.auth.signOut();}catch(e){}
+        localStorage.clear();sessionStorage.clear();
+        window.location.href='index.html';
     });
 });
 </script>
