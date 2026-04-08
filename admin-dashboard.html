@@ -81,6 +81,7 @@
 
         .header-logout-btn { display: flex; align-items: center; gap: 6px; background: rgba(238,93,80,0.1); color: var(--danger); border: 1px solid rgba(238,93,80,0.2); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; font-family: 'DM Sans', sans-serif;}
         .header-logout-btn:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 10px rgba(238,93,80,0.3); transform: translateY(-2px);}
+        .logout-btn-mobile { display: none; color: var(--danger); border-color: rgba(238,93,80,0.2); background: rgba(238,93,80,0.1); }
 
         /* CONTENT */
         .content{padding:0 2.5rem 2.5rem;flex:1}
@@ -313,6 +314,8 @@
             .drawer{width:100vw}.detail-grid{grid-template-columns:1fr}
             .drawer-action-grid{grid-template-columns:1fr}
             .drawer-action-grid .btn.full{grid-column:span 1}
+            .header-logout-btn { display: none !important; }
+            .logout-btn-mobile { display: flex !important; }
         }
     </style>
 </head>
@@ -402,6 +405,10 @@
             <button class="header-logout-btn" id="logoutBtnTop" title="Log out of Admin Dashboard">
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Log Out
+            </button>
+
+            <button class="icon-btn logout-btn-mobile" id="logoutBtnMobile" title="Log Out">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </button>
         </div>
     </header>
@@ -1195,16 +1202,21 @@ window.addEventListener('load',function(){
     loadBlogPosts();
     subscribeRealtime();
 
-    document.getElementById('logoutBtn').addEventListener('click',async()=>{
-        try{await _sb.auth.signOut();}catch(e){}
-        localStorage.clear();sessionStorage.clear();
-        window.location.href='index.html';
-    });
     document.getElementById('logoutBtnTop').addEventListener('click',async()=>{
         try{await _sb.auth.signOut();}catch(e){}
         localStorage.clear();sessionStorage.clear();
         window.location.href='index.html';
     });
+
+    // Mobile specific logout handler
+    const mobileLogoutBtn = document.getElementById('logoutBtnMobile');
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', async()=>{
+            try{await _sb.auth.signOut();}catch(e){}
+            localStorage.clear();sessionStorage.clear();
+            window.location.href='index.html';
+        });
+    }
 });
 </script>
 </body>
