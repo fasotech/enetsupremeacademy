@@ -229,9 +229,13 @@
         .footer-logo span { color: var(--brand-yellow); }
         .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
 
+        /* ============================
+           MOBILE RESPONSIVENESS FIX 
+           ============================ */
         @media (max-width: 950px) {
             .mobile-menu-btn { display: block; }
-            .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; }
+            /* Left align mobile menu items */
+            .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; text-align: left; padding: 1rem 0 1rem 10px; gap: 1.2rem; }
             .nav-links.show { display: flex; }
             .hero-container { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; text-align: center; gap: 2rem; }
             .hero-content { align-items: center; }
@@ -266,10 +270,8 @@
 </head>
 <body>
 
-<!-- Hidden GT element — required for the API to work -->
 <div id="google_translate_element" style="display:none;visibility:hidden;position:absolute;"></div>
 
-<!-- Translating indicator -->
 <div class="translating-toast" id="translating-toast">
     <div class="translating-spinner"></div>
     <span id="translating-label">Translating page...</span>
@@ -344,7 +346,6 @@
     </div>
 </section>
 
-<!-- PAYMENT MODAL -->
 <div class="modal-overlay" id="paymentOverlay" onclick="closePaymentModal(event)">
     <div class="payment-modal" onclick="event.stopPropagation()">
         <button class="payment-close" onclick="togglePaymentModal()">✕</button>
@@ -413,7 +414,7 @@
             <p>Join the ENET Supreme Community Hub — where students, teachers, and mentors post updates, share resources, ask questions, and cheer each other on. It's your academy social feed.</p>
             <div class="community-cta">
                 <a href="community.html" class="btn btn-community" style="background:var(--accent-cyan);border-color:var(--accent-cyan);">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 11.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03-8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 11.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                     Open Community Feed
                 </a>
             </div>
@@ -441,7 +442,6 @@
     </div>
 </footer>
 
-<!-- LANGUAGE MODAL -->
 <div class="lang-modal-overlay" id="langModalOverlay" onclick="handleOverlayClick(event)">
     <div class="lang-modal" id="langModal">
         <div class="lang-modal-head">
@@ -471,10 +471,6 @@
     </div>
 </div>
 
-<!-- =============================================
-     GOOGLE TRANSLATE — Must load BEFORE our code
-     The callback fires when the GT API is ready
-============================================= -->
 <script>
     // Called by Google when the API is fully loaded
     function googleTranslateElementInit() {
@@ -572,29 +568,29 @@
     ============================================= */
     const LANG_GROUPS = [
         { group: '🌍 African Languages', langs: [
-            { code: 'ha',  flag: '🇳🇬', name: 'Hausa',           native: 'Harshen Hausa' },
-            { code: 'yo',  flag: '🇳🇬', name: 'Yoruba',          native: 'Yorùbá' },
-            { code: 'ig',  flag: '🇳🇬', name: 'Igbo',            native: 'Asụsụ Igbo' },
-            { code: 'sw',  flag: '🇰🇪', name: 'Swahili',         native: 'Kiswahili' },
-            { code: 'am',  flag: '🇪🇹', name: 'Amharic',         native: 'አማርኛ' }
+            { code: 'ha',  flag: '🇳🇬', name: 'Hausa',          native: 'Harshen Hausa' },
+            { code: 'yo',  flag: '🇳🇬', name: 'Yoruba',         native: 'Yorùbá' },
+            { code: 'ig',  flag: '🇳🇬', name: 'Igbo',           native: 'Asụsụ Igbo' },
+            { code: 'sw',  flag: '🇰🇪', name: 'Swahili',        native: 'Kiswahili' },
+            { code: 'am',  flag: '🇪🇹', name: 'Amharic',        native: 'አማርኛ' }
         ]},
         { group: '🌐 European Languages', langs: [
-            { code: 'fr',  flag: '🇫🇷', name: 'French',          native: 'Français' },
-            { code: 'es',  flag: '🇪🇸', name: 'Spanish',         native: 'Español' },
-            { code: 'pt',  flag: '🇧🇷', name: 'Portuguese',      native: 'Português' },
-            { code: 'de',  flag: '🇩🇪', name: 'German',          native: 'Deutsch' },
-            { code: 'it',  flag: '🇮🇹', name: 'Italian',         native: 'Italiano' },
-            { code: 'nl',  flag: '🇳🇱', name: 'Dutch',           native: 'Nederlands' },
-            { code: 'ru',  flag: '🇷🇺', name: 'Russian',         native: 'Русский' },
-            { code: 'pl',  flag: '🇵🇱', name: 'Polish',          native: 'Polski' },
-            { code: 'tr',  flag: '🇹🇷', name: 'Turkish',         native: 'Türkçe' }
+            { code: 'fr',  flag: '🇫🇷', name: 'French',         native: 'Français' },
+            { code: 'es',  flag: '🇪🇸', name: 'Spanish',        native: 'Español' },
+            { code: 'pt',  flag: '🇧🇷', name: 'Portuguese',     native: 'Português' },
+            { code: 'de',  flag: '🇩🇪', name: 'German',         native: 'Deutsch' },
+            { code: 'it',  flag: '🇮🇹', name: 'Italian',        native: 'Italiano' },
+            { code: 'nl',  flag: '🇳🇱', name: 'Dutch',          native: 'Nederlands' },
+            { code: 'ru',  flag: '🇷🇺', name: 'Russian',        native: 'Русский' },
+            { code: 'pl',  flag: '🇵🇱', name: 'Polish',         native: 'Polski' },
+            { code: 'tr',  flag: '🇹🇷', name: 'Turkish',        native: 'Türkçe' }
         ]},
         { group: '🕌 Middle East & South Asia', langs: [
-            { code: 'ar',  flag: '🇸🇦', name: 'Arabic',          native: 'العربية' },
-            { code: 'fa',  flag: '🇮🇷', name: 'Persian',         native: 'فارسی' },
-            { code: 'ur',  flag: '🇵🇰', name: 'Urdu',            native: 'اردو' },
-            { code: 'hi',  flag: '🇮🇳', name: 'Hindi',           native: 'हिन्दी' },
-            { code: 'bn',  flag: '🇧🇩', name: 'Bengali',         native: 'বাংলা' }
+            { code: 'ar',  flag: '🇸🇦', name: 'Arabic',         native: 'العربية' },
+            { code: 'fa',  flag: '🇮🇷', name: 'Persian',        native: 'فارسی' },
+            { code: 'ur',  flag: '🇵🇰', name: 'Urdu',           native: 'اردو' },
+            { code: 'hi',  flag: '🇮🇳', name: 'Hindi',          native: 'हिन्दी' },
+            { code: 'bn',  flag: '🇧🇩', name: 'Bengali',        native: 'বাংলা' }
         ]},
         { group: '🌏 East & Southeast Asia', langs: [
             { code: 'zh-CN', flag: '🇨🇳', name: 'Chinese (Simplified)',  native: '中文(简体)' },
