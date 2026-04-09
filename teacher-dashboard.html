@@ -59,6 +59,7 @@
         .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--accent-cyan);box-shadow:0 2px 10px var(--shadow-color)}
         .welcome-text h1{font-family:'Poppins',sans-serif;font-size:1.75rem;font-weight:700;color:var(--text-dark);margin-bottom:.2rem}
         .welcome-text p{font-size:.9rem;color:var(--text-gray)}
+        
         .topbar-right{display:flex;align-items:center;gap:1rem}
         .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);font-size:1.1rem}
         .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
@@ -106,8 +107,10 @@
         .form-group{margin-bottom:1.2rem}
         .form-group.full-width{grid-column:1/-1}
         .form-group label{display:block;font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem}
-        .form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;color:var(--text-dark);font-size:.9rem;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
-        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent-cyan)}
+        .form-input, .form-group input, .form-group select, .form-group textarea{width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;color:var(--text-dark);font-size:.9rem;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+        .form-textarea { resize: vertical; min-height: 80px; }
+        .form-input:focus, .form-textarea:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus{border-color:var(--accent-cyan)}
+        
         .curriculum-builder{background:var(--bg-light);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1rem}
         .module-box{background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 4px 6px rgba(0,0,0,0.02);animation:fadeUp .3s ease}
         .module-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
@@ -142,24 +145,46 @@
         .btn-outline.danger:hover{background:rgba(238,93,80,0.1)}
         .btn-outline.success{border-color:var(--success);color:var(--success)}
         .btn-outline.success:hover{background:rgba(5,205,153,0.1)}
+        
         .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;padding:12px 24px;border-radius:8px;cursor:pointer;transition:.2s;background:var(--accent-cyan);color:#fff;border:none}
         .btn-primary:hover{background:#0088bd}
+        .btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+        
         .btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;padding:12px 24px;border-radius:8px;cursor:pointer;transition:.2s;background:var(--surface);color:var(--text-gray);border:1px solid var(--border)}
         .btn-secondary:hover{background:var(--bg-light);color:var(--text-dark);border-color:var(--text-muted)}
-        .btn-ghost-mode{background:var(--brand-navy);color:#fff;grid-column:span 2;margin-top:.5rem;justify-content:center;padding:.85rem}
+
+        /* GRADING MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 3000; align-items: center; justify-content: center; padding: 1rem;}
+        .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+        .review-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 600px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
 
         /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
         .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
         .toast.success{border-left:4px solid var(--success)}
         .toast.error{border-left:4px solid var(--danger)}
+        .toast.info{border-left:4px solid var(--accent-cyan)}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-
-        @media(max-width:992px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-wrap{margin-left:0}.mobile-toggle{display:flex}.stats-grid{grid-template-columns:repeat(2,1fr)}.course-form-grid{grid-template-columns:1fr}}
-        @media(max-width:576px){.stats-grid{grid-template-columns:1fr}.lesson-inputs{flex-direction:column;align-items:stretch}.delete-lesson-btn{width:100%}.lesson-extras{padding-left:0}.quiz-options{grid-template-columns:1fr}.course-type-selector{flex-direction:column}}
+        @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-wrap { margin-left: 0; }
+            .mobile-toggle { display: flex; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .course-form-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 576px) { 
+            .stats-grid { grid-template-columns: 1fr; } 
+            .lesson-inputs { flex-direction: column; align-items: stretch;} 
+            .delete-lesson-btn { width: 100%;} 
+            .lesson-extras { padding-left: 0; } 
+            .quiz-options { grid-template-columns: 1fr; }
+            .course-type-selector { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -180,11 +205,17 @@
     <a class="nav-item active" href="#" onclick="switchTab('dashboard-overview'); return false;" id="nav-dashboard">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard
     </a>
+    
     <a class="nav-item" href="#" onclick="startNewCourse(); return false;" id="nav-creator">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Course Creator
     </a>
+
     <a class="nav-item" href="#" onclick="switchTab('students-section'); return false;" id="nav-students">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> My Students
+    </a>
+
+    <a class="nav-item" href="#" onclick="switchTab('assignments-section'); return false;" id="nav-assignments">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg> Assignments
     </a>
     
     <div class="nav-label">Resources</div>
@@ -251,6 +282,20 @@
                     <thead><tr><th>Student Info</th><th>Enrolled Course</th><th>Enrollment Date</th></tr></thead>
                     <tbody id="students-table-body">
                         <tr><td colspan="3"><p style="text-align:center; color: var(--text-muted); padding: 1rem;">Loading students...</p></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel view-section" id="assignments-section" style="display: none;">
+            <div class="panel-head">
+                <div class="panel-title">Student Assignments & Grading</div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-tbl">
+                    <thead><tr><th>Student</th><th>Course & Task</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="assignments-table-body">
+                        <tr><td colspan="5"><p style="text-align:center; color: var(--text-muted); padding: 1rem;">Loading assignments...</p></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -329,6 +374,57 @@
     </main>
 </div>
 
+<div class="modal-overlay" id="grading-modal">
+    <div class="review-modal" style="max-width: 600px; text-align: left;">
+        <h2 style="margin-bottom: 1rem; font-family: 'Poppins'; color: var(--text-dark);">Grade Assignment</h2>
+        
+        <div style="margin-bottom: 1rem;">
+            <strong style="color:var(--brand-navy); font-size: 1.1rem;" id="grade-student-name">Student Name</strong><br>
+            <span style="font-size: 0.9rem; color: var(--text-muted);" id="grade-task-title">Course - Task Title</span>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Student's Submission Notes</label>
+            <div id="grade-student-desc" style="font-size:0.9rem; background: var(--bg-light); padding: 12px; border-radius: 8px; color: var(--text-gray); max-height: 120px; overflow-y: auto; border: 1px solid var(--border);">No notes.</div>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Attached Files</label>
+            <div id="grade-student-files" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+        </div>
+        
+        <input type="hidden" id="grading-submission-id">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+                <label>Grade (Letter)</label>
+                <select id="grade-letter" class="form-input">
+                    <option value="">Select Grade...</option>
+                    <option value="A">A (Excellent)</option>
+                    <option value="B">B (Good)</option>
+                    <option value="C">C (Average)</option>
+                    <option value="D">D (Pass)</option>
+                    <option value="F">F (Fail)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Score (0-100)</label>
+                <input type="number" id="grade-score" class="form-input" min="0" max="100" placeholder="e.g. 85">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Instructor Feedback</label>
+            <textarea id="grade-feedback" class="form-textarea" placeholder="Great job on this analysis..." rows="3"></textarea>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem;">
+            <button class="btn-secondary" onclick="closeGradingModal()">Cancel</button>
+            <button class="btn-primary" id="save-grade-btn" onclick="submitGrade()">💾 Save Grade</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ── THEME & UI ──
@@ -344,9 +440,12 @@ function switchTab(sectionId) {
     document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
     document.getElementById(sectionId).style.display = 'block';
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
     if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
     if(sectionId === 'students-section') { document.getElementById('nav-students').classList.add('active'); fetchMyStudents(); }
+    if(sectionId === 'assignments-section') { document.getElementById('nav-assignments').classList.add('active'); fetchAssignments(); }
     if(sectionId === 'dashboard-overview') { document.getElementById('nav-dashboard').classList.add('active'); fetchMyCourses(); }
+    
     if(window.innerWidth <= 992) toggleSidebar();
 }
 
@@ -361,6 +460,7 @@ window.setCourseType = function(type) {
 // ── SUPABASE ──
 const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
 let currentInstructorId = null;
+let instructorSubmissions = []; // Stores loaded assignments
 
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
@@ -392,7 +492,6 @@ async function fetchInstructorStats(courseIds) {
         return;
     }
     try {
-        // 1. Calculate Revenue (Exclude free member perks)
         const { data: enrollments } = await sb.from('enrollments')
             .select('course_id, enrollment_type, courses(price)')
             .in('course_id', courseIds)
@@ -404,7 +503,6 @@ async function fetchInstructorStats(courseIds) {
         }
         document.getElementById('stat-revenue').textContent = '₦' + totalRev.toLocaleString();
 
-        // 2. Calculate Average Rating
         const { data: reviews } = await sb.from('course_reviews').select('rating').in('course_id', courseIds);
         let avgRating = 0;
         if (reviews && reviews.length > 0) {
@@ -423,7 +521,6 @@ async function fetchMyCourses() {
         
         document.getElementById('stat-courses').textContent = data.length;
         
-        // Trigger Dynamic Stats
         const courseIds = data.map(c => c.id);
         fetchInstructorStats(courseIds);
         
@@ -477,6 +574,120 @@ async function fetchMyStudents() {
                 <td>${new Date(en.enrolled_at).toLocaleDateString()}</td>
             </tr>`).join('');
     } catch(err) { console.error(err); }
+}
+
+// ── ASSIGNMENTS & GRADING ──
+async function fetchAssignments() {
+    if (!currentInstructorId) return;
+    try {
+        const { data: courses } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
+        if (!courses || courses.length === 0) return;
+        const courseIds = courses.map(c => c.id);
+
+        const { data: subs, error } = await sb.from('assignment_submissions')
+            .select('*, profiles(first_name, last_name), courses(title)')
+            .in('course_id', courseIds)
+            .order('submitted_at', { ascending: false });
+
+        if (error) throw error;
+        instructorSubmissions = subs || [];
+
+        const tbody = document.getElementById('assignments-table-body');
+        if (instructorSubmissions.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = instructorSubmissions.map(s => {
+            const fName = s.profiles?.first_name || 'Student';
+            const lName = s.profiles?.last_name || '';
+            const date = new Date(s.submitted_at).toLocaleDateString();
+            const status = s.grade 
+                ? `<span style="color:var(--success); font-weight:bold; font-size:0.85rem; background:rgba(5,205,153,0.1); padding:4px 8px; border-radius:6px;">Graded (${s.grade})</span>` 
+                : `<span style="color:#b08800; font-weight:bold; font-size:0.85rem; background:rgba(255,193,7,0.15); padding:4px 8px; border-radius:6px;">Pending Review</span>`;
+            
+            return `
+            <tr>
+                <td>
+                    <div class="user-cell">
+                        <div class="uav" style="background:var(--navy-light);">${fName.charAt(0).toUpperCase()}</div>
+                        <div class="uname">${fName} ${lName}</div>
+                    </div>
+                </td>
+                <td>
+                    <div style="font-weight: 700; color: var(--brand-navy); margin-bottom:4px;">${s.title}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">${s.courses?.title}</div>
+                </td>
+                <td>${date}</td>
+                <td>${status}</td>
+                <td>
+                    <button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? '✏️ Edit Grade' : '📋 Grade'}</button>
+                </td>
+            </tr>`;
+        }).join('');
+    } catch(e) { console.error("Error fetching assignments:", e); }
+}
+
+window.openGradingModal = function(subId) {
+    const s = instructorSubmissions.find(x => x.id === subId);
+    if(!s) return;
+    
+    document.getElementById('grading-submission-id').value = s.id;
+    document.getElementById('grade-student-name').textContent = `${s.profiles?.first_name || 'Student'} ${s.profiles?.last_name || ''}`;
+    document.getElementById('grade-task-title').textContent = `${s.courses?.title || ''} — ${s.title}`;
+    document.getElementById('grade-student-desc').textContent = s.description || 'No additional notes provided by the student.';
+    
+    const filesDiv = document.getElementById('grade-student-files');
+    if(s.file_urls && s.file_urls.length > 0) {
+        filesDiv.innerHTML = s.file_urls.map(url => {
+            const name = url.split('/').pop().split('?')[0] || 'Download File';
+            return `<a href="${url}" target="_blank" class="btn-outline success" style="font-size:0.8rem; text-decoration:none;">⬇️ ${name}</a>`;
+        }).join('');
+    } else {
+        filesDiv.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted);">No files attached to this submission.</span>';
+    }
+
+    document.getElementById('grade-letter').value = s.grade || '';
+    document.getElementById('grade-score').value = s.score || '';
+    document.getElementById('grade-feedback').value = s.feedback || '';
+
+    document.getElementById('grading-modal').classList.add('show');
+}
+
+window.closeGradingModal = function() {
+    document.getElementById('grading-modal').classList.remove('show');
+}
+
+window.submitGrade = async function() {
+    const subId = document.getElementById('grading-submission-id').value;
+    const grade = document.getElementById('grade-letter').value;
+    const score = document.getElementById('grade-score').value;
+    const feedback = document.getElementById('grade-feedback').value.trim();
+
+    if(!grade) return showToast("Please select a letter grade.", "error");
+
+    const btn = document.getElementById('save-grade-btn');
+    btn.disabled = true; btn.textContent = "⏳ Saving...";
+
+    try {
+        const { error } = await sb.from('assignment_submissions').update({
+            grade: grade,
+            score: score ? Number(score) : null,
+            feedback: feedback,
+            graded_at: new Date().toISOString()
+        }).eq('id', subId);
+
+        if(error) throw error;
+
+        showToast("Grade saved successfully! Student notified.", "success");
+        closeGradingModal();
+        fetchAssignments(); // refresh list
+    } catch(e) {
+        console.error(e);
+        showToast("Failed to save grade.", "error");
+    } finally {
+        btn.disabled = false; btn.textContent = "💾 Save Grade";
+    }
 }
 
 // ── QUIZ BUILDER ──
