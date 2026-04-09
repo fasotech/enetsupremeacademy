@@ -460,7 +460,7 @@ window.setCourseType = function(type) {
 // ── SUPABASE ──
 const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
 let currentInstructorId = null;
-let instructorSubmissions = []; // Stores loaded assignments
+let instructorSubmissions = [];
 
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
@@ -484,7 +484,7 @@ window.addEventListener('load', async () => {
 
 window.forceLogout = async () => { try { await sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); window.location.href = 'index.html'; } };
 
-// ── DYNAMIC INSTRUCTOR STATS (REVENUE & RATING) ──
+// ── DYNAMIC INSTRUCTOR STATS ──
 async function fetchInstructorStats(courseIds) {
     if (!courseIds || courseIds.length === 0) {
         document.getElementById('stat-revenue').textContent = '₦0';
@@ -576,23 +576,36 @@ async function fetchMyStudents() {
     } catch(err) { console.error(err); }
 }
 
-// ── ASSIGNMENTS & GRADING ──
+// ── TWO-STEP ASSIGNMENT FETCH ──
 async function fetchAssignments() {
     if (!currentInstructorId) return;
+    const tbody = document.getElementById('assignments-table-body');
     try {
         const { data: courses } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
-        if (!courses || courses.length === 0) return;
+        if (!courses || courses.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`;
+            return;
+        }
         const courseIds = courses.map(c => c.id);
 
         const { data: subs, error } = await sb.from('assignment_submissions')
-            .select('*, profiles(first_name, last_name), courses(title)')
+            .select('*, courses(title)')
             .in('course_id', courseIds)
             .order('submitted_at', { ascending: false });
 
         if (error) throw error;
+        
+        // Manual Join for Profiles
+        if (subs && subs.length > 0) {
+            const studentIds = [...new Set(subs.map(s => s.student_id))];
+            const { data: profiles } = await sb.from('profiles').select('id, first_name, last_name').in('id', studentIds);
+            const profMap = {};
+            if (profiles) profiles.forEach(p => profMap[p.id] = p);
+            subs.forEach(s => s.profiles = profMap[s.student_id]);
+        }
+
         instructorSubmissions = subs || [];
 
-        const tbody = document.getElementById('assignments-table-body');
         if (instructorSubmissions.length === 0) {
             tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`;
             return;
@@ -625,7 +638,10 @@ async function fetchAssignments() {
                 </td>
             </tr>`;
         }).join('');
-    } catch(e) { console.error("Error fetching assignments:", e); }
+    } catch(e) { 
+        console.error("Error fetching assignments:", e); 
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--danger);">Error loading assignments. Please refresh.</td></tr>`;
+    }
 }
 
 window.openGradingModal = function(subId) {
@@ -681,7 +697,7 @@ window.submitGrade = async function() {
 
         showToast("Grade saved successfully! Student notified.", "success");
         closeGradingModal();
-        fetchAssignments(); // refresh list
+        fetchAssignments(); 
     } catch(e) {
         console.error(e);
         showToast("Failed to save grade.", "error");
