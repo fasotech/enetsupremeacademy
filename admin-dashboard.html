@@ -181,16 +181,19 @@
         .grant-select:focus{border-color:var(--accent-cyan)}
         .grant-note{font-size:.75rem;color:var(--text-muted);margin-bottom:.75rem;line-height:1.4}
 
+        /* EMPTY STATES */
         .empty-cell{padding:4rem 2rem;text-align:center}
-        .empty-ico{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
         .empty-ttl{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-dark);margin-bottom:.4rem}
         .empty-sub{font-size:.85rem;color:var(--text-muted)}
+        .empty-cell-large { padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+        .empty-cell-img-wrap { width: 100%; max-width: 450px; margin: 0 auto 1.5rem; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px var(--shadow-color); border: 1px solid var(--border); }
+        .empty-cell-img-wrap img { width: 100%; height: auto; display: block; object-fit: cover; }
 
         /* ACTIVITY */
         .activity-list{padding:0 2rem 2rem;display:flex;flex-direction:column;gap:1.5rem}
         .activity-item{display:flex;align-items:flex-start;gap:1rem;cursor:pointer;border-radius:12px;padding:.5rem;margin:-.5rem;transition:background .2s}
         .activity-item:hover{background:var(--surface-hover)}
-        .act-av{width:36px;height:36px;border-radius:10px;background:var(--bg-light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+        .act-av{width:36px;height:36px;border-radius:10px;background:var(--bg-light);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:var(--brand-navy);flex-shrink:0}
         .act-text p{font-size:.85rem;color:var(--text-dark);line-height:1.4}
         .act-text p strong{color:var(--brand-navy); font-weight: 700;}
         .act-time{font-size:.7rem;color:var(--text-muted);margin-top:4px;display:block}
@@ -212,7 +215,7 @@
         .blog-tbl tbody tr{transition:background .15s}
         .blog-tbl tbody tr:hover{background:var(--bg-light)}
         .blog-post-thumb{width:56px;height:40px;border-radius:8px;object-fit:cover;background:var(--bg-light);border:1px solid var(--border);flex-shrink:0}
-        .blog-post-thumb-placeholder{width:56px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--brand-navy),var(--navy-light));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+        .blog-post-thumb-placeholder{width:56px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--brand-navy),var(--navy-light));display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:white;flex-shrink:0}
         .blog-post-cell{display:flex;align-items:center;gap:.85rem}
         .blog-post-name{font-weight:700;color:var(--text-dark);font-size:.9rem;line-height:1.3;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .blog-post-excerpt{font-size:.75rem;color:var(--text-muted);max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
@@ -259,7 +262,7 @@
         .modal-backdrop.open{opacity:1;pointer-events:all}
         .modal{background:var(--surface);border-radius:24px;padding:2.5rem;max-width:420px;width:90%;box-shadow:0 20px 60px var(--shadow-color);border:1px solid var(--border);transform:scale(.95);transition:transform .25s;text-align:center}
         .modal-backdrop.open .modal{transform:scale(1)}
-        .modal-ico{font-size:3rem;margin-bottom:1rem; opacity: 0.8;}
+        .modal-ico{font-size:2rem;margin-bottom:1rem; color: var(--danger);}
         .modal h3{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem}
         .modal p{font-size:.9rem;color:var(--text-gray);margin-bottom:2rem;line-height:1.6}
         .modal-actions{display:flex;gap:1rem;justify-content:center}
@@ -330,12 +333,12 @@
 
 <div class="modal-backdrop" id="deleteModal">
     <div class="modal">
-        <div class="modal-ico">🗑️</div>
-        <h3>Delete Blog Post?</h3>
-        <p id="deleteModal-msg">This action is permanent and cannot be undone. The post will be removed from the public blog immediately.</p>
+        <div class="modal-ico">⚠️</div>
+        <h3>Confirm Action</h3>
+        <p id="deleteModal-msg">Are you sure you want to proceed?</p>
         <div class="modal-actions">
             <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-            <button class="btn btn-danger" id="deleteModal-confirm">Yes, Delete It</button>
+            <button class="btn btn-danger" id="deleteModal-confirm">Yes, Proceed</button>
         </div>
     </div>
 </div>
@@ -344,7 +347,7 @@
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
         <div class="logo-wrapper">
-            <img src="mainlogo.png" alt="Logo" class="main-logo-img">
+            <img src="mainlogo.png" alt="Logo" class="main-logo-img" onerror="this.style.display='none'">
             <div class="brand-text-wrap">
                 <div class="brand">ENET <span>SUPREME</span></div>
                 <div class="badge-admin">Admin Dashboard</div>
@@ -513,7 +516,7 @@
                             </tr>
                         </thead>
                         <tbody id="blog-posts-list">
-                            <tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">⌛</div><div class="empty-ttl">Loading posts...</div></div></td></tr>
+                            <tr><td colspan="4"><div class="empty-cell"><div class="empty-ttl">Loading posts...</div></div></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -598,7 +601,7 @@
 <div class="drawer" id="userDrawer">
     <div class="drawer-header">
         <div class="drawer-header-left">
-            <span id="drawer-role-icon" style="font-size:1.3rem; margin-right: 5px;">👤</span>
+            <span id="drawer-role-icon" style="font-size:1.3rem; margin-right: 5px; font-weight: 900; color: var(--brand-navy);">U</span>
             <h3 id="drawer-title">User Details</h3>
         </div>
         <button class="drawer-close" onclick="closeDrawer()">✕</button>
@@ -661,7 +664,11 @@ function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d);}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
-function emptyRow(msg,cols){return`<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ttl">${msg}</div></div></td></tr>`;}
+
+function emptyRow(msg,cols){
+    const imgHtml = cols === 5 ? `<div class="empty-cell-img-wrap"><img src="tech-banner.png" alt="Caught Up" onerror="this.style.display='none'"></div>` : '';
+    return`<tr><td colspan="${cols}"><div class="empty-cell-large">${imgHtml}<div class="empty-ttl">${msg}</div><div class="empty-sub">No new data to display.</div></div></td></tr>`;
+}
 function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
 let _data=[],_tab='all',_sb,_allCourses=[];
@@ -792,7 +799,14 @@ function renderPending(data){
         if(r==='admin')bc='admin';
         html+=`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">Approve</button><button class="btn btn-danger" onclick="rejectUser('${u.id}')">Reject</button></div></td></tr>`;
     });
-    document.getElementById('pending-users-list').innerHTML=html||emptyRow('All caught up!',5);
+    
+    const emptyPending = `<tr><td colspan="5"><div class="empty-cell-large">
+        <div class="empty-cell-img-wrap"><img src="tech-banner.png" alt="All Caught Up" onerror="this.style.display='none'"></div>
+        <div class="empty-ttl">All caught up!</div>
+        <div class="empty-sub">No new registration requests at the moment.</div>
+    </div></td></tr>`;
+
+    document.getElementById('pending-users-list').innerHTML=html||emptyPending;
     document.getElementById('pend-badge').textContent=pc;
     document.getElementById('nav-pcount').textContent=pc;
     document.getElementById('stat-pending').textContent=pc;
