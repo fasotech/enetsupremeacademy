@@ -36,7 +36,6 @@
         .video-controls-bar { background: var(--surface-dark); padding: 1rem 2.5rem; border-bottom: 1px solid var(--border-dark); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;}
         .lesson-title-display { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
         
-        /* NEW: RATE COURSE BUTTON */
         .btn-rate-course { background: rgba(252, 209, 22, 0.15); color: var(--brand-yellow); border: 1px solid var(--brand-yellow); padding: 10px 16px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px;}
         .btn-rate-course:hover { background: var(--brand-yellow); color: var(--bg-dark); transform: translateY(-2px); }
 
@@ -151,7 +150,7 @@
                 
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn-rate-course" onclick="document.getElementById('review-modal').classList.add('show')">
-                        ⭐ Rate Course
+                        ★ Rate Course
                     </button>
                     <button class="btn-complete" id="mark-complete-btn" onclick="markLessonComplete()">
                         Mark as Complete 
@@ -378,7 +377,7 @@
                     course_id: courseData.id,
                     certificate_id: certId
                 });
-                alert("🎉 COURSE COMPLETED! Your certificate has been generated. Go to your Dashboard to view it.");
+                alert("COURSE COMPLETED! Your certificate has been generated. Go to your Dashboard to view it.");
                 window.location.href = "student-dashboard.html";
             } catch(e) {}
         }
@@ -395,7 +394,6 @@
             if(rating === 0) { alert("Please select a star rating."); return; }
 
             try {
-                // Upsert to allow users to update their review if they want
                 await sb.from('course_reviews').upsert({
                     course_id: courseData.id,
                     student_id: currentUser.id,
