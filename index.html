@@ -36,14 +36,17 @@
         .goog-tooltip { display: none !important; }
         .goog-tooltip:hover { display: none !important; }
         .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
-        /* Kill the banner iframe that pushes page down */
         iframe.goog-te-banner-frame { display: none !important; }
 
         /* === HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
-        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--brand-yellow); }
+        
+        /* BRANDING: Logo Layout */
+        .logo { display: flex; align-items: center; gap: 12px; color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo .logo-text span { color: var(--brand-yellow); }
+        .main-logo-img { height: 45px; width: auto; object-fit: contain; display: block; }
+        
         .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
         .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
         .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
@@ -225,8 +228,9 @@
 
         /* === FOOTER === */
         footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); }
-        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
         .footer-logo span { color: var(--brand-yellow); }
+        .footer-logo-img { height: 40px; width: auto; object-fit: contain; }
         .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
 
         /* ============================
@@ -234,7 +238,6 @@
            ============================ */
         @media (max-width: 950px) {
             .mobile-menu-btn { display: block; }
-            /* Left align mobile menu items */
             .nav-links { display: none; width: 100%; flex-direction: column; align-items: flex-start; text-align: left; padding: 1rem 0 1rem 10px; gap: 1.2rem; }
             .nav-links.show { display: flex; }
             .hero-container { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; text-align: center; gap: 2rem; }
@@ -251,6 +254,8 @@
             .stat-item { min-width: 40%; }
         }
         @media (max-width: 600px) {
+            .main-logo-img { height: 35px; }
+            .logo .logo-text { font-size: 1.2rem; }
             .hero-title { font-size: 2.2rem; }
             .hero-container { padding: 1.5rem 1rem; }
             .cta-group { flex-direction: column; width: 100%; }
@@ -279,7 +284,10 @@
 
 <header>
     <nav>
-        <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+        <a href="index.html" class="logo">
+            <img src="mainlogo.png" alt="ENET Supreme Logo" class="main-logo-img">
+            <span class="logo-text">ENET SUPREME <span>ACADEMY</span></span>
+        </a>
         <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
 
         <div class="nav-links" id="navLinks">
@@ -431,7 +439,10 @@
 <footer>
     <div class="container footer-container">
         <div>
-            <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+            <div class="footer-logo">
+                <img src="mainlogo.png" alt="ENET Supreme Logo" class="footer-logo-img">
+                <div>ENET SUPREME <span>ACADEMY</span></div>
+            </div>
             <p style="margin-top: 1rem;">enetsupremeacademy@gmail.com | +234 8062 770 265</p>
         </div>
         <div style="color: #cbd5e1; font-size: 0.9rem;">
