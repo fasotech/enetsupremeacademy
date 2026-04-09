@@ -232,20 +232,41 @@
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Smart Video Parser
+        // ==========================================
+        // UPGRADED SMART VIDEO PARSER
+        // ==========================================
         function renderVideo(url) {
             const container = document.getElementById('player-container');
             if (!url) {
                 container.innerHTML = `<div class="state-box" style="background:#111;"><h3 style="color:var(--text-main);">Video not available</h3></div>`;
                 return;
             }
-            if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
-                let videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('youtu.be/')[1].split('?')[0];
-                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
-            } else if (url.includes('vimeo.com/')) {
+            
+            url = url.trim();
+
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = "";
+                if (url.includes('v=')) {
+                    videoId = url.split('v=')[1].split('&')[0];
+                } else if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1].split('?')[0];
+                }
+                container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            
+            } else if (url.includes('vimeo.com')) {
                 const videoId = url.split('vimeo.com/')[1].split('?')[0];
-                container.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                container.innerHTML = `<iframe src="https://player.vimeo.com/video/${videoId}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            
+            } else if (url.includes('drive.google.com')) {
+                // Convert Google Drive view links to embeddable preview links
+                let embedUrl = url;
+                if (url.includes('/view')) {
+                    embedUrl = url.replace('/view', '/preview');
+                }
+                container.innerHTML = `<iframe src="${embedUrl}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            
             } else {
+                // Standard uploaded videos (MP4, WebM, etc.) from Supabase
                 container.innerHTML = `<video controls controlsList="nodownload"><source src="${url}" type="video/mp4"></video>`;
             }
         }
@@ -297,8 +318,12 @@
             btn.innerHTML = "Saving...";
 
             try {
-                // Save to DB
-                await sb.from('lesson_progress').insert({ student_id: currentUser.id, lesson_id: currentLessonId });
+                // Save to DB (Tracking both student_id AND user_id for maximum compatibility)
+                await sb.from('lesson_progress').insert({ 
+                    student_id: currentUser.id, 
+                    user_id: currentUser.id,
+                    lesson_id: currentLessonId 
+                });
                 
                 completedLessonIds.push(currentLessonId);
                 
@@ -395,7 +420,14 @@
             try {
                 const { data: { session } } = await sb.auth.getSession();
                 if (!session) { window.location.href = "login.html"; return; }
-                currentUser = session.user;
+                
+                // Allow Ghost Mode viewing
+                const ghostId = localStorage.getItem('enet_impersonate_id');
+                if (ghostId) {
+                    currentUser = { id: ghostId };
+                } else {
+                    currentUser = session.user;
+                }
 
                 // Back button logic based on role
                 const { data: profile } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
@@ -410,7 +442,7 @@
                 courseData = course;
 
                 document.getElementById('header-title').textContent = course.title;
-                document.getElementById('tab-overview').innerHTML = course.description.replace(/\n/g, '<br>');
+                document.getElementById('tab-overview').innerHTML = course.description ? course.description.replace(/\n/g, '<br>') : 'No description available.';
 
                 // Fetch Curriculum
                 const { data: sections } = await sb.from('course_sections').select('*').eq('course_id', courseId).order('sequence_order', {ascending: true});
@@ -419,11 +451,22 @@
                 const { data: lessons } = await sb.from('course_lessons').select('*').in('section_id', sections.map(s=>s.id)).order('sequence_order', {ascending: true});
                 allLessonsFlat = lessons || [];
 
-                // Fetch Progress & Review State
-                const { data: prog } = await sb.from('lesson_progress').select('lesson_id').eq('student_id', currentUser.id);
-                if(prog) completedLessonIds = prog.map(p => p.lesson_id);
+                // Fetch Progress & Review State (Fallback queries checking both IDs)
+                let progData = null;
+                try {
+                    const res = await sb.from('lesson_progress').select('lesson_id').eq('user_id', currentUser.id);
+                    if(res.data && res.data.length > 0) progData = res.data;
+                } catch(e){}
+                if(!progData) {
+                    try {
+                        const res2 = await sb.from('lesson_progress').select('lesson_id').eq('student_id', currentUser.id);
+                        if(res2.data) progData = res2.data;
+                    } catch(e){}
+                }
 
-                const { data: rev } = await sb.from('course_reviews').select('id').eq('course_id', courseId).eq('student_id', currentUser.id).single();
+                if(progData) completedLessonIds = [...new Set(progData.map(p => p.lesson_id))];
+
+                const { data: rev } = await sb.from('course_reviews').select('id').eq('course_id', courseId).eq('student_id', currentUser.id).maybeSingle();
                 if(rev) hasReviewed = true;
 
                 // Render Sidebar
