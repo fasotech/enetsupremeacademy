@@ -31,14 +31,19 @@
         *{box-sizing:border-box;margin:0;padding:0}
         body{background:var(--bg-light);color:var(--text-gray);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
 
-        /* SIDEBAR */
+        /* SIDEBAR & LOGO */
         .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(2,1,74,0.4);backdrop-filter:blur(4px);z-index:90;opacity:0;transition:opacity .3s}
         .sidebar-overlay.show{display:block;opacity:1}
         .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--surface);display:flex;flex-direction:column;z-index:100;box-shadow:4px 0 24px var(--shadow-color);border-right:1px solid var(--border);transition:transform .3s,background .3s}
-        .sidebar-logo{padding:2.5rem 2rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
-        .brand{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-.02em;text-transform:uppercase;color:var(--text-dark);line-height:1.2}
-        .brand span{color:var(--brand-yellow)}
-        .badge-admin{display:inline-block;margin-top:.4rem;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+        
+        .sidebar-logo { padding: 2.5rem 1.5rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo-wrapper { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .main-logo-img { height: 36px; width: auto; object-fit: contain; flex-shrink: 0;}
+        .brand-text-wrap { display: flex; flex-direction: column; }
+        .brand { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; text-transform: uppercase; color: var(--text-dark); line-height: 1.2; }
+        .brand span { color: var(--brand-yellow); }
+        .badge-admin { display: inline-block; margin-top: 0.2rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--success); }
+        
         .close-sidebar{display:none;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer}
         .nav-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:1.5rem 2rem .5rem}
         .nav-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 2rem;margin:.2rem 1rem;font-size:.95rem;font-weight:500;color:var(--text-gray);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
@@ -169,7 +174,7 @@
         .master-tag{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;color:var(--success);background:rgba(5,205,153,.1);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px}
         .system-owner-tag{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--brand-navy);background:var(--brand-yellow);border:1px solid rgba(252,209,22,0.5);padding:6px 12px;border-radius:8px}
 
-        /* ── NEW: GRANT COURSE SECTION ── */
+        /* ── GRANT COURSE SECTION ── */
         .grant-section{background:rgba(0,160,223,.05);border:1px solid rgba(0,160,223,.2);padding:1rem;border-radius:12px;grid-column:span 2;margin-top:1rem}
         .grant-section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-cyan);margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
         .grant-select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;background:var(--surface);color:var(--text-dark);outline:none;font-family:'DM Sans',sans-serif;font-size:.9rem}
@@ -254,7 +259,7 @@
         .modal-backdrop.open{opacity:1;pointer-events:all}
         .modal{background:var(--surface);border-radius:24px;padding:2.5rem;max-width:420px;width:90%;box-shadow:0 20px 60px var(--shadow-color);border:1px solid var(--border);transform:scale(.95);transition:transform .25s;text-align:center}
         .modal-backdrop.open .modal{transform:scale(1)}
-        .modal-ico{font-size:3rem;margin-bottom:1rem}
+        .modal-ico{font-size:3rem;margin-bottom:1rem; opacity: 0.8;}
         .modal h3{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem}
         .modal p{font-size:.9rem;color:var(--text-gray);margin-bottom:2rem;line-height:1.6}
         .modal-actions{display:flex;gap:1rem;justify-content:center}
@@ -338,12 +343,16 @@
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        <div>
-            <div class="brand">ENET <span>SUPREME</span></div>
-            <div class="badge-admin">Admin Dashboard</div>
+        <div class="logo-wrapper">
+            <img src="mainlogo.png" alt="Logo" class="main-logo-img">
+            <div class="brand-text-wrap">
+                <div class="brand">ENET <span>SUPREME</span></div>
+                <div class="badge-admin">Admin Dashboard</div>
+            </div>
         </div>
         <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
     </div>
+    
     <div class="nav-label">Main Menu</div>
     <a class="nav-item active" href="admin-dashboard.html">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
@@ -420,25 +429,21 @@
                 <div class="stat-lbl">Total Students</div>
                 <div class="stat-num" id="stat-students">—</div>
                 <div class="stat-hint">Click to view all students</div>
-                <div class="stat-arrow">🎒</div>
             </div>
             <div class="stat-card brand-orange" id="card-teachers" onclick="statCardNav('teachers')">
                 <div class="stat-lbl">Active Teachers</div>
                 <div class="stat-num" id="stat-teachers">—</div>
                 <div class="stat-hint">Click to view all teachers</div>
-                <div class="stat-arrow">🎓</div>
             </div>
             <div class="stat-card brand-yellow" onclick="scrollToBlog()">
                 <div class="stat-lbl">Blog Posts</div>
                 <div class="stat-num" id="stat-posts">—</div>
                 <div class="stat-hint">Manage your blog content</div>
-                <div class="stat-arrow">✍️</div>
             </div>
             <div class="stat-card brand-surface pend" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'})">
                 <div class="stat-lbl">Pending Reviews</div>
                 <div class="stat-num" id="stat-pending">—</div>
                 <div class="stat-hint">Needs your attention</div>
-                <div class="stat-arrow">⏳</div>
             </div>
         </div>
 
@@ -492,7 +497,7 @@
                     <span class="panel-cnt" id="blog-post-count">0 posts</span>
                 </div>
                 <button class="btn btn-primary" onclick="startNewPost()" id="new-post-btn" style="padding:.6rem 1.25rem;font-size:.85rem">
-                    ✍️ New Post
+                    Write New Post
                 </button>
             </div>
 
@@ -508,7 +513,7 @@
                             </tr>
                         </thead>
                         <tbody id="blog-posts-list">
-                            <tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">⏳</div><div class="empty-ttl">Loading posts...</div></div></td></tr>
+                            <tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">⌛</div><div class="empty-ttl">Loading posts...</div></div></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -517,9 +522,9 @@
             <div class="blog-manager-section" id="blog-form-section" style="display:none">
                 <div class="blog-form-wrap">
                     <div class="blog-form-header">
-                        <h3 id="blog-form-title">✍️ Write New Post</h3>
+                        <h3 id="blog-form-title">Write New Post</h3>
                         <div id="editing-indicator" style="display:none">
-                            <span class="editing-pill">✏️ Editing Post</span>
+                            <span class="editing-pill">Editing Post</span>
                         </div>
                     </div>
 
@@ -548,9 +553,9 @@
                     </div>
 
                     <div class="blog-form-actions">
-                        <button class="btn btn-primary" onclick="submitBlogPost()" id="publish-blog-btn">🚀 Publish Post</button>
+                        <button class="btn btn-primary" onclick="submitBlogPost()" id="publish-blog-btn">Publish Post</button>
                         <button class="btn btn-secondary" onclick="cancelBlogForm()">Cancel</button>
-                        <a href="blog.html" target="_blank" class="btn btn-admin" style="margin-left:auto;text-decoration:none">🌐 View Live Blog</a>
+                        <a href="blog.html" target="_blank" class="btn btn-admin" style="margin-left:auto;text-decoration:none">View Live Blog</a>
                     </div>
                 </div>
             </div>
@@ -593,7 +598,7 @@
 <div class="drawer" id="userDrawer">
     <div class="drawer-header">
         <div class="drawer-header-left">
-            <span id="drawer-role-icon" style="font-size:1.3rem">👤</span>
+            <span id="drawer-role-icon" style="font-size:1.3rem; margin-right: 5px;">👤</span>
             <h3 id="drawer-title">User Details</h3>
         </div>
         <button class="drawer-close" onclick="closeDrawer()">✕</button>
@@ -626,10 +631,10 @@ document.addEventListener('click',e=>{const w=document.querySelector('.notificat
 ═══════════════════════════════ */
 function showToast(msg,type='info',duration=3500){
     const wrap=document.getElementById('toast-wrap');
-    const icons={success:'✅',error:'❌',info:'ℹ️'};
+    const icons={success:'✓',error:'✕',info:'i'};
     const t=document.createElement('div');
     t.className=`toast ${type}`;
-    t.innerHTML=`<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+    t.innerHTML=`<span style="font-weight:900;">${icons[type]||'i'}</span><span>${msg}</span>`;
     wrap.appendChild(t);
     setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},duration);
 }
@@ -656,11 +661,11 @@ function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d);}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
-function emptyRow(msg,cols,ico,sub){return`<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ico">${ico||'📭'}</div><div class="empty-ttl">${msg}</div>${sub?`<div class="empty-sub">${sub}</div>`:''}</div></td></tr>`;}
+function emptyRow(msg,cols){return`<tr><td colspan="${cols}"><div class="empty-cell"><div class="empty-ttl">${msg}</div></div></td></tr>`;}
 function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
 let _data=[],_tab='all',_sb,_allCourses=[];
-const ROLE_ICONS={student:'🎒',teacher:'🎓',instructor:'🎓',admin:'🛡️'};
+const ROLE_ICONS={student:'S',teacher:'T',instructor:'T',admin:'A'};
 
 /* ═══════════════════════════════
    USER DRAWER & GHOST MODE
@@ -678,13 +683,13 @@ window.grantCourseAccess = async function(userId) {
     if(!courseId) return showToast("Please select a course first.", "error");
 
     const btn = document.getElementById('grant-btn-' + userId);
-    if(btn) { btn.disabled = true; btn.textContent = '⏳ Granting...'; }
+    if(btn) { btn.disabled = true; btn.textContent = 'Granting...'; }
 
     try {
         const {data: existing} = await _sb.from('enrollments').select('id').eq('student_id', userId).eq('course_id', courseId).maybeSingle();
         if(existing) {
             showToast("Student is already enrolled in this course.", "info");
-            if(btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
+            if(btn) { btn.disabled = false; btn.textContent = 'Enroll Student'; }
             return;
         }
 
@@ -698,12 +703,12 @@ window.grantCourseAccess = async function(userId) {
             if(!approveErr) {
                 user.status = 'approved';
                 renderAll(_data);
-                showToast("✅ Course granted and student account approved!", "success");
+                showToast("Course granted and student account approved!", "success");
             } else {
-                showToast("✅ Course granted!", "success");
+                showToast("Course granted!", "success");
             }
         } else {
-            showToast("✅ Course successfully granted to student!", "success");
+            showToast("Course successfully granted to student!", "success");
         }
         closeDrawer();
         loadProfiles();
@@ -711,7 +716,7 @@ window.grantCourseAccess = async function(userId) {
         console.error('Grant error:', err);
         showToast("Failed to grant course: " + err.message, "error");
     } finally {
-        if(btn) { btn.disabled = false; btn.textContent = '✓ Enroll Student'; }
+        if(btn) { btn.disabled = false; btn.textContent = 'Enroll Student'; }
     }
 }
 
@@ -728,34 +733,34 @@ function openDrawer(userId){
     else if(r==='admin')displayRole='admin';
     else displayRole='student';
     
-    document.getElementById('drawer-role-icon').textContent=ROLE_ICONS[displayRole]||'👤';
+    document.getElementById('drawer-role-icon').textContent=ROLE_ICONS[displayRole]||'U';
     document.getElementById('drawer-title').textContent=displayRole==='teacher'?'Teacher Profile':displayRole==='admin'?'Admin Profile':'Student Profile';
     
     let actions='';
-    if(isPending){actions=`<button class="btn btn-approve full" onclick="approveUser('${u.id}');closeDrawer()">✓ Approve Registration</button><button class="btn btn-danger full" onclick="rejectUser('${u.id}');closeDrawer()">✕ Reject & Remove</button>`;}
-    else if(displayRole==='admin'){if(isOwner){actions=`<div class="system-owner-tag full" style="justify-content:center;padding:1rem;grid-column:span 2">👑 System Owner — Cannot be modified</div>`;}else{actions=`<button class="btn btn-unadmin" onclick="removeAdmin('${u.id}');closeDrawer()">↓ Demote to Student</button><button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`;}}
+    if(isPending){actions=`<button class="btn btn-approve full" onclick="approveUser('${u.id}');closeDrawer()">Approve Registration</button><button class="btn btn-danger full" onclick="rejectUser('${u.id}');closeDrawer()">Reject & Remove</button>`;}
+    else if(displayRole==='admin'){if(isOwner){actions=`<div class="system-owner-tag full" style="justify-content:center;padding:1rem;grid-column:span 2">System Owner — Cannot be modified</div>`;}else{actions=`<button class="btn btn-unadmin" onclick="removeAdmin('${u.id}');closeDrawer()">Demote to Student</button><button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">Suspend Account</button>`;}}
     else{
-        actions=`<button class="btn btn-admin" onclick="makeAdmin('${u.id}');closeDrawer()">↑ Make Admin</button>${isInactive?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">▶ Activate Account</button>`:`<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">⏸ Suspend Account</button>`}`;
-        actions += `<button class="btn btn-ghost-mode" onclick="impersonateUser('${u.id}', '${displayRole}')">🔑 Remote Login as ${u.first_name || 'User'}</button>`;
+        actions=`<button class="btn btn-admin" onclick="makeAdmin('${u.id}');closeDrawer()">Make Admin</button>${isInactive?`<button class="btn btn-activate" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">Activate Account</button>`:`<button class="btn btn-deact" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">Suspend Account</button>`}`;
+        actions += `<button class="btn btn-ghost-mode" onclick="impersonateUser('${u.id}', '${displayRole}')">Remote Login as ${u.first_name || 'User'}</button>`;
     }
     
     let grantSection = '';
     if (displayRole === 'student') {
         let options = '<option value="">── Select a course ──</option>';
         _allCourses.forEach(c => {
-            const tag = c.is_event_course ? '🎁 [EVENT]' : '📚 [MAIN]';
+            const tag = c.is_event_course ? '[EVENT]' : '[MAIN]';
             options += `<option value="${c.id}">${tag} ${c.title}</option>`;
         });
         const statusNote = isPending
-            ? `<div class="grant-note" style="color:var(--success);font-weight:700;">💡 Granting a course will automatically approve this student's account.</div>`
+            ? `<div class="grant-note" style="color:var(--success);font-weight:700;">Granting a course will automatically approve this student's account.</div>`
             : '';
         grantSection = `
         <div class="grant-section">
-            <div class="grant-section-title">📚 Grant Course Access</div>
+            <div class="grant-section-title">Grant Course Access</div>
             ${statusNote}
             <div class="grant-note">Student will be enrolled immediately and can start learning.</div>
             <select class="grant-select" id="grant-course-select">${options}</select>
-            <button class="btn btn-primary" id="grant-btn-${u.id}" style="width:100%;justify-content:center;padding:.75rem;" onclick="grantCourseAccess('${u.id}')">✓ Enroll Student</button>
+            <button class="btn btn-primary" id="grant-btn-${u.id}" style="width:100%;justify-content:center;padding:.75rem;" onclick="grantCourseAccess('${u.id}')">Enroll Student</button>
         </div>`;
     }
 
@@ -785,9 +790,9 @@ function renderPending(data){
         const r=getRole(u);let bc='student';
         if(r.includes('teacher')||r.includes('instructor'))bc='teacher';
         if(r==='admin')bc='admin';
-        html+=`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">✓ Approve</button><button class="btn btn-danger" onclick="rejectUser('${u.id}')">✕ Reject</button></div></td></tr>`;
+        html+=`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">Approve</button><button class="btn btn-danger" onclick="rejectUser('${u.id}')">Reject</button></div></td></tr>`;
     });
-    document.getElementById('pending-users-list').innerHTML=html||emptyRow('All caught up!',5,'✅','No pending approvals.');
+    document.getElementById('pending-users-list').innerHTML=html||emptyRow('All caught up!',5);
     document.getElementById('pend-badge').textContent=pc;
     document.getElementById('nav-pcount').textContent=pc;
     document.getElementById('stat-pending').textContent=pc;
@@ -810,15 +815,15 @@ function renderUsers(data,tab){
     else if(tab==='admins')rows=rows.filter(u=>getRole(u)==='admin');
     if(q)rows=rows.filter(u=>{const nm=`${u.first_name||''} ${u.last_name||''}`.toLowerCase();return nm.includes(q)||(u.email||'').toLowerCase().includes(q);});
     document.getElementById('users-badge').textContent=rows.length;
-    if(!rows.length){const msgs={students:'No students registered yet',teachers:'No teachers registered yet',admins:'No admins found',all:'No users found'};const icos={students:'🎒',teachers:'🎓',admins:'🛡️',all:'🔍'};document.getElementById('all-users-list').innerHTML=emptyRow(msgs[tab]||'No users found',6,icos[tab]||'🔍','');return;}
+    if(!rows.length){const msgs={students:'No students registered yet',teachers:'No teachers registered yet',admins:'No admins found',all:'No users found'};document.getElementById('all-users-list').innerHTML=emptyRow(msgs[tab]||'No users found',6);return;}
     document.getElementById('all-users-list').innerHTML=rows.map(u=>{
         const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();
         const r=getRole(u);const isAdmin=r==='admin';const isInactive=u.status==='inactive';
         const isOwner=(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com';
         let bc='student';if(r.includes('teacher')||r.includes('instructor'))bc='teacher';if(r==='admin')bc='admin';
         let btns='';
-        if(isAdmin){if(isOwner)btns=`<span class="system-owner-tag">👑 System Owner</span>`;else btns=`<span class="master-tag">★ Master Admin</span><button class="btn btn-unadmin" onclick="event.stopPropagation();removeAdmin('${u.id}')">↓ Demote</button>`;}
-        else{btns=`<button class="btn btn-admin" onclick="event.stopPropagation();makeAdmin('${u.id}')">↑ Admin</button>`;btns+=isInactive?`<button class="btn btn-activate" onclick="event.stopPropagation();toggleUserStatus('${u.id}','approved')">▶ Activate</button>`:`<button class="btn btn-deact" onclick="event.stopPropagation();toggleUserStatus('${u.id}','inactive')">⏸ Suspend</button>`;}
+        if(isAdmin){if(isOwner)btns=`<span class="system-owner-tag">System Owner</span>`;else btns=`<span class="master-tag">Master Admin</span><button class="btn btn-unadmin" onclick="event.stopPropagation();removeAdmin('${u.id}')">Demote</button>`;}
+        else{btns=`<button class="btn btn-admin" onclick="event.stopPropagation();makeAdmin('${u.id}')">Make Admin</button>`;btns+=isInactive?`<button class="btn btn-activate" onclick="event.stopPropagation();toggleUserStatus('${u.id}','approved')">Activate</button>`:`<button class="btn btn-deact" onclick="event.stopPropagation();toggleUserStatus('${u.id}','inactive')">Suspend</button>`;}
         return`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:.55':''}">${inits(u.first_name,u.last_name)}</div><div><div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td><span class="status-badge ${isInactive?'inactive':'active'}">${isInactive?'Suspended':'Active'}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions">${btns}</div></td></tr>`;
     }).join('');
 }
@@ -849,7 +854,7 @@ async function loadGlobalActivity() {
         const { data: users } = await _sb.from('profiles').select('first_name, last_name, role, created_at').order('created_at', {ascending: false}).limit(5);
         if (users) {
             users.forEach(u => activities.push({
-                type: 'user', time: u.created_at, icon: '👤',
+                type: 'user', time: u.created_at, icon: 'U',
                 msg: `<strong>${u.first_name} ${u.last_name||''}</strong> registered as a ${u.role}.`
             }));
         }
@@ -858,7 +863,7 @@ async function loadGlobalActivity() {
         const { data: courses } = await _sb.from('courses').select('title, created_at, profiles(first_name, last_name)').eq('is_published', true).order('created_at', {ascending: false}).limit(5);
         if (courses) {
             courses.forEach(c => activities.push({
-                type: 'course', time: c.created_at, icon: '📚',
+                type: 'course', time: c.created_at, icon: 'C',
                 msg: `<strong>${c.profiles?.first_name || 'A Teacher'}</strong> published the course: "${c.title}".`
             }));
         }
@@ -867,7 +872,7 @@ async function loadGlobalActivity() {
         const { data: certs } = await _sb.from('certificates').select('issued_at, profiles(first_name, last_name), courses(title)').order('issued_at', {ascending: false}).limit(5);
         if (certs) {
             certs.forEach(c => activities.push({
-                type: 'cert', time: c.issued_at, icon: '🎓',
+                type: 'cert', time: c.issued_at, icon: 'A',
                 msg: `<strong>${c.profiles?.first_name || 'A Student'}</strong> completed the course: "${c.courses?.title}".`
             }));
         }
@@ -876,7 +881,7 @@ async function loadGlobalActivity() {
         const { data: posts } = await _sb.from('posts').select('created_at, profiles(first_name, last_name)').order('created_at', {ascending: false}).limit(5);
         if (posts) {
             posts.forEach(p => activities.push({
-                type: 'post', time: p.created_at, icon: '💬',
+                type: 'post', time: p.created_at, icon: 'P',
                 msg: `<strong>${p.profiles?.first_name || 'Someone'}</strong> posted in the Community Hub.`
             }));
         }
@@ -920,8 +925,8 @@ async function loadProfiles(){
 
         loadGlobalActivity(); // Fire radar on load
     } catch(err){
-        document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5,'⚠️','Check console for details.');
-        document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6,'⚠️','Check console for details.');
+        document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5);
+        document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6);
     }
 }
 
@@ -977,29 +982,29 @@ async function loadBlogPosts(){
         document.getElementById('stat-posts').textContent=cnt;
         document.getElementById('nav-blog-count').textContent=cnt;
     }catch(err){
-        document.getElementById('blog-posts-list').innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">⚠️</div><div class="empty-ttl">Could not load posts</div><div class="empty-sub">${err.message}</div></div></td></tr>`;
+        document.getElementById('blog-posts-list').innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ttl">Could not load posts</div><div class="empty-sub">${err.message}</div></div></td></tr>`;
     }
 }
 
 function renderBlogPostsList(posts){
     const tbody=document.getElementById('blog-posts-list');
     if(!posts||!posts.length){
-        tbody.innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ico">✍️</div><div class="empty-ttl">No blog posts yet</div><div class="empty-sub">Click "New Post" to publish your first article.</div></div></td></tr>`;
+        tbody.innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ttl">No blog posts yet</div><div class="empty-sub">Click "New Post" to publish your first article.</div></div></td></tr>`;
         return;
     }
     tbody.innerHTML=posts.map(p=>{
         const thumb=p.cover_image
             ?`<img src="${p.cover_image}" class="blog-post-thumb" alt="" onerror="this.style.display='none'">`
-            :`<div class="blog-post-thumb-placeholder">📝</div>`;
+            :`<div class="blog-post-thumb-placeholder">P</div>`;
         const updated=p.updated_at&&p.updated_at!==p.created_at?`<span style="font-size:.7rem;color:var(--accent-cyan);margin-left:6px">(edited)</span>`:'';
         return`<tr>
             <td><div class="blog-post-cell">${thumb}<div><div class="blog-post-name" title="${escHtml(p.title)}">${escHtml(p.title)}</div><div class="blog-post-excerpt">${escHtml(p.excerpt||'No excerpt')}</div></div></div></td>
             <td style="white-space:nowrap">${fmtDate(p.created_at)}${updated}</td>
             <td><span class="status-badge active">Published</span></td>
             <td style="text-align:right"><div class="actions" style="justify-content:flex-end">
-                <a href="blog.html?post=${p.id}" target="_blank" class="btn btn-admin" title="View on blog">🌐 View</a>
-                <button class="btn btn-edit" onclick="startEditPost('${p.id}')">✏️ Edit</button>
-                <button class="btn btn-danger" onclick="confirmDeletePost('${p.id}','${escAttr(p.title)}')">🗑️ Delete</button>
+                <a href="blog.html?post=${p.id}" target="_blank" class="btn btn-admin" title="View on blog">View</a>
+                <button class="btn btn-edit" onclick="startEditPost('${p.id}')">Edit</button>
+                <button class="btn btn-danger" onclick="confirmDeletePost('${p.id}','${escAttr(p.title)}')">Delete</button>
             </div></td>
         </tr>`;
     }).join('');
@@ -1020,10 +1025,10 @@ window.startNewPost=function(){
     preview.src='';preview.classList.remove('show');
     initQuill();
     quillEditor.setContents([]);
-    document.getElementById('blog-form-title').textContent='✍️ Write New Post';
+    document.getElementById('blog-form-title').textContent='Write New Post';
     document.getElementById('editing-indicator').style.display='none';
-    document.getElementById('publish-blog-btn').textContent='🚀 Publish Post';
-    document.getElementById('new-post-btn').textContent='← Back to Posts';
+    document.getElementById('publish-blog-btn').textContent='Publish Post';
+    document.getElementById('new-post-btn').textContent='Back to Posts';
     document.getElementById('new-post-btn').onclick=cancelBlogForm;
     showBlogForm();
 };
@@ -1051,8 +1056,8 @@ window.startEditPost=async function(postId){
         quillEditor.root.innerHTML=data.content||'';
         document.getElementById('blog-form-title').textContent='Edit Post';
         document.getElementById('editing-indicator').style.display='block';
-        document.getElementById('publish-blog-btn').textContent='💾 Save Changes';
-        document.getElementById('new-post-btn').textContent='← Back to Posts';
+        document.getElementById('publish-blog-btn').textContent='Save Changes';
+        document.getElementById('new-post-btn').textContent='Back to Posts';
         document.getElementById('new-post-btn').onclick=cancelBlogForm;
         showBlogForm();
         document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});
@@ -1084,7 +1089,7 @@ function showBlogForm(){
 window.cancelBlogForm=function(){
     document.getElementById('blog-list-section').style.display='block';
     document.getElementById('blog-form-section').style.display='none';
-    document.getElementById('new-post-btn').textContent='✍️ New Post';
+    document.getElementById('new-post-btn').textContent='Write New Post';
     document.getElementById('new-post-btn').onclick=startNewPost;
     _isEditMode=false;
     _removeCoverOnSave=false;
@@ -1164,7 +1169,7 @@ window.submitBlogPost=async function(){
         console.error(err);
     }finally{
         btn.disabled=false;
-        btn.textContent=_isEditMode?'💾 Save Changes':'🚀 Publish Post';
+        btn.textContent=_isEditMode?'Save Changes':'Publish Post';
     }
 };
 
