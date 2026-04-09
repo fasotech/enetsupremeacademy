@@ -242,7 +242,7 @@
             </div>
         </div>
         <div class="topbar-right">
-            <button class="icon-btn" onclick="cycleTheme()"><span id="theme-icon">💻</span></button>
+            <button class="icon-btn" onclick="cycleTheme()" title="Toggle Theme"><span id="theme-icon">💻</span></button>
         </div>
     </header>
 
@@ -315,11 +315,11 @@
                     <div class="course-type-selector" id="course-type-selector">
                         <button type="button" class="course-type-btn active-main" id="btn-type-main" onclick="setCourseType('main')">
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                            📚 Main Course <span style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">(Paid)</span>
+                            Main Course <span style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">(Paid)</span>
                         </button>
                         <button type="button" class="course-type-btn" id="btn-type-event" onclick="setCourseType('event')">
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                            🎟️ Event Course <span style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">(Free for Members)</span>
+                            Event Course <span style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">(Free for Members)</span>
                         </button>
                     </div>
 
@@ -354,10 +354,10 @@
 
                     <div id="quiz-builder-section" style="display: none; background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-bright); margin-bottom: 2rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <h4 style="color: var(--brand-navy); font-family: 'Poppins'; margin: 0;">📝 Quiz Builder</h4>
+                            <h4 style="color: var(--brand-navy); font-family: 'Poppins'; margin: 0;">Quiz Builder</h4>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div class="ai-status" id="ai-status-bar"><div class="ai-spinner"></div><span id="ai-status-text">Generating...</span></div>
-                                <button type="button" class="btn-outline" onclick="generateAIQuiz()" id="btn-ai-gen">✨ AI Generate</button>
+                                <button type="button" class="btn-outline" onclick="generateAIQuiz()" id="btn-ai-gen">Generate with AI</button>
                             </div>
                         </div>
                         <div id="quiz-questions-container"></div>
@@ -365,8 +365,8 @@
                     </div>
 
                     <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                        <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Cancel Edit</button>
-                        <button type="button" class="btn-primary" id="save-btn" onclick="window.saveCourse()">🚀 Save & Publish Course</button>
+                        <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Cancel</button>
+                        <button type="button" class="btn-primary" id="save-btn" onclick="window.saveCourse()">Save & Publish Course</button>
                     </div>
                 </div>
             </div>
@@ -376,7 +376,7 @@
 
 <div class="modal-overlay" id="grading-modal">
     <div class="review-modal" style="max-width: 600px; text-align: left;">
-        <h2 style="margin-bottom: 1rem; font-family: 'Poppins'; color: var(--text-dark);">Grade Assignment</h2>
+        <h2 style="margin-bottom: 1rem; font-family: 'Poppins'; color: var(--text-dark);">Grade Submission</h2>
         
         <div style="margin-bottom: 1rem;">
             <strong style="color:var(--brand-navy); font-size: 1.1rem;" id="grade-student-name">Student Name</strong><br>
@@ -420,7 +420,7 @@
         
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem;">
             <button class="btn-secondary" onclick="closeGradingModal()">Cancel</button>
-            <button class="btn-primary" id="save-grade-btn" onclick="submitGrade()">💾 Save Grade</button>
+            <button class="btn-primary" id="save-grade-btn" onclick="submitGrade()">Save Grade</button>
         </div>
     </div>
 </div>
@@ -433,7 +433,7 @@ const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
 function cycleTheme() { let c = localStorage.getItem('enet_theme') || 'system'; let n = themes[(themes.indexOf(c) + 1) % themes.length]; localStorage.setItem('enet_theme', n); applyTheme(n); }
 function applyTheme(t) { document.getElementById('theme-icon').textContent = themeIcons[t]; document.documentElement.setAttribute('data-theme', t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : t); }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
-function showToast(msg, type='info') { const wrap = document.getElementById('toast-wrap'); const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<span>${type==='error'?'❌':'✅'}</span><span>${msg}</span>`; wrap.appendChild(t); setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000); }
+function showToast(msg, type='info') { const wrap = document.getElementById('toast-wrap'); const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<span>${type==='error'?'✕':'✓'}</span><span>${msg}</span>`; wrap.appendChild(t); setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000); }
 function copyShareLink(cId) { navigator.clipboard.writeText(window.location.origin + '/courses.html').then(() => showToast("Storefront link copied!", "success")); }
 
 function switchTab(sectionId) {
@@ -537,15 +537,15 @@ async function fetchMyCourses() {
                 <div style="flex:1; min-width: 200px;">
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
                         <h4 style="color:var(--brand-navy);">${c.title}</h4>
-                        ${isEvent ? '<span class="pill-event">🎟️ Event Course</span>' : '<span class="pill-main">📚 Main Course</span>'}
+                        ${isEvent ? '<span class="pill-event">Event Course</span>' : '<span class="pill-main">Main Course</span>'}
                     </div>
                     <span style="font-size:0.8rem; font-weight:bold; color:var(--accent-cyan); background: rgba(0, 160, 223, 0.1); padding: 2px 8px; border-radius: 4px;">${p}</span>
                     <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Published: ${new Date(c.created_at).toLocaleDateString()}</div>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                    <a href="learn.html?course=${c.id}" target="_blank" class="btn-outline">👁️ Preview</a>
-                    <button class="btn-outline" onclick="editCourse('${c.id}')">✏️ Edit</button>
-                    <button class="btn-outline danger" onclick="deleteCourse('${c.id}')">🗑️ Delete</button>
+                    <a href="learn.html?course=${c.id}" target="_blank" class="btn-outline">Preview</a>
+                    <button class="btn-outline" onclick="editCourse('${c.id}')">Edit</button>
+                    <button class="btn-outline danger" onclick="deleteCourse('${c.id}')">Delete</button>
                 </div>
             </div>`;
         });
@@ -634,7 +634,7 @@ async function fetchAssignments() {
                 <td>${date}</td>
                 <td>${status}</td>
                 <td>
-                    <button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? '✏️ Edit Grade' : '📋 Grade'}</button>
+                    <button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? 'Edit Grade' : 'Grade Submission'}</button>
                 </td>
             </tr>`;
         }).join('');
@@ -657,7 +657,7 @@ window.openGradingModal = function(subId) {
     if(s.file_urls && s.file_urls.length > 0) {
         filesDiv.innerHTML = s.file_urls.map(url => {
             const name = url.split('/').pop().split('?')[0] || 'Download File';
-            return `<a href="${url}" target="_blank" class="btn-outline success" style="font-size:0.8rem; text-decoration:none;">⬇️ ${name}</a>`;
+            return `<a href="${url}" target="_blank" class="btn-outline success" style="font-size:0.8rem; text-decoration:none;">↓ ${name}</a>`;
         }).join('');
     } else {
         filesDiv.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted);">No files attached to this submission.</span>';
@@ -683,7 +683,7 @@ window.submitGrade = async function() {
     if(!grade) return showToast("Please select a letter grade.", "error");
 
     const btn = document.getElementById('save-grade-btn');
-    btn.disabled = true; btn.textContent = "⏳ Saving...";
+    btn.disabled = true; btn.textContent = "Saving...";
 
     try {
         const { error } = await sb.from('assignment_submissions').update({
@@ -695,14 +695,14 @@ window.submitGrade = async function() {
 
         if(error) throw error;
 
-        showToast("Grade saved successfully! Student notified.", "success");
+        showToast("Grade saved successfully!", "success");
         closeGradingModal();
         fetchAssignments(); 
     } catch(e) {
         console.error(e);
         showToast("Failed to save grade.", "error");
     } finally {
-        btn.disabled = false; btn.textContent = "💾 Save Grade";
+        btn.disabled = false; btn.textContent = "Save Grade";
     }
 }
 
@@ -775,10 +775,10 @@ window.editCourse = async function(courseId) {
     document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0;
     s.forEach(sec => { const sId = window.addSection(sec.title); l.filter(x=>x.section_id===sec.id).forEach(les => window.addLesson(sId, les.title, les.video_url)); });
     
-    document.getElementById('save-btn').textContent = "💾 Save Updates"; document.getElementById('cancel-edit-btn').style.display = 'inline-flex';
+    document.getElementById('save-btn').textContent = "Save Updates"; document.getElementById('cancel-edit-btn').style.display = 'inline-flex';
     switchTab('creator-section');
 };
-window.startNewCourse = function() { document.getElementById('editing-course-id').value = ""; document.getElementById('course-title').value = ''; document.getElementById('course-price').value = ''; document.getElementById('course-desc').value = ''; document.getElementById('course-image').value = ''; document.getElementById('edit-image-preview-container').style.display = 'none'; document.getElementById('course-image').required = true; window.setCourseType('main'); document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0; window.addSection(); document.getElementById('save-btn').textContent = "🚀 Publish Course"; document.getElementById('cancel-edit-btn').style.display = 'none'; switchTab('creator-section'); };
+window.startNewCourse = function() { document.getElementById('editing-course-id').value = ""; document.getElementById('course-title').value = ''; document.getElementById('course-price').value = ''; document.getElementById('course-desc').value = ''; document.getElementById('course-image').value = ''; document.getElementById('edit-image-preview-container').style.display = 'none'; document.getElementById('course-image').required = true; window.setCourseType('main'); document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0; window.addSection(); document.getElementById('save-btn').textContent = "Save & Publish Course"; document.getElementById('cancel-edit-btn').style.display = 'none'; switchTab('creator-section'); };
 window.cancelEdit = function() { window.startNewCourse(); switchTab('dashboard-overview'); };
 window.deleteCourse = async function(id) { if(confirm("Delete this course permanently?")) { await sb.from('courses').delete().eq('id', id); showToast("Deleted", "success"); fetchMyCourses(); } };
 
