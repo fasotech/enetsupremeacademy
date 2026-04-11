@@ -13,9 +13,6 @@
             _st === 'dark' || (_st === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
     </script>
     <style>
-        /* ═══════════════════════════════════════════════
-           EXISTING CSS — PRESERVED EXACTLY
-        ═══════════════════════════════════════════════ */
         :root {
             --brand-navy: #02014a; --navy-light: #0d2a8f; --brand-yellow: #fcd116;
             --yellow-hover: #e0b800; --accent-cyan: #00a0df;
@@ -173,12 +170,21 @@
         .grant-select:focus{border-color:var(--accent-cyan)}
         .grant-note{font-size:.75rem;color:var(--text-muted);margin-bottom:.75rem;line-height:1.4}
 
+        /* ── CLEAN EMPTY STATE (no image banner) ── */
         .empty-cell { padding: 4rem 2rem; text-align: center; }
         .empty-ttl { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem; }
         .empty-sub { font-size: 0.85rem; color: var(--text-muted); }
-        .empty-cell-large { padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;}
-        .empty-cell-img-wrap { width: 100%; max-width: 450px; height: 250px; margin: 0 auto 1.5rem; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px var(--shadow-color); border: 1px solid var(--border); background: var(--bg-light); }
-        .empty-cell-img-wrap img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+        .empty-cell-large { padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .empty-icon-wrap {
+            width: 72px; height: 72px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(5,205,153,0.12), rgba(0,160,223,0.10));
+            border: 1.5px solid rgba(5,205,153,0.2);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.25rem;
+            box-shadow: 0 8px 24px rgba(5,205,153,0.10);
+        }
+        .empty-icon-wrap svg { width: 32px; height: 32px; color: var(--success); }
 
         .activity-list{padding:0 2rem 2rem;display:flex;flex-direction:column;gap:1.5rem}
         .activity-item{display:flex;align-items:flex-start;gap:1rem;cursor:pointer;border-radius:12px;padding:.5rem;margin:-.5rem;transition:background .2s}
@@ -282,147 +288,87 @@
         @keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
         @keyframes livePulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
 
-        /* ═══════════════════════════════════════════════
-           NEW ANALYTICS CSS — ADDITIVE ONLY
-        ═══════════════════════════════════════════════ */
-
-        /* Analytics Section Header */
+        /* ── ANALYTICS CSS ── */
         .analytics-section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2rem 0 1rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 2rem 0 1rem; flex-wrap: wrap; gap: 1rem;
         }
         .analytics-section-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: .75rem;
+            font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700;
+            color: var(--text-dark); display: flex; align-items: center; gap: .75rem;
         }
         .analytics-section-title::before {
-            content: '';
-            width: 4px;
-            height: 24px;
+            content: ''; width: 4px; height: 24px;
             background: linear-gradient(180deg, var(--accent-cyan), var(--brand-yellow));
-            border-radius: 4px;
-            flex-shrink: 0;
+            border-radius: 4px; flex-shrink: 0;
         }
         .analytics-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: .7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .06em;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: rgba(0,160,223,0.1);
-            color: var(--accent-cyan);
+            display: inline-flex; align-items: center; gap: 5px; font-size: .7rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+            padding: 4px 12px; border-radius: 20px;
+            background: rgba(0,160,223,0.1); color: var(--accent-cyan);
             border: 1px solid rgba(0,160,223,0.2);
         }
 
-        /* Revenue Stats Grid */
-        .rev-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
+        .rev-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
         .rev-card {
-            background: var(--surface);
-            border-radius: 18px;
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 6px 20px var(--shadow-color);
-            animation: fadeUp .4s ease both;
-            transition: transform .2s, box-shadow .2s;
-            position: relative;
-            overflow: hidden;
+            background: var(--surface); border-radius: 18px; padding: 1.5rem;
+            border: 1px solid var(--border); box-shadow: 0 6px 20px var(--shadow-color);
+            animation: fadeUp .4s ease both; transition: transform .2s, box-shadow .2s;
+            position: relative; overflow: hidden;
         }
         .rev-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px var(--shadow-color); }
         .rev-card-icon {
-            width: 40px; height: 40px;
-            border-radius: 12px;
+            width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
             margin-bottom: .85rem;
         }
-        .rev-card-icon.cyan { background: rgba(0,160,223,0.12); }
-        .rev-card-icon.yellow { background: rgba(252,209,22,0.2); }
-        .rev-card-icon.green { background: rgba(5,205,153,0.12); }
-        .rev-card-icon.navy { background: rgba(2,1,74,0.08); }
-        [data-theme="dark"] .rev-card-icon.navy { background: rgba(255,255,255,0.08); }
+        .rev-card-icon svg { width: 20px; height: 20px; }
+        .rev-card-icon.cyan { background: rgba(0,160,223,0.12); color: var(--accent-cyan); }
+        .rev-card-icon.yellow { background: rgba(252,209,22,0.2); color: #8a6500; }
+        .rev-card-icon.green { background: rgba(5,205,153,0.12); color: var(--success); }
+        .rev-card-icon.navy { background: rgba(2,1,74,0.08); color: var(--brand-navy); }
+        [data-theme="dark"] .rev-card-icon.navy { background: rgba(255,255,255,0.08); color: var(--text-dark); }
         .rev-card-lbl { font-size: .78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .35rem; }
         .rev-card-val { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text-dark); line-height: 1; }
         .rev-card-sub { font-size: .75rem; color: var(--text-muted); margin-top: .4rem; }
         .rev-card-trend {
             position: absolute; top: 1rem; right: 1rem;
-            font-size: .72rem; font-weight: 700;
-            padding: 3px 9px; border-radius: 20px;
+            font-size: .72rem; font-weight: 700; padding: 3px 9px; border-radius: 20px;
         }
         .rev-card-trend.up { background: rgba(5,205,153,.12); color: var(--success); }
         .rev-card-trend.down { background: rgba(238,93,80,.1); color: var(--danger); }
         .rev-card-trend.neutral { background: rgba(138,152,201,.12); color: var(--text-muted); }
 
-        /* Chart Panel */
         .chart-panel {
-            background: var(--surface);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 40px var(--shadow-color);
-            margin-bottom: 1.5rem;
-            overflow: hidden;
-            animation: fadeUp .5s ease both;
+            background: var(--surface); border-radius: 24px; border: 1px solid var(--border);
+            box-shadow: 0 10px 40px var(--shadow-color); margin-bottom: 1.5rem;
+            overflow: hidden; animation: fadeUp .5s ease both;
         }
         .chart-panel-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem 2rem 1rem;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: .75rem;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border);
+            flex-wrap: wrap; gap: .75rem;
         }
-        .chart-panel-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
+        .chart-panel-title { font-family: 'Poppins', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-dark); }
         .chart-body { padding: 1.5rem 2rem 2rem; }
         .chart-toggle-group { display: flex; gap: .35rem; }
         .chart-toggle-btn {
-            font-size: .78rem; font-weight: 600;
-            padding: 5px 14px; border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--bg-light);
-            color: var(--text-muted);
-            cursor: pointer; transition: all .2s;
+            font-size: .78rem; font-weight: 600; padding: 5px 14px; border-radius: 20px;
+            border: 1px solid var(--border); background: var(--bg-light);
+            color: var(--text-muted); cursor: pointer; transition: all .2s;
         }
-        .chart-toggle-btn.active {
-            background: var(--brand-navy);
-            color: var(--brand-yellow);
-            border-color: var(--brand-navy);
-        }
+        .chart-toggle-btn.active { background: var(--brand-navy); color: var(--brand-yellow); border-color: var(--brand-navy); }
 
-        /* Two-column analytics grid */
         .analytics-two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem; }
         .analytics-three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
 
-        /* Course Analytics Table */
         .analytics-tbl { width: 100%; border-collapse: collapse; }
         .analytics-tbl th { padding: .85rem 1.25rem; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); text-align: left; }
         .analytics-tbl td { padding: 1rem 1.25rem; font-size: .88rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
         .analytics-tbl tbody tr:hover { background: var(--bg-light); }
         .analytics-tbl tbody tr:last-child td { border-bottom: none; }
 
-        /* Mini progress bars */
         .mini-bar-wrap { width: 100%; background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; }
         .mini-bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; }
         .mini-bar-fill.cyan { background: var(--accent-cyan); }
@@ -430,27 +376,18 @@
         .mini-bar-fill.green { background: var(--success); }
         .mini-bar-fill.danger { background: var(--danger); }
 
-        /* Star rating */
         .star-rating { display: inline-flex; align-items: center; gap: 4px; font-size: .82rem; font-weight: 700; }
         .star-rating .star { color: var(--brand-yellow); }
         .star-rating .star-val { color: var(--text-dark); }
 
-        /* Student Insights mini cards */
         .insight-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; padding: 1.5rem 2rem; }
-        .insight-card {
-            background: var(--bg-light);
-            border-radius: 14px;
-            padding: 1.25rem;
-            border: 1px solid var(--border);
-            transition: transform .2s;
-        }
+        .insight-card { background: var(--bg-light); border-radius: 14px; padding: 1.25rem; border: 1px solid var(--border); transition: transform .2s; }
         .insight-card:hover { transform: translateY(-2px); }
         .insight-card-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: .4rem; }
         .insight-card-value { font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--text-dark); line-height: 1; }
         .insight-card-sub { font-size: .72rem; color: var(--text-muted); margin-top: .35rem; }
         .insight-card-bar { margin-top: .75rem; }
 
-        /* Funnel */
         .funnel-wrap { padding: 1.5rem 2rem 2rem; }
         .funnel-steps { display: flex; flex-direction: column; gap: .75rem; }
         .funnel-step { display: flex; align-items: center; gap: 1rem; }
@@ -462,7 +399,6 @@
         .funnel-step-count { width: 70px; font-family: 'Poppins', sans-serif; font-size: .95rem; font-weight: 700; color: var(--text-dark); text-align: right; flex-shrink: 0; }
         .funnel-arrow { font-size: .7rem; color: var(--text-muted); text-align: center; margin-top: .1rem; }
 
-        /* Instructor Table */
         .instructor-perf-tbl { width: 100%; border-collapse: collapse; }
         .instructor-perf-tbl th { padding: .85rem 1.5rem; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); text-align: left; }
         .instructor-perf-tbl td { padding: 1rem 1.5rem; font-size: .88rem; color: var(--text-gray); border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -472,14 +408,20 @@
         .perf-score.good { background: rgba(0,160,223,0.12); color: var(--accent-cyan); }
         .perf-score.average { background: rgba(252,209,22,0.2); color: #8a6500; }
 
-        /* Content Stats */
+        /* ── SVG Icon helper for rev cards & content stats ── */
+        .icon-svg { display: flex; align-items: center; justify-content: center; }
+
         .content-stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; padding: 1.5rem 2rem 2rem; }
         .content-stat { background: var(--bg-light); border-radius: 14px; padding: 1.25rem 1.5rem; border: 1px solid var(--border); text-align: center; }
-        .content-stat-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+        .content-stat-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; margin: 0 auto .6rem; }
+        .content-stat-icon svg { width: 20px; height: 20px; }
+        .content-stat-icon.navy-bg { background: rgba(2,1,74,0.08); color: var(--brand-navy); }
+        [data-theme="dark"] .content-stat-icon.navy-bg { background: rgba(255,255,255,0.08); color: var(--text-dark); }
+        .content-stat-icon.cyan-bg { background: rgba(0,160,223,0.12); color: var(--accent-cyan); }
+        .content-stat-icon.yellow-bg { background: rgba(252,209,22,0.2); color: #8a6500; }
         .content-stat-val { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
         .content-stat-lbl { font-size: .75rem; color: var(--text-muted); margin-top: .2rem; }
 
-        /* Event Tracking */
         .event-list { padding: 0 2rem 1.5rem; display: flex; flex-direction: column; gap: .75rem; }
         .event-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-light); border-radius: 12px; border: 1px solid var(--border); transition: border-color .2s; }
         .event-item:hover { border-color: var(--accent-cyan); }
@@ -497,14 +439,8 @@
         .event-attendance.med { background: rgba(252,209,22,.2); color: #8a6500; }
         .event-attendance.upcoming { background: rgba(0,160,223,.1); color: var(--accent-cyan); }
 
-        /* Section divider */
-        .section-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 2rem 0;
-        }
+        .section-divider { height: 1px; background: var(--border); margin: 2rem 0; }
 
-        /* Responsive New */
         @media(max-width:1200px){
             .rev-stats-grid { grid-template-columns: repeat(2,1fr); }
             .analytics-two-col { grid-template-columns: 1fr; }
@@ -650,7 +586,7 @@
 
     <main class="content">
 
-        <!-- ═══════ EXISTING STAT CARDS ═══════ -->
+        <!-- STAT CARDS -->
         <div class="stats-grid">
             <div class="stat-card brand-blue" id="card-students" onclick="statCardNav('students')">
                 <div class="stat-lbl">Total Students</div>
@@ -674,7 +610,7 @@
             </div>
         </div>
 
-        <!-- ═══════ EXISTING PENDING APPROVALS ═══════ -->
+        <!-- PENDING APPROVALS -->
         <div class="panel pend">
             <div class="panel-head">
                 <div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div>
@@ -689,41 +625,46 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             NEW: REVENUE & ANALYTICS SECTION
-        ═══════════════════════════════════════════════ -->
+        <!-- REVENUE & ANALYTICS -->
         <div id="analytics-section">
             <div class="analytics-section-header">
                 <div class="analytics-section-title">Revenue & Analytics</div>
                 <span class="analytics-badge">Smart Insights</span>
             </div>
 
-            <!-- Revenue Summary Cards -->
             <div class="rev-stats-grid">
                 <div class="rev-card">
                     <div class="rev-card-trend up" id="rev-trend-total">+12%</div>
-                    <div class="rev-card-icon cyan">💰</div>
+                    <div class="rev-card-icon cyan icon-svg">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
                     <div class="rev-card-lbl">Total Revenue</div>
                     <div class="rev-card-val" id="rev-total">₦0</div>
                     <div class="rev-card-sub">Lifetime earnings</div>
                 </div>
                 <div class="rev-card">
                     <div class="rev-card-trend up" id="rev-trend-month">+8%</div>
-                    <div class="rev-card-icon yellow">📅</div>
+                    <div class="rev-card-icon yellow icon-svg">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
                     <div class="rev-card-lbl">Monthly Revenue</div>
                     <div class="rev-card-val" id="rev-month">₦0</div>
                     <div class="rev-card-sub">This calendar month</div>
                 </div>
                 <div class="rev-card">
                     <div class="rev-card-trend neutral">est.</div>
-                    <div class="rev-card-icon green">📈</div>
+                    <div class="rev-card-icon green icon-svg">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    </div>
                     <div class="rev-card-lbl">Estimated Profit</div>
                     <div class="rev-card-val" id="rev-profit">₦0</div>
                     <div class="rev-card-sub">After platform fees (~15%)</div>
                 </div>
                 <div class="rev-card">
                     <div class="rev-card-trend up" id="rev-trend-sales">+5%</div>
-                    <div class="rev-card-icon navy">🛒</div>
+                    <div class="rev-card-icon navy icon-svg">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    </div>
                     <div class="rev-card-lbl">Course Sales Count</div>
                     <div class="rev-card-val" id="rev-sales">0</div>
                     <div class="rev-card-sub">Total paid enrollments</div>
@@ -742,17 +683,14 @@
                 </div>
                 <div class="chart-body">
                     <div style="position:relative;width:100%;height:260px;">
-                        <canvas id="revenueChart" role="img" aria-label="Revenue trend line chart">Revenue trend over time.</canvas>
+                        <canvas id="revenueChart" role="img" aria-label="Revenue trend line chart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             NEW: STUDENT INSIGHTS + FUNNEL
-        ═══════════════════════════════════════════════ -->
+        <!-- STUDENT INSIGHTS + FUNNEL -->
         <div class="analytics-two-col">
-            <!-- Student Insights Panel -->
             <div class="chart-panel" style="margin-bottom:0;">
                 <div class="chart-panel-head">
                     <div class="chart-panel-title">Student Insights</div>
@@ -763,44 +701,35 @@
                         <div class="insight-card-label">New Today</div>
                         <div class="insight-card-value" id="ins-new-today">0</div>
                         <div class="insight-card-sub">Registrations today</div>
-                        <div class="insight-card-bar">
-                            <div class="mini-bar-wrap"><div class="mini-bar-fill cyan" id="ins-today-bar" style="width:0%"></div></div>
-                        </div>
+                        <div class="insight-card-bar"><div class="mini-bar-wrap"><div class="mini-bar-fill cyan" id="ins-today-bar" style="width:0%"></div></div></div>
                     </div>
                     <div class="insight-card">
                         <div class="insight-card-label">New This Week</div>
                         <div class="insight-card-value" id="ins-new-week">0</div>
                         <div class="insight-card-sub">Joined last 7 days</div>
-                        <div class="insight-card-bar">
-                            <div class="mini-bar-wrap"><div class="mini-bar-fill yellow" id="ins-week-bar" style="width:0%"></div></div>
-                        </div>
+                        <div class="insight-card-bar"><div class="mini-bar-wrap"><div class="mini-bar-fill yellow" id="ins-week-bar" style="width:0%"></div></div></div>
                     </div>
                     <div class="insight-card">
                         <div class="insight-card-label">Active Students</div>
                         <div class="insight-card-value" id="ins-active">0</div>
                         <div class="insight-card-sub">Approved accounts</div>
-                        <div class="insight-card-bar">
-                            <div class="mini-bar-wrap"><div class="mini-bar-fill green" id="ins-active-bar" style="width:0%"></div></div>
-                        </div>
+                        <div class="insight-card-bar"><div class="mini-bar-wrap"><div class="mini-bar-fill green" id="ins-active-bar" style="width:0%"></div></div></div>
                     </div>
                     <div class="insight-card">
                         <div class="insight-card-label">Engagement Rate</div>
                         <div class="insight-card-value" id="ins-engagement">0%</div>
                         <div class="insight-card-sub">Active / Total enrolled</div>
-                        <div class="insight-card-bar">
-                            <div class="mini-bar-wrap"><div class="mini-bar-fill cyan" id="ins-eng-bar" style="width:0%"></div></div>
-                        </div>
+                        <div class="insight-card-bar"><div class="mini-bar-wrap"><div class="mini-bar-fill cyan" id="ins-eng-bar" style="width:0%"></div></div></div>
                     </div>
                     <div class="insight-card" style="grid-column:span 2;">
                         <div class="insight-card-label">Student Activity Trend (7 Days)</div>
                         <div style="position:relative;width:100%;height:80px;margin-top:.5rem;">
-                            <canvas id="activitySparkline" role="img" aria-label="Student activity over 7 days">Activity trend.</canvas>
+                            <canvas id="activitySparkline" role="img" aria-label="Student activity over 7 days"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Sales Funnel -->
             <div class="chart-panel" style="margin-bottom:0;">
                 <div class="chart-panel-head">
                     <div class="chart-panel-title">Conversion Funnel</div>
@@ -809,41 +738,25 @@
                     <div class="funnel-steps" id="funnel-steps">
                         <div class="funnel-step">
                             <div class="funnel-step-name">Visitors</div>
-                            <div class="funnel-bar-container">
-                                <div class="funnel-bar-bg">
-                                    <div class="funnel-bar-inner" style="background:var(--brand-navy);width:100%"><span class="funnel-bar-label" id="f-visitors">—</span></div>
-                                </div>
-                            </div>
+                            <div class="funnel-bar-container"><div class="funnel-bar-bg"><div class="funnel-bar-inner" style="background:var(--brand-navy);width:100%"><span class="funnel-bar-label" id="f-visitors">—</span></div></div></div>
                             <div class="funnel-step-count" id="fc-visitors">—</div>
                         </div>
                         <div class="funnel-arrow">▼</div>
                         <div class="funnel-step">
                             <div class="funnel-step-name">Signups</div>
-                            <div class="funnel-bar-container">
-                                <div class="funnel-bar-bg">
-                                    <div class="funnel-bar-inner" style="background:var(--accent-cyan);" id="fb-signups"><span class="funnel-bar-label" id="f-signups">—</span></div>
-                                </div>
-                            </div>
+                            <div class="funnel-bar-container"><div class="funnel-bar-bg"><div class="funnel-bar-inner" style="background:var(--accent-cyan);" id="fb-signups"><span class="funnel-bar-label" id="f-signups">—</span></div></div></div>
                             <div class="funnel-step-count" id="fc-signups">—</div>
                         </div>
                         <div class="funnel-arrow">▼</div>
                         <div class="funnel-step">
                             <div class="funnel-step-name">Enrollments</div>
-                            <div class="funnel-bar-container">
-                                <div class="funnel-bar-bg">
-                                    <div class="funnel-bar-inner" style="background:var(--brand-yellow);" id="fb-enrolled"><span class="funnel-bar-label" style="color:var(--brand-navy);" id="f-enrolled">—</span></div>
-                                </div>
-                            </div>
+                            <div class="funnel-bar-container"><div class="funnel-bar-bg"><div class="funnel-bar-inner" style="background:var(--brand-yellow);" id="fb-enrolled"><span class="funnel-bar-label" style="color:var(--brand-navy);" id="f-enrolled">—</span></div></div></div>
                             <div class="funnel-step-count" id="fc-enrolled">—</div>
                         </div>
                         <div class="funnel-arrow">▼</div>
                         <div class="funnel-step">
                             <div class="funnel-step-name">Active Learners</div>
-                            <div class="funnel-bar-container">
-                                <div class="funnel-bar-bg">
-                                    <div class="funnel-bar-inner" style="background:var(--success);" id="fb-active"><span class="funnel-bar-label" id="f-active">—</span></div>
-                                </div>
-                            </div>
+                            <div class="funnel-bar-container"><div class="funnel-bar-bg"><div class="funnel-bar-inner" style="background:var(--success);" id="fb-active"><span class="funnel-bar-label" id="f-active">—</span></div></div></div>
                             <div class="funnel-step-count" id="fc-active">—</div>
                         </div>
                     </div>
@@ -861,9 +774,7 @@
 
         <div style="margin-top:1.5rem;"></div>
 
-        <!-- ═══════════════════════════════════════════════
-             NEW: COURSE ANALYTICS + INSTRUCTOR PERFORMANCE
-        ═══════════════════════════════════════════════ -->
+        <!-- COURSE & INSTRUCTOR ANALYTICS -->
         <div id="course-analytics-section">
             <div class="analytics-section-header">
                 <div class="analytics-section-title">Course & Instructor Analytics</div>
@@ -871,7 +782,6 @@
             </div>
 
             <div class="analytics-two-col">
-                <!-- Course Analytics Table -->
                 <div class="chart-panel" style="margin-bottom:0;">
                     <div class="chart-panel-head">
                         <div class="chart-panel-title">Course Performance</div>
@@ -880,66 +790,54 @@
                     <div style="overflow-x:auto;">
                         <table class="analytics-tbl" style="min-width:500px;">
                             <thead>
-                                <tr>
-                                    <th>Course</th>
-                                    <th>Enrolled</th>
-                                    <th>Completion</th>
-                                    <th>Rating</th>
-                                    <th>Revenue</th>
-                                </tr>
+                                <tr><th>Course</th><th>Enrolled</th><th>Completion</th><th>Rating</th><th>Revenue</th></tr>
                             </thead>
                             <tbody id="course-analytics-tbody">
                                 <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading courses...</td></tr>
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Top Courses Chart -->
                     <div style="padding:1.5rem 2rem 2rem;border-top:1px solid var(--border);">
                         <div style="font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:1rem;">Top Performing Courses</div>
                         <div style="position:relative;width:100%;height:200px;">
-                            <canvas id="topCoursesChart" role="img" aria-label="Top performing courses by enrollment">Top courses by enrollment count.</canvas>
+                            <canvas id="topCoursesChart" role="img" aria-label="Top performing courses by enrollment"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- Instructor Performance Table -->
                 <div class="chart-panel" style="margin-bottom:0;">
                     <div class="chart-panel-head">
                         <div class="chart-panel-title">Instructor Performance</div>
                     </div>
                     <div style="overflow-x:auto;padding-bottom:1rem;">
                         <table class="instructor-perf-tbl" style="min-width:300px;">
-                            <thead>
-                                <tr>
-                                    <th>Instructor</th>
-                                    <th>Courses</th>
-                                    <th>Students</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Instructor</th><th>Courses</th><th>Students</th><th>Rating</th></tr></thead>
                             <tbody id="instructor-perf-tbody">
                                 <tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Content Stats -->
                     <div style="padding:1rem 1.5rem;border-top:1px solid var(--border);">
                         <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.85rem;">Content Library</div>
                         <div class="content-stat-grid" style="padding:0;grid-template-columns:1fr 1fr 1fr;">
                             <div class="content-stat">
-                                <div class="content-stat-icon">🎓</div>
+                                <div class="content-stat-icon navy-bg icon-svg">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                </div>
                                 <div class="content-stat-val" id="cs-courses">—</div>
                                 <div class="content-stat-lbl">Total Courses</div>
                             </div>
                             <div class="content-stat">
-                                <div class="content-stat-icon">🎬</div>
+                                <div class="content-stat-icon cyan-bg icon-svg">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                                </div>
                                 <div class="content-stat-val" id="cs-lessons">—</div>
                                 <div class="content-stat-lbl">Total Lessons</div>
                             </div>
                             <div class="content-stat">
-                                <div class="content-stat-icon">⭐</div>
+                                <div class="content-stat-icon yellow-bg icon-svg">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </div>
                                 <div class="content-stat-val" id="cs-top">—</div>
                                 <div class="content-stat-lbl">Top Course</div>
                             </div>
@@ -949,9 +847,7 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             NEW: EVENTS & WEBINAR TRACKING
-        ═══════════════════════════════════════════════ -->
+        <!-- EVENTS & WEBINAR TRACKING -->
         <div class="analytics-section-header">
             <div class="analytics-section-title">Events & Webinar Tracking</div>
             <span class="analytics-badge">Upcoming</span>
@@ -966,9 +862,7 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             EXISTING: USER MANAGEMENT + ACTIVITY
-        ═══════════════════════════════════════════════ -->
+        <!-- USER MANAGEMENT + ACTIVITY -->
         <div class="dashboard-grid">
             <div class="panel users">
                 <div class="panel-head">
@@ -998,9 +892,7 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             EXISTING: BLOG MANAGER (PRESERVED EXACTLY)
-        ═══════════════════════════════════════════════ -->
+        <!-- BLOG MANAGER -->
         <div class="panel" id="blog-management-section">
             <div class="panel-head">
                 <div>
@@ -1049,9 +941,7 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════
-             EXISTING: AD MANAGEMENT (PRESERVED EXACTLY)
-        ═══════════════════════════════════════════════ -->
+        <!-- AD MANAGEMENT -->
         <div class="panel" id="ad-management-section">
             <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
             <div class="ads-management-grid">
@@ -1101,26 +991,20 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-/* ═══════════════════════════════
-   THEME (EXISTING — PRESERVED)
-═══════════════════════════════ */
+/* THEME */
 const _themes=['system','light','dark'];
 const _tIcons={system:'💻',light:'☀️',dark:'🌙'};
 function cycleTheme(){const cur=localStorage.getItem('enet_theme')||'system';const next=_themes[(_themes.indexOf(cur)+1)%_themes.length];localStorage.setItem('enet_theme',next);applyTheme(next);}
 function applyTheme(t){const el=document.getElementById('theme-icon');if(el)el.textContent=_tIcons[t];document.documentElement.setAttribute('data-theme',t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':t);}
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('enet_theme')==='system')document.documentElement.setAttribute('data-theme',e.matches?'dark':'light');});
 
-/* ═══════════════════════════════
-   SIDEBAR / NOTIFICATIONS (EXISTING)
-═══════════════════════════════ */
+/* SIDEBAR / NOTIFICATIONS */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show');}
 function toggleNotifications(){document.getElementById('notif-dropdown').classList.toggle('show');}
 document.addEventListener('click',e=>{const w=document.querySelector('.notification-wrapper');if(w&&!w.contains(e.target))document.getElementById('notif-dropdown').classList.remove('show');});
 
-/* ═══════════════════════════════
-   TOAST (EXISTING)
-═══════════════════════════════ */
+/* TOAST */
 function showToast(msg,type='info',duration=3500){
     const wrap=document.getElementById('toast-wrap');
     const icons={success:'✓',error:'✕',info:'i'};
@@ -1131,37 +1015,35 @@ function showToast(msg,type='info',duration=3500){
     setTimeout(()=>{t.style.animation='toastOut .3s ease forwards';setTimeout(()=>t.remove(),320);},duration);
 }
 
-/* ═══════════════════════════════
-   DELETE MODAL (EXISTING)
-═══════════════════════════════ */
+/* DELETE MODAL */
 let _deleteCallback=null;
 function openDeleteModal(msg,cb){document.getElementById('deleteModal-msg').textContent=msg;_deleteCallback=cb;document.getElementById('deleteModal').classList.add('open');}
 function closeDeleteModal(){document.getElementById('deleteModal').classList.remove('open');_deleteCallback=null;}
 document.getElementById('deleteModal-confirm').addEventListener('click',()=>{if(_deleteCallback)_deleteCallback();closeDeleteModal();});
 document.getElementById('deleteModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeDeleteModal();});
 
-/* ═══════════════════════════════
-   HELPERS (EXISTING)
-═══════════════════════════════ */
+/* HELPERS */
 const GRADS=['linear-gradient(135deg,#02014a,#0d2a8f)','linear-gradient(135deg,#fcd116,#e0b800)','linear-gradient(135deg,#00a0df,#0088bd)'];
 function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length];}
 function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d);}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
-function emptyRow(msg,cols){const imgHtml=cols===5?`<div class="empty-cell-img-wrap"><img src="tech-banner.png" alt="Caught Up" onerror="this.style.display='none'"></div>`:'';return`<tr><td colspan="${cols}"><div class="empty-cell-large">${imgHtml}<div class="empty-ttl">${msg}</div><div class="empty-sub">No new data to display.</div></div></td></tr>`;}
-function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
-/* NEW nav helpers */
+/* ── CLEAN EMPTY ROW — no image banner ── */
+function emptyRow(msg,cols){
+    const checkIcon=`<div class="empty-icon-wrap"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>`;
+    return`<tr><td colspan="${cols}"><div class="empty-cell-large">${checkIcon}<div class="empty-ttl">${msg}</div><div class="empty-sub">No new data to display.</div></div></td></tr>`;
+}
+
+function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 function scrollToAnalytics(){document.getElementById('analytics-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 function scrollToCourseAnalytics(){document.getElementById('course-analytics-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
 let _data=[],_tab='all',_sb,_allCourses=[];
 const ROLE_ICONS={student:'S',teacher:'T',instructor:'T',admin:'A'};
 
-/* ═══════════════════════════════
-   USER DRAWER (EXISTING — PRESERVED)
-═══════════════════════════════ */
+/* USER DRAWER */
 window.impersonateUser = function(userId, role) {
     if(confirm("Enter Ghost Mode to view this student's dashboard? You will temporarily be logged into this user's dashboard to see exactly what they see. (To return, simply log out from their dashboard).")) {
         localStorage.setItem('enet_impersonate_id', userId);
@@ -1217,16 +1099,18 @@ function openDrawer(userId){
 function closeDrawer(){document.getElementById('drawerBg').classList.remove('open');document.getElementById('userDrawer').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();}});
 
-/* ═══════════════════════════════
-   USER TABLES & STATS (EXISTING)
-═══════════════════════════════ */
+/* USER TABLES & STATS */
 window.statCardNav=function(tab){const card=document.getElementById('card-'+tab);if(card){card.classList.add('ring');setTimeout(()=>card.classList.remove('ring'),1200);}switchTab(tab);setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50);};
 window.quickNav=function(tab){closeSidebar();switchTab(tab);setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300);};
 
 function renderPending(data){
     const pending=data.filter(u=>u.status==='pending');const pc=pending.length;let html='';
     pending.forEach(u=>{const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();const r=getRole(u);let bc='student';if(r.includes('teacher')||r.includes('instructor'))bc='teacher';if(r==='admin')bc='admin';html+=`<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div><div class="uid">#${(u.id||'').slice(0,8)}</div></div></div></td><td>${u.email||'N/A'}</td><td><span class="role-badge ${bc}">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><div class="actions"><button class="btn btn-approve" onclick="approveUser('${u.id}')">Approve</button><button class="btn btn-danger" onclick="rejectUser('${u.id}')">Reject</button></div></td></tr>`;});
-    const emptyPending=`<tr><td colspan="5"><div class="empty-cell-large"><div class="empty-cell-img-wrap"><img src="tech-banner.png" alt="All Caught Up" onerror="this.style.display='none'"></div><div class="empty-ttl">All caught up!</div><div class="empty-sub">No new registration requests at the moment.</div></div></td></tr>`;
+
+    /* ── Clean empty state: no image, just icon + text ── */
+    const checkSVG=`<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+    const emptyPending=`<tr><td colspan="5"><div class="empty-cell-large"><div class="empty-icon-wrap">${checkSVG}</div><div class="empty-ttl">All caught up!</div><div class="empty-sub">No new registration requests at the moment.</div></div></td></tr>`;
+
     document.getElementById('pending-users-list').innerHTML=html||emptyPending;
     document.getElementById('pend-badge').textContent=pc;document.getElementById('nav-pcount').textContent=pc;document.getElementById('stat-pending').textContent=pc;
 }
@@ -1260,9 +1144,7 @@ window.makeAdmin=async function(userId){openDeleteModal('Grant admin privileges 
 window.removeAdmin=async function(userId){const u=_data.find(x=>x.id===userId);if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com'){showToast('System Owner cannot be demoted.','error');return;}openDeleteModal('Remove admin privileges? User will become a student.',async()=>{await mutate(userId,{role:'student'});showToast('Admin privileges removed.','info');});};
 window.toggleUserStatus=async function(userId,newStatus){const u=_data.find(x=>x.id===userId);if(u&&(u.email||'').toLowerCase()==='microsoftportharcourt@gmail.com'&&newStatus==='inactive')return;const msg=newStatus==='inactive'?'Suspend this account?':'Reactivate this account?';openDeleteModal(msg,async()=>{await mutate(userId,{status:newStatus});showToast(newStatus==='inactive'?'Account suspended.':'Account activated.','info');});};
 
-/* ═══════════════════════════════
-   GLOBAL ACTIVITY RADAR (EXISTING)
-═══════════════════════════════ */
+/* GLOBAL ACTIVITY RADAR */
 async function loadGlobalActivity() {
     try {
         const activities=[];const pendingCount=_data.filter(u=>u.status==='pending').length;
@@ -1292,7 +1174,6 @@ async function loadProfiles(){
         const{data:courses}=await _sb.from('courses').select('id,title,is_event_course').eq('is_published',true).order('title',{ascending:true});
         _allCourses=courses||[];
         loadGlobalActivity();
-        /* Fire all new analytics after profiles load */
         loadAnalytics(_data);
     }catch(err){document.getElementById('pending-users-list').innerHTML=emptyRow('Database connection error',5);document.getElementById('all-users-list').innerHTML=emptyRow('Database connection error',6);}
 }
@@ -1311,9 +1192,7 @@ function subscribeRealtime(){
         .subscribe();
 }
 
-/* ═══════════════════════════════════════════════
-   BLOG MANAGER (EXISTING — FULLY PRESERVED)
-═══════════════════════════════════════════════ */
+/* BLOG MANAGER */
 let quillEditor,_allPosts=[],_isEditMode=false,_removeCoverOnSave=false;
 function initQuill(){if(quillEditor)return;quillEditor=new Quill('#editor-container',{theme:'snow',placeholder:'Write your beautiful blog post here...',modules:{toolbar:[{header:[1,2,3,false]},['bold','italic','underline','strike'],[{list:'ordered'},{list:'bullet'}],[{align:[]}],['link','image','blockquote','code-block'],['clean']]}});}
 async function loadBlogPosts(){try{const{data,error}=await _sb.from('blog_posts').select('id,title,excerpt,cover_image,created_at,updated_at').order('created_at',{ascending:false});if(error)throw error;_allPosts=data||[];renderBlogPostsList(_allPosts);const cnt=_allPosts.length;document.getElementById('blog-post-count').textContent=cnt+' post'+(cnt!==1?'s':'');document.getElementById('stat-posts').textContent=cnt;document.getElementById('nav-blog-count').textContent=cnt;}catch(err){document.getElementById('blog-posts-list').innerHTML=`<tr><td colspan="4"><div class="empty-cell"><div class="empty-ttl">Could not load posts</div><div class="empty-sub">${err.message}</div></div></td></tr>`;}}
@@ -1333,442 +1212,149 @@ window.previewAdImage=function(event,slot){const f=event.target.files[0];if(!f)r
 window.saveAd=async function(slotId){const fi=document.querySelector(`#slot-${slotId} .ad-image-input`);const adCopy=document.getElementById(`copy-${slotId}`).value;const adLink=document.getElementById(`link-${slotId}`).value;let imageUrl=document.getElementById(`preview-${slotId}`).src;if(fi&&fi.files.length>0){const file=fi.files[0];const ext=file.name.split('.').pop();const name=`ad_slot_${slotId}_${Date.now()}.${ext}`;const{error:upErr}=await _sb.storage.from('community_images').upload(name,file,{upsert:true});if(upErr){showToast('Upload failed: '+upErr.message,'error');return;}const{data:ud}=_sb.storage.from('community_images').getPublicUrl(name);imageUrl=ud.publicUrl;}const{error}=await _sb.from('ads').upsert({slot_id:slotId,image_url:imageUrl,ads_copy:adCopy,advertiser_link:adLink},{onConflict:'slot_id'});if(error)showToast("Save failed. Is the 'ads' table set up?\n"+error.message,'error');else showToast(`Ad Slot ${slotId} saved successfully!`,'success');};
 
 /* ═══════════════════════════════════════════════
-   NEW: ANALYTICS ENGINE
-   All new logic below — does NOT modify existing
+   ANALYTICS ENGINE
 ═══════════════════════════════════════════════ */
+let _revenueChart=null,_topCoursesChart=null,_sparklineChart=null;
+let _revenueMode='daily';
+let _analyticsData={enrollments:[],courses:[],profiles:[]};
 
-// Chart.js instances (stored for updates)
-let _revenueChart = null;
-let _topCoursesChart = null;
-let _sparklineChart = null;
-let _revenueMode = 'daily';
-let _analyticsData = { enrollments: [], courses: [], profiles: [] };
+function isDark(){return document.documentElement.getAttribute('data-theme')==='dark';}
+function chartColors(){return{bg:isDark()?'#13151F':'#FFFFFF',text:isDark()?'#A0AEC0':'#475467',grid:isDark()?'rgba(255,255,255,0.06)':'rgba(2,1,74,0.05)',navy:'#02014a',cyan:'#00a0df',yellow:'#fcd116',success:'#05CD99',danger:'#EE5D50'};}
 
-/* Theme-aware chart colors */
-function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
-function chartColors() {
-    return {
-        bg: isDark() ? '#13151F' : '#FFFFFF',
-        text: isDark() ? '#A0AEC0' : '#475467',
-        grid: isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(2,1,74,0.05)',
-        navy: '#02014a', cyan: '#00a0df', yellow: '#fcd116', success: '#05CD99', danger: '#EE5D50'
-    };
-}
-
-/* Master analytics loader — called after profiles load */
-async function loadAnalytics(profiles) {
-    try {
-        // Parallel fetch of analytics data
-        const [enrollRes, courseRes, certRes, lessonRes] = await Promise.all([
-            _sb.from('enrollments').select('id, student_id, course_id, enrolled_at, enrollment_type, courses(title, price, is_event_course)').order('enrolled_at', { ascending: false }),
-            _sb.from('courses').select('id, title, price, is_event_course, instructor_id, is_published, created_at, profiles(first_name, last_name)').eq('is_published', true),
-            _sb.from('certificates').select('id, student_id, course_id, issued_at'),
-            _sb.from('course_lessons').select('id, section_id')
+async function loadAnalytics(profiles){
+    try{
+        const[enrollRes,courseRes,certRes,lessonRes]=await Promise.all([
+            _sb.from('enrollments').select('id,student_id,course_id,enrolled_at,enrollment_type,courses(title,price,is_event_course)').order('enrolled_at',{ascending:false}),
+            _sb.from('courses').select('id,title,price,is_event_course,instructor_id,is_published,created_at,profiles(first_name,last_name)').eq('is_published',true),
+            _sb.from('certificates').select('id,student_id,course_id,issued_at'),
+            _sb.from('course_lessons').select('id,section_id')
         ]);
-
-        const enrollments = enrollRes.data || [];
-        const courses = courseRes.data || [];
-        const certs = certRes.data || [];
-        const lessons = lessonRes.data || [];
-
-        _analyticsData = { enrollments, courses, certs, profiles: profiles || [], lessons };
-
-        renderRevenueCards(enrollments, courses);
-        renderRevenueChart(enrollments, _revenueMode);
-        renderStudentInsights(profiles, enrollments);
-        renderFunnel(profiles, enrollments);
-        renderCourseAnalytics(courses, enrollments, certs);
-        renderInstructorPerformance(courses, enrollments);
-        renderContentStats(courses, lessons);
-        renderEvents(courses, enrollments);
-    } catch(err) {
-        console.error('Analytics load error:', err);
-    }
+        const enrollments=enrollRes.data||[];
+        const courses=courseRes.data||[];
+        const certs=certRes.data||[];
+        const lessons=lessonRes.data||[];
+        _analyticsData={enrollments,courses,certs,profiles:profiles||[],lessons};
+        renderRevenueCards(enrollments,courses);
+        renderRevenueChart(enrollments,_revenueMode);
+        renderStudentInsights(profiles,enrollments);
+        renderFunnel(profiles,enrollments);
+        renderCourseAnalytics(courses,enrollments,certs);
+        renderInstructorPerformance(courses,enrollments);
+        renderContentStats(courses,lessons);
+        renderEvents(courses,enrollments);
+    }catch(err){console.error('Analytics load error:',err);}
 }
 
-/* ── Revenue Cards ── */
-function renderRevenueCards(enrollments, courses) {
-    const priceMap = {};
-    courses.forEach(c => priceMap[c.id] = Number(c.price || 0));
-
-    let total = 0, monthly = 0;
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    let salesCount = 0;
-
-    enrollments.forEach(en => {
-        const price = priceMap[en.course_id] || 0;
-        const isEvent = en.courses?.is_event_course;
-        const isPaid = en.enrollment_type !== 'member_perk' && price > 0 && !isEvent;
-        if (isPaid) {
-            total += price;
-            salesCount++;
-            if (new Date(en.enrolled_at) >= monthStart) monthly += price;
-        }
-    });
-
-    const profit = Math.round(total * 0.85);
-    document.getElementById('rev-total').textContent = '₦' + total.toLocaleString();
-    document.getElementById('rev-month').textContent = '₦' + monthly.toLocaleString();
-    document.getElementById('rev-profit').textContent = '₦' + profit.toLocaleString();
-    document.getElementById('rev-sales').textContent = salesCount.toLocaleString();
+function renderRevenueCards(enrollments,courses){
+    const priceMap={};courses.forEach(c=>priceMap[c.id]=Number(c.price||0));
+    let total=0,monthly=0,salesCount=0;
+    const now=new Date();const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+    enrollments.forEach(en=>{const price=priceMap[en.course_id]||0;const isPaid=en.enrollment_type!=='member_perk'&&price>0&&!en.courses?.is_event_course;if(isPaid){total+=price;salesCount++;if(new Date(en.enrolled_at)>=monthStart)monthly+=price;}});
+    const profit=Math.round(total*0.85);
+    document.getElementById('rev-total').textContent='₦'+total.toLocaleString();
+    document.getElementById('rev-month').textContent='₦'+monthly.toLocaleString();
+    document.getElementById('rev-profit').textContent='₦'+profit.toLocaleString();
+    document.getElementById('rev-sales').textContent=salesCount.toLocaleString();
 }
 
-/* ── Revenue Chart ── */
-function generateRevenueData(enrollments, mode) {
-    const priceMap = {};
-    const now = new Date();
-    const labels = [], values = [];
-
-    if (mode === 'daily') {
-        for (let i = 13; i >= 0; i--) {
-            const d = new Date(now); d.setDate(d.getDate() - i);
-            labels.push(d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
-            values.push(0);
-        }
-        enrollments.forEach(en => {
-            const price = Number(en.courses?.price || 0);
-            if (!price || en.enrollment_type === 'member_perk') return;
-            const d = new Date(en.enrolled_at);
-            const dStr = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-            const idx = labels.indexOf(dStr);
-            if (idx !== -1) values[idx] += price;
-        });
-    } else if (mode === 'weekly') {
-        for (let i = 7; i >= 0; i--) {
-            const d = new Date(now); d.setDate(d.getDate() - i * 7);
-            labels.push('Wk ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
-            values.push(0);
-        }
-        enrollments.forEach(en => {
-            const price = Number(en.courses?.price || 0);
-            if (!price || en.enrollment_type === 'member_perk') return;
-            const d = new Date(en.enrolled_at);
-            const diffMs = now - d;
-            const diffWeeks = Math.floor(diffMs / (7 * 86400000));
-            if (diffWeeks <= 7) values[7 - diffWeeks] += price;
-        });
-    } else {
-        for (let i = 5; i >= 0; i--) {
-            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            labels.push(d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }));
-            values.push(0);
-        }
-        enrollments.forEach(en => {
-            const price = Number(en.courses?.price || 0);
-            if (!price || en.enrollment_type === 'member_perk') return;
-            const d = new Date(en.enrolled_at);
-            const monthsAgo = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
-            if (monthsAgo >= 0 && monthsAgo <= 5) values[5 - monthsAgo] += price;
-        });
-    }
-    return { labels, values };
+function generateRevenueData(enrollments,mode){
+    const now=new Date();const labels=[],values=[];
+    if(mode==='daily'){for(let i=13;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}));values.push(0);}enrollments.forEach(en=>{const price=Number(en.courses?.price||0);if(!price||en.enrollment_type==='member_perk')return;const d=new Date(en.enrolled_at);const dStr=d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});const idx=labels.indexOf(dStr);if(idx!==-1)values[idx]+=price;});}
+    else if(mode==='weekly'){for(let i=7;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i*7);labels.push('Wk '+d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}));values.push(0);}enrollments.forEach(en=>{const price=Number(en.courses?.price||0);if(!price||en.enrollment_type==='member_perk')return;const d=new Date(en.enrolled_at);const diffWeeks=Math.floor((now-d)/(7*86400000));if(diffWeeks<=7)values[7-diffWeeks]+=price;});}
+    else{for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);labels.push(d.toLocaleDateString('en-US',{month:'short',year:'2-digit'}));values.push(0);}enrollments.forEach(en=>{const price=Number(en.courses?.price||0);if(!price||en.enrollment_type==='member_perk')return;const d=new Date(en.enrolled_at);const monthsAgo=(now.getFullYear()-d.getFullYear())*12+(now.getMonth()-d.getMonth());if(monthsAgo>=0&&monthsAgo<=5)values[5-monthsAgo]+=price;});}
+    return{labels,values};
 }
 
-function renderRevenueChart(enrollments, mode) {
-    const { labels, values } = generateRevenueData(enrollments, mode);
-    const cc = chartColors();
-    const ctx = document.getElementById('revenueChart');
-    if (!ctx) return;
-
-    if (_revenueChart) { _revenueChart.destroy(); _revenueChart = null; }
-
-    _revenueChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Revenue (₦)',
-                data: values,
-                borderColor: '#00a0df',
-                backgroundColor: 'rgba(0,160,223,0.08)',
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#00a0df',
-                pointRadius: 4,
-                pointHoverRadius: 7,
-                borderWidth: 2.5,
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => '₦' + Math.round(ctx.raw).toLocaleString()
-                    }
-                }
-            },
-            scales: {
-                x: { grid: { color: cc.grid }, ticks: { color: cc.text, font: { family: 'DM Sans', size: 11 }, maxRotation: 45 } },
-                y: { grid: { color: cc.grid }, ticks: { color: cc.text, font: { family: 'DM Sans', size: 11 }, callback: v => '₦' + Math.round(v).toLocaleString() }, beginAtZero: true }
-            }
-        }
-    });
+function renderRevenueChart(enrollments,mode){
+    const{labels,values}=generateRevenueData(enrollments,mode);
+    const cc=chartColors();const ctx=document.getElementById('revenueChart');if(!ctx)return;
+    if(_revenueChart){_revenueChart.destroy();_revenueChart=null;}
+    _revenueChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Revenue (₦)',data:values,borderColor:'#00a0df',backgroundColor:'rgba(0,160,223,0.08)',fill:true,tension:0.4,pointBackgroundColor:'#00a0df',pointRadius:4,pointHoverRadius:7,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'₦'+Math.round(ctx.raw).toLocaleString()}}},scales:{x:{grid:{color:cc.grid},ticks:{color:cc.text,font:{family:'DM Sans',size:11},maxRotation:45}},y:{grid:{color:cc.grid},ticks:{color:cc.text,font:{family:'DM Sans',size:11},callback:v=>'₦'+Math.round(v).toLocaleString()},beginAtZero:true}}}});
 }
 
-window.switchRevenueChart = function(mode) {
-    _revenueMode = mode;
-    ['daily','weekly','monthly'].forEach(m => {
-        const btn = document.getElementById('rtoggle-' + m);
-        if (btn) btn.classList.toggle('active', m === mode);
-    });
-    renderRevenueChart(_analyticsData.enrollments, mode);
+window.switchRevenueChart=function(mode){
+    _revenueMode=mode;
+    ['daily','weekly','monthly'].forEach(m=>{const btn=document.getElementById('rtoggle-'+m);if(btn)btn.classList.toggle('active',m===mode);});
+    renderRevenueChart(_analyticsData.enrollments,mode);
 };
 
-/* ── Student Insights ── */
-function renderStudentInsights(profiles, enrollments) {
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    const weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate() - 7);
-
-    let newToday = 0, newWeek = 0, active = 0;
-    profiles.forEach(p => {
-        const d = new Date(p.created_at);
-        if (d >= today) newToday++;
-        if (d >= weekAgo) newWeek++;
-        if (p.status === 'approved') active++;
-    });
-
-    const total = profiles.length || 1;
-    const enrolled = enrollments.length;
-    const engRate = enrolled > 0 ? Math.round((active / Math.max(enrolled, 1)) * 100) : 0;
-
-    document.getElementById('ins-new-today').textContent = newToday;
-    document.getElementById('ins-new-week').textContent = newWeek;
-    document.getElementById('ins-active').textContent = active;
-    document.getElementById('ins-engagement').textContent = engRate + '%';
-
-    const setBar = (id, pct) => { const el = document.getElementById(id); if (el) el.style.width = Math.min(pct, 100) + '%'; };
-    setBar('ins-today-bar', newToday > 0 ? Math.min(newToday * 20, 100) : 5);
-    setBar('ins-week-bar', newWeek > 0 ? Math.min((newWeek / Math.max(total, 1)) * 100, 100) : 5);
-    setBar('ins-active-bar', (active / total) * 100);
-    setBar('ins-eng-bar', engRate);
-
-    // Sparkline: registrations per day last 7 days
-    const days = []; const dayLabels = [];
-    for (let i = 6; i >= 0; i--) {
-        const d = new Date(today); d.setDate(d.getDate() - i);
-        dayLabels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
-        const cnt = profiles.filter(p => { const pd = new Date(p.created_at); pd.setHours(0,0,0,0); return pd.getTime() === d.getTime(); }).length;
-        days.push(cnt);
-    }
-
-    const spCtx = document.getElementById('activitySparkline');
-    if (!spCtx) return;
-    if (_sparklineChart) { _sparklineChart.destroy(); _sparklineChart = null; }
-    const cc = chartColors();
-    _sparklineChart = new Chart(spCtx, {
-        type: 'bar',
-        data: {
-            labels: dayLabels,
-            datasets: [{ data: days, backgroundColor: 'rgba(0,160,223,0.6)', borderRadius: 4, borderSkipped: false }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + ' signups' } } },
-            scales: {
-                x: { grid: { display: false }, ticks: { color: cc.text, font: { size: 10 } } },
-                y: { display: false, beginAtZero: true }
-            }
-        }
-    });
+function renderStudentInsights(profiles,enrollments){
+    const today=new Date();today.setHours(0,0,0,0);
+    const weekAgo=new Date(today);weekAgo.setDate(weekAgo.getDate()-7);
+    let newToday=0,newWeek=0,active=0;
+    profiles.forEach(p=>{const d=new Date(p.created_at);if(d>=today)newToday++;if(d>=weekAgo)newWeek++;if(p.status==='approved')active++;});
+    const total=profiles.length||1;const enrolled=enrollments.length;
+    const engRate=enrolled>0?Math.round((active/Math.max(enrolled,1))*100):0;
+    document.getElementById('ins-new-today').textContent=newToday;document.getElementById('ins-new-week').textContent=newWeek;document.getElementById('ins-active').textContent=active;document.getElementById('ins-engagement').textContent=engRate+'%';
+    const setBar=(id,pct)=>{const el=document.getElementById(id);if(el)el.style.width=Math.min(pct,100)+'%';};
+    setBar('ins-today-bar',newToday>0?Math.min(newToday*20,100):5);setBar('ins-week-bar',newWeek>0?Math.min((newWeek/Math.max(total,1))*100,100):5);setBar('ins-active-bar',(active/total)*100);setBar('ins-eng-bar',engRate);
+    const days=[],dayLabels=[];
+    for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);dayLabels.push(d.toLocaleDateString('en-US',{weekday:'short'}));const cnt=profiles.filter(p=>{const pd=new Date(p.created_at);pd.setHours(0,0,0,0);return pd.getTime()===d.getTime();}).length;days.push(cnt);}
+    const spCtx=document.getElementById('activitySparkline');if(!spCtx)return;
+    if(_sparklineChart){_sparklineChart.destroy();_sparklineChart=null;}
+    const cc=chartColors();
+    _sparklineChart=new Chart(spCtx,{type:'bar',data:{labels:dayLabels,datasets:[{data:days,backgroundColor:'rgba(0,160,223,0.6)',borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+' signups'}}},scales:{x:{grid:{display:false},ticks:{color:cc.text,font:{size:10}}},y:{display:false,beginAtZero:true}}}});
 }
 
-/* ── Funnel ── */
-function renderFunnel(profiles, enrollments) {
-    const visitors = Math.max(profiles.length * 4, 100); // estimated
-    const signups = profiles.length;
-    const enrolled = [...new Set(enrollments.map(e => e.student_id))].length;
-    const active = profiles.filter(p => p.status === 'approved').length;
-
-    const setFunnel = (id, fbId, count, pct, label) => {
-        const el = document.getElementById(id); if (el) el.textContent = count.toLocaleString();
-        const fb = document.getElementById(fbId); if (fb) fb.style.width = Math.max(pct, 8) + '%';
-        const fl = document.getElementById(label); if (fl) fl.textContent = count.toLocaleString();
-    };
-
-    document.getElementById('fc-visitors').textContent = visitors.toLocaleString();
-    document.getElementById('f-visitors').textContent = visitors.toLocaleString();
-    setFunnel('fc-signups', 'fb-signups', signups, Math.round((signups / visitors) * 100), 'f-signups');
-    setFunnel('fc-enrolled', 'fb-enrolled', enrolled, Math.round((enrolled / Math.max(visitors, 1)) * 100), 'f-enrolled');
-    setFunnel('fc-active', 'fb-active', active, Math.round((active / Math.max(visitors, 1)) * 100), 'f-active');
-
-    const signupRate = Math.round((signups / visitors) * 100);
-    const enrollRate = Math.round((enrolled / Math.max(signups, 1)) * 100);
-    const activeRate = Math.round((active / Math.max(enrolled, 1)) * 100);
-    document.getElementById('conv-signup').textContent = signupRate + '%';
-    document.getElementById('conv-enroll').textContent = enrollRate + '%';
-    document.getElementById('conv-active').textContent = activeRate + '%';
+function renderFunnel(profiles,enrollments){
+    const visitors=Math.max(profiles.length*4,100);const signups=profiles.length;
+    const enrolled=[...new Set(enrollments.map(e=>e.student_id))].length;const active=profiles.filter(p=>p.status==='approved').length;
+    const setFunnel=(id,fbId,count,pct,label)=>{const el=document.getElementById(id);if(el)el.textContent=count.toLocaleString();const fb=document.getElementById(fbId);if(fb)fb.style.width=Math.max(pct,8)+'%';const fl=document.getElementById(label);if(fl)fl.textContent=count.toLocaleString();};
+    document.getElementById('fc-visitors').textContent=visitors.toLocaleString();document.getElementById('f-visitors').textContent=visitors.toLocaleString();
+    setFunnel('fc-signups','fb-signups',signups,Math.round((signups/visitors)*100),'f-signups');
+    setFunnel('fc-enrolled','fb-enrolled',enrolled,Math.round((enrolled/Math.max(visitors,1))*100),'f-enrolled');
+    setFunnel('fc-active','fb-active',active,Math.round((active/Math.max(visitors,1))*100),'f-active');
+    document.getElementById('conv-signup').textContent=Math.round((signups/visitors)*100)+'%';
+    document.getElementById('conv-enroll').textContent=Math.round((enrolled/Math.max(signups,1))*100)+'%';
+    document.getElementById('conv-active').textContent=Math.round((active/Math.max(enrolled,1))*100)+'%';
 }
 
-/* ── Course Analytics ── */
-async function renderCourseAnalytics(courses, enrollments, certs) {
-    const tbody = document.getElementById('course-analytics-tbody');
-
-    // Count enrollments per course
-    const enrollMap = {};
-    const certMap = {};
-    enrollments.forEach(en => { enrollMap[en.course_id] = (enrollMap[en.course_id] || 0) + 1; });
-    certs.forEach(c => { certMap[c.course_id] = (certMap[c.course_id] || 0) + 1; });
-
-    const sorted = [...courses].sort((a, b) => (enrollMap[b.id] || 0) - (enrollMap[a.id] || 0));
-
-    if (!sorted.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">No courses yet</td></tr>'; return; }
-
-    // Top course name for content stats
-    if (sorted[0]) document.getElementById('cs-top').textContent = sorted[0].title.substring(0, 12) + (sorted[0].title.length > 12 ? '…' : '');
-
-    tbody.innerHTML = sorted.slice(0, 8).map(c => {
-        const enCount = enrollMap[c.id] || 0;
-        const certCount = certMap[c.id] || 0;
-        const completion = enCount > 0 ? Math.round((certCount / enCount) * 100) : 0;
-        const price = Number(c.price || 0);
-        const revenue = price * enCount;
-        const rating = (Math.random() * 1.5 + 3.5).toFixed(1); // placeholder until reviews table exists
-        const barW = Math.min(completion, 100);
-        const barColor = completion >= 70 ? 'green' : completion >= 40 ? 'cyan' : 'yellow';
-
-        return `<tr>
-            <td>
-                <div style="font-weight:700;color:var(--text-dark);font-size:.88rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.title}">${c.title}</div>
-                ${c.is_event_course ? '<span style="font-size:.65rem;background:rgba(124,58,237,0.12);color:#7c3aed;padding:2px 7px;border-radius:4px;font-weight:700;">Event</span>' : ''}
-            </td>
-            <td><span style="font-family:Poppins;font-weight:700;color:var(--text-dark);">${enCount}</span></td>
-            <td>
-                <div style="display:flex;align-items:center;gap:.5rem;">
-                    <div style="flex:1;min-width:60px;"><div class="mini-bar-wrap"><div class="mini-bar-fill ${barColor}" style="width:${barW}%"></div></div></div>
-                    <span style="font-size:.78rem;font-weight:700;color:var(--text-dark);min-width:32px;">${completion}%</span>
-                </div>
-            </td>
-            <td><div class="star-rating"><span class="star">★</span><span class="star-val">${rating}</span></div></td>
-            <td style="font-weight:700;color:var(--text-dark);">${price > 0 ? '₦'+revenue.toLocaleString() : '<span style="color:var(--text-muted);">Free</span>'}</td>
-        </tr>`;
-    }).join('');
-
-    // Top Courses Bar Chart
-    const top5 = sorted.slice(0, 5);
-    const cc = chartColors();
-    const tcCtx = document.getElementById('topCoursesChart');
-    if (!tcCtx) return;
-    if (_topCoursesChart) { _topCoursesChart.destroy(); _topCoursesChart = null; }
-
-    _topCoursesChart = new Chart(tcCtx, {
-        type: 'bar',
-        data: {
-            labels: top5.map(c => c.title.length > 20 ? c.title.substring(0, 20) + '…' : c.title),
-            datasets: [{
-                label: 'Enrollments',
-                data: top5.map(c => enrollMap[c.id] || 0),
-                backgroundColor: ['#02014a', '#00a0df', '#fcd116', '#05CD99', '#EE5D50'],
-                borderRadius: 6,
-                borderSkipped: false
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { grid: { display: false }, ticks: { color: cc.text, font: { size: 10 } } },
-                y: { grid: { color: cc.grid }, ticks: { color: cc.text, font: { size: 10 }, stepSize: 1, precision: 0 }, beginAtZero: true }
-            }
-        }
-    });
-}
-async function loadCourseAnalytics() {
-    const { data: courses } = await _sb.from('courses').select('id,title,price,is_event_course,instructor_id,is_published,created_at,profiles(first_name,last_name)').eq('is_published', true);
-    const { data: enrollments } = await _sb.from('enrollments').select('id,student_id,course_id,enrolled_at,enrollment_type,courses(title,price,is_event_course)');
-    const { data: certs } = await _sb.from('certificates').select('id,student_id,course_id,issued_at');
-    renderCourseAnalytics(courses||[], enrollments||[], certs||[]);
+async function renderCourseAnalytics(courses,enrollments,certs){
+    const tbody=document.getElementById('course-analytics-tbody');
+    const enrollMap={},certMap={};
+    enrollments.forEach(en=>{enrollMap[en.course_id]=(enrollMap[en.course_id]||0)+1;});
+    certs.forEach(c=>{certMap[c.course_id]=(certMap[c.course_id]||0)+1;});
+    const sorted=[...courses].sort((a,b)=>(enrollMap[b.id]||0)-(enrollMap[a.id]||0));
+    if(!sorted.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">No courses yet</td></tr>';return;}
+    if(sorted[0])document.getElementById('cs-top').textContent=sorted[0].title.substring(0,12)+(sorted[0].title.length>12?'…':'');
+    tbody.innerHTML=sorted.slice(0,8).map(c=>{const enCount=enrollMap[c.id]||0;const certCount=certMap[c.id]||0;const completion=enCount>0?Math.round((certCount/enCount)*100):0;const price=Number(c.price||0);const revenue=price*enCount;const rating=(Math.random()*1.5+3.5).toFixed(1);const barW=Math.min(completion,100);const barColor=completion>=70?'green':completion>=40?'cyan':'yellow';return`<tr><td><div style="font-weight:700;color:var(--text-dark);font-size:.88rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.title}">${c.title}</div>${c.is_event_course?'<span style="font-size:.65rem;background:rgba(124,58,237,0.12);color:#7c3aed;padding:2px 7px;border-radius:4px;font-weight:700;">Event</span>':''}</td><td><span style="font-family:Poppins;font-weight:700;color:var(--text-dark);">${enCount}</span></td><td><div style="display:flex;align-items:center;gap:.5rem;"><div style="flex:1;min-width:60px;"><div class="mini-bar-wrap"><div class="mini-bar-fill ${barColor}" style="width:${barW}%"></div></div></div><span style="font-size:.78rem;font-weight:700;color:var(--text-dark);min-width:32px;">${completion}%</span></div></td><td><div class="star-rating"><span class="star">★</span><span class="star-val">${rating}</span></div></td><td style="font-weight:700;color:var(--text-dark);">${price>0?'₦'+revenue.toLocaleString():'<span style="color:var(--text-muted);">Free</span>'}</td></tr>`;}).join('');
+    const top5=sorted.slice(0,5);const cc=chartColors();const tcCtx=document.getElementById('topCoursesChart');if(!tcCtx)return;
+    if(_topCoursesChart){_topCoursesChart.destroy();_topCoursesChart=null;}
+    _topCoursesChart=new Chart(tcCtx,{type:'bar',data:{labels:top5.map(c=>c.title.length>20?c.title.substring(0,20)+'…':c.title),datasets:[{label:'Enrollments',data:top5.map(c=>enrollMap[c.id]||0),backgroundColor:['#02014a','#00a0df','#fcd116','#05CD99','#EE5D50'],borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:cc.text,font:{size:10}}},y:{grid:{color:cc.grid},ticks:{color:cc.text,font:{size:10},stepSize:1,precision:0},beginAtZero:true}}}});
 }
 
-/* ── Instructor Performance ── */
-function renderInstructorPerformance(courses, enrollments) {
-    const tbody = document.getElementById('instructor-perf-tbody');
-
-    // Group courses by instructor
-    const instrMap = {};
-    courses.forEach(c => {
-        const key = c.instructor_id;
-        if (!key) return;
-        if (!instrMap[key]) instrMap[key] = { name: `${c.profiles?.first_name || 'Instructor'} ${c.profiles?.last_name || ''}`.trim(), courses: 0, students: 0, rating: 0 };
-        instrMap[key].courses++;
-        instrMap[key].students += enrollments.filter(e => e.course_id === c.id).length;
-        instrMap[key].rating = +(Math.random() * 1.2 + 3.8).toFixed(1);
-    });
-
-    const instructors = Object.values(instrMap).sort((a, b) => b.students - a.students);
-
-    if (!instructors.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--text-muted);">No instructors yet</td></tr>'; return; }
-
-    tbody.innerHTML = instructors.map((ins, i) => {
-        const scoreClass = ins.students >= 20 ? 'excellent' : ins.students >= 5 ? 'good' : 'average';
-        const initial = (ins.name[0] || 'I').toUpperCase();
-        return `<tr>
-            <td>
-                <div style="display:flex;align-items:center;gap:.75rem;">
-                    <div style="width:34px;height:34px;border-radius:10px;background:${i===0?'var(--brand-navy)':i===1?'var(--accent-cyan)':'var(--brand-yellow)'};display:flex;align-items:center;justify-content:center;color:${i===2?'var(--brand-navy)':'#fff'};font-weight:700;font-size:.9rem;flex-shrink:0;">${initial}</div>
-                    <span style="font-weight:700;color:var(--text-dark);font-size:.88rem;">${ins.name}</span>
-                </div>
-            </td>
-            <td style="text-align:center;font-weight:700;color:var(--text-dark);">${ins.courses}</td>
-            <td style="text-align:center;font-weight:700;color:var(--text-dark);">${ins.students}</td>
-            <td><div class="star-rating"><span class="star">★</span><span class="star-val">${ins.rating}</span></div></td>
-        </tr>`;
-    }).join('');
+async function loadCourseAnalytics(){
+    const{data:courses}=await _sb.from('courses').select('id,title,price,is_event_course,instructor_id,is_published,created_at,profiles(first_name,last_name)').eq('is_published',true);
+    const{data:enrollments}=await _sb.from('enrollments').select('id,student_id,course_id,enrolled_at,enrollment_type,courses(title,price,is_event_course)');
+    const{data:certs}=await _sb.from('certificates').select('id,student_id,course_id,issued_at');
+    renderCourseAnalytics(courses||[],enrollments||[],certs||[]);
 }
 
-/* ── Content Stats ── */
-function renderContentStats(courses, lessons) {
-    document.getElementById('cs-courses').textContent = courses.length;
-    document.getElementById('cs-lessons').textContent = lessons.length;
+function renderInstructorPerformance(courses,enrollments){
+    const tbody=document.getElementById('instructor-perf-tbody');const instrMap={};
+    courses.forEach(c=>{const key=c.instructor_id;if(!key)return;if(!instrMap[key])instrMap[key]={name:`${c.profiles?.first_name||'Instructor'} ${c.profiles?.last_name||''}`.trim(),courses:0,students:0,rating:0};instrMap[key].courses++;instrMap[key].students+=enrollments.filter(e=>e.course_id===c.id).length;instrMap[key].rating=+(Math.random()*1.2+3.8).toFixed(1);});
+    const instructors=Object.values(instrMap).sort((a,b)=>b.students-a.students);
+    if(!instructors.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--text-muted);">No instructors yet</td></tr>';return;}
+    tbody.innerHTML=instructors.map((ins,i)=>{const initial=(ins.name[0]||'I').toUpperCase();return`<tr><td><div style="display:flex;align-items:center;gap:.75rem;"><div style="width:34px;height:34px;border-radius:10px;background:${i===0?'var(--brand-navy)':i===1?'var(--accent-cyan)':'var(--brand-yellow)'};display:flex;align-items:center;justify-content:center;color:${i===2?'var(--brand-navy)':'#fff'};font-weight:700;font-size:.9rem;flex-shrink:0;">${initial}</div><span style="font-weight:700;color:var(--text-dark);font-size:.88rem;">${ins.name}</span></div></td><td style="text-align:center;font-weight:700;color:var(--text-dark);">${ins.courses}</td><td style="text-align:center;font-weight:700;color:var(--text-dark);">${ins.students}</td><td><div class="star-rating"><span class="star">★</span><span class="star-val">${ins.rating}</span></div></td></tr>`;}).join('');
 }
 
-/* ── Events / Webinar Tracking ── */
-function renderEvents(courses, enrollments) {
-    const eventCourses = courses.filter(c => c.is_event_course === true);
-    const el = document.getElementById('events-list');
-
-    if (!eventCourses.length) {
-        el.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted);">No event courses created yet. Create a course and mark it as "Event Course" in the instructor portal.</div>`;
-        return;
-    }
-
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    el.innerHTML = eventCourses.map((c, idx) => {
-        const date = new Date(c.created_at);
-        const regCount = enrollments.filter(e => e.course_id === c.id).length;
-        const attendanceRate = regCount > 0 ? Math.min(Math.round((regCount / Math.max(regCount * 1.3, 1)) * 100), 100) : 0;
-        const isUpcoming = idx === 0;
-        const attClass = isUpcoming ? 'upcoming' : attendanceRate >= 70 ? 'high' : 'med';
-        const attLabel = isUpcoming ? 'Upcoming' : attendanceRate + '% Attended';
-
-        return `<div class="event-item">
-            <div class="event-item-date">
-                <div class="ev-day">${date.getDate()}</div>
-                <div class="ev-mon">${months[date.getMonth()]}</div>
-            </div>
-            <div class="event-item-info">
-                <div class="event-item-title">${c.title}</div>
-                <div class="event-item-meta">Event Course • Created ${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
-                <div class="event-attendance ${attClass}">${attLabel}</div>
-            </div>
-            <div class="event-item-reg">
-                <div class="event-reg-count">${regCount}</div>
-                <div class="event-reg-lbl">Registrations</div>
-            </div>
-        </div>`;
-    }).join('');
+function renderContentStats(courses,lessons){
+    document.getElementById('cs-courses').textContent=courses.length;
+    document.getElementById('cs-lessons').textContent=lessons.length;
 }
 
-/* ═══════════════════════════════
-   INIT (EXISTING + NEW)
-═══════════════════════════════ */
+function renderEvents(courses,enrollments){
+    const eventCourses=courses.filter(c=>c.is_event_course===true);
+    const el=document.getElementById('events-list');
+    if(!eventCourses.length){el.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-muted);">No event courses created yet. Create a course and mark it as "Event Course" in the instructor portal.</div>`;return;}
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    el.innerHTML=eventCourses.map((c,idx)=>{const date=new Date(c.created_at);const regCount=enrollments.filter(e=>e.course_id===c.id).length;const attendanceRate=regCount>0?Math.min(Math.round((regCount/Math.max(regCount*1.3,1))*100),100):0;const isUpcoming=idx===0;const attClass=isUpcoming?'upcoming':attendanceRate>=70?'high':'med';const attLabel=isUpcoming?'Upcoming':attendanceRate+'% Attended';return`<div class="event-item"><div class="event-item-date"><div class="ev-day">${date.getDate()}</div><div class="ev-mon">${months[date.getMonth()]}</div></div><div class="event-item-info"><div class="event-item-title">${c.title}</div><div class="event-item-meta">Event Course • Created ${date.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div><div class="event-attendance ${attClass}">${attLabel}</div></div><div class="event-item-reg"><div class="event-reg-count">${regCount}</div><div class="event-reg-lbl">Registrations</div></div></div>`;}).join('');
+}
+
+/* INIT */
 window.addEventListener('load',function(){
-    const t=localStorage.getItem('enet_theme')||'system';
-    applyTheme(t);
-    const cs=localStorage.getItem('enet_stat_students');
-    const ct=localStorage.getItem('enet_stat_teachers');
+    const t=localStorage.getItem('enet_theme')||'system';applyTheme(t);
+    const cs=localStorage.getItem('enet_stat_students');const ct=localStorage.getItem('enet_stat_teachers');
     if(cs!==null)document.getElementById('stat-students').textContent=cs;
     if(ct!==null)document.getElementById('stat-teachers').textContent=ct;
 
@@ -1777,26 +1363,14 @@ window.addEventListener('load',function(){
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E'
     );
 
-    loadProfiles();
-    loadExistingAds();
-    loadBlogPosts();
-    subscribeRealtime();
+    loadProfiles();loadExistingAds();loadBlogPosts();subscribeRealtime();
 
-    document.getElementById('logoutBtnTop').addEventListener('click',async()=>{
-        try{await _sb.auth.signOut();}catch(e){}
-        localStorage.clear();sessionStorage.clear();window.location.href='index.html';
-    });
+    document.getElementById('logoutBtnTop').addEventListener('click',async()=>{try{await _sb.auth.signOut();}catch(e){}localStorage.clear();sessionStorage.clear();window.location.href='index.html';});
     const mobileLogoutBtn=document.getElementById('logoutBtnMobile');
     if(mobileLogoutBtn){mobileLogoutBtn.addEventListener('click',async()=>{try{await _sb.auth.signOut();}catch(e){}localStorage.clear();sessionStorage.clear();window.location.href='index.html';});}
 
-    // Re-render charts on theme change
-    const observer = new MutationObserver(() => {
-        if (_analyticsData.enrollments) {
-            renderRevenueChart(_analyticsData.enrollments, _revenueMode);
-            renderStudentInsights(_analyticsData.profiles, _analyticsData.enrollments);
-        }
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    const observer=new MutationObserver(()=>{if(_analyticsData.enrollments){renderRevenueChart(_analyticsData.enrollments,_revenueMode);renderStudentInsights(_analyticsData.profiles,_analyticsData.enrollments);}});
+    observer.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 });
 </script>
 </body>
