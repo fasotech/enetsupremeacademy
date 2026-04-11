@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>ENET SUPREME ACADEMY | Browse Courses</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -28,11 +31,24 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
+        /* === HIDE ALL GOOGLE TRANSLATE UI CHROME === */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        .goog-te-gadget { display: none !important; }
+        #google_translate_element { display: none !important; }
+        body { top: 0px !important; }
+        .skiptranslate { display: none !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+        iframe.goog-te-banner-frame { display: none !important; }
+
         /* === HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
-        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--brand-yellow); }
+        
+        .logo { display: flex; align-items: center; gap: 12px; color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo .logo-text span { color: var(--brand-yellow); }
+        .main-logo-img { height: 45px; width: auto; object-fit: contain; display: block; }
         
         .mobile-menu-btn { display: none; background: transparent; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
 
@@ -41,7 +57,6 @@
         .nav-links a:hover { color: var(--accent-cyan); }
         .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
 
-        /* Member status pill in nav */
         .member-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(5,205,153,0.15); border: 1px solid rgba(5,205,153,0.35); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: #05CD99; }
         .member-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: #05CD99; animation: blink 1.6s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -51,7 +66,6 @@
         .catalog-header { font-size: 2rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; font-family: 'Times New Roman', Times, serif; letter-spacing: -0.5px;}
         .catalog-subheader { font-size: 1rem; color: var(--text-gray); margin-bottom: 2rem; }
 
-        /* Member perks callout banner */
         .member-perks-callout { display: none; background: linear-gradient(135deg, rgba(0,160,223,0.08), rgba(0,160,223,0.02)); border: 1px solid rgba(0,160,223,0.25); border-left: 4px solid var(--accent-cyan); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; }
         .member-perks-callout.show { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
         .member-perks-callout p { font-size: 0.9rem; color: var(--text-main); flex: 1; }
@@ -59,7 +73,6 @@
         .member-perks-callout a { color: var(--accent-cyan); font-weight: 700; text-decoration: none; }
         .member-perks-callout a:hover { text-decoration: underline; }
 
-        /* Filter tabs */
         .filter-tabs { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .filter-tab { padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; cursor: pointer; background: var(--background); color: var(--text-gray); transition: 0.2s; }
         .filter-tab:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
@@ -73,7 +86,6 @@
         .udemy-img-wrapper { position: relative; width: 100%; padding-top: 56.25%; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; background: var(--navy-blue);}
         .udemy-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         
-        /* Event course ribbon */
         .event-ribbon { position: absolute; top: 12px; right: -2px; background: var(--success); color: #000; font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 4px 0 0 4px; z-index: 2; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .udemy-content { padding: 0.5rem 0; display: flex; flex-direction: column; flex: 1;}
@@ -93,42 +105,66 @@
         .badge-premium { background: #ecd5fa; color: #4b0082; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
         .badge-event-public { background: #fff3cd; color: #856404; font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 2px; }
 
+        /* === SINGLE COURSE VIEW === */
+        .single-course-container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; flex: 1; width: 100%; display: none; }
+        .back-to-catalog { display: inline-flex; align-items: center; gap: 6px; color: var(--text-gray); text-decoration: none; font-weight: 600; margin-bottom: 1.5rem; font-size: 0.95rem; transition: 0.2s; }
+        .back-to-catalog:hover { color: var(--accent-cyan); }
+        .single-card { display: flex; background: var(--background); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.06); flex-wrap: wrap; }
+        .single-card-img-wrap { flex: 1; min-width: 300px; background: var(--navy-blue); }
+        .single-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; min-height: 100%; }
+        .single-card-content { flex: 1.2; min-width: 300px; padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+        .single-title { font-size: 2rem; font-weight: 800; color: var(--navy-blue); margin-bottom: 0.5rem; line-height: 1.2; font-family: 'Times New Roman', Times, serif; letter-spacing: -0.5px;}
+        .single-instructor { font-size: 1rem; color: var(--text-gray); margin-bottom: 1rem; font-weight: 500; }
+        .single-price { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; }
+        .single-desc { font-size: 1rem; color: var(--text-gray); line-height: 1.6; margin-bottom: 2.5rem; }
+        
+        .btn { padding: 1rem 2rem; border-radius: 8px; font-size: 1.05rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; transition: all 0.3s ease; text-align: center; border: none; }
+        .btn-primary { background-color: var(--brand-yellow); color: var(--navy-blue); }
+        .btn-primary:hover { background-color: var(--yellow-hover); }
+        .btn-success { background-color: var(--success); color: #fff; }
+        .btn-success:hover { background-color: #04b386; }
+        .btn-secondary { background-color: var(--navy-blue); color: var(--white); }
+        .btn-secondary:hover { background-color: var(--navy-light); }
+
+        .share-btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; cursor: pointer; transition: 0.2s; border: none; display: inline-flex; align-items: center; gap: 6px; }
+        .share-btn.copy { background: #f1f3f5; color: var(--text-main); border: 1px solid var(--border); }
+        .share-btn.copy:hover { background: #e2e6ea; }
+        .share-btn.wa { background: #25d366; color: #fff; }
+        .share-btn.wa:hover { background: #1ebc5a; }
+        .share-btn.tw { background: #000; color: #fff; }
+        .share-btn.tw:hover { background: #333; }
+
         /* === PAYMENT MODAL === */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 1, 74, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;}
         .modal-overlay.show { display: flex; opacity: 1; }
-        
         .payment-modal { background: #fff; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 550px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); transform: translateY(20px); transition: transform 0.3s ease; position: relative; text-align: center;}
         .modal-overlay.show .payment-modal { transform: translateY(0); }
-        
         .payment-close { position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; font-size: 1.5rem; color: var(--text-gray); cursor: pointer; transition: 0.2s; }
         .payment-close:hover { color: #dc2626; }
-
         .payment-modal h2 { color: var(--navy-blue); font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
         .payment-modal h3 { color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;}
-        
         .payment-box { background: #f8f9fa; border: 2px dashed var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; text-align: left;}
         .payment-box h4 { color: var(--text-main); font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;}
         .bank-details p { font-size: 1.1rem; color: var(--text-gray); margin-bottom: 0.5rem; }
         .bank-details strong { color: var(--navy-blue); }
         .bank-details .highlight { display: inline-block; background: rgba(252, 209, 22, 0.2); padding: 2px 8px; border-radius: 4px; color: #b29300; font-weight: 800;}
-
         .whatsapp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background-color: #25d366; color: #fff; border: none; padding: 1.2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 800; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); cursor: pointer;}
         .whatsapp-btn:hover { background-color: #1ebc5a; transform: translateY(-3px); }
 
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
         .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,0.1);font-size:.9rem;font-weight:600;color:var(--text-main);pointer-events:all;animation:toastIn .3s ease;}
         .toast.error{border-left-color: var(--danger);}
-        .toast.info{border-left-color: var(--accent-cyan);}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
         footer { background-color: var(--navy-blue); color: #fff; padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto;}
-        .footer-logo { color: #fff; font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
         .footer-logo span { color: var(--brand-yellow); }
+        .footer-logo-img { height: 40px; width: auto; object-fit: contain; }
         .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
 
         @media (max-width: 950px) { .mobile-menu-btn { display: block; } .nav-links { display: none; width: 100%; flex-direction: column; text-align: center; padding-top: 1rem; gap: 1rem; } .nav-links.show { display: flex; } }
-        @media (max-width: 600px) { .payment-modal { padding: 1.5rem; } .footer-container { flex-direction: column; text-align: center; gap: 1rem; } }
+        @media (max-width: 600px) { .single-card-content { padding: 2rem 1.5rem; } .payment-modal { padding: 1.5rem; } .footer-container { flex-direction: column; text-align: center; gap: 1rem; } }
     </style>
 </head>
 <body>
@@ -137,11 +173,15 @@
 
     <header>
         <nav>
-            <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+            <a href="index.html" class="logo">
+                <img src="mainlogo.png" alt="ENET Supreme Logo" class="main-logo-img" onerror="this.style.display='none'">
+                <span class="logo-text">ENET SUPREME <span>ACADEMY</span></span>
+            </a>
             <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
 
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
+                <a href="blog.html">Blog</a>
                 <a href="courses.html" class="active">Courses</a>
                 <a href="community.html">Community</a>
                 <span class="member-pill" id="member-pill" style="display:none;"><span class="dot"></span> Full Member</span>
@@ -150,7 +190,7 @@
         </nav>
     </header>
 
-    <section class="catalog-section">
+    <section class="catalog-section" id="catalog-view">
         <h1 class="catalog-header">What to learn next</h1>
         <p class="catalog-subheader" id="catalog-subheader">Browse all premium tracks and exclusive event courses.</p>
         
@@ -165,11 +205,35 @@
         <div class="filter-tabs">
             <button class="filter-tab active" onclick="filterCourses('all', this)">All Courses</button>
             <button class="filter-tab" onclick="filterCourses('regular', this)">Main Courses</button>
-            <button class="filter-tab" onclick="filterCourses('event', this)">⭐ Event Courses</button>
+            <button class="filter-tab" onclick="filterCourses('event', this)">Event Courses</button>
         </div>
 
         <div class="course-grid" id="course-container">
             <div style="grid-column: 1 / -1; padding: 2rem 0; color: var(--text-gray); font-size: 1.1rem;">Loading courses...</div>
+        </div>
+    </section>
+
+    <section class="single-course-container" id="single-course-view">
+        <a href="courses.html" class="back-to-catalog">← Back to all courses</a>
+        <div class="single-card">
+            <div class="single-card-img-wrap">
+                <img id="single-course-img" src="" alt="Course Cover">
+            </div>
+            <div class="single-card-content">
+                <div id="single-course-badges" style="display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;"></div>
+                <h1 class="single-title" id="single-course-title">Loading Course...</h1>
+                <p class="single-instructor" id="single-course-instructor">Instructor: ...</p>
+                <div class="single-price" id="single-course-price">...</div>
+                <p class="single-desc" id="single-course-desc">...</p>
+                
+                <div id="single-course-action" style="margin-bottom: 2rem;">
+                    </div>
+                
+                <hr style="border: none; border-top: 1px solid var(--border); margin-bottom: 1rem;">
+                <p style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Share this course</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="single-course-share">
+                    </div>
+            </div>
         </div>
     </section>
 
@@ -199,7 +263,10 @@
     <footer>
         <div class="footer-container">
             <div>
-                <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
+                <div class="footer-logo">
+                    <img src="mainlogo.png" alt="ENET Supreme Logo" class="footer-logo-img" onerror="this.style.display='none'">
+                    <div>ENET SUPREME <span>ACADEMY</span></div>
+                </div>
                 <p style="margin-top: 1rem; font-size: 0.9rem; color: #d1d7dc;">info@enetsupreme.com.ng | +234 8062 770 265</p>
             </div>
             <div style="color: #d1d7dc; font-size: 0.9rem; text-align: right;">
@@ -215,7 +282,7 @@
         const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
         let activeSession = null;
-        let isFullMember = false; // True ONLY if they own a Main Course
+        let isFullMember = false; 
         let enrolledCourseIds = [];
         let allCourses = []; 
         let currentFilter = 'all';
@@ -224,7 +291,7 @@
             const wrap = document.getElementById('toast-wrap');
             const t = document.createElement('div');
             t.className = `toast ${type}`;
-            t.innerHTML = `<span>${type === 'error' ? '❌' : (type === 'info' ? 'ℹ️' : '✅')}</span><span>${msg}</span>`;
+            t.innerHTML = `<span>${type === 'error' ? '✕' : (type === 'info' ? 'i' : '✓')}</span><span>${msg}</span>`;
             wrap.appendChild(t);
             setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000);
         }
@@ -239,14 +306,12 @@
                 const navBtn = document.getElementById('nav-login-btn');
                 navBtn.innerText = 'Dashboard';
 
-                // Check enrollments to see if they are a FULL member (own at least 1 Main Course)
                 const { data: enrollments } = await sb.from('enrollments')
                     .select('course_id, courses(is_event_course)')
                     .eq('student_id', session.user.id);
                 
                 if (enrollments) {
                     enrolledCourseIds = enrollments.map(e => e.course_id);
-                    // A Full Member has at least one course where 'is_event_course' is false or null
                     isFullMember = enrollments.some(e => e.courses && e.courses.is_event_course !== true);
                 }
 
@@ -255,7 +320,6 @@
                 else if (profile?.role === 'teacher' || profile?.role === 'instructor') navBtn.href = 'teacher-dashboard.html';
                 else navBtn.href = 'student-dashboard.html';
 
-                // Only show the perks banner if they are a Full Member
                 if (isFullMember) {
                     document.getElementById('member-perks-callout').classList.add('show');
                     document.getElementById('member-pill').style.display = 'inline-flex';
@@ -291,6 +355,75 @@
             }
         }
 
+        async function fetchSingleCourse(courseId) {
+            document.getElementById('catalog-view').style.display = 'none';
+            const singleView = document.getElementById('single-course-view');
+            singleView.style.display = 'flex';
+            
+            try {
+                const { data: course, error } = await sb
+                    .from('courses')
+                    .select('*, profiles(first_name, last_name)')
+                    .eq('id', courseId)
+                    .single();
+                    
+                if (error || !course) throw error;
+                
+                const instructorName = `${course.profiles?.first_name || 'Academy'} ${course.profiles?.last_name || ''}`.trim();
+                const isEvent = course.is_event_course === true;
+                const isOwned = enrolledCourseIds.includes(course.id);
+                const rawPrice = Number(course.price);
+                
+                let displayPrice = rawPrice === 0 ? 'FREE' : `₦${rawPrice.toLocaleString()}`;
+                let actionType = 'pay';
+                let btnText = 'Enroll Now';
+                let btnClass = 'btn-primary';
+                
+                if (isOwned) {
+                    displayPrice = '<span style="color: var(--success); font-size: 1.5rem;">✓ Already Enrolled</span>';
+                    btnText = 'Go to My Dashboard';
+                    btnClass = 'btn-secondary';
+                    actionType = 'dashboard';
+                } else if (isEvent && isFullMember) {
+                    displayPrice = '<span style="color: var(--success); font-size: 1.5rem;">Free for Members</span>';
+                    btnText = 'Claim Free Access';
+                    btnClass = 'btn-success';
+                    actionType = 'claim';
+                }
+                
+                document.getElementById('single-course-img').src = course.image_url || '';
+                document.getElementById('single-course-title').textContent = course.title;
+                document.getElementById('single-course-instructor').textContent = `Instructor: ${instructorName}`;
+                document.getElementById('single-course-price').innerHTML = displayPrice;
+                document.getElementById('single-course-desc').textContent = course.description || '';
+                
+                const safeTitle = course.title.replace(/'/g, "\\'");
+                const safePrice = rawPrice === 0 ? 'FREE' : `₦${rawPrice.toLocaleString()}`;
+                
+                const actionDiv = document.getElementById('single-course-action');
+                actionDiv.innerHTML = `<button class="btn ${btnClass}" style="width: 100%; padding: 1.2rem; font-size: 1.1rem;" onclick="handleCourseClick('${course.id}', '${safeTitle}', '${safePrice}', ${isEvent}, '${actionType}')">${btnText}</button>`;
+                
+                // Construct Share URLs
+                const currentUrl = window.location.origin + window.location.pathname + '?course=' + course.id;
+                const encodedUrl = encodeURIComponent(currentUrl);
+                const encodedTitle = encodeURIComponent(`Check out this course: ${course.title} on ENET Supreme Academy!`);
+                
+                document.getElementById('single-course-share').innerHTML = `
+                    <button onclick="navigator.clipboard.writeText('${currentUrl}'); showToast('Link copied to clipboard!', 'success');" class="share-btn copy">Copy Link</button>
+                    <a href="https://wa.me/?text=${encodedTitle}%20${encodedUrl}" target="_blank" class="share-btn wa">WhatsApp</a>
+                    <a href="https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}" target="_blank" class="share-btn tw">X (Twitter)</a>
+                `;
+                
+                // Badges
+                let badgesHTML = '<span class="badge-premium">Premium</span>';
+                if (isEvent) badgesHTML += `<span class="badge-event-public" style="margin-left:8px;">Event Course</span>`;
+                document.getElementById('single-course-badges').innerHTML = badgesHTML;
+                
+            } catch(e) {
+                singleView.innerHTML = `<div style="padding: 4rem 2rem; width: 100%; text-align: center; color: var(--danger);"><h3>Course not found</h3><br><a href="courses.html" style="color:var(--accent-cyan);">Browse all courses</a></div>`;
+            }
+        }
+
         function renderCourseCards(courses) {
             const container = document.getElementById('course-container');
             container.innerHTML = '';
@@ -320,19 +453,15 @@
                 let ribbonHTML = '';
                 let actionType = 'pay'; 
 
-                // THE SECURE GATEWAY LOGIC
                 if (isOwned) {
-                    // They already own this specific course (Main or Event)
                     priceHTML = `<div class="udemy-price member-free">✓ Enrolled</div>`;
                     ribbonHTML = `<div class="event-ribbon" style="background: var(--accent-cyan); color: #fff;">Access Granted</div>`;
                     actionType = 'dashboard';
                 } else if (isEvent && isFullMember) {
-                    // It's an Event course, and they are a Full Member (they own a Main Course)
                     priceHTML = `<div class="udemy-price member-free">🎁 FREE for Members</div>`;
                     ribbonHTML = `<div class="event-ribbon">Free for You</div>`;
                     actionType = 'claim';
                 } else {
-                    // Everything else requires payment (Main Courses, or Event Courses for non-members)
                     const displayPrice = rawPrice === 0 ? 'FREE' : `₦${rawPrice.toLocaleString()}`;
                     priceHTML = `<div class="udemy-price">${displayPrice}</div>`;
                     if (isEvent) ribbonHTML = `<div class="event-ribbon" style="background: var(--brand-yellow); color: #000;">Event Course</div>`;
@@ -359,36 +488,32 @@
                         ${badgesHTML}
                     </div>`;
 
-                card.onclick = () => handleCourseClick(course.id, safeTitle, safePrice, isEvent, actionType);
+                // Clicking the card anywhere routes it to the specific Course Page!
+                card.onclick = () => window.location.href = `courses.html?course=${course.id}`;
                 container.appendChild(card);
             });
         }
 
         async function handleCourseClick(courseId, courseTitle, coursePrice, isEvent, actionType) {
-            // 1. Go to Dashboard
             if (actionType === 'dashboard') {
                 window.location.href = "student-dashboard.html";
                 return;
             }
-
-            // 2. Claim Free Event Course
             if (actionType === 'claim') {
                 try {
                     const { error } = await sb.from('enrollments').insert({ student_id: activeSession.user.id, course_id: courseId, enrollment_type: 'member_perk' });
                     if (error) throw error;
-                    showToast(`🎉 "${courseTitle}" claimed for FREE! Redirecting...`);
+                    showToast(`"${courseTitle}" claimed for FREE! Redirecting...`);
                     setTimeout(() => window.location.href = 'student-dashboard.html', 1500);
                 } catch (err) { showToast('Could not claim course.', 'error'); }
                 return;
             }
 
-            // 3. Payment Required
             document.getElementById('modal-course-title').textContent = courseTitle;
             document.getElementById('modal-course-price').textContent = coursePrice;
-
             const userText = activeSession ? activeSession.user.email : 'a guest visitor';
-            const courseType = isEvent ? "Event Course" : "Main Course";
-            const message = encodeURIComponent(`Hello Admin, I am ${userText} and I want to pay ${coursePrice} for the ${courseType}: "${courseTitle}". How do I proceed to get access?`);
+            const cType = isEvent ? "Event Course" : "Main Course";
+            const message = encodeURIComponent(`Hello Admin, I am ${userText} and I want to pay ${coursePrice} for the ${cType}: "${courseTitle}". How do I proceed to get access?`);
             document.getElementById('whatsapp-link').href = `https://wa.me/2348162337303?text=${message}`;
             
             togglePaymentModal();
@@ -399,7 +524,15 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             await checkSession(); 
-            await fetchAllCourses();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetCourseId = urlParams.get('course') || urlParams.get('id');
+            
+            if (targetCourseId) {
+                await fetchSingleCourse(targetCourseId);
+            } else {
+                await fetchAllCourses();
+            }
         });
     </script>
 </body>
