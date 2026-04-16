@@ -193,6 +193,48 @@
         .whatsapp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background-color: #25d366; color: var(--white); border: none; padding: 1.2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 800; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); cursor: pointer;}
         .whatsapp-btn:hover { background-color: #1ebc5a; transform: translateY(-3px); }
 
+        /* === Calendly Modal === */
+        .calendly-modal-inner {
+            max-width: 850px;
+            height: 85vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        .calendly-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--white);
+            flex-shrink: 0;
+            border-radius: 16px 16px 0 0;
+        }
+        .calendly-modal-header h2 {
+            font-size: 1.3rem;
+            color: var(--navy-blue);
+            margin: 0;
+            font-weight: 800;
+            text-align: left;
+        }
+        .calendly-modal-header .modal-close {
+            position: static;
+            font-size: 1.4rem;
+        }
+        .calendly-widget-wrapper {
+            flex: 1;
+            overflow: hidden;
+            border-radius: 0 0 16px 16px;
+        }
+        .calendly-inline-widget {
+            width: 100% !important;
+            height: 100% !important;
+            min-width: 320px;
+        }
+
         /* === REASONS & STATS === */
         .reasons-section { background-color: var(--white); padding: 5rem 1.5rem; }
         .reasons-title { text-align: center; color: var(--navy-blue); font-size: 2.5rem; font-weight: 800; margin-bottom: 4rem; }
@@ -253,6 +295,7 @@
             .reasons-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .stats-container { justify-content: center; gap: 2.5rem; }
             .stat-item { min-width: 40%; }
+            .calendly-modal-inner { height: 92vh; }
         }
         @media (max-width: 600px) {
             .main-logo-img { height: 35px; }
@@ -271,6 +314,7 @@
             .section-header-title { font-size: 1.6rem; text-align: center;}
             .custom-modal { padding: 1.5rem; }
             .lang-grid { grid-template-columns: repeat(2, 1fr); }
+            .calendly-modal-inner { height: 95vh; }
         }
     </style>
 </head>
@@ -355,16 +399,25 @@
     </div>
 </section>
 
-<div class="modal-overlay" id="calendlyOverlay" onclick="closeCalendlyModal(event)">
-    <div class="custom-modal" style="max-width: 850px; height: 85vh; padding: 1.5rem; display: flex; flex-direction: column;" onclick="event.stopPropagation()">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
-            <h2 style="font-size: 1.4rem; color: var(--navy-blue); margin: 0; font-family: 'Poppins', sans-serif;">Book Your Free Consultation</h2>
-            <button class="modal-close" style="position: static;" onclick="closeCalendlyModal()">✕</button>
+<!-- ===== CALENDLY MODAL (FIXED) ===== -->
+<div class="modal-overlay" id="calendlyOverlay" onclick="handleCalendlyOverlayClick(event)">
+    <div class="custom-modal calendly-modal-inner" onclick="event.stopPropagation()">
+        <div class="calendly-modal-header">
+            <h2>📅 Book Your Free Consultation</h2>
+            <button class="modal-close" onclick="closeCalendlyModal()">✕</button>
         </div>
-        
-        <div class="calendly-inline-widget" data-url="https://calendly.com/" style="min-width:320px; height:100%; flex:1; width:100%;"></div>
-        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        
+        <div class="calendly-widget-wrapper">
+            <!-- 
+                ⚠️  IMPORTANT: Replace the URL below with your actual Calendly link.
+                Example: https://calendly.com/enetsupreme/free-consultation
+                Your Calendly link format: https://calendly.com/YOUR-USERNAME/EVENT-NAME
+            -->
+            <div
+                class="calendly-inline-widget"
+                id="calendly-widget"
+                data-url="https://calendly.com/enetsupreme/free-consultation?hide_gdpr_banner=1&primary_color=02014a"
+            ></div>
+        </div>
     </div>
 </div>
 
@@ -745,6 +798,44 @@
     }
 
     /* =============================================
+       CALENDLY MODAL — FIXED
+    ============================================= */
+    let calendlyLoaded = false;
+
+    function openCalendlyModal() {
+        document.getElementById('calendlyOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
+
+        // Load and init the Calendly widget only once
+        if (!calendlyLoaded) {
+            calendlyLoaded = true;
+            const script = document.createElement('script');
+            script.src = 'https://assets.calendly.com/assets/external/widget.js';
+            script.async = true;
+            script.onload = function () {
+                if (window.Calendly) {
+                    Calendly.initInlineWidget({
+                        url: 'https://calendly.com/enetsupreme/free-consultation?hide_gdpr_banner=1&primary_color=02014a',
+                        parentElement: document.getElementById('calendly-widget'),
+                    });
+                }
+            };
+            document.body.appendChild(script);
+        }
+    }
+
+    function closeCalendlyModal() {
+        document.getElementById('calendlyOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function handleCalendlyOverlayClick(event) {
+        if (event.target === document.getElementById('calendlyOverlay')) {
+            closeCalendlyModal();
+        }
+    }
+
+    /* =============================================
        SUPABASE / COURSE / ENROLLMENT / PAYMENT
     ============================================= */
     const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
@@ -781,17 +872,6 @@
             if (heroBtn) { heroBtn.innerText = "Access My Dashboard"; heroBtn.href = dashboardPage; }
             if (navBtn) { navBtn.innerText = "Dashboard"; navBtn.href = dashboardPage; }
         }
-    }
-
-    function openCalendlyModal() {
-        document.getElementById('calendlyOverlay').classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeCalendlyModal(event) {
-        if (event && event.target !== document.getElementById('calendlyOverlay')) return;
-        document.getElementById('calendlyOverlay').classList.remove('show');
-        document.body.style.overflow = '';
     }
 
     async function renderCourses() {
