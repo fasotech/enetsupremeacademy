@@ -46,6 +46,7 @@
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
         
+        /* BRANDING: Logo Layout */
         .logo { display: flex; align-items: center; gap: 12px; color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
         .logo .logo-text span { color: var(--brand-yellow); }
         .main-logo-img { height: 45px; width: auto; object-fit: contain; display: block; }
@@ -112,13 +113,8 @@
         
         .single-card { display: flex; background: var(--background); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.06); flex-wrap: wrap; }
         
-        /* THE 16:9 DISTORTION FIX */
-        .single-card-img-wrap { 
-            flex: 1; min-width: 300px; background: var(--navy-blue); display: flex; align-items: center; justify-content: center; padding: 2.5rem; 
-        }
-        .single-card-img-wrap img { 
-            display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-        }
+        .single-card-img-wrap { flex: 1; min-width: 300px; background: var(--navy-blue); display: flex; align-items: center; justify-content: center; padding: 2.5rem; }
+        .single-card-img-wrap img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 
         .single-card-content { flex: 1.2; min-width: 300px; padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
         .single-title { font-size: 2rem; font-weight: 800; color: var(--navy-blue); margin-bottom: 0.5rem; line-height: 1.2; font-family: 'Times New Roman', Times, serif; letter-spacing: -0.5px;}
@@ -230,7 +226,8 @@
 
             <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
-                <a href="about.html">About Us</a> <a href="courses.html" class="active">Courses</a>
+                <a href="about.html">About Us</a>
+                <a href="courses.html" class="active">Courses</a>
                 <a href="community.html">Community</a>
                 <span class="member-pill" id="member-pill" style="display:none;"><span class="dot"></span> Full Member</span>
                 <a href="login.html" id="nav-login-btn">Log In / Academy</a>
@@ -326,6 +323,10 @@
                     <p>8.00 AM - 6.00 PM</p>
                 </div>
                 <div class="footer-info-block">
+                    <h4>Contact Us:</h4>
+                    <p>08162337303, 07060837925</p>
+                </div>
+                <div class="footer-info-block">
                     <p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p>
                 </div>
             </div>
@@ -355,13 +356,13 @@
                 </div>
                 
                 <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
-                <a href="mailto:info@enetsupreme.com.ng" class="footer-email-btn">Submit Your Request Here</a>
+                <a href="mailto:microsoftportharcourt@gmail.com" class="footer-email-btn">Submit Your Request Here</a>
             </div>
 
         </div>
         
         <div class="footer-bottom">
-            <p>Copyright @ E-Net Supreme Technologies - All Right Reserved.</p>
+            <p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p>
         </div>
     </footer>
 
