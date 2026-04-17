@@ -7,7 +7,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>ENET SUPREME ACADEMY | Home</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 
     <style>
         /* === ENET SUPREME BRANDING === */
@@ -168,7 +171,7 @@
         .view-all-btn { display: block; width: max-content; margin: 0 auto; padding: 1rem 2.5rem; border: 2px solid var(--navy-blue); color: var(--navy-blue); font-weight: 800; border-radius: 8px; text-decoration: none; transition: 0.2s;}
         .view-all-btn:hover { background: var(--navy-blue); color: var(--white); }
 
-        /* === MODALS (Payment & Calendly) === */
+        /* === PAYMENT MODAL === */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 1, 74, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;}
         .modal-overlay.show { display: flex; opacity: 1; }
         
@@ -178,9 +181,8 @@
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; font-size: 1.5rem; color: var(--text-gray); cursor: pointer; transition: 0.2s; }
         .modal-close:hover { color: #dc2626; }
 
-        /* Payment Specific */
-        .custom-modal h2 { color: var(--navy-blue); font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .custom-modal h3 { color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;}
+        .payment-modal h2 { color: var(--navy-blue); font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .payment-modal h3 { color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;}
         
         .payment-box { background: var(--background); border: 2px dashed var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; text-align: left;}
         .payment-box h4 { color: var(--text-main); font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;}
@@ -190,44 +192,6 @@
 
         .whatsapp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background-color: #25d366; color: var(--white); border: none; padding: 1.2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 800; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); cursor: pointer;}
         .whatsapp-btn:hover { background-color: #1ebc5a; transform: translateY(-3px); }
-
-        /* === Calendly Modal - FIXED === */
-        .calendly-modal-inner {
-            max-width: 850px;
-            height: 85vh;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border-radius: 16px;
-        }
-        .calendly-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            background: var(--white);
-            flex-shrink: 0;
-            border-radius: 16px 16px 0 0;
-        }
-        .calendly-modal-header h2 {
-            font-size: 1.3rem;
-            color: var(--navy-blue);
-            margin: 0;
-            font-weight: 800;
-            text-align: left;
-        }
-        .calendly-modal-header .modal-close {
-            position: static;
-            font-size: 1.4rem;
-        }
-        .calendly-widget-wrapper {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            background: var(--white);
-        }
 
         /* === REASONS & STATS === */
         .reasons-section { background-color: var(--white); padding: 5rem 1.5rem; }
@@ -289,7 +253,6 @@
             .reasons-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .stats-container { justify-content: center; gap: 2.5rem; }
             .stat-item { min-width: 40%; }
-            .calendly-modal-inner { height: 92vh; }
         }
         @media (max-width: 600px) {
             .main-logo-img { height: 35px; }
@@ -308,7 +271,6 @@
             .section-header-title { font-size: 1.6rem; text-align: center;}
             .custom-modal { padding: 1.5rem; }
             .lang-grid { grid-template-columns: repeat(2, 1fr); }
-            .calendly-modal-inner { height: 95vh; }
         }
     </style>
 </head>
@@ -364,10 +326,12 @@
                 Explore Academy Courses
                 <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
-            <button class="btn btn-secondary" onclick="openCalendlyModal()">
+            
+            <button class="btn btn-secondary" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/microsoftportharcourt?hide_gdpr_banner=1&primary_color=02014a'}); return false;">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 Book Free Consultation
             </button>
+
         </div>
         <div class="feature-ticks">
             <div class="tick-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Practical Workshops</div>
@@ -392,24 +356,6 @@
         <a href="courses.html" class="view-all-btn">Explore All Courses ➔</a>
     </div>
 </section>
-
-<div class="modal-overlay" id="calendlyOverlay" onclick="handleCalendlyOverlayClick(event)">
-    <div class="custom-modal calendly-modal-inner" onclick="event.stopPropagation()">
-        <div class="calendly-modal-header">
-            <h2>📅 Book Your Free Consultation</h2>
-            <button class="modal-close" onclick="closeCalendlyModal()">✕</button>
-        </div>
-        <div class="calendly-widget-wrapper">
-            <iframe 
-                src="https://calendly.com/microsoftportharcourt?hide_gdpr_banner=1&primary_color=02014a" 
-                width="100%" 
-                height="100%" 
-                frameborder="0" 
-                style="min-height: 600px; border: none;">
-            </iframe>
-        </div>
-    </div>
-</div>
 
 <div class="modal-overlay" id="paymentOverlay" onclick="closePaymentModal(event)">
     <div class="custom-modal" onclick="event.stopPropagation()">
@@ -538,6 +484,8 @@
         </div>
     </div>
 </div>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
 <script>
     function googleTranslateElementInit() {
@@ -761,25 +709,6 @@
         applyGoogleTranslate('en');
 
         setTimeout(closeLangModal, 350);
-    }
-
-    /* =============================================
-       CALENDLY MODAL — FIXED WITH IFRAME
-    ============================================= */
-    function openCalendlyModal() {
-        document.getElementById('calendlyOverlay').classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeCalendlyModal() {
-        document.getElementById('calendlyOverlay').classList.remove('show');
-        document.body.style.overflow = '';
-    }
-
-    function handleCalendlyOverlayClick(event) {
-        if (event.target === document.getElementById('calendlyOverlay')) {
-            closeCalendlyModal();
-        }
     }
 
     /* =============================================
