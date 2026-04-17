@@ -29,7 +29,7 @@
         .info-box { background: #fff; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1rem; border-left: 4px solid var(--accent-cyan); }
         .info-box h4 { color: var(--navy-blue); margin-bottom: 0.5rem; }
         
-        .contact-form { background: #fff; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .contact-form { background: #fff; padding: 2.5rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); scroll-margin-top: 100px; }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-main); }
         .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-family: inherit; }
@@ -97,7 +97,10 @@
             
             <div class="info-box">
                 <h4>Email Us</h4>
-                <p><a href="mailto:microsoftportharcourt@gmail.com" style="color: var(--accent-cyan); text-decoration: none;">microsoftportharcourt@gmail.com</a></p>
+                <p>
+                    <a href="mailto:microsoftportharcourt@gmail.com" style="color: var(--accent-cyan); text-decoration: none; display: block; margin-bottom: 5px;">microsoftportharcourt@gmail.com</a>
+                    <a href="mailto:info@enetsupreme.com.ng" style="color: var(--accent-cyan); text-decoration: none; display: block;">info@enetsupreme.com.ng</a>
+                </p>
             </div>
             
             <div class="info-box">
@@ -106,7 +109,7 @@
             </div>
         </div>
         
-        <div class="contact-form">
+        <div class="contact-form" id="contact-form">
             <form action="https://formsubmit.co/microsoftportharcourt@gmail.com" method="POST">
                 
                 <input type="hidden" name="_subject" value="New Contact Us Message from ENET Academy">
@@ -168,7 +171,7 @@
                     <a href="#" class="soc-icon g">G+</a>
                 </div>
                 <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
-                <a href="mailto:microsoftportharcourt@gmail.com" class="footer-email-btn">Submit Your Request Here</a>
+                <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
             </div>
         </div>
         <div class="footer-bottom"><p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p></div>
