@@ -113,7 +113,6 @@
         
         .single-card { display: flex; background: var(--background); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.06); flex-wrap: wrap; }
         
-        /* THE 16:9 DISTORTION FIX */
         .single-card-img-wrap { 
             flex: 1; 
             min-width: 300px; 
@@ -178,18 +177,54 @@
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
-        footer { background-color: var(--navy-blue); color: #fff; padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto;}
-        .footer-logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        /* === NEW COMPREHENSIVE FOOTER === */
+        .site-footer { background-color: #18191b; color: #fff; padding-top: 4rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: auto; }
+        .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
+        
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1.5rem; text-decoration: none; }
         .footer-logo span { color: var(--brand-yellow); }
-        .footer-logo-img { height: 40px; width: auto; object-fit: contain; }
-        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
+        .footer-logo-img { height: 45px; width: auto; object-fit: contain; }
+        
+        .footer-info-block { margin-bottom: 1.5rem; }
+        .footer-info-block h4 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+        .footer-info-block p { font-size: 0.95rem; color: #b0b5ba; line-height: 1.6; }
+        
+        .footer-heading { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-heading::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: var(--danger); }
+        
+        .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links li a { color: #b0b5ba; text-decoration: none; font-size: 1rem; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .footer-links li a:hover { color: var(--brand-yellow); }
+        .check-icon { color: var(--danger); font-size: 1.1rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--danger); border-radius: 3px; width: 16px; height: 16px; font-size: 0.8rem; font-weight: bold;}
 
-        @media (max-width: 950px) { .mobile-menu-btn { display: block; } .nav-links { display: none; width: 100%; flex-direction: column; text-align: left; align-items: flex-start; padding: 1rem 0 1rem 10px; gap: 1.2rem; } .nav-links.show { display: flex; } }
+        .social-icons { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .soc-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 1.2rem; transition: transform 0.2s; }
+        .soc-icon:hover { transform: translateY(-3px); color: #fff; }
+        .soc-icon.fb { background: #3b5998; }
+        .soc-icon.ig { background: #00a0df; } 
+        .soc-icon.x { background: #000000; border: 1px solid #333; }
+        .soc-icon.yt { background: #ff0000; }
+        .soc-icon.g { background: #db4a39; }
+
+        .footer-email-btn { display: inline-block; background: var(--danger); color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 700; font-size: 1rem; transition: background 0.3s; text-align: center; }
+        .footer-email-btn:hover { background: #d32f2f; color: #fff; }
+
+        .footer-bottom { background: #636b95; padding: 1.5rem 5%; text-align: center; } 
+        .footer-bottom p { color: #fff; font-size: 0.95rem; font-weight: 500; margin: 0; }
+
+        @media (max-width: 950px) { 
+            .mobile-menu-btn { display: block; } 
+            .nav-links { display: none; width: 100%; flex-direction: column; text-align: left; align-items: flex-start; padding: 1rem 0 1rem 10px; gap: 1.2rem; } 
+            .nav-links.show { display: flex; } 
+            .footer-top { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
+        }
         @media (max-width: 600px) { 
             .single-card-img-wrap { padding: 1.5rem; }
             .single-card-content { padding: 2rem 1.5rem; } 
             .payment-modal { padding: 1.5rem; } 
-            .footer-container { flex-direction: column; text-align: center; gap: 1rem; } 
             .main-logo-img { height: 35px; }
             .logo .logo-text { font-size: 1.2rem; }
         }
@@ -223,6 +258,7 @@
         <p class="catalog-subheader" id="catalog-subheader">Browse all premium tracks and exclusive event courses.</p>
         
         <div class="member-perks-callout" id="member-perks-callout">
+            <span style="font-size: 1.5rem;">🎓</span>
             <p>
                 <strong>Welcome to the Academy!</strong> Because you own a Main Course, you are a <strong>Full Member</strong>!
                 You can claim any Event Course below for FREE.
@@ -287,19 +323,60 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div>
-                <div class="footer-logo">
+    <footer class="site-footer">
+        <div class="footer-top">
+            
+            <div class="footer-col">
+                <a href="index.html" class="footer-logo">
                     <img src="mainlogo.png" alt="ENET Supreme Logo" class="footer-logo-img" onerror="this.style.display='none'">
-                    <div>ENET SUPREME <span>ACADEMY</span></div>
+                    <div>ENET SUPREME <span style="color: var(--brand-yellow);">ACADEMY</span></div>
+                </a>
+                
+                <div class="footer-info-block">
+                    <h4>Working Days:</h4>
+                    <p>Monday - Saturday</p>
                 </div>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: #d1d7dc;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+                <div class="footer-info-block">
+                    <h4>Working Time:</h4>
+                    <p>8.00 AM - 6.00 PM</p>
+                </div>
+                <div class="footer-info-block">
+                    <p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p>
+                </div>
             </div>
-            <div style="color: #d1d7dc; font-size: 0.9rem; text-align: right;">
-                <p>Suite 58 Georgewill/Clifford Plaza</p>
-                <p>Choba Junction, Port Harcourt</p>
+
+            <div class="footer-col">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><span class="check-icon">✓</span> Home</a></li>
+                    <li><a href="#"><span class="check-icon">✓</span> About Us</a></li>
+                    <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
+                    <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                    <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
+                    <li><a href="#"><span class="check-icon">✓</span> Contact</a></li>
+                </ul>
             </div>
+
+            <div class="footer-col">
+                <h3 class="footer-heading">Follow Us</h3>
+                <p style="font-size: 0.95rem; color: #b0b5ba; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+                
+                <div class="social-icons">
+                    <a href="#" class="soc-icon fb">f</a>
+                    <a href="#" class="soc-icon ig">📷</a>
+                    <a href="#" class="soc-icon x">X</a>
+                    <a href="#" class="soc-icon yt">▶</a>
+                    <a href="#" class="soc-icon g">G+</a>
+                </div>
+                
+                <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
+                <a href="mailto:info@enetsupreme.com.ng" class="footer-email-btn">Submit Your Request Here</a>
+            </div>
+
+        </div>
+        
+        <div class="footer-bottom">
+            <p>Copyright @ E-Net Supreme Technologies - All Right Reserved.</p>
         </div>
     </footer>
 
