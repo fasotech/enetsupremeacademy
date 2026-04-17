@@ -3,103 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>ENET SUPREME ACADEMY | Explore Tracks</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* === BRAND COLORS === */
+        /* === ENET SUPREME BRANDING === */
         :root {
-            --royal-blue: #23196B; /* Deep Blue from your design */
-            --brand-orange: #D72820; /* Orange/Red from your design */
-            --accent-blue: #2DAAE1;
+            --navy-blue: #02014a;
+            --navy-light: #0d2a8f;
+            --brand-yellow: #fcd116;
+            --yellow-hover: #e0b800;
+            --accent-cyan: #00a0df;
             --text-main: #333333;
+            --text-gray: #475467;
             --background: #F8F9FA;
             --white: #FFFFFF;
-            --border: #E2E8F0;
+            --border: #E5E7EB;
+            --danger: #EE5D50;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
         /* === HEADER === */
-        header { background-color: var(--royal-blue); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-orange); }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; }
-        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; }
-        .logo span { color: var(--brand-orange); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent-blue); }
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; }
+        .logo span { color: var(--brand-yellow); }
+        .main-logo-img { height: 45px; width: auto; object-fit: contain; }
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent-cyan); }
+        .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
+
+        /* === TRACKS HERO === */
+        .page-header { background: linear-gradient(135deg, var(--navy-blue), var(--navy-light)); padding: 4rem 1rem; text-align: center; color: var(--white); }
+        .page-header h1 { font-size: 2.8rem; color: var(--brand-yellow); margin-bottom: 0.5rem; }
+        .page-header p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
 
         /* === TRACKS GRID LAYOUT === */
-        .page-header { text-align: center; padding: 3rem 1rem 1rem; color: var(--royal-blue); }
-        .tracks-container { max-width: 1100px; margin: 2rem auto 5rem; padding: 0 1.5rem; }
+        .tracks-container { max-width: 1100px; margin: 3rem auto 5rem; padding: 0 1.5rem; flex: 1; }
         
-        .track-row { display: flex; border-radius: 16px; overflow: hidden; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        @media (max-width: 850px) { .track-row { flex-direction: column; border-radius: 0; gap: 1rem; box-shadow: none; } .track-card { border-radius: 12px; } }
+        .track-row { display: flex; border-radius: 16px; overflow: hidden; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--border); }
+        @media (max-width: 850px) { .track-row { flex-direction: column; border-radius: 0; gap: 1.5rem; box-shadow: none; border: none; } .track-card { border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); } }
 
-        .track-card { flex: 1; padding: 3rem 2rem; text-align: center; color: var(--white); display: flex; flex-direction: column; align-items: center; }
-        .bg-blue { background-color: var(--royal-blue); }
-        .bg-orange { background-color: var(--brand-orange); }
+        .track-card { flex: 1; padding: 3rem 2rem; text-align: center; color: var(--white); display: flex; flex-direction: column; align-items: center; transition: transform 0.3s; }
+        .track-card:hover { transform: translateY(-5px); }
+        
+        .bg-blue { background-color: var(--navy-blue); }
+        .bg-cyan { background-color: var(--accent-cyan); }
 
-        .icon-circle { width: 70px; height: 70px; background-color: var(--white); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem; }
+        .icon-circle { width: 70px; height: 70px; background-color: var(--white); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .icon-circle svg { width: 30px; height: 30px; }
-        .bg-blue .icon-circle svg { fill: none; stroke: var(--brand-orange); stroke-width: 2; }
-        .bg-orange .icon-circle svg { fill: none; stroke: var(--royal-blue); stroke-width: 2; }
+        .bg-blue .icon-circle svg { fill: none; stroke: var(--brand-yellow); stroke-width: 2.5; }
+        .bg-cyan .icon-circle svg { fill: none; stroke: var(--navy-blue); stroke-width: 2.5; }
 
         .track-card h3 { font-size: 1.4rem; margin-bottom: 1rem; font-weight: 800; }
         .track-card p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; opacity: 0.9; flex: 1; }
+        
         .read-more-btn { background: transparent; color: var(--white); border: none; font-weight: bold; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.4); padding-bottom: 2px; cursor: pointer; transition: 0.3s; }
         .read-more-btn:hover { border-bottom-color: var(--white); }
+        .bg-blue .read-more-btn:hover { color: var(--brand-yellow); border-bottom-color: var(--brand-yellow); }
+        .bg-cyan .read-more-btn:hover { color: var(--navy-blue); border-bottom-color: var(--navy-blue); }
 
         /* === MODAL OVERLAYS === */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
-        .modal-overlay.active { display: flex; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2,1,74,0.6); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         /* Details Modal */
-        .details-modal { background: var(--white); padding: 2.5rem; border-radius: 12px; max-width: 500px; width: 100%; position: relative; }
-        .close-btn { position: absolute; top: 1rem; right: 1.5rem; font-size: 1.5rem; cursor: pointer; color: #666; font-weight: bold; }
-        .details-title { color: var(--royal-blue); font-size: 1.8rem; margin-bottom: 1rem; }
+        .details-modal { background: var(--white); padding: 2.5rem; border-radius: 16px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .close-btn { position: absolute; top: 1rem; right: 1.5rem; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); font-weight: bold; transition: 0.2s; }
+        .close-btn:hover { color: var(--danger); }
+        .details-title { color: var(--navy-blue); font-size: 1.8rem; margin-bottom: 1rem; font-weight: 800; }
         .tools-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
-        .tool-tag { background: #E0E7FF; color: var(--royal-blue); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: bold; }
-        .enroll-btn { width: 100%; background-color: var(--brand-orange); color: white; border: none; padding: 1rem; border-radius: 6px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
-        .enroll-btn:hover { background-color: #B32019; }
+        .tool-tag { background: rgba(0,160,223,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,160,223,0.2); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: bold; }
+        .enroll-btn { width: 100%; background-color: var(--brand-yellow); color: var(--navy-blue); border: none; padding: 1rem; border-radius: 8px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
+        .enroll-btn:hover { background-color: var(--yellow-hover); }
 
         /* FormSubmit Modal (2-Column) */
-        .form-modal { background: var(--white); border-radius: 12px; max-width: 900px; width: 100%; display: flex; overflow: hidden; position: relative; }
+        .form-modal { background: var(--white); border-radius: 16px; max-width: 900px; width: 100%; display: flex; overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         @media (max-width: 768px) { .form-modal { flex-direction: column; } }
         
-        .form-left { background: #F8FAFC; padding: 3rem 2rem; flex: 1; border-right: 1px solid var(--border); }
-        .form-left h3 { color: var(--royal-blue); font-size: 1.8rem; margin-bottom: 1rem; }
-        .contact-info { margin-top: 2rem; font-size: 0.95rem; line-height: 1.8; color: #475467; }
-        .contact-info strong { color: var(--text-main); }
+        .form-left { background: var(--bg-light); padding: 3rem 2rem; flex: 1; border-right: 1px solid var(--border); }
+        .form-left h3 { color: var(--navy-blue); font-size: 1.8rem; margin-bottom: 1rem; font-weight: 800; }
+        .contact-info { margin-top: 2rem; font-size: 0.95rem; line-height: 1.8; color: var(--text-gray); }
+        .contact-info strong { color: var(--navy-blue); }
 
         .form-right { padding: 3rem 2rem; flex: 1.5; background: white; }
         .form-group { margin-bottom: 1.2rem; }
         .form-row { display: flex; gap: 1rem; }
+        @media (max-width: 500px) { .form-row { flex-direction: column; gap: 0; } }
         .form-row .form-group { flex: 1; }
-        .form-right label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 600; color: #64748b; }
-        .form-right input, .form-right select { width: 100%; padding: 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 0.95rem; }
-        .form-right input:focus, .form-right select:focus { border-color: var(--royal-blue); }
-        .submit-btn { width: 100%; background-color: var(--royal-blue); color: white; border: none; padding: 1rem; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
-        .submit-btn:hover { background-color: #17104A; }
+        .form-right label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
+        .form-right input, .form-right select { width: 100%; padding: 0.9rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 0.95rem; background: var(--bg-light); transition: 0.2s; }
+        .form-right input:focus, .form-right select:focus { border-color: var(--accent-cyan); background: var(--white); }
+        .submit-btn { width: 100%; background-color: var(--brand-yellow); color: var(--navy-blue); border: none; padding: 1rem; border-radius: 8px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 1rem; }
+        .submit-btn:hover { background-color: var(--yellow-hover); }
+
+        /* === FOOTER === */
+        .site-footer { background-color: var(--navy-blue); color: #fff; padding-top: 4rem; border-top: 4px solid var(--brand-yellow); margin-top: auto; }
+        .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; margin-bottom: 1.5rem; }
+        .footer-logo span { color: var(--brand-yellow); }
+        .footer-logo-img { height: 45px; object-fit: contain; }
+        .footer-info-block { margin-bottom: 1.5rem; }
+        .footer-info-block h4 { font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; }
+        .footer-info-block p { color: #d1d7dc; font-size: 0.95rem; line-height: 1.6;}
+        .footer-heading { font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-heading::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: var(--brand-yellow); }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links li a { color: #d1d7dc; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .footer-links li a:hover { color: var(--brand-yellow); }
+        .check-icon { color: var(--danger); border: 2px solid var(--danger); border-radius: 3px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
+        .social-icons { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .soc-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; transition: transform 0.2s;}
+        .soc-icon:hover { transform: translateY(-3px); color: #fff;}
+        .soc-icon.fb { background: #3b5998; } .soc-icon.ig { background: #E1306C; } .soc-icon.x { background: #000; border: 1px solid #333;} .soc-icon.yt { background: #ff0000; } .soc-icon.g { background: #db4a39; }
+        .footer-email-btn { background: var(--danger); color: #fff; padding: 12px 24px; border-radius: 6px; font-weight: 700; text-decoration: none; display: inline-block; transition: background 0.3s; border: 1px solid transparent;}
+        .footer-email-btn:hover { background: #d32f2f; color: #fff; }
+        .footer-bottom { background: var(--navy-light); padding: 1.5rem 5%; text-align: center; color: #fff; }
+        
+        @media (max-width: 950px) { .mobile-menu-btn { display: block; } .nav-links { display: none; width: 100%; flex-direction: column; text-align: left; align-items: flex-start; padding: 1rem 0 1rem 10px; gap: 1.2rem; } .nav-links.show { display: flex; } .footer-top { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 2.5rem; } }
+        @media (max-width: 600px) { .main-logo-img { height: 35px; } .logo .logo-text { font-size: 1.2rem; } }
     </style>
 </head>
 <body>
 
     <header>
         <nav>
-            <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
-            <div class="nav-links">
+            <a href="index.html" class="logo">
+                <img src="mainlogo.png" alt="Logo" class="main-logo-img" onerror="this.style.display='none'">
+                <span class="logo-text">ENET SUPREME <span>ACADEMY</span></span>
+            </a>
+            <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
+            <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
-                <a href="blog.html">Blog</a>
-                <a href="tracks.html" style="color: var(--brand-orange); font-weight: bold;">Buy Course</a>
+                <a href="about.html">About Us</a>
+                <a href="courses.html">Courses</a>
+                <a href="tracks.html" class="active">Tracks</a>
+                <a href="community.html">Community</a>
                 <a href="login.html">Log In / Academy</a>
             </div>
         </nav>
     </header>
 
-    <h1 class="page-header">Explore Academy Tracks</h1>
+    <div class="page-header">
+        <h1>Explore Academy Tracks</h1>
+        <p>Choose your path and start your journey in tech today.</p>
+    </div>
 
     <div class="tracks-container">
         <div class="track-row">
@@ -109,7 +167,7 @@
                 <p>Learn how to clean messy data, build dashboards, and present insights like a professional. You'll work on real projects.</p>
                 <button class="read-more-btn" onclick="openDetails('data-analytics')">Read More</button>
             </div>
-            <div class="track-card bg-orange">
+            <div class="track-card bg-cyan">
                 <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
                 <h3>Digital Marketing</h3>
                 <p>If you want customers to notice you, you need more than random posting. We'll help you build a clean content system and turn attention into results.</p>
@@ -124,19 +182,19 @@
         </div>
 
         <div class="track-row">
-            <div class="track-card bg-blue">
+            <div class="track-card bg-cyan">
                 <div class="icon-circle"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
                 <h3>Web Design & Dev</h3>
                 <p>Build modern websites that load fast and look great on phones. Whether it's a business site, portfolio, or school portal — we teach you and guide you.</p>
                 <button class="read-more-btn" onclick="openDetails('web-design')">Read More</button>
             </div>
-            <div class="track-card bg-orange">
+            <div class="track-card bg-blue">
                 <div class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
                 <h3>Training / Coaching</h3>
                 <p>Need guidance, accountability, and someone to break things down clearly? Our coaching is structured, practical, and focused on helping you grow fast.</p>
                 <button class="read-more-btn" onclick="openDetails('training')">Read More</button>
             </div>
-            <div class="track-card bg-blue">
+            <div class="track-card bg-cyan">
                 <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
                 <h3>Branding & Printing</h3>
                 <p>Stand out with a brand people remember. We help you design and prepare materials the right way — clean, sharp, and print-ready.</p>
@@ -149,11 +207,10 @@
         <div class="details-modal">
             <span class="close-btn" onclick="closeModals()">×</span>
             <h2 class="details-title" id="detail-title">Course Title</h2>
-            <p id="detail-desc" style="color: #475467; line-height: 1.6;">Course description goes here.</p>
+            <p id="detail-desc" style="color: var(--text-gray); line-height: 1.6;">Course description goes here.</p>
             
-            <h4 style="margin-top: 1.5rem; color: var(--royal-blue);">Tools & Frameworks You Will Learn:</h4>
-            <div class="tools-list" id="detail-tools">
-                </div>
+            <h4 style="margin-top: 1.5rem; color: var(--navy-blue);">Tools & Frameworks You Will Learn:</h4>
+            <div class="tools-list" id="detail-tools"></div>
             
             <button class="enroll-btn" onclick="openEnrollForm()">PROCEED TO ENROLL NOW</button>
         </div>
@@ -165,14 +222,14 @@
             
             <div class="form-left">
                 <h3>Contact / Enroll</h3>
-                <p style="color: #64748b;">Fill the form and submit. You'll receive our reply and payment instructions after we review your request.</p>
+                <p style="color: var(--text-gray);">Fill the form and submit. You'll receive our reply and payment instructions after we review your request.</p>
                 
                 <div class="contact-info">
                     <p><strong>Office Address:</strong> Suite 58 Georgewill/Clifford Plaza Choba Junction, Port Harcourt, Rivers State, Nigeria.</p>
-                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +234 8062 770 265</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> 08162337303, 07060837925</p>
                     <p><strong>Email:</strong> microsoftportharcourt@gmail.com</p>
-                    <p style="margin-top: 1rem;"><strong>Working Days:</strong> Monday – Saturday</p>
-                    <p><strong>Working Time:</strong> 8.00 AM – 6.00 PM</p>
+                    <p style="margin-top: 1rem;"><strong>Working Days:</strong> Monday – Friday</p>
+                    <p><strong>Working Time:</strong> 10:00 AM – 6:00 PM</p>
                 </div>
             </div>
 
@@ -222,8 +279,59 @@
         </div>
     </div>
 
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-col">
+                <a href="index.html" class="footer-logo">
+                    <img src="mainlogo.png" alt="Logo" class="footer-logo-img" onerror="this.style.display='none'">
+                    <div>ENET SUPREME <span style="color: var(--brand-yellow);">ACADEMY</span></div>
+                </a>
+                <div class="footer-info-block">
+                    <h4>Working Days & Hours:</h4>
+                    <p>Monday - Friday: 10:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
+                </div>
+                <div class="footer-info-block">
+                    <h4>Contact Us:</h4>
+                    <p>08162337303, 07060837925, 0816 997 4244</p>
+                </div>
+                <div class="footer-info-block">
+                    <p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><span class="check-icon">✓</span> Home</a></li>
+                    <li><a href="about.html"><span class="check-icon">✓</span> About Us</a></li>
+                    <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
+                    <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                    <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
+                    <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3 class="footer-heading">Follow Us</h3>
+                <p style="font-size: 0.95rem; color: #d1d7dc; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com/enetsupremeacademy" target="_blank" class="soc-icon fb">f</a>
+                    <a href="#" class="soc-icon ig">📷</a>
+                    <a href="#" class="soc-icon x">X</a>
+                    <a href="#" class="soc-icon yt">▶</a>
+                    <a href="#" class="soc-icon g">G+</a>
+                </div>
+                <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
+                <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p>
+        </div>
+    </footer>
+
     <script>
-        // Course Data Dictionary
+        // Course Data Dictionary (Preserved functionality)
         const courseData = {
             'data-analytics': {
                 title: 'Data Analytics',
@@ -237,7 +345,7 @@
             },
             'graphics-design': {
                 title: 'Graphics Design',
-                desc: 'Learn the psychology of colors, typography, and layout. By the end of this track, you will be producing commercial-grade flyers, logos, and UI assets for high-paying clients.',
+                desc: 'Learn design the right way — clean layout, bold typography, and brand-ready visuals. You will create flyers, logos, banners, and social media designs.',
                 tools: ['Adobe Photoshop', 'Adobe Illustrator', 'CorelDraw', 'Brand Strategy']
             },
             'web-design': {
@@ -264,27 +372,22 @@
         function openDetails(courseId) {
             const data = courseData[courseId];
             
-            // Populate Modal
             document.getElementById('detail-title').innerText = data.title;
             document.getElementById('detail-desc').innerText = data.desc;
             
-            // Build Tools Tags
             const toolsContainer = document.getElementById('detail-tools');
             toolsContainer.innerHTML = '';
             data.tools.forEach(tool => {
                 toolsContainer.innerHTML += `<span class="tool-tag">${tool}</span>`;
             });
 
-            // Pre-select the course in the hidden form dropdown for later
             const dropdown = document.getElementById('form-course-select');
             dropdown.value = data.title;
 
-            // Show Details Modal
             detailsModal.classList.add('active');
         }
 
         function openEnrollForm() {
-            // Close details modal, open form modal
             detailsModal.classList.remove('active');
             formModal.classList.add('active');
         }
@@ -294,7 +397,6 @@
             formModal.classList.remove('active');
         }
 
-        // Close modal if user clicks the black background outside the box
         window.onclick = function(event) {
             if (event.target == detailsModal) detailsModal.classList.remove('active');
             if (event.target == formModal) formModal.classList.remove('active');

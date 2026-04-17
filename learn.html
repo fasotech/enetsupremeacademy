@@ -43,7 +43,7 @@
         .btn-complete:hover { opacity: 0.9; transform: translateY(-2px); }
         .btn-complete.done { background: rgba(5, 205, 153, 0.15); color: var(--success); border: 1px solid var(--success); pointer-events: none; }
 
-        .course-details { padding: 2.5rem; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .course-details { padding: 2.5rem; max-width: 1000px; margin: 0 auto; width: 100%; flex: 1; }
         
         /* TABS */
         .tabs { display: flex; gap: 2rem; border-bottom: 1px solid var(--border-dark); margin-bottom: 2rem; }
@@ -106,12 +106,45 @@
         .state-box { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 2rem; text-align: center; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
 
+        /* === FOOTER FOR LEARN DASHBOARD === */
+        /* Overriding dark mode defaults with hardcoded hexes to ensure brand consistency */
+        .site-footer { background-color: #02014a; color: #fff; padding-top: 4rem; font-family: 'DM Sans', sans-serif; margin-top: auto; border-top: 4px solid #fcd116; }
+        .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; margin-bottom: 1.5rem; }
+        .footer-logo span { color: #fcd116; }
+        .footer-logo-img { height: 45px; width: auto; object-fit: contain; }
+        .footer-info-block { margin-bottom: 1.5rem; }
+        .footer-info-block h4 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+        .footer-info-block p { font-size: 0.95rem; color: #A0AEC0; line-height: 1.6; }
+        .footer-heading { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-heading::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: #fcd116; }
+        .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links li a { color: #A0AEC0; text-decoration: none; font-size: 1rem; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .footer-links li a:hover { color: #fcd116; }
+        .check-icon { color: #EE5D50; display: flex; align-items: center; justify-content: center; border: 2px solid #EE5D50; border-radius: 3px; width: 16px; height: 16px; font-size: 0.8rem; font-weight: bold;}
+        .social-icons { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .soc-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 1.2rem; transition: transform 0.2s; }
+        .soc-icon:hover { transform: translateY(-3px); color: #fff; }
+        .soc-icon.fb { background: #3b5998; }
+        .soc-icon.ig { background: #E1306C; } 
+        .soc-icon.x { background: #000000; border: 1px solid #333; }
+        .soc-icon.yt { background: #ff0000; }
+        .soc-icon.g { background: #db4a39; }
+        .footer-email-btn { display: inline-block; background: #EE5D50; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 700; font-size: 1rem; transition: background 0.3s; text-align: center; border: 1px solid transparent;}
+        .footer-email-btn:hover { background: #d32f2f; color: #fff; }
+        .footer-bottom { background: #0d2a8f; padding: 1.5rem 5%; text-align: center; } 
+        .footer-bottom p { color: #fff; font-size: 0.95rem; font-weight: 500; margin: 0; }
+
         @media (max-width: 1024px) {
             .curriculum-sidebar { position: fixed; right: 0; top: 64px; bottom: 0; z-index: 200; transform: translateX(100%); }
             .curriculum-sidebar.open { transform: translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
             .mobile-sidebar-toggle { display: flex; align-items: center; gap: 8px;}
             .close-sidebar-btn { display: block; background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;}
             .course-title-header { max-width: 300px; }
+            .footer-top { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
         }
         @media (max-width: 600px) {
             .course-title-header { display: none; }
@@ -183,6 +216,64 @@
                     </div>
                 </div>
             </div>
+
+            <footer class="site-footer">
+                <div class="footer-top">
+                    
+                    <div class="footer-col">
+                        <a href="index.html" class="footer-logo">
+                            <img src="mainlogo.png" alt="ENET Supreme Logo" class="footer-logo-img" onerror="this.style.display='none'">
+                            <div>ENET SUPREME <span style="color: #fcd116;">ACADEMY</span></div>
+                        </a>
+                        
+                        <div class="footer-info-block">
+                            <h4>Working Days & Hours:</h4>
+                            <p>Monday - Friday: 10:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
+                        </div>
+                        <div class="footer-info-block">
+                            <h4>Contact Us:</h4>
+                            <p>08162337303, 07060837925, 0816 997 4244</p>
+                        </div>
+                        <div class="footer-info-block">
+                            <p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p>
+                        </div>
+                    </div>
+
+                    <div class="footer-col">
+                        <h3 class="footer-heading">Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="index.html"><span class="check-icon">✓</span> Home</a></li>
+                            <li><a href="about.html"><span class="check-icon">✓</span> About Us</a></li>
+                            <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
+                            <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                            <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
+                            <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h3 class="footer-heading">Follow Us</h3>
+                        <p style="font-size: 0.95rem; color: #A0AEC0; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+                        
+                        <div class="social-icons">
+                            <a href="https://facebook.com/enetsupremeacademy" target="_blank" class="soc-icon fb">f</a>
+                            <a href="#" class="soc-icon ig">📷</a>
+                            <a href="#" class="soc-icon x">X</a>
+                            <a href="#" class="soc-icon yt">▶</a>
+                            <a href="#" class="soc-icon g">G+</a>
+                        </div>
+                        
+                        <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
+                        <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
+                    </div>
+
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p>
+                </div>
+            </footer>
+
         </main>
 
         <aside class="curriculum-sidebar" id="sidebar">

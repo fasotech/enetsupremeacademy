@@ -40,7 +40,7 @@
         .btn-primary:hover { background-color: var(--yellow-hover); }
         .btn-primary:disabled { background-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; }
         
-        .message-box { margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; font-weight: 600; padding: 0.8rem; border-radius: 6px; display: none; }
+        .message-box { margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; font-weight: 600; padding: 0.8rem; border-radius: 6px; display: none; line-height: 1.5; }
         
         .register-link { display: block; text-align: center; margin-top: 1.5rem; color: #64748b; text-decoration: none; font-size: 0.95rem; font-weight: 500; }
         .register-link span { color: var(--accent-cyan); font-weight: 800; }
@@ -56,7 +56,6 @@
 
     <a href="index.html" class="auth-logo">ENET SUPREME <br><span>ACADEMY</span></a>
 
-    <!-- ===== LOGIN SECTION ===== -->
     <section class="auth-card" id="login-section">
         <h2>Gateway Portal</h2>
         <div class="message-box" id="auth-message"></div>
@@ -82,7 +81,6 @@
         <a href="register.html" class="register-link">Don't have an account? <span>Apply here</span></a>
     </section>
 
-    <!-- ===== RESET PASSWORD SECTION ===== -->
     <section class="auth-card hidden" id="reset-section">
         <h2>Reset Password</h2>
         <p class="sub-text">Enter your email and we'll send you a secure reset link.</p>
@@ -99,7 +97,6 @@
         <a href="#" class="register-link" onclick="showSection('login-section'); return false;">Back to <span>Secure Log In</span></a>
     </section>
 
-    <!-- ===== SET NEW PASSWORD SECTION ===== -->
     <section class="auth-card hidden" id="update-section">
         <h2>Set New Password</h2>
         <p class="sub-text">Welcome back! Enter your new password below.</p>
@@ -124,7 +121,6 @@
         var SUPA_URL = 'https://lskwzcvexyxjncttvimf.supabase.co';
         var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
 
-        // ✅ EXACT same lazy-init pattern as your original working file
         function getSupabase() {
             if (typeof window.supabase === 'undefined') {
                 throw new Error("Cannot connect to the database. Please check your internet connection or disable any adblockers.");
@@ -145,7 +141,6 @@
             ['login-section', 'reset-section', 'update-section'].forEach(function(s) {
                 document.getElementById(s).classList.toggle('hidden', s !== id);
             });
-            // Pre-fill reset email when switching to reset view
             if (id === 'reset-section') {
                 var loginEmail = document.getElementById('login-email').value;
                 if (loginEmail) document.getElementById('reset-email').value = loginEmail;
@@ -174,7 +169,7 @@
             showMessage('auth-message', 'Authenticating securely...', false);
 
             try {
-                var supabase = getSupabase(); // ✅ lazy init — same as original
+                var supabase = getSupabase(); 
 
                 var email    = document.getElementById('login-email').value;
                 var password = document.getElementById('login-password').value;
@@ -221,7 +216,8 @@
                 });
                 if (error) throw error;
 
-                showMessage('reset-message', 'If an account matches that email, a reset link has been sent. Check your inbox and spam folder.', false);
+                // NEW SPAM INSTRUCTIONS ADDED HERE
+                showMessage('reset-message', 'If an account matches that email, a reset link has been sent.\n\nIMPORTANT: Please check your Spam/Junk box, mark the email as "Safe" or "Not Spam", and then tap on the link through your inbox.', false);
 
             } catch (err) {
                 showMessage('reset-message', 'Error: ' + err.message, true);

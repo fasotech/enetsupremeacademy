@@ -7,10 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>ENET SUPREME ACADEMY | Home</title>
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 
     <style>
         /* === ENET SUPREME BRANDING === */
@@ -26,6 +23,7 @@
             --background: #F8F9FA;
             --white: #FFFFFF;
             --border: #E5E7EB;
+            --danger: #EE5D50;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -171,7 +169,7 @@
         .view-all-btn { display: block; width: max-content; margin: 0 auto; padding: 1rem 2.5rem; border: 2px solid var(--navy-blue); color: var(--navy-blue); font-weight: 800; border-radius: 8px; text-decoration: none; transition: 0.2s;}
         .view-all-btn:hover { background: var(--navy-blue); color: var(--white); }
 
-        /* === PAYMENT MODAL === */
+        /* === MODALS (Payment & Calendly) === */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 1, 74, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;}
         .modal-overlay.show { display: flex; opacity: 1; }
         
@@ -181,8 +179,9 @@
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; font-size: 1.5rem; color: var(--text-gray); cursor: pointer; transition: 0.2s; }
         .modal-close:hover { color: #dc2626; }
 
-        .payment-modal h2 { color: var(--navy-blue); font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .payment-modal h3 { color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;}
+        /* Payment Specific */
+        .custom-modal h2 { color: var(--navy-blue); font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .custom-modal h3 { color: var(--accent-cyan); font-size: 1.2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;}
         
         .payment-box { background: var(--background); border: 2px dashed var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; text-align: left;}
         .payment-box h4 { color: var(--text-main); font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;}
@@ -192,6 +191,44 @@
 
         .whatsapp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background-color: #25d366; color: var(--white); border: none; padding: 1.2rem; border-radius: 8px; font-size: 1.1rem; font-weight: 800; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); cursor: pointer;}
         .whatsapp-btn:hover { background-color: #1ebc5a; transform: translateY(-3px); }
+
+        /* === Calendly Modal - FIXED === */
+        .calendly-modal-inner {
+            max-width: 850px;
+            height: 85vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        .calendly-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--white);
+            flex-shrink: 0;
+            border-radius: 16px 16px 0 0;
+        }
+        .calendly-modal-header h2 {
+            font-size: 1.3rem;
+            color: var(--navy-blue);
+            margin: 0;
+            font-weight: 800;
+            text-align: left;
+        }
+        .calendly-modal-header .modal-close {
+            position: static;
+            font-size: 1.4rem;
+        }
+        .calendly-widget-wrapper {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+        }
 
         /* === REASONS & STATS === */
         .reasons-section { background-color: var(--white); padding: 5rem 1.5rem; }
@@ -230,12 +267,40 @@
         .preview-body h5 { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
         .preview-body p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.45; }
 
-        /* === FOOTER === */
-        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); }
-        .footer-logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        /* === CORRECTED ENET SUPREME BRANDED FOOTER === */
+        .site-footer { background-color: var(--navy-blue); color: #fff; padding-top: 4rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: auto; border-top: 4px solid var(--brand-yellow); }
+        .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
+        
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1.5rem; text-decoration: none; }
         .footer-logo span { color: var(--brand-yellow); }
-        .footer-logo-img { height: 40px; width: auto; object-fit: contain; }
-        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 2rem;}
+        .footer-logo-img { height: 45px; width: auto; object-fit: contain; }
+        
+        .footer-info-block { margin-bottom: 1.5rem; }
+        .footer-info-block h4 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+        .footer-info-block p { font-size: 0.95rem; color: #d1d7dc; line-height: 1.6; }
+        
+        .footer-heading { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-heading::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: var(--brand-yellow); }
+        
+        .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links li a { color: #d1d7dc; text-decoration: none; font-size: 1rem; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .footer-links li a:hover { color: var(--brand-yellow); }
+        .check-icon { color: var(--danger); display: flex; align-items: center; justify-content: center; border: 2px solid var(--danger); border-radius: 3px; width: 16px; height: 16px; font-size: 0.8rem; font-weight: bold;}
+
+        .social-icons { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .soc-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 1.2rem; transition: transform 0.2s; }
+        .soc-icon:hover { transform: translateY(-3px); color: #fff; }
+        .soc-icon.fb { background: #3b5998; }
+        .soc-icon.ig { background: #E1306C; } 
+        .soc-icon.x { background: #000000; border: 1px solid #333; }
+        .soc-icon.yt { background: #ff0000; }
+        .soc-icon.g { background: #db4a39; }
+
+        .footer-email-btn { display: inline-block; background: var(--danger); color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 700; font-size: 1rem; transition: background 0.3s; text-align: center; border: 1px solid transparent;}
+        .footer-email-btn:hover { background: #d32f2f; color: #fff; }
+
+        .footer-bottom { background: var(--navy-light); padding: 1.5rem 5%; text-align: center; } 
+        .footer-bottom p { color: #fff; font-size: 0.95rem; font-weight: 500; margin: 0; }
 
         @media (max-width: 950px) {
             .mobile-menu-btn { display: block; }
@@ -253,6 +318,11 @@
             .reasons-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .stats-container { justify-content: center; gap: 2.5rem; }
             .stat-item { min-width: 40%; }
+            .calendly-modal-inner { height: 92vh; }
+            .footer-top { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
         }
         @media (max-width: 600px) {
             .main-logo-img { height: 35px; }
@@ -264,13 +334,13 @@
             .feature-ticks { flex-direction: column; align-items: center; gap: 1rem; }
             .community-text h2 { font-size: 2rem; }
             .community-section { padding: 3rem 1rem; }
-            .footer-container { flex-direction: column; text-align: center; gap: 1rem; }
             .reasons-title { font-size: 2rem; margin-bottom: 2rem; }
             .stat-item { min-width: 100%; }
             .stat-number { font-size: 3rem; }
             .section-header-title { font-size: 1.6rem; text-align: center;}
             .custom-modal { padding: 1.5rem; }
             .lang-grid { grid-template-columns: repeat(2, 1fr); }
+            .calendly-modal-inner { height: 95vh; }
         }
     </style>
 </head>
@@ -293,7 +363,7 @@
 
         <div class="nav-links" id="navLinks">
             <a href="index.html" class="active">Home</a>
-            <a href="blog.html">Blog</a>
+            <a href="about.html">About Us</a>
             <a href="courses.html">Courses</a>
             <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
 
@@ -327,7 +397,7 @@
                 <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
             
-            <button class="btn btn-secondary" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/microsoftportharcourt?hide_gdpr_banner=1&primary_color=02014a'}); return false;">
+            <button class="btn btn-secondary" onclick="openCalendlyModal()">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 Book Free Consultation
             </button>
@@ -356,6 +426,24 @@
         <a href="courses.html" class="view-all-btn">Explore All Courses ➔</a>
     </div>
 </section>
+
+<div class="modal-overlay" id="calendlyOverlay" onclick="handleCalendlyOverlayClick(event)">
+    <div class="custom-modal calendly-modal-inner" onclick="event.stopPropagation()">
+        <div class="calendly-modal-header">
+            <h2>📅 Book Your Free Consultation</h2>
+            <button class="modal-close" onclick="closeCalendlyModal()">✕</button>
+        </div>
+        <div class="calendly-widget-wrapper">
+            <iframe 
+                src="https://calendly.com/microsoftportharcourt?hide_gdpr_banner=1&primary_color=02014a" 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                style="min-height: 600px; border: none;">
+            </iframe>
+        </div>
+    </div>
+</div>
 
 <div class="modal-overlay" id="paymentOverlay" onclick="closePaymentModal(event)">
     <div class="custom-modal" onclick="event.stopPropagation()">
@@ -439,20 +527,60 @@
     </div>
 </section>
 
-<footer>
-    <div class="container footer-container">
-        <div>
-            <div class="footer-logo">
+<footer class="site-footer">
+    <div class="footer-top">
+        
+        <div class="footer-col">
+            <a href="index.html" class="footer-logo">
                 <img src="mainlogo.png" alt="ENET Supreme Logo" class="footer-logo-img" onerror="this.style.display='none'">
-                <div>ENET SUPREME <span>ACADEMY</span></div>
+                <div>ENET SUPREME <span style="color: var(--brand-yellow);">ACADEMY</span></div>
+            </a>
+            
+            <div class="footer-info-block">
+                <h4>Working Days & Hours:</h4>
+                <p>Monday - Friday: 10:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
             </div>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: #d1d7dc;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+            <div class="footer-info-block">
+                <h4>Contact Us:</h4>
+                <p>08162337303, 07060837925, 0816 997 4244</p>
+            </div>
+            <div class="footer-info-block">
+                <p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p>
+            </div>
         </div>
-        <div style="color: #d1d7dc; font-size: 0.9rem; text-align: right;">
-            <p>Suite 58 Georgewill/Clifford Plaza</p>
-            <p>Choba Junction, Port Harcourt</p>
-            <p>Rivers State, Nigeria.</p>
+
+        <div class="footer-col">
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="index.html"><span class="check-icon">✓</span> Home</a></li>
+                <li><a href="about.html"><span class="check-icon">✓</span> About Us</a></li>
+                <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
+                <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
+                <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
+            </ul>
         </div>
+
+        <div class="footer-col">
+            <h3 class="footer-heading">Follow Us</h3>
+            <p style="font-size: 0.95rem; color: #d1d7dc; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+            
+            <div class="social-icons">
+                <a href="https://facebook.com/enetsupremeacademy" target="_blank" class="soc-icon fb">f</a>
+                <a href="#" class="soc-icon ig">📷</a>
+                <a href="#" class="soc-icon x">X</a>
+                <a href="#" class="soc-icon yt">▶</a>
+                <a href="#" class="soc-icon g">G+</a>
+            </div>
+            
+            <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
+            <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
+        </div>
+
+    </div>
+    
+    <div class="footer-bottom">
+        <p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p>
     </div>
 </footer>
 
@@ -484,8 +612,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
 <script>
     function googleTranslateElementInit() {
@@ -711,9 +837,22 @@
         setTimeout(closeLangModal, 350);
     }
 
-    /* =============================================
-       SUPABASE / COURSE / ENROLLMENT / PAYMENT
-    ============================================= */
+    function openCalendlyModal() {
+        document.getElementById('calendlyOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCalendlyModal() {
+        document.getElementById('calendlyOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function handleCalendlyOverlayClick(event) {
+        if (event.target === document.getElementById('calendlyOverlay')) {
+            closeCalendlyModal();
+        }
+    }
+
     const supabaseUrl = 'https://lskwzcvexyxjncttvimf.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
