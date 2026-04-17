@@ -49,7 +49,7 @@
         
         .auth-card { 
             background: var(--white); 
-            max-width: 550px; 
+            max-width: 600px; 
             width: 100%; 
             padding: 2.5rem; 
             border-radius: 12px; 
@@ -148,7 +148,6 @@
             line-height: 1.5;
         }
 
-        /* Mobile Adjustments */
         @media (max-width: 600px) {
             .flex-mobile-col { flex-direction: column; gap: 0 !important; }
             .auth-card { padding: 1.5rem; }
@@ -182,6 +181,28 @@
                     <div class="form-group" style="flex: 1;">
                         <label>Email Address</label>
                         <input type="email" id="reg-email" placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem;" class="flex-mobile-col">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Date of Birth</label>
+                        <input type="date" id="reg-dob" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>State / Province</label>
+                        <input type="text" id="reg-state" placeholder="e.g. Rivers State" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem;" class="flex-mobile-col">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Country</label>
+                        <input type="text" id="reg-country" placeholder="e.g. Nigeria" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Interests / Skills</label>
+                        <input type="text" id="reg-interests" placeholder="e.g. Coding, Design, Data">
                     </div>
                 </div>
                 
@@ -240,6 +261,15 @@
                 const role = document.getElementById('reg-role').value;
                 const email = document.getElementById('reg-email').value.trim();
                 const password = document.getElementById('reg-password').value;
+                
+                // Fetch new fields
+                const dobVal = document.getElementById('reg-dob').value;
+                const state = document.getElementById('reg-state').value.trim();
+                const country = document.getElementById('reg-country').value.trim();
+                const interestsString = document.getElementById('reg-interests').value.trim();
+                
+                // Convert string to array for Postgres TEXT[] column
+                const interestsArray = interestsString ? interestsString.split(',').map(i => i.trim()) : [];
 
                 const { data: authData, error: authError } = await supabaseClient.auth.signUp({ email, password });
                 if (authError) throw authError;
@@ -253,7 +283,11 @@
                         address: address,   
                         email: email,
                         role: role,
-                        status: 'pending'
+                        status: 'pending',
+                        date_of_birth: dobVal || null,
+                        state: state,
+                        country: country,
+                        interests: interestsArray
                     }]);
                     if (dbError) throw new Error("Database Error: " + dbError.message);
                 }
