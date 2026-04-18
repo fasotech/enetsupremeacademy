@@ -139,8 +139,13 @@
         .post-body { padding: 1rem; }
         .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
         .post-author { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; object-fit: cover; border: 1px solid var(--border); }
-        .author-info h4 { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0px;}
+        
+        /* Interactive Avatar & Name */
+        .avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; object-fit: cover; border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
+        .avatar:hover { transform: scale(1.05); }
+        .author-info h4 { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0px; cursor: pointer; transition: color 0.2s;}
+        .author-info h4:hover { color: var(--primary-color); }
+        
         .author-info span { font-size: 0.75rem; color: var(--text-muted); }
         .role-badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; margin-left: 6px; background: var(--bg-light); color: var(--text-gray); border: 1px solid var(--border);}
         
@@ -157,11 +162,15 @@
         .post-footer { padding: 1rem; }
         .comments-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; }
         .comment-item { display: flex; gap: 8px; align-items: flex-start; }
-        .c-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; object-fit: cover; border: 1px solid var(--border); }
+        
+        /* Interactive Comment Avatar & Name */
+        .c-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; object-fit: cover; border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
+        .c-avatar:hover { transform: scale(1.05); }
+        .c-bubble h5 { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; transition: color 0.2s;}
+        .c-bubble h5 span:hover { color: var(--primary-color); }
         
         .c-content-wrap { flex: 1; position: relative; }
         .c-bubble { background: var(--comment-bg); padding: 0.5rem 0.8rem; border-radius: 18px; display: inline-block; max-width: 100%; position: relative; }
-        .c-bubble h5 { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; gap: 10px;}
         .c-text-content { font-size: 0.9rem; color: var(--text-dark); line-height: 1.4; word-break: break-word; }
         
         .c-like-badge { position: absolute; bottom: -8px; right: -5px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 2px 6px; font-size: 0.7rem; color: var(--primary-color); font-weight: 600; display: flex; align-items: center; gap: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -183,10 +192,11 @@
         .edit-textarea { width: 100%; min-height: 60px; padding: 0.5rem; border-radius: 8px; background: var(--input-bg); border: 1px solid var(--primary-color); color: var(--text-dark); font-size: 0.9rem; font-family: 'DM Sans', sans-serif; resize: vertical; outline: none; margin-top: 0.5rem; margin-bottom: 0.5rem; }
         .edit-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
-        /* SETTINGS MODAL */
+        /* MODALS (Settings & Public Profile) */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.show { display: flex; }
         .modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
+        @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
         
         .form-group { margin-bottom: 1rem; }
@@ -197,6 +207,19 @@
         .avatar-preview { width: 70px; height: 70px; border-radius: 50%; background: var(--input-bg); border: 2px dashed var(--primary-color); object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; color: var(--text-muted);}
         .upload-btn { background: var(--surface-hover); color: var(--primary-color); border: 1px solid var(--border-bright); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; position: relative; overflow: hidden;}
         .upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+        /* PUBLIC PROFILE STYLES */
+        #public-profile-modal .modal-content { max-width: 420px; text-align: center; padding: 3rem 2rem 2rem; overflow: visible;}
+        .pp-avatar { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--surface); box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin: -5.5rem auto 1rem; background: var(--brand-navy); }
+        .pp-name { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text-dark); }
+        .pp-role { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 1.5rem; }
+        .pp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; margin-bottom: 1.5rem; }
+        .pp-info-box { background: var(--bg-light); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); }
+        .pp-info-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem; }
+        .pp-info-val { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); }
+        .pp-interests { background: var(--bg-light); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); text-align: left; }
+        .pp-interest-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.5rem; }
+        .pp-tag { background: rgba(0, 160, 223, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 160, 223, 0.2); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
 
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface); border: 1px solid var(--border-bright); color: var(--text-dark); padding: 0.85rem 1.5rem; border-radius: 12px; font-weight: 600; z-index: 9999; transition: transform 0.4s; }
         .toast.show { transform: translateX(-50%) translateY(0); }
@@ -327,11 +350,37 @@
         </div>
         
         <div class="form-group">
-            <label>Interests / Skills</label>
+            <label>Interests / Skills (Comma separated)</label>
             <input type="text" id="set-interests" placeholder="e.g. Coding, Design, Data">
         </div>
         
         <button class="post-btn" style="width: 100%; margin-top: 1rem; border-radius: 12px; padding: 1rem;" onclick="saveSettings()" id="save-set-btn">Save Changes</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="public-profile-modal" onclick="closePublicProfile(event)">
+    <div class="modal-content" style="margin-top: 3rem;" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closePublicProfile()">✕</button>
+        <img id="pp-avatar" class="pp-avatar" src="" alt="Avatar">
+        <div id="pp-name" class="pp-name">Loading...</div>
+        <div id="pp-role" class="pp-role">...</div>
+        
+        <div class="pp-info-grid">
+            <div class="pp-info-box">
+                <div class="pp-info-lbl">Birthday</div>
+                <div class="pp-info-val" id="pp-dob">—</div>
+            </div>
+            <div class="pp-info-box">
+                <div class="pp-info-lbl">Location</div>
+                <div class="pp-info-val" id="pp-loc">—</div>
+            </div>
+        </div>
+        
+        <div class="pp-interests">
+            <div class="pp-info-lbl">Interests & Skills</div>
+            <div class="pp-interest-tags" id="pp-interests-list">
+                </div>
+        </div>
     </div>
 </div>
 
@@ -473,12 +522,9 @@ function openSettings() {
     document.getElementById('set-phone').value = currentProfile.phone || '';
     document.getElementById('set-address').value = currentProfile.address || '';
     
-    // Populate new fields matching SQL
     document.getElementById('set-dob').value = currentProfile.date_of_birth || '';
     document.getElementById('set-state').value = currentProfile.state || '';
     document.getElementById('set-country').value = currentProfile.country || '';
-    
-    // Convert the database array back into a comma-separated string for the input box
     document.getElementById('set-interests').value = currentProfile.interests ? currentProfile.interests.join(', ') : '';
     
     document.getElementById('set-avatar-preview').src = currentProfile.avatar_url || 'https://ui-avatars.com/api/?name=' + (currentProfile.first_name||'U') + '&background=02014a&color=fff';
@@ -506,7 +552,6 @@ async function saveSettings() {
             avatarUrl = data.publicUrl;
         }
 
-        // Convert the string back into an array before sending to Supabase
         const interestsStr = document.getElementById('set-interests').value.trim();
         const interestsArray = interestsStr ? interestsStr.split(',').map(i => i.trim()) : [];
 
@@ -515,10 +560,10 @@ async function saveSettings() {
             last_name: document.getElementById('set-last').value.trim(),
             phone: document.getElementById('set-phone').value.trim(),
             address: document.getElementById('set-address').value.trim(),
-            date_of_birth: document.getElementById('set-dob').value || null, // Matches SQL
+            date_of_birth: document.getElementById('set-dob').value || null, 
             state: document.getElementById('set-state').value.trim(),
             country: document.getElementById('set-country').value.trim(),
-            interests: interestsArray, // Matches SQL
+            interests: interestsArray, 
             avatar_url: avatarUrl
         };
 
@@ -531,6 +576,60 @@ async function saveSettings() {
         fetchFeed(); 
     } catch(err) { alert(err.message); }
     btn.disabled = false; btn.textContent = 'Save Changes';
+}
+
+/* PUBLIC PROFILE ENGINE */
+async function openPublicProfile(userId) {
+    document.getElementById('public-profile-modal').classList.add('show');
+    document.getElementById('pp-name').textContent = 'Loading...';
+    document.getElementById('pp-role').textContent = '';
+    document.getElementById('pp-dob').textContent = '—';
+    document.getElementById('pp-loc').textContent = '—';
+    document.getElementById('pp-interests-list').innerHTML = '';
+    
+    try {
+        const { data: profile, error } = await sb.from('profiles').select('*').eq('id', userId).single();
+        if (error) throw error;
+        
+        const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'User';
+        document.getElementById('pp-name').textContent = name;
+        document.getElementById('pp-role').textContent = profile.role || 'Student';
+        document.getElementById('pp-avatar').src = profile.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=02014a&color=fff';
+        
+        // Format Birthday (Month and Day only for privacy)
+        if (profile.date_of_birth) {
+            const date = new Date(profile.date_of_birth);
+            document.getElementById('pp-dob').textContent = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        } else {
+            document.getElementById('pp-dob').textContent = 'Not specified';
+        }
+        
+        // Format Location
+        let loc = [];
+        if (profile.state) loc.push(profile.state);
+        if (profile.country) loc.push(profile.country);
+        document.getElementById('pp-loc').textContent = loc.length > 0 ? loc.join(', ') : 'Not specified';
+        
+        // Format Interests
+        const intContainer = document.getElementById('pp-interests-list');
+        intContainer.innerHTML = '';
+        if (profile.interests && profile.interests.length > 0) {
+            profile.interests.forEach(interest => {
+                intContainer.innerHTML += `<span class="pp-tag">${esc(interest)}</span>`;
+            });
+        } else {
+            intContainer.innerHTML = '<span style="font-size:0.8rem; color: var(--text-muted);">No interests listed</span>';
+        }
+        
+    } catch (err) {
+        console.error("Error loading profile:", err);
+        document.getElementById('pp-name').textContent = 'User not found';
+    }
+}
+
+function closePublicProfile(event) {
+    if (event && event.target !== document.getElementById('public-profile-modal')) return;
+    document.getElementById('public-profile-modal').classList.remove('show');
 }
 
 async function toggleLike(id, type) {
@@ -601,7 +700,6 @@ async function fetchFeed() {
         const role = post.profiles?.role || 'member';
         const avatar = post.profiles?.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=02014a&color=fff';
         
-        // Show interest tag if available
         let interestTag = '';
         if (post.profiles?.interests && post.profiles.interests.length > 0) {
             interestTag = ` · <span style="color: var(--text-muted); font-weight:normal;">Interests: ${esc(post.profiles.interests.join(', '))}</span>`;
@@ -625,10 +723,10 @@ async function fetchFeed() {
             
             cHtml += `
             <div class="comment-item">
-                <img class="c-avatar" src="${cAvatar}">
+                <img class="c-avatar" src="${cAvatar}" title="View Profile" onclick="openPublicProfile('${c.user_id}')">
                 <div class="c-content-wrap">
                     <div class="c-bubble">
-                        <h5>${esc(cName)} ${cMine ? `<button class="action-btn" onclick="enableEdit('${c.id}', 'comment')">✎ Edit</button>` : ''}</h5>
+                        <h5><span title="View Profile" onclick="openPublicProfile('${c.user_id}')">${esc(cName)}</span> ${cMine ? `<button class="action-btn" onclick="enableEdit('${c.id}', 'comment')">✎ Edit</button>` : ''}</h5>
                         <div id="c-text-${c.id}" class="c-text-content">${esc(c.content)}</div>
                         ${cLikeCount > 0 ? `<div class="c-like-badge">💙 ${cLikeCount}</div>` : ''}
                     </div>
@@ -646,9 +744,9 @@ async function fetchFeed() {
             <div class="post-body">
                 <div class="post-header">
                     <div class="post-author">
-                        <img class="avatar" src="${avatar}">
+                        <img class="avatar" src="${avatar}" title="View Profile" onclick="openPublicProfile('${post.user_id}')">
                         <div class="author-info">
-                            <h4>${esc(name)} <span class="role-badge ${role}">${esc(role)}</span></h4>
+                            <h4 title="View Profile" onclick="openPublicProfile('${post.user_id}')">${esc(name)} <span class="role-badge ${role}">${esc(role)}</span></h4>
                             <span>${timeAgo(post.created_at)} ${interestTag}</span>
                         </div>
                     </div>
