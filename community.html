@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
     <title>ENET SUPREME ACADEMY | Community Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -23,12 +18,11 @@
     </script>
 
     <style>
-        /* === ENET SUPREME BRANDING === */
         :root {
             --brand-navy: #02014a; 
             --brand-yellow: #fcd116; 
             --yellow-hover: #e0b800;
-            --primary-color: #00a0df; /* Accent Cyan */
+            --primary-color: #00a0df; 
             --primary-hover: #0088bd;
             --danger: #EE5D50; 
             --success: #05CD99;
@@ -46,7 +40,6 @@
             --shadow-color: rgba(2, 1, 74, 0.06); 
             --input-bg: #F0F2F5;
             --comment-bg: #F0F2F5; 
-            --fb-blue: #00a0df;
         }
 
         [data-theme="dark"] {
@@ -95,8 +88,6 @@
         .btn-gate { display: block; width: 100%; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s; border: none; }
         .btn-gate-primary { background: var(--brand-yellow); color: var(--brand-navy); margin-bottom: 0.75rem; box-shadow: 0 4px 15px rgba(252, 209, 22, 0.3); }
         .btn-gate-primary:hover { background: var(--yellow-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(252, 209, 22, 0.4); }
-        .btn-gate-secondary { background: var(--surface); color: var(--text-dark); border: 1px solid var(--border-bright) !important; }
-        .btn-gate-secondary:hover { background: var(--bg-light); color: var(--primary-color); }
 
         #community-app { display: none; flex: 1; padding: 2.5rem 1.5rem; }
         #community-app.visible { display: block; }
@@ -113,6 +104,7 @@
         .blog-list li { margin-bottom: 0.8rem; }
         .blog-list a { color: var(--text-dark); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
         .blog-list a:hover { color: var(--primary-color); text-decoration: underline; }
+        
         .bday-item { display: flex; align-items: center; gap: 12px; }
         .bday-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-yellow), var(--yellow-hover)); color: var(--brand-navy); display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Poppins', sans-serif; }
         .bday-item p { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
@@ -141,7 +133,6 @@
         .attach-btn:hover { background: var(--surface-hover); color: var(--primary-color); }
         .attach-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 100px; }
         .post-btn { background: var(--primary-color); color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
-        .post-btn:hover { background: var(--primary-hover); }
         
         .feed { display: flex; flex-direction: column; gap: 1rem; }
         .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 1px 4px var(--shadow-color); overflow: hidden; }
@@ -186,7 +177,6 @@
         .reply-input-wrap { flex: 1; display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--border); border-radius: 20px; padding: 0.4rem 1rem; transition: border-color 0.2s; }
         .reply-input-wrap:focus-within { border-color: var(--primary-color); }
         .reply-input-wrap input { flex: 1; background: transparent; border: none; color: var(--text-dark); font-size: 0.9rem; outline: none; padding: 0.2rem 0; }
-        .reply-input-wrap input::placeholder { color: var(--text-muted); }
         .reply-send-btn { background: none; border: none; color: var(--primary-color); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0.2rem; margin-left: 0.5rem; transition: transform 0.2s; }
         .reply-send-btn:hover { transform: scale(1.15); }
 
@@ -196,8 +186,9 @@
         /* SETTINGS MODAL */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.show { display: flex; }
-        .modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s ease; }
+        .modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
         .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
         .form-group input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1rem; color: var(--text-dark); font-size: 0.95rem; outline: none; }
@@ -308,7 +299,8 @@
 <div class="modal-overlay" id="settings-modal">
     <div class="modal-content">
         <button class="modal-close" onclick="closeSettings()">✕</button>
-        <h3 class="modal-title">Profile Settings</h3>
+        <h3 class="modal-title" style="margin-bottom: 1.5rem; color: var(--navy-blue);">Profile Settings</h3>
+        
         <div class="avatar-upload-wrapper">
             <img id="set-avatar-preview" class="avatar-preview" src="" alt="Avatar">
             <div class="upload-btn">
@@ -316,12 +308,29 @@
                 <input type="file" accept="image/*" onchange="handleAvatarSelect(event)">
             </div>
         </div>
-        <div style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex:1;"><label>First Name</label><input type="text" id="set-first"></div>
-            <div class="form-group" style="flex:1;"><label>Last Name</label><input type="text" id="set-last"></div>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="flex:1; min-width: 200px;"><label>First Name</label><input type="text" id="set-first"></div>
+            <div class="form-group" style="flex:1; min-width: 200px;"><label>Last Name</label><input type="text" id="set-last"></div>
         </div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" id="set-phone"></div>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="flex:1; min-width: 200px;"><label>Phone Number</label><input type="tel" id="set-phone"></div>
+            <div class="form-group" style="flex:1; min-width: 200px;"><label>Date of Birth</label><input type="date" id="set-dob"></div>
+        </div>
+        
         <div class="form-group"><label>Address</label><input type="text" id="set-address"></div>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="flex:1; min-width: 200px;"><label>State / Province</label><input type="text" id="set-state" placeholder="e.g. Rivers State"></div>
+            <div class="form-group" style="flex:1; min-width: 200px;"><label>Country</label><input type="text" id="set-country" placeholder="e.g. Nigeria"></div>
+        </div>
+        
+        <div class="form-group">
+            <label>Interests / Skills</label>
+            <input type="text" id="set-interests" placeholder="e.g. Coding, Design, Data">
+        </div>
+        
         <button class="post-btn" style="width: 100%; margin-top: 1rem; border-radius: 12px; padding: 1rem;" onclick="saveSettings()" id="save-set-btn">Save Changes</button>
     </div>
 </div>
@@ -329,7 +338,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// THEME
 const themes = ['system', 'light', 'dark'];
 const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
 function cycleTheme() {
@@ -342,7 +350,6 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : theme);
 }
 
-// SUPABASE SETUP
 const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
 
 let currentUser = null;
@@ -367,7 +374,6 @@ function timeAgo(dateStr) {
 
 function esc(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
 
-// INITIALIZE
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
     if (window.location.hash === '#openSettings') { setTimeout(openSettings, 1000); }
@@ -395,15 +401,13 @@ async function loadUserProfile() {
     const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'User';
     const role = (profile.role || 'student').toLowerCase();
     
-    // Switch to brand colors for default avatars
     const avatar = profile.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=02014a&color=fff';
 
-    // IRONCLAD ROUTING LOGIC
-    let dashboardLink = 'student-dashboard.html'; // Fallback
+    let dashboardLink = 'student-dashboard.html'; 
     if (role === 'admin') {
         dashboardLink = 'admin-dashboard.html';
     } else if (role === 'teacher' || role === 'instructor') {
-        dashboardLink = 'teacher-dashboard.html'; // Strictly assigned
+        dashboardLink = 'teacher-dashboard.html'; 
     }
 
     document.getElementById('auth-controls').innerHTML = `
@@ -469,7 +473,14 @@ function openSettings() {
     document.getElementById('set-phone').value = currentProfile.phone || '';
     document.getElementById('set-address').value = currentProfile.address || '';
     
-    // Switch to brand colors for default avatars in settings
+    // Populate new fields matching SQL
+    document.getElementById('set-dob').value = currentProfile.date_of_birth || '';
+    document.getElementById('set-state').value = currentProfile.state || '';
+    document.getElementById('set-country').value = currentProfile.country || '';
+    
+    // Convert the database array back into a comma-separated string for the input box
+    document.getElementById('set-interests').value = currentProfile.interests ? currentProfile.interests.join(', ') : '';
+    
     document.getElementById('set-avatar-preview').src = currentProfile.avatar_url || 'https://ui-avatars.com/api/?name=' + (currentProfile.first_name||'U') + '&background=02014a&color=fff';
     
     document.getElementById('settings-modal').classList.add('show');
@@ -495,11 +506,19 @@ async function saveSettings() {
             avatarUrl = data.publicUrl;
         }
 
+        // Convert the string back into an array before sending to Supabase
+        const interestsStr = document.getElementById('set-interests').value.trim();
+        const interestsArray = interestsStr ? interestsStr.split(',').map(i => i.trim()) : [];
+
         const updates = {
             first_name: document.getElementById('set-first').value.trim(),
             last_name: document.getElementById('set-last').value.trim(),
             phone: document.getElementById('set-phone').value.trim(),
             address: document.getElementById('set-address').value.trim(),
+            date_of_birth: document.getElementById('set-dob').value || null, // Matches SQL
+            state: document.getElementById('set-state').value.trim(),
+            country: document.getElementById('set-country').value.trim(),
+            interests: interestsArray, // Matches SQL
             avatar_url: avatarUrl
         };
 
@@ -532,7 +551,7 @@ async function toggleLike(id, type) {
         
         fetchFeed(); 
     } catch (err) {
-        showToast("Database error: Ensure the SQL command was run successfully.", "error");
+        showToast("Database error.", "error");
         console.error(err);
     }
 }
@@ -582,6 +601,12 @@ async function fetchFeed() {
         const role = post.profiles?.role || 'member';
         const avatar = post.profiles?.avatar_url || 'https://ui-avatars.com/api/?name=' + name + '&background=02014a&color=fff';
         
+        // Show interest tag if available
+        let interestTag = '';
+        if (post.profiles?.interests && post.profiles.interests.length > 0) {
+            interestTag = ` · <span style="color: var(--text-muted); font-weight:normal;">Interests: ${esc(post.profiles.interests.join(', '))}</span>`;
+        }
+
         const postLikes = post.likes || [];
         const isPostLiked = postLikes.includes(currentUser?.id);
         const postLikeCount = postLikes.length;
@@ -624,7 +649,7 @@ async function fetchFeed() {
                         <img class="avatar" src="${avatar}">
                         <div class="author-info">
                             <h4>${esc(name)} <span class="role-badge ${role}">${esc(role)}</span></h4>
-                            <span>${timeAgo(post.created_at)}</span>
+                            <span>${timeAgo(post.created_at)} ${interestTag}</span>
                         </div>
                     </div>
                     ${isMine ? `<button class="action-btn" onclick="enableEdit('${post.id}', 'post')">✎ Edit</button>` : ''}
