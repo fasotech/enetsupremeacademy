@@ -38,8 +38,9 @@
         /* === HEADER === */
         header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 0.5rem; }
-        .logo { color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; }
         .logo span { color: var(--brand-yellow); }
+        .main-logo-img { height: 45px; width: auto; object-fit: contain; }
 
         .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
 
@@ -145,6 +146,7 @@
         .blog-sidebar { display: flex; flex-direction: column; gap: 2.5rem; }
         .widget { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 4px solid var(--brand-yellow); }
         .widget-title { font-size: 1.3rem; color: var(--navy-blue); margin-bottom: 1.5rem; padding-bottom: 0.5rem; font-weight: bold; border-bottom: 2px solid var(--border); }
+        
         /* === SEARCH === */
         .search-wrapper { position: relative; width: 100%; }
         .search-box { display: flex; width: 100%; }
@@ -184,6 +186,7 @@
         }
         .search-clear-btn:hover { color: var(--danger); }
         .search-clear-btn.visible { display: block; }
+        
         .sidebar-list { list-style: none; }
         .sidebar-list li { margin-bottom: 1.2rem; line-height: 1.5; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
         .sidebar-list li:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
@@ -191,10 +194,40 @@
         .sidebar-list a:hover { color: var(--accent-cyan); }
         .sidebar-list span { display: block; font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
 
-        footer { background-color: var(--navy-blue); color: var(--white); padding: 4rem 1.5rem; border-top: 4px solid var(--brand-yellow); margin-top: auto; }
-        .footer-logo { color: var(--white); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        /* === FULLY UPDATED FOOTER === */
+        .site-footer { background-color: var(--navy-blue); color: #fff; padding-top: 4rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: auto; border-top: 4px solid var(--brand-yellow); }
+        .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
+        
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; margin-bottom: 1.5rem; }
         .footer-logo span { color: var(--brand-yellow); }
-        .footer-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 2rem; }
+        .footer-logo-img { height: 45px; width: auto; object-fit: contain; }
+        
+        .footer-info-block { margin-bottom: 1.5rem; }
+        .footer-info-block h4 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+        .footer-info-block p { font-size: 0.95rem; color: #d1d7dc; line-height: 1.6; }
+        
+        .footer-heading { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-heading::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: var(--brand-yellow); }
+        
+        .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links li a { color: #d1d7dc; text-decoration: none; font-size: 1rem; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+        .footer-links li a:hover { color: var(--brand-yellow); }
+        .check-icon { color: var(--danger); display: flex; align-items: center; justify-content: center; border: 2px solid var(--danger); border-radius: 3px; width: 16px; height: 16px; font-size: 0.8rem; font-weight: bold;}
+
+        .social-icons { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .soc-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 1.2rem; transition: transform 0.2s; }
+        .soc-icon:hover { transform: translateY(-3px); color: #fff; }
+        .soc-icon.fb { background: #3b5998; }
+        .soc-icon.ig { background: #E1306C; } 
+        .soc-icon.x { background: #000000; border: 1px solid #333; }
+        .soc-icon.yt { background: #ff0000; }
+        .soc-icon.g { background: #db4a39; }
+
+        .footer-email-btn { display: inline-block; background: var(--danger); color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 700; font-size: 1rem; transition: background 0.3s; text-align: center; border: 1px solid transparent;}
+        .footer-email-btn:hover { background: #d32f2f; color: #fff; }
+
+        .footer-bottom { background: var(--navy-light); padding: 1.5rem 5%; text-align: center; } 
+        .footer-bottom p { color: #fff; font-size: 0.95rem; font-weight: 500; margin: 0; }
 
         @media (max-width: 950px) {
             .mobile-menu-btn { display: block; }
@@ -202,17 +235,22 @@
             .nav-links.show { display: flex; }
             .translator-dropdown { right: auto; left: 50%; transform: translateX(-50%) translateY(-8px); }
             .translator-wrapper.open .translator-dropdown { transform: translateX(-50%) translateY(0); }
+            .footer-top { grid-template-columns: 1fr 1fr; }
         }
+        @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 2.5rem; } }
+        @media (max-width: 600px) { .main-logo-img { height: 35px; } .logo .logo-text { font-size: 1.2rem; } }
     </style>
 </head>
 <body>
 
-<!-- Hidden Google Translate element -->
 <div id="google_translate_element"></div>
 
 <header>
     <nav>
-        <a href="index.html" class="logo">ENET SUPREME <span>ACADEMY</span></a>
+        <a href="index.html" class="logo">
+            <img src="mainlogo.png" alt="Logo" class="main-logo-img" onerror="this.style.display='none'">
+            <span class="logo-text">ENET SUPREME <span>ACADEMY</span></span>
+        </a>
         <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('show')">☰</button>
         <div class="nav-links" id="navLinks">
             <a href="index.html">Home</a>
@@ -221,7 +259,6 @@
             <a href="community.html" class="nav-community"><span class="dot"></span>Community</a>
             <a href="login.html">Log In / Academy</a>
 
-            <!-- TRANSLATOR -->
             <div class="translator-wrapper" id="translatorWrapper">
                 <button class="translator-btn" id="translatorBtn" onclick="toggleTranslator(event)" aria-label="Translate page">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -315,21 +352,57 @@
     </aside>
 </main>
 
-<footer>
-    <div class="footer-container">
-        <div>
-            <div class="footer-logo">ENET SUPREME <span>ACADEMY</span></div>
-            <p style="margin-top: 1rem;">info@enetsupreme.com.ng | +234 8062 770 265</p>
+<footer class="site-footer">
+    <div class="footer-top">
+        <div class="footer-col">
+            <a href="index.html" class="footer-logo">
+                <img src="mainlogo.png" alt="Logo" class="footer-logo-img" onerror="this.style.display='none'">
+                <div>ENET SUPREME <span style="color: var(--brand-yellow);">ACADEMY</span></div>
+            </a>
+            <div class="footer-info-block">
+                <h4>Working Days & Hours:</h4>
+                <p>Monday - Friday: 10:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
+            </div>
+            <div class="footer-info-block">
+                <h4>Contact Us:</h4>
+                <p>08162337303, 07060837925, 0816 997 4244</p>
+            </div>
+            <div class="footer-info-block">
+                <p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p>
+            </div>
         </div>
-        <div style="color: #cbd5e1; font-size: 0.9rem; text-align: right;">
-            <p>Suite 58 Georgewill/Clifford Plaza</p>
-            <p>Choba Junction, Port Harcourt</p>
-            <p>Rivers State, Nigeria.</p>
+
+        <div class="footer-col">
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="index.html"><span class="check-icon">✓</span> Home</a></li>
+                <li><a href="about.html"><span class="check-icon">✓</span> About Us</a></li>
+                <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
+                <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
+                <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
+            </ul>
         </div>
+
+        <div class="footer-col">
+            <h3 class="footer-heading">Follow Us</h3>
+            <p style="font-size: 0.95rem; color: #d1d7dc; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+            <div class="social-icons">
+                <a href="https://facebook.com/enetsupremeacademy" target="_blank" class="soc-icon fb">f</a>
+                <a href="#" class="soc-icon ig">📷</a>
+                <a href="#" class="soc-icon x">X</a>
+                <a href="#" class="soc-icon yt">▶</a>
+                <a href="#" class="soc-icon g">G+</a>
+            </div>
+            <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
+            <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p>
     </div>
 </footer>
 
-<!-- Google Translate Script -->
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
