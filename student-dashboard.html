@@ -142,6 +142,20 @@
         .cert-info p{font-size:.8rem;color:var(--text-muted);}
         .cert-item-btns{display:flex;flex-direction:column;gap:6px;min-width:150px;}
 
+        /* SETTINGS MODAL CSS (Added) */
+        .settings-modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: fadeUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
+        .settings-modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
+        .settings-modal-close:hover { color: var(--danger); }
+        .set-form-group { margin-bottom: 1rem; text-align: left; }
+        .set-form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
+        .set-form-group input { width: 100%; background: var(--bg-light); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1rem; color: var(--text-dark); font-size: 0.95rem; outline: none; transition: 0.2s;}
+        .set-form-group input:focus { border-color: var(--accent-cyan); }
+        .avatar-upload-wrapper { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .avatar-preview { width: 70px; height: 70px; border-radius: 50%; background: var(--bg-light); border: 2px dashed var(--accent-cyan); object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; color: var(--text-muted);}
+        .upload-btn { background: var(--surface-hover); color: var(--accent-cyan); border: 1px solid var(--border-bright); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s;}
+        .upload-btn:hover { background: var(--accent-cyan); color: #fff;}
+        .upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
         /* CERTIFICATE MODAL */
         .cert-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity .3s;}
         .cert-modal-overlay.show{display:flex;opacity:1;}
@@ -219,7 +233,7 @@
 
         /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none;}
-        .toast{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.1);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;}
+        .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px rgba(0,0,0,.1);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;}
         .toast.error{border-left-color:var(--danger);}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
@@ -252,7 +266,6 @@
             .cert-course{font-size:1.3rem;}
             .cert-footer{flex-direction:column;align-items:center;gap:2rem;}
             .approval-badge span:last-child{display:none;}
-            .logout-btn-mobile { display: flex !important; }
         }
     </style>
 </head>
@@ -303,8 +316,10 @@
                 <span id="approval-status-text">Pending Approval</span>
             </div>
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle theme"><span id="theme-icon">💻</span></button>
-            
-            <button class="icon-btn logout-btn-mobile" onclick="forceLogout()" title="Log Out" style="display:none; color: var(--danger); border-color: rgba(238,93,80,0.2); background: rgba(238,93,80,0.1);">
+            <button class="icon-btn" onclick="openSettings()" title="Profile Settings">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+            <button class="icon-btn" onclick="forceLogout()" title="Log Out" style="color: var(--danger); border-color: rgba(238,93,80,0.2); background: rgba(238,93,80,0.1);">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
             </button>
         </div>
@@ -387,6 +402,40 @@
             </div>
         </div>
     </main>
+</div>
+
+<div class="cert-modal-overlay" id="settings-modal" style="z-index: 4000;">
+    <div class="settings-modal-content">
+        <button class="settings-modal-close" onclick="closeSettings()">✕</button>
+        <h3 style="margin-bottom: 1.5rem; font-family: 'Poppins'; color: var(--text-dark);">Profile Settings</h3>
+        
+        <div class="avatar-upload-wrapper">
+            <img id="set-avatar-preview" class="avatar-preview" src="" alt="Avatar">
+            <div class="upload-btn">
+                Upload Passport/Avatar
+                <input type="file" accept="image/*" onchange="handleAvatarSelect(event)">
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="set-form-group" style="flex:1; min-width: 200px;"><label>First Name</label><input type="text" id="set-first"></div>
+            <div class="set-form-group" style="flex:1; min-width: 200px;"><label>Last Name</label><input type="text" id="set-last"></div>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="set-form-group" style="flex:1; min-width: 200px;"><label>Phone Number</label><input type="tel" id="set-phone"></div>
+            <div class="set-form-group" style="flex:1; min-width: 200px;"><label>Date of Birth</label><input type="date" id="set-dob"></div>
+        </div>
+        <div class="set-form-group"><label>Address</label><input type="text" id="set-address"></div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="set-form-group" style="flex:1; min-width: 200px;"><label>State / Province</label><input type="text" id="set-state" placeholder="e.g. Rivers State"></div>
+            <div class="set-form-group" style="flex:1; min-width: 200px;"><label>Country</label><input type="text" id="set-country" placeholder="e.g. Nigeria"></div>
+        </div>
+        <div class="set-form-group">
+            <label>Interests / Skills (Comma separated)</label>
+            <input type="text" id="set-interests" placeholder="e.g. Coding, Design, Data">
+        </div>
+        <button class="btn-continue" style="margin-top: 1rem; padding: 1rem;" onclick="saveSettings()" id="save-set-btn">Save Changes</button>
+    </div>
 </div>
 
 <div class="cert-modal-overlay" id="cert-modal">
@@ -489,6 +538,7 @@ let isApprovedMember = false;
 let hasEnrollments = false;   
 let isFullMember = false;
 let selectedFiles = [];
+let newAvatarFile = null;
 
 // ─────────────────────────────────────────────
 // BOOT
@@ -559,6 +609,65 @@ window.forceLogout = async () => {
     try { await sb.auth.signOut(); } catch (e) {}
     finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; }
 };
+
+// ─────────────────────────────────────────────
+// PROFILE SETTINGS (NEW)
+// ─────────────────────────────────────────────
+function openSettings() {
+    if (!userProfile) return;
+    document.getElementById('set-first').value = userProfile.first_name || '';
+    document.getElementById('set-last').value = userProfile.last_name || '';
+    document.getElementById('set-phone').value = userProfile.phone || '';
+    document.getElementById('set-address').value = userProfile.address || '';
+    document.getElementById('set-dob').value = userProfile.date_of_birth || '';
+    document.getElementById('set-state').value = userProfile.state || '';
+    document.getElementById('set-country').value = userProfile.country || '';
+    document.getElementById('set-interests').value = userProfile.interests ? userProfile.interests.join(', ') : '';
+    document.getElementById('set-avatar-preview').src = userProfile.avatar_url || 'https://ui-avatars.com/api/?name=' + (userProfile.first_name||'U') + '&background=02014a&color=fff';
+    document.getElementById('settings-modal').classList.add('show');
+}
+function closeSettings() { document.getElementById('settings-modal').classList.remove('show'); newAvatarFile = null; }
+function handleAvatarSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    newAvatarFile = file;
+    document.getElementById('set-avatar-preview').src = URL.createObjectURL(file);
+}
+async function saveSettings() {
+    const btn = document.getElementById('save-set-btn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+    try {
+        let avatarUrl = userProfile.avatar_url;
+        if (newAvatarFile) {
+            const fileName = `avatar_${currentUser.id}_${Date.now()}`;
+            await sb.storage.from('community_images').upload(fileName, newAvatarFile, { upsert: true });
+            const { data } = sb.storage.from('community_images').getPublicUrl(fileName);
+            avatarUrl = data.publicUrl;
+        }
+        const interestsStr = document.getElementById('set-interests').value.trim();
+        const interestsArray = interestsStr ? interestsStr.split(',').map(i => i.trim()) : [];
+        const updates = {
+            first_name: document.getElementById('set-first').value.trim(),
+            last_name: document.getElementById('set-last').value.trim(),
+            phone: document.getElementById('set-phone').value.trim(),
+            address: document.getElementById('set-address').value.trim(),
+            date_of_birth: document.getElementById('set-dob').value || null, 
+            state: document.getElementById('set-state').value.trim(),
+            country: document.getElementById('set-country').value.trim(),
+            interests: interestsArray, 
+            avatar_url: avatarUrl
+        };
+        const { error } = await sb.from('profiles').update(updates).eq('id', currentUser.id);
+        if (error) throw error;
+        showToast('Profile updated successfully!');
+        Object.assign(userProfile, updates);
+        closeSettings();
+        if (!localStorage.getItem('enet_impersonate_id')) {
+            document.getElementById('welcome-msg').textContent = `Welcome back, ${userProfile.first_name}!`;
+        }
+    } catch(err) { alert(err.message); }
+    btn.disabled = false; btn.textContent = 'Save Changes';
+}
 
 // ─────────────────────────────────────────────
 // CERTIFICATE HELPERS (AUTO HEALING)
