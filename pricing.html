@@ -67,16 +67,16 @@
         .pricing-hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; color: var(--brand-yellow); }
         .pricing-hero p { font-size: 1.15rem; max-width: 650px; margin: 0 auto; color: #d1d7dc; line-height: 1.6; }
 
-        /* === PRICING GRID === */
-        .pricing-section { max-width: 1200px; margin: -4rem auto 5rem; padding: 0 1.5rem; position: relative; z-index: 10; flex: 1; width: 100%;}
-        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; }
+        /* === PRICING GRID (2 Columns Centered) === */
+        .pricing-section { max-width: 900px; margin: -4rem auto 5rem; padding: 0 1.5rem; position: relative; z-index: 10; flex: 1; width: 100%;}
+        .pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; align-items: stretch; }
 
         .pricing-card { background: var(--white); border-radius: 16px; padding: 2.5rem 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.08); border: 1px solid var(--border); display: flex; flex-direction: column; position: relative; transition: transform 0.3s, box-shadow 0.3s; }
         .pricing-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
         
-        /* Popular Tier */
-        .pricing-card.popular { border: 2px solid var(--accent-cyan); transform: scale(1.05); }
-        .pricing-card.popular:hover { transform: scale(1.05) translateY(-10px); }
+        /* Pro Tier (Popular) */
+        .pricing-card.popular { border: 2px solid var(--accent-cyan); transform: scale(1.03); }
+        .pricing-card.popular:hover { transform: scale(1.03) translateY(-10px); }
         .popular-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--accent-cyan); color: var(--white); font-weight: 800; font-size: 0.85rem; padding: 6px 16px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; }
         
         /* Elite Tier */
@@ -100,8 +100,6 @@
         .pricing-card.elite .feature-check { color: var(--brand-yellow); }
 
         .btn-subscribe { width: 100%; padding: 1rem; border-radius: 8px; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: 0.3s; text-align: center; border: none; text-decoration: none; display: inline-block;}
-        .btn-basic { background: var(--background); color: var(--navy-blue); border: 2px solid var(--border); }
-        .btn-basic:hover { background: var(--border); }
         .btn-pro { background: var(--accent-cyan); color: var(--white); }
         .btn-pro:hover { background: #0088bd; }
         .btn-elite { background: var(--brand-yellow); color: var(--navy-blue); }
@@ -157,13 +155,15 @@
             .nav-links { display: none; width: 100%; flex-direction: column; text-align: left; align-items: flex-start; padding: 1rem 0 1rem 10px; gap: 1.2rem; } 
             .nav-links.show { display: flex; } 
             .footer-top { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) { 
+            .footer-top { grid-template-columns: 1fr; gap: 2.5rem; } 
             .pricing-grid { grid-template-columns: 1fr; }
             .pricing-card.popular { transform: scale(1); }
             .pricing-card.popular:hover { transform: translateY(-10px); }
             .pricing-section { margin-top: -2rem; }
             .pricing-hero { padding-bottom: 5rem; }
         }
-        @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 2.5rem; } }
         @media (max-width: 600px) { .main-logo-img { height: 35px; } .logo .logo-text { font-size: 1.2rem; } }
     </style>
 </head>
@@ -195,47 +195,34 @@
 
     <section class="pricing-section">
         <div class="pricing-grid">
-            
-            <div class="pricing-card">
-                <div class="plan-name">Basic</div>
-                <div class="plan-desc">For those just starting out and looking to connect.</div>
-                <div class="plan-price">Free</div>
-                <ul class="plan-features">
-                    <li><span class="feature-check">✓</span> Full Community Access</li>
-                    <li><span class="feature-check">✓</span> Join Discussions</li>
-                    <li><span class="feature-check">✓</span> Free Resource Downloads</li>
-                    <li><span class="feature-check">✓</span> Basic Support</li>
-                </ul>
-                <a href="register.html" class="btn-subscribe btn-basic">Create Free Account</a>
-            </div>
 
             <div class="pricing-card popular">
                 <div class="popular-badge">Most Popular</div>
-                <div class="plan-name">Pro Monthly</div>
-                <div class="plan-desc">Perfect for dedicated learners who want full access.</div>
-                <div class="plan-price">₦20,000<span>/mo</span></div>
+                <div class="plan-name">Pro Access</div>
+                <div class="plan-desc">Perfect for dedicated learners who want full access to the platform.</div>
+                <div class="plan-price">₦15,000<span>/mo</span></div>
                 <ul class="plan-features">
-                    <li><span class="feature-check">✓</span> Everything in Basic</li>
-                    <li><span class="feature-check">✓</span> <strong>Access ALL Courses</strong></li>
+                    <li><span class="feature-check">✓</span> Full Community Access</li>
+                    <li><span class="feature-check">✓</span> <strong>Access to ALL Courses</strong></li>
                     <li><span class="feature-check">✓</span> Earn Verified Certificates</li>
                     <li><span class="feature-check">✓</span> Monthly Live Workshops</li>
                     <li><span class="feature-check">✓</span> Direct Instructor Q&A</li>
                 </ul>
-                <button class="btn-subscribe btn-pro" onclick="initiateSubscription('Pro Monthly Subscription', '₦20,000')">Subscribe Now</button>
+                <button class="btn-subscribe btn-pro" onclick="initiateSubscription('Pro Monthly Subscription', '₦15,000')">Subscribe Now</button>
             </div>
 
             <div class="pricing-card elite">
-                <div class="plan-name">Elite Yearly</div>
-                <div class="plan-desc">The ultimate package for career transformation.</div>
-                <div class="plan-price">₦200,000<span>/yr</span></div>
+                <div class="plan-name">Elite Premium</div>
+                <div class="plan-desc">The ultimate package for deep learning and career transformation.</div>
+                <div class="plan-price">₦50,000<span>/quarter</span></div>
                 <ul class="plan-features">
                     <li><span class="feature-check">✓</span> Everything in Pro</li>
-                    <li><span class="feature-check">✓</span> Save ₦40,000 annually</li>
+                    <li><span class="feature-check">✓</span> Extended Access Duration</li>
                     <li><span class="feature-check">✓</span> <strong>1-on-1 Mentorship</strong></li>
                     <li><span class="feature-check">✓</span> Resume & Interview Prep</li>
                     <li><span class="feature-check">✓</span> VIP Priority Support</li>
                 </ul>
-                <button class="btn-subscribe btn-elite" onclick="initiateSubscription('Elite Yearly Subscription', '₦200,000')">Get Elite Access</button>
+                <button class="btn-subscribe btn-elite" onclick="initiateSubscription('Elite Premium Subscription', '₦50,000')">Get Elite Access</button>
             </div>
 
         </div>
@@ -268,11 +255,13 @@
 
     <footer class="site-footer">
         <div class="footer-top">
+            
             <div class="footer-col">
                 <a href="index.html" class="footer-logo">
                     <img src="mainlogo.png" alt="ENET Supreme Logo" class="footer-logo-img" onerror="this.style.display='none'">
                     <div>ENET SUPREME <span style="color: var(--brand-yellow);">ACADEMY</span></div>
                 </a>
+                
                 <div class="footer-info-block">
                     <h4>Working Days & Hours:</h4>
                     <p>Monday - Friday: 10:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
@@ -294,6 +283,7 @@
                     <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
                     <li><a href="pricing.html"><span class="check-icon">✓</span> Pricing</a></li>
                     <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                    <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
                     <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
                 </ul>
             </div>
@@ -301,6 +291,7 @@
             <div class="footer-col">
                 <h3 class="footer-heading">Follow Us</h3>
                 <p style="font-size: 0.95rem; color: #d1d7dc; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+                
                 <div class="social-icons">
                     <a href="https://facebook.com/enetsupremeacademy" target="_blank" class="soc-icon fb">f</a>
                     <a href="#" class="soc-icon ig">📷</a>
@@ -308,10 +299,13 @@
                     <a href="#" class="soc-icon yt">▶</a>
                     <a href="#" class="soc-icon g">G+</a>
                 </div>
+                
                 <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
                 <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
             </div>
+
         </div>
+        
         <div class="footer-bottom">
             <p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p>
         </div>
@@ -344,7 +338,6 @@
 
         function initiateSubscription(planTitle, planPrice) {
             if (!activeSession) {
-                // Force them to login/register first, then bring them back here
                 window.location.href = `login.html?redirect=pricing.html`;
                 return;
             }
