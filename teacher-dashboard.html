@@ -65,6 +65,50 @@
         .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
         .content{padding:0 2.5rem 2.5rem;flex:1}
 
+        /* ── NOTIFICATION BELL ── */
+        .notif-wrap{position:relative}
+        .notif-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;background:var(--danger);color:#fff;font-size:.65rem;font-weight:800;border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--topbar-bg);animation:popIn .3s ease;pointer-events:none;z-index:10}
+        .notif-badge.show{display:flex}
+        @keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+
+        .notif-panel{position:absolute;top:calc(100% + 12px);right:0;width:360px;background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.18);z-index:2000;overflow:hidden;display:none;animation:slideDown .25s ease}
+        .notif-panel.show{display:block}
+        @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+        .notif-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg-light)}
+        .notif-head h4{font-family:'Poppins';font-size:.95rem;font-weight:700;color:var(--text-dark)}
+        .notif-mark-all{font-size:.75rem;font-weight:700;color:var(--accent-cyan);cursor:pointer;border:none;background:none;padding:4px 8px;border-radius:6px;transition:.2s}
+        .notif-mark-all:hover{background:rgba(0,160,223,.1)}
+
+        .notif-list{max-height:380px;overflow-y:auto}
+        .notif-list::-webkit-scrollbar{width:4px}
+        .notif-list::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:4px}
+
+        .notif-item{display:flex;gap:12px;padding:.9rem 1.25rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;text-decoration:none;color:inherit}
+        .notif-item:last-child{border-bottom:none}
+        .notif-item:hover{background:var(--surface-hover)}
+        .notif-item.unread{background:rgba(0,160,223,.04);border-left:3px solid var(--accent-cyan)}
+        .notif-item.unread.comm{border-left-color:var(--accent-cyan)}
+        .notif-item.unread.course{border-left-color:var(--success)}
+        .notif-item.unread.blog{border-left-color:var(--brand-yellow)}
+        .notif-item.unread.assign{border-left-color:var(--danger)}
+
+        .notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+        .notif-icon.comm{background:rgba(0,160,223,.12);color:var(--accent-cyan)}
+        .notif-icon.course{background:rgba(5,205,153,.12);color:var(--success)}
+        .notif-icon.blog{background:rgba(252,209,22,.18);color:#a07800}
+        .notif-icon.assign{background:rgba(238,93,80,.12);color:var(--danger)}
+
+        .notif-text{flex:1;min-width:0}
+        .notif-text strong{display:block;font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .notif-text span{font-size:.75rem;color:var(--text-muted)}
+        .notif-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-cyan);flex-shrink:0;margin-top:6px}
+
+        .notif-empty{padding:2.5rem 1.25rem;text-align:center;color:var(--text-muted);font-size:.85rem}
+        .notif-footer{padding:.75rem 1.25rem;border-top:1px solid var(--border);background:var(--bg-light);text-align:center}
+        .notif-footer a{font-size:.8rem;font-weight:700;color:var(--accent-cyan);text-decoration:none}
+        .notif-footer a:hover{text-decoration:underline}
+
         /* STATS */
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem;margin-top:2rem}
         .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
@@ -158,7 +202,7 @@
         .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
         .review-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 600px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
 
-        /* SETTINGS MODAL CSS (Added) */
+        /* SETTINGS MODAL */
         .settings-modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: fadeUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
         .settings-modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
         .settings-modal-close:hover { color: var(--danger); }
@@ -182,6 +226,7 @@
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
         @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        @keyframes spin{to{transform:rotate(360deg)}}
         
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); }
@@ -190,6 +235,7 @@
             .mobile-toggle { display: flex; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .course-form-grid { grid-template-columns: 1fr; }
+            .notif-panel { width: 300px; right: -60px; }
         }
         @media (max-width: 576px) { 
             .stats-grid { grid-template-columns: 1fr; } 
@@ -198,6 +244,7 @@
             .lesson-extras { padding-left: 0; } 
             .quiz-options { grid-template-columns: 1fr; }
             .course-type-selector { flex-direction: column; }
+            .notif-panel { width: 280px; right: -80px; }
         }
     </style>
 </head>
@@ -257,6 +304,27 @@
         </div>
         <div class="topbar-right">
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle Theme"><span id="theme-icon">💻</span></button>
+
+            <!-- NOTIFICATION BELL -->
+            <div class="notif-wrap" id="notif-wrap">
+                <button class="icon-btn" id="notif-bell-btn" onclick="toggleNotifPanel()" title="Notifications" aria-label="Notifications">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    <span class="notif-badge" id="notif-badge"></span>
+                </button>
+                <div class="notif-panel" id="notif-panel">
+                    <div class="notif-head">
+                        <h4>Notifications</h4>
+                        <button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>
+                    </div>
+                    <div class="notif-list" id="notif-list">
+                        <div class="notif-empty">Loading notifications...</div>
+                    </div>
+                    <div class="notif-footer">
+                        <a href="community.html">Go to Community Hub →</a>
+                    </div>
+                </div>
+            </div>
+
             <button class="icon-btn" onclick="openSettings()" title="Profile Settings">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </button>
@@ -391,27 +459,23 @@
     </main>
 </div>
 
+<!-- GRADING MODAL -->
 <div class="modal-overlay" id="grading-modal">
     <div class="review-modal" style="max-width: 600px; text-align: left;">
         <h2 style="margin-bottom: 1rem; font-family: 'Poppins'; color: var(--text-dark);">Grade Submission</h2>
-        
         <div style="margin-bottom: 1rem;">
             <strong style="color:var(--brand-navy); font-size: 1.1rem;" id="grade-student-name">Student Name</strong><br>
             <span style="font-size: 0.9rem; color: var(--text-muted);" id="grade-task-title">Course - Task Title</span>
         </div>
-        
         <div class="form-group" style="margin-bottom: 1rem;">
             <label>Student's Submission Notes</label>
             <div id="grade-student-desc" style="font-size:0.9rem; background: var(--bg-light); padding: 12px; border-radius: 8px; color: var(--text-gray); max-height: 120px; overflow-y: auto; border: 1px solid var(--border);">No notes.</div>
         </div>
-        
         <div class="form-group" style="margin-bottom: 1.5rem;">
             <label>Attached Files</label>
             <div id="grade-student-files" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
         </div>
-        
         <input type="hidden" id="grading-submission-id">
-        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             <div class="form-group">
                 <label>Grade (Letter)</label>
@@ -429,12 +493,10 @@
                 <input type="number" id="grade-score" class="form-input" min="0" max="100" placeholder="e.g. 85">
             </div>
         </div>
-        
         <div class="form-group">
             <label>Instructor Feedback</label>
             <textarea id="grade-feedback" class="form-textarea" placeholder="Great job on this analysis..." rows="3"></textarea>
         </div>
-        
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem;">
             <button class="btn-secondary" onclick="closeGradingModal()">Cancel</button>
             <button class="btn-primary" id="save-grade-btn" onclick="submitGrade()">Save Grade</button>
@@ -442,19 +504,15 @@
     </div>
 </div>
 
+<!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settings-modal" style="z-index: 4000;">
     <div class="settings-modal-content">
         <button class="settings-modal-close" onclick="closeSettings()">✕</button>
         <h3 style="margin-bottom: 1.5rem; font-family: 'Poppins'; color: var(--text-dark);">Profile Settings</h3>
-        
         <div class="avatar-upload-wrapper">
             <img id="set-avatar-preview" class="avatar-preview" src="" alt="Avatar">
-            <div class="upload-btn">
-                Upload Passport/Avatar
-                <input type="file" accept="image/*" onchange="handleAvatarSelect(event)">
-            </div>
+            <div class="upload-btn">Upload Passport/Avatar<input type="file" accept="image/*" onchange="handleAvatarSelect(event)"></div>
         </div>
-        
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
             <div class="form-group" style="flex:1; min-width: 200px;"><label>First Name</label><input type="text" id="set-first"></div>
             <div class="form-group" style="flex:1; min-width: 200px;"><label>Last Name</label><input type="text" id="set-last"></div>
@@ -468,10 +526,7 @@
             <div class="form-group" style="flex:1; min-width: 200px;"><label>State / Province</label><input type="text" id="set-state" placeholder="e.g. Rivers State"></div>
             <div class="form-group" style="flex:1; min-width: 200px;"><label>Country</label><input type="text" id="set-country" placeholder="e.g. Nigeria"></div>
         </div>
-        <div class="form-group">
-            <label>Interests / Skills (Comma separated)</label>
-            <input type="text" id="set-interests" placeholder="e.g. Coding, Design, Data">
-        </div>
+        <div class="form-group"><label>Interests / Skills (Comma separated)</label><input type="text" id="set-interests" placeholder="e.g. Coding, Design, Data"></div>
         <button class="btn-primary" style="width: 100%; margin-top: 1rem; border-radius: 12px; padding: 1rem;" onclick="saveSettings()" id="save-set-btn">Save Changes</button>
     </div>
 </div>
@@ -485,18 +540,15 @@ function cycleTheme() { let c = localStorage.getItem('enet_theme') || 'system'; 
 function applyTheme(t) { document.getElementById('theme-icon').textContent = themeIcons[t]; document.documentElement.setAttribute('data-theme', t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : t); }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
 function showToast(msg, type='info') { const wrap = document.getElementById('toast-wrap'); const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<span>${type==='error'?'✕':'✓'}</span><span>${msg}</span>`; wrap.appendChild(t); setTimeout(() => { t.style.animation = 'toastOut .3s ease forwards'; setTimeout(() => t.remove(), 320); }, 4000); }
-function copyShareLink(cId) { navigator.clipboard.writeText(window.location.origin + '/courses.html').then(() => showToast("Storefront link copied!", "success")); }
 
 function switchTab(sectionId) {
     document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
     document.getElementById(sectionId).style.display = 'block';
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
     if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
     if(sectionId === 'students-section') { document.getElementById('nav-students').classList.add('active'); fetchMyStudents(); }
     if(sectionId === 'assignments-section') { document.getElementById('nav-assignments').classList.add('active'); fetchAssignments(); }
     if(sectionId === 'dashboard-overview') { document.getElementById('nav-dashboard').classList.add('active'); fetchMyCourses(); }
-    
     if(window.innerWidth <= 992) toggleSidebar();
 }
 
@@ -535,11 +587,180 @@ window.addEventListener('load', async () => {
         if (p) document.getElementById('welcome-msg').textContent = `Welcome back, ${p.first_name}!`;
     }
     fetchMyCourses();
+    loadNotifications();
+    setInterval(loadNotifications, 60000); // poll every 60s
+});
+
+// Close notif panel when clicking outside
+document.addEventListener('click', function(e) {
+    const wrap = document.getElementById('notif-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('notif-panel').classList.remove('show');
+    }
 });
 
 window.forceLogout = async () => { try { await sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); window.location.href = 'index.html'; } };
 
-// ── PROFILE SETTINGS (NEW) ──
+// ── NOTIFICATION SYSTEM ──
+const NOTIF_STORAGE_KEY = 'enet_teacher_notif_seen';
+
+function getSeenState() {
+    try { return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+function saveSeenState(state) {
+    localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(state));
+}
+
+function timeAgo(dateStr) {
+    const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+async function loadNotifications() {
+    try {
+        const seen = getSeenState();
+        const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(); // last 7 days
+
+        // Fetch in parallel: community posts, new courses, blog posts, new assignment submissions
+        const [postsRes, coursesRes, blogsRes, subsRes] = await Promise.all([
+            sb.from('posts').select('id, content, created_at, profiles(first_name, last_name)').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
+            sb.from('courses').select('id, title, created_at, updated_at, is_event_course').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
+            sb.from('blog_posts').select('id, title, created_at').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
+            sb.from('assignment_submissions').select('id, title, submitted_at, student_id, profiles(first_name, last_name)').gte('submitted_at', cutoff).order('submitted_at', { ascending: false }).limit(20)
+        ]);
+
+        const notifications = [];
+
+        // Community posts
+        (postsRes.data || []).forEach(p => {
+            const id = 'comm_' + p.id;
+            const name = `${p.profiles?.first_name || ''} ${p.profiles?.last_name || ''}`.trim() || 'Someone';
+            const preview = (p.content || '').slice(0, 60) + ((p.content || '').length > 60 ? '...' : '');
+            notifications.push({
+                id, type: 'comm', icon: '💬',
+                title: `${name} posted in Community`,
+                sub: preview || 'Shared something new',
+                time: p.created_at,
+                href: 'community.html',
+                unread: !seen[id]
+            });
+        });
+
+        // New courses
+        (coursesRes.data || []).forEach(c => {
+            const id = 'course_' + c.id;
+            notifications.push({
+                id, type: 'course', icon: '📚',
+                title: `New Course: ${c.title}`,
+                sub: c.is_event_course ? 'Event course published' : 'Main course published',
+                time: c.created_at,
+                href: 'courses.html',
+                unread: !seen[id]
+            });
+        });
+
+        // Blog posts
+        (blogsRes.data || []).forEach(b => {
+            const id = 'blog_' + b.id;
+            notifications.push({
+                id, type: 'blog', icon: '📰',
+                title: `New Blog: ${b.title}`,
+                sub: 'New article published on the academy blog',
+                time: b.created_at,
+                href: 'blog.html',
+                unread: !seen[id]
+            });
+        });
+
+        // New assignment submissions (for this instructor's courses)
+        if (currentInstructorId) {
+            const { data: myCourses } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
+            const myCourseIds = (myCourses || []).map(c => c.id);
+            (subsRes.data || []).filter(s => myCourseIds.includes(s.course_id) || true).forEach(s => {
+                const id = 'assign_' + s.id;
+                const name = `${s.profiles?.first_name || ''} ${s.profiles?.last_name || ''}`.trim() || 'A student';
+                notifications.push({
+                    id, type: 'assign', icon: '📝',
+                    title: `Assignment submitted`,
+                    sub: `${name}: "${s.title || 'Untitled'}"`,
+                    time: s.submitted_at,
+                    href: '#',
+                    onclick: `switchTab('assignments-section')`,
+                    unread: !seen[id]
+                });
+            });
+        }
+
+        // Sort by time descending
+        notifications.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+        const unreadCount = notifications.filter(n => n.unread).length;
+        const badge = document.getElementById('notif-badge');
+        badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+        badge.classList.toggle('show', unreadCount > 0);
+
+        renderNotifications(notifications);
+    } catch (err) {
+        console.error('Notification load error:', err);
+    }
+}
+
+function renderNotifications(notifications) {
+    const list = document.getElementById('notif-list');
+    if (!notifications.length) {
+        list.innerHTML = '<div class="notif-empty">🎉 You\'re all caught up!</div>';
+        return;
+    }
+    list.innerHTML = notifications.slice(0, 20).map(n => {
+        const clickHandler = n.onclick ? `onclick="${n.onclick}; document.getElementById('notif-panel').classList.remove('show'); markOneRead('${n.id}');"` : `onclick="markOneRead('${n.id}')"`;
+        const tag = n.href && !n.onclick ? 'a' : 'div';
+        const hrefAttr = n.href && !n.onclick ? `href="${n.href}"` : '';
+        return `<${tag} class="notif-item ${n.unread ? 'unread ' + n.type : ''}" ${hrefAttr} ${clickHandler} data-id="${n.id}">
+            <div class="notif-icon ${n.type}">${n.icon}</div>
+            <div class="notif-text">
+                <strong>${escapeHtml(n.title)}</strong>
+                <span>${escapeHtml(n.sub)}</span>
+                <span style="display:block; margin-top:2px; font-size:.7rem; color:var(--text-muted);">${timeAgo(n.time)}</span>
+            </div>
+            ${n.unread ? '<div class="notif-dot"></div>' : ''}
+        </${tag}>`;
+    }).join('');
+}
+
+function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
+
+function toggleNotifPanel() {
+    document.getElementById('notif-panel').classList.toggle('show');
+}
+
+function markOneRead(id) {
+    const seen = getSeenState();
+    seen[id] = true;
+    saveSeenState(seen);
+    // Update UI immediately
+    const item = document.querySelector(`[data-id="${id}"]`);
+    if (item) { item.classList.remove('unread', 'comm', 'course', 'blog', 'assign'); const dot = item.querySelector('.notif-dot'); if (dot) dot.remove(); }
+    // Recount
+    const unread = document.querySelectorAll('.notif-item.unread').length;
+    const badge = document.getElementById('notif-badge');
+    badge.textContent = unread > 9 ? '9+' : unread;
+    badge.classList.toggle('show', unread > 0);
+}
+
+function markAllRead() {
+    const seen = getSeenState();
+    document.querySelectorAll('.notif-item[data-id]').forEach(item => { seen[item.dataset.id] = true; });
+    saveSeenState(seen);
+    loadNotifications();
+    document.getElementById('notif-panel').classList.remove('show');
+    showToast('All notifications marked as read', 'success');
+}
+
+// ── PROFILE SETTINGS ──
 function openSettings() {
     if (!userProfile) return;
     document.getElementById('set-first').value = userProfile.first_name || '';
@@ -555,14 +776,11 @@ function openSettings() {
 }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('show'); newAvatarFile = null; }
 function handleAvatarSelect(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    newAvatarFile = file;
-    document.getElementById('set-avatar-preview').src = URL.createObjectURL(file);
+    const file = e.target.files[0]; if (!file) return;
+    newAvatarFile = file; document.getElementById('set-avatar-preview').src = URL.createObjectURL(file);
 }
 async function saveSettings() {
-    const btn = document.getElementById('save-set-btn');
-    btn.disabled = true; btn.textContent = 'Saving...';
+    const btn = document.getElementById('save-set-btn'); btn.disabled = true; btn.textContent = 'Saving...';
     try {
         let avatarUrl = userProfile.avatar_url;
         if (newAvatarFile) {
@@ -573,55 +791,28 @@ async function saveSettings() {
         }
         const interestsStr = document.getElementById('set-interests').value.trim();
         const interestsArray = interestsStr ? interestsStr.split(',').map(i => i.trim()) : [];
-        const updates = {
-            first_name: document.getElementById('set-first').value.trim(),
-            last_name: document.getElementById('set-last').value.trim(),
-            phone: document.getElementById('set-phone').value.trim(),
-            address: document.getElementById('set-address').value.trim(),
-            date_of_birth: document.getElementById('set-dob').value || null, 
-            state: document.getElementById('set-state').value.trim(),
-            country: document.getElementById('set-country').value.trim(),
-            interests: interestsArray, 
-            avatar_url: avatarUrl
-        };
+        const updates = { first_name: document.getElementById('set-first').value.trim(), last_name: document.getElementById('set-last').value.trim(), phone: document.getElementById('set-phone').value.trim(), address: document.getElementById('set-address').value.trim(), date_of_birth: document.getElementById('set-dob').value || null, state: document.getElementById('set-state').value.trim(), country: document.getElementById('set-country').value.trim(), interests: interestsArray, avatar_url: avatarUrl };
         const { error } = await sb.from('profiles').update(updates).eq('id', currentInstructorId);
         if (error) throw error;
         showToast('Profile updated successfully!');
         Object.assign(userProfile, updates);
         closeSettings();
-        if (!localStorage.getItem('enet_impersonate_id')) {
-            document.getElementById('welcome-msg').textContent = `Welcome back, ${userProfile.first_name}!`;
-        }
+        if (!localStorage.getItem('enet_impersonate_id')) { document.getElementById('welcome-msg').textContent = `Welcome back, ${userProfile.first_name}!`; }
     } catch(err) { alert(err.message); }
     btn.disabled = false; btn.textContent = 'Save Changes';
 }
 
-
-// ── DYNAMIC INSTRUCTOR STATS ──
+// ── STATS ──
 async function fetchInstructorStats(courseIds) {
-    if (!courseIds || courseIds.length === 0) {
-        document.getElementById('stat-revenue').textContent = '₦0';
-        document.getElementById('stat-rating').textContent = '0.0 ★';
-        return;
-    }
+    if (!courseIds || courseIds.length === 0) { document.getElementById('stat-revenue').textContent = '₦0'; document.getElementById('stat-rating').textContent = '0.0 ★'; return; }
     try {
-        const { data: enrollments } = await sb.from('enrollments')
-            .select('course_id, enrollment_type, courses(price)')
-            .in('course_id', courseIds)
-            .neq('enrollment_type', 'member_perk');
-        
+        const { data: enrollments } = await sb.from('enrollments').select('course_id, enrollment_type, courses(price)').in('course_id', courseIds).neq('enrollment_type', 'member_perk');
         let totalRev = 0;
-        if (enrollments) {
-            enrollments.forEach(en => { totalRev += Number(en.courses?.price || 0); });
-        }
+        if (enrollments) { enrollments.forEach(en => { totalRev += Number(en.courses?.price || 0); }); }
         document.getElementById('stat-revenue').textContent = '₦' + totalRev.toLocaleString();
-
         const { data: reviews } = await sb.from('course_reviews').select('rating').in('course_id', courseIds);
         let avgRating = 0;
-        if (reviews && reviews.length > 0) {
-            const sum = reviews.reduce((acc, curr) => acc + Number(curr.rating), 0);
-            avgRating = (sum / reviews.length).toFixed(1);
-        }
+        if (reviews && reviews.length > 0) { const sum = reviews.reduce((acc, curr) => acc + Number(curr.rating), 0); avgRating = (sum / reviews.length).toFixed(1); }
         document.getElementById('stat-rating').textContent = avgRating + ' ★';
     } catch (err) { console.error('Stats error:', err); }
 }
@@ -631,21 +822,16 @@ async function fetchMyCourses() {
     try {
         const { data, error } = await sb.from('courses').select('*').eq('instructor_id', currentInstructorId).order('created_at', { ascending: false });
         if (error) throw error;
-        
         document.getElementById('stat-courses').textContent = data.length;
-        
         const courseIds = data.map(c => c.id);
         fetchInstructorStats(courseIds);
-        
         const list = document.getElementById('my-courses-list');
         if (data.length === 0) { list.innerHTML = "<p style='text-align:center; color:var(--text-muted); padding:2rem;'>No courses published yet.</p>"; return; }
-        
         let html = '<div style="display:flex; flex-direction:column; gap:15px;">';
         data.forEach(c => {
             const p = Number(c.price) === 0 ? "FREE" : `₦${Number(c.price).toLocaleString()}`;
             const isEvent = c.is_event_course === true;
-            html += `
-            <div style="display:flex; align-items:center; gap:15px; padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-light); flex-wrap: wrap; ${isEvent ? 'border-left: 4px solid var(--event-color);' : ''}">
+            html += `<div style="display:flex; align-items:center; gap:15px; padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-light); flex-wrap: wrap; ${isEvent ? 'border-left: 4px solid var(--event-color);' : ''}">
                 <img src="${c.image_url || ''}" style="width:120px; height:80px; object-fit:cover; border-radius:8px; background: var(--border);">
                 <div style="flex:1; min-width: 200px;">
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
@@ -672,204 +858,87 @@ async function fetchMyStudents() {
         const { data: courses } = await sb.from('courses').select('id, title').eq('instructor_id', currentInstructorId);
         const tbody = document.getElementById('students-table-body');
         if (!courses || courses.length === 0) { document.getElementById('stat-students').textContent = '0'; tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No students yet.</td></tr>`; return; }
-        
         const courseIds = courses.map(c => c.id);
         const { data: enrollments } = await sb.from('enrollments').select('enrolled_at, profiles(first_name, last_name, email), courses(title)').in('course_id', courseIds).order('enrolled_at', { ascending: false });
-            
         document.getElementById('stat-students').textContent = enrollments ? enrollments.length : 0;
-        
         if (!enrollments || enrollments.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No students yet.</td></tr>`; return; }
-        
-        tbody.innerHTML = enrollments.map(en => `
-            <tr>
-                <td><div class="user-cell"><div class="uav">${(en.profiles?.first_name||'S')[0].toUpperCase()}</div><div><div class="uname">${en.profiles?.first_name||'Student'} ${en.profiles?.last_name||''}</div><div style="font-size: 0.75rem; color: var(--text-muted);">${en.profiles?.email || ''}</div></div></div></td>
-                <td style="font-weight: 500; color: var(--brand-navy);">${en.courses?.title || ''}</td>
-                <td>${new Date(en.enrolled_at).toLocaleDateString()}</td>
-            </tr>`).join('');
+        tbody.innerHTML = enrollments.map(en => `<tr><td><div class="user-cell"><div class="uav">${(en.profiles?.first_name||'S')[0].toUpperCase()}</div><div><div class="uname">${en.profiles?.first_name||'Student'} ${en.profiles?.last_name||''}</div><div style="font-size: 0.75rem; color: var(--text-muted);">${en.profiles?.email || ''}</div></div></div></td><td style="font-weight: 500; color: var(--brand-navy);">${en.courses?.title || ''}</td><td>${new Date(en.enrolled_at).toLocaleDateString()}</td></tr>`).join('');
     } catch(err) { console.error(err); }
 }
 
-// ── TWO-STEP ASSIGNMENT FETCH ──
 async function fetchAssignments() {
     if (!currentInstructorId) return;
     const tbody = document.getElementById('assignments-table-body');
     try {
         const { data: courses } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
-        if (!courses || courses.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`;
-            return;
-        }
+        if (!courses || courses.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`; return; }
         const courseIds = courses.map(c => c.id);
-
-        const { data: subs, error } = await sb.from('assignment_submissions')
-            .select('*, courses(title)')
-            .in('course_id', courseIds)
-            .order('submitted_at', { ascending: false });
-
+        const { data: subs, error } = await sb.from('assignment_submissions').select('*, courses(title)').in('course_id', courseIds).order('submitted_at', { ascending: false });
         if (error) throw error;
-        
-        // Manual Join for Profiles
         if (subs && subs.length > 0) {
             const studentIds = [...new Set(subs.map(s => s.student_id))];
             const { data: profiles } = await sb.from('profiles').select('id, first_name, last_name').in('id', studentIds);
-            const profMap = {};
-            if (profiles) profiles.forEach(p => profMap[p.id] = p);
+            const profMap = {}; if (profiles) profiles.forEach(p => profMap[p.id] = p);
             subs.forEach(s => s.profiles = profMap[s.student_id]);
         }
-
         instructorSubmissions = subs || [];
-
-        if (instructorSubmissions.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`;
-            return;
-        }
-
+        if (instructorSubmissions.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`; return; }
         tbody.innerHTML = instructorSubmissions.map(s => {
-            const fName = s.profiles?.first_name || 'Student';
-            const lName = s.profiles?.last_name || '';
+            const fName = s.profiles?.first_name || 'Student'; const lName = s.profiles?.last_name || '';
             const date = new Date(s.submitted_at).toLocaleDateString();
-            const status = s.grade 
-                ? `<span style="color:var(--success); font-weight:bold; font-size:0.85rem; background:rgba(5,205,153,0.1); padding:4px 8px; border-radius:6px;">Graded (${s.grade})</span>` 
-                : `<span style="color:#b08800; font-weight:bold; font-size:0.85rem; background:rgba(255,193,7,0.15); padding:4px 8px; border-radius:6px;">Pending Review</span>`;
-            
-            return `
-            <tr>
-                <td>
-                    <div class="user-cell">
-                        <div class="uav" style="background:var(--navy-light);">${fName.charAt(0).toUpperCase()}</div>
-                        <div class="uname">${fName} ${lName}</div>
-                    </div>
-                </td>
-                <td>
-                    <div style="font-weight: 700; color: var(--brand-navy); margin-bottom:4px;">${s.title}</div>
-                    <div style="font-size: 0.75rem; color: var(--text-muted);">${s.courses?.title}</div>
-                </td>
-                <td>${date}</td>
-                <td>${status}</td>
-                <td>
-                    <button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? 'Edit Grade' : 'Grade Submission'}</button>
-                </td>
-            </tr>`;
+            const status = s.grade ? `<span style="color:var(--success); font-weight:bold; font-size:0.85rem; background:rgba(5,205,153,0.1); padding:4px 8px; border-radius:6px;">Graded (${s.grade})</span>` : `<span style="color:#b08800; font-weight:bold; font-size:0.85rem; background:rgba(255,193,7,0.15); padding:4px 8px; border-radius:6px;">Pending Review</span>`;
+            return `<tr><td><div class="user-cell"><div class="uav" style="background:var(--navy-light);">${fName.charAt(0).toUpperCase()}</div><div class="uname">${fName} ${lName}</div></div></td><td><div style="font-weight: 700; color: var(--brand-navy); margin-bottom:4px;">${s.title}</div><div style="font-size: 0.75rem; color: var(--text-muted);">${s.courses?.title}</div></td><td>${date}</td><td>${status}</td><td><button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? 'Edit Grade' : 'Grade Submission'}</button></td></tr>`;
         }).join('');
-    } catch(e) { 
-        console.error("Error fetching assignments:", e); 
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--danger);">Error loading assignments. Please refresh.</td></tr>`;
-    }
+    } catch(e) { console.error("Error fetching assignments:", e); tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--danger);">Error loading assignments. Please refresh.</td></tr>`; }
 }
 
 window.openGradingModal = function(subId) {
-    const s = instructorSubmissions.find(x => x.id === subId);
-    if(!s) return;
-    
+    const s = instructorSubmissions.find(x => x.id === subId); if(!s) return;
     document.getElementById('grading-submission-id').value = s.id;
     document.getElementById('grade-student-name').textContent = `${s.profiles?.first_name || 'Student'} ${s.profiles?.last_name || ''}`;
     document.getElementById('grade-task-title').textContent = `${s.courses?.title || ''} — ${s.title}`;
     document.getElementById('grade-student-desc').textContent = s.description || 'No additional notes provided by the student.';
-    
     const filesDiv = document.getElementById('grade-student-files');
-    if(s.file_urls && s.file_urls.length > 0) {
-        filesDiv.innerHTML = s.file_urls.map(url => {
-            const name = url.split('/').pop().split('?')[0] || 'Download File';
-            return `<a href="${url}" target="_blank" class="btn-outline success" style="font-size:0.8rem; text-decoration:none;">↓ ${name}</a>`;
-        }).join('');
-    } else {
-        filesDiv.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted);">No files attached to this submission.</span>';
-    }
-
+    if(s.file_urls && s.file_urls.length > 0) { filesDiv.innerHTML = s.file_urls.map(url => { const name = url.split('/').pop().split('?')[0] || 'Download File'; return `<a href="${url}" target="_blank" class="btn-outline success" style="font-size:0.8rem; text-decoration:none;">↓ ${name}</a>`; }).join(''); } 
+    else { filesDiv.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted);">No files attached to this submission.</span>'; }
     document.getElementById('grade-letter').value = s.grade || '';
     document.getElementById('grade-score').value = s.score || '';
     document.getElementById('grade-feedback').value = s.feedback || '';
-
     document.getElementById('grading-modal').classList.add('show');
-}
-
-window.closeGradingModal = function() {
-    document.getElementById('grading-modal').classList.remove('show');
-}
-
+};
+window.closeGradingModal = function() { document.getElementById('grading-modal').classList.remove('show'); };
 window.submitGrade = async function() {
     const subId = document.getElementById('grading-submission-id').value;
     const grade = document.getElementById('grade-letter').value;
     const score = document.getElementById('grade-score').value;
     const feedback = document.getElementById('grade-feedback').value.trim();
-
     if(!grade) return showToast("Please select a letter grade.", "error");
-
-    const btn = document.getElementById('save-grade-btn');
-    btn.disabled = true; btn.textContent = "Saving...";
-
+    const btn = document.getElementById('save-grade-btn'); btn.disabled = true; btn.textContent = "Saving...";
     try {
-        const { error } = await sb.from('assignment_submissions').update({
-            grade: grade,
-            score: score ? Number(score) : null,
-            feedback: feedback,
-            graded_at: new Date().toISOString()
-        }).eq('id', subId);
-
+        const { error } = await sb.from('assignment_submissions').update({ grade, score: score ? Number(score) : null, feedback, graded_at: new Date().toISOString() }).eq('id', subId);
         if(error) throw error;
-
-        showToast("Grade saved successfully!", "success");
-        closeGradingModal();
-        fetchAssignments(); 
-    } catch(e) {
-        console.error(e);
-        showToast("Failed to save grade.", "error");
-    } finally {
-        btn.disabled = false; btn.textContent = "Save Grade";
-    }
-}
+        showToast("Grade saved successfully!", "success"); closeGradingModal(); fetchAssignments();
+    } catch(e) { console.error(e); showToast("Failed to save grade.", "error"); }
+    finally { btn.disabled = false; btn.textContent = "Save Grade"; }
+};
 
 // ── QUIZ BUILDER ──
 function toggleQuizBuilder() { const c = document.getElementById('require-quiz-toggle').checked; document.getElementById('quiz-builder-section').style.display = c ? 'block' : 'none'; if(c && document.getElementById('quiz-questions-container').children.length===0) window.addQuizQuestion(); }
 window.addQuizQuestion = function(qText='', optA='', optB='', optC='', optD='', cIdx=0) {
     const qId = 'q_'+Date.now()+Math.floor(Math.random()*1000); const e = s=>String(s).replace(/"/g,'&quot;');
-    document.getElementById('quiz-questions-container').insertAdjacentHTML('beforeend', `
-        <div class="quiz-question-box" id="${qId}">
-            <button type="button" class="remove-q-btn" onclick="document.getElementById('${qId}').remove()">✕</button>
-            <input type="text" class="q-text" placeholder="Enter question..." value="${e(qText)}">
-            <div class="quiz-options">
-                <label class="quiz-option"><input type="radio" name="correct-${qId}" value="0" ${cIdx===0?'checked':''}><input type="text" class="q-opt" placeholder="Option A" value="${e(optA)}"></label>
-                <label class="quiz-option"><input type="radio" name="correct-${qId}" value="1" ${cIdx===1?'checked':''}><input type="text" class="q-opt" placeholder="Option B" value="${e(optB)}"></label>
-                <label class="quiz-option"><input type="radio" name="correct-${qId}" value="2" ${cIdx===2?'checked':''}><input type="text" class="q-opt" placeholder="Option C" value="${e(optC)}"></label>
-                <label class="quiz-option"><input type="radio" name="correct-${qId}" value="3" ${cIdx===3?'checked':''}><input type="text" class="q-opt" placeholder="Option D" value="${e(optD)}"></label>
-            </div>
-        </div>`);
+    document.getElementById('quiz-questions-container').insertAdjacentHTML('beforeend', `<div class="quiz-question-box" id="${qId}"><button type="button" class="remove-q-btn" onclick="document.getElementById('${qId}').remove()">✕</button><input type="text" class="q-text" placeholder="Enter question..." value="${e(qText)}"><div class="quiz-options"><label class="quiz-option"><input type="radio" name="correct-${qId}" value="0" ${cIdx===0?'checked':''}><input type="text" class="q-opt" placeholder="Option A" value="${e(optA)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="1" ${cIdx===1?'checked':''}><input type="text" class="q-opt" placeholder="Option B" value="${e(optB)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="2" ${cIdx===2?'checked':''}><input type="text" class="q-opt" placeholder="Option C" value="${e(optC)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="3" ${cIdx===3?'checked':''}><input type="text" class="q-opt" placeholder="Option D" value="${e(optD)}"></label></div></div>`);
 };
 
 // ── COURSE BUILDER ──
 let sectionCount = 0;
 window.addSection = function(defTitle="") {
     sectionCount++; const id = sectionCount;
-    document.getElementById('curriculum-container').insertAdjacentHTML('beforeend', `
-        <div class="module-box" id="section-${id}">
-            <div class="module-header">
-                <input type="text" class="section-title-input" placeholder="e.g. Section ${id}" value="${defTitle}">
-                <button type="button" class="btn-outline danger" style="border:none;" onclick="document.getElementById('section-${id}').remove()">✕</button>
-            </div>
-            <ul class="lesson-list" id="lesson-list-${id}"></ul>
-            <button type="button" class="btn-outline" onclick="addLesson(${id})">+ Add Video</button>
-        </div>`);
+    document.getElementById('curriculum-container').insertAdjacentHTML('beforeend', `<div class="module-box" id="section-${id}"><div class="module-header"><input type="text" class="section-title-input" placeholder="e.g. Section ${id}" value="${defTitle}"><button type="button" class="btn-outline danger" style="border:none;" onclick="document.getElementById('section-${id}').remove()">✕</button></div><ul class="lesson-list" id="lesson-list-${id}"></ul><button type="button" class="btn-outline" onclick="addLesson(${id})">+ Add Video</button></div>`);
     return id;
 };
 window.addLesson = function(secId, defTitle="", defUrl="") {
     const lId = 'les_'+Date.now()+Math.floor(Math.random()*1000); const e = s=>String(s).replace(/"/g,'&quot;');
-    document.getElementById(`lesson-list-${secId}`).insertAdjacentHTML('beforeend', `
-        <li class="lesson-item" id="${lId}">
-            <div class="lesson-inputs">
-                <input type="text" class="lesson-title-input" placeholder="Video Title..." value="${e(defTitle)}" style="flex: 2;">
-                <select class="lesson-type-select" onchange="const p=this.closest('.lesson-inputs'); p.querySelector('.lesson-url-input').style.display=this.value==='url'?'block':'none'; p.querySelector('.lesson-file-input').style.display=this.value==='upload'?'block':'none';">
-                    <option value="url" selected>Link (YT/Drive/Vimeo)</option>
-                    <option value="upload">Upload (MP4)</option>
-                </select>
-                <input type="url" class="lesson-url-input" placeholder="Paste Link..." value="${e(defUrl)}">
-                <input type="file" class="lesson-file-input" accept="video/*" style="display:none;">
-                <button type="button" class="btn-outline danger delete-lesson-btn" style="border:none;" onclick="document.getElementById('${lId}').remove()">✕</button>
-            </div>
-            <div class="lesson-extras">
-                <textarea class="lesson-notes-input" placeholder="Add Instructor Notes..."></textarea>
-                <div class="material-upload-box"><label>Attach Handout (PDF)</label><input type="file" class="lesson-material-input" accept=".pdf,.doc,.docx,.zip"></div>
-            </div>
-        </li>`);
+    document.getElementById(`lesson-list-${secId}`).insertAdjacentHTML('beforeend', `<li class="lesson-item" id="${lId}"><div class="lesson-inputs"><input type="text" class="lesson-title-input" placeholder="Video Title..." value="${e(defTitle)}" style="flex: 2;"><select class="lesson-type-select" onchange="const p=this.closest('.lesson-inputs'); p.querySelector('.lesson-url-input').style.display=this.value==='url'?'block':'none'; p.querySelector('.lesson-file-input').style.display=this.value==='upload'?'block':'none';"><option value="url" selected>Link (YT/Drive/Vimeo)</option><option value="upload">Upload (MP4)</option></select><input type="url" class="lesson-url-input" placeholder="Paste Link..." value="${e(defUrl)}"><input type="file" class="lesson-file-input" accept="video/*" style="display:none;"><button type="button" class="btn-outline danger delete-lesson-btn" style="border:none;" onclick="document.getElementById('${lId}').remove()">✕</button></div><div class="lesson-extras"><textarea class="lesson-notes-input" placeholder="Add Instructor Notes..."></textarea><div class="material-upload-box"><label>Attach Handout (PDF)</label><input type="file" class="lesson-material-input" accept=".pdf,.doc,.docx,.zip"></div></div></li>`);
 };
 
 window.editCourse = async function(courseId) {
@@ -877,17 +946,14 @@ window.editCourse = async function(courseId) {
     const { data: c } = await sb.from('courses').select('*').eq('id', courseId).single();
     const { data: s } = await sb.from('course_sections').select('*').eq('course_id', courseId).order('sequence_order');
     const { data: l } = await sb.from('course_lessons').select('*').in('section_id', s.map(x=>x.id)).order('sequence_order');
-    
     document.getElementById('editing-course-id').value = c.id;
     document.getElementById('course-title').value = c.title; document.getElementById('course-price').value = c.price;
     document.getElementById('course-desc').value = c.description;
     window.setCourseType(c.is_event_course ? 'event' : 'main');
     document.getElementById('edit-image-preview').src = c.image_url || '';
     document.getElementById('edit-image-preview-container').style.display = 'block'; document.getElementById('course-image').required = false;
-    
     document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0;
     s.forEach(sec => { const sId = window.addSection(sec.title); l.filter(x=>x.section_id===sec.id).forEach(les => window.addLesson(sId, les.title, les.video_url)); });
-    
     document.getElementById('save-btn').textContent = "Save Updates"; document.getElementById('cancel-edit-btn').style.display = 'inline-flex';
     switchTab('creator-section');
 };
@@ -899,36 +965,23 @@ window.saveCourse = async function() {
     const editId = document.getElementById('editing-course-id').value;
     const title = document.getElementById('course-title').value, price = document.getElementById('course-price').value, desc = document.getElementById('course-desc').value;
     if(!title || price==="" || !desc) return showToast("Fill all required fields", "error");
-    
     const saveBtn = document.getElementById('save-btn'); saveBtn.disabled = true;
     try {
         let imgUrl = undefined;
         const fi = document.getElementById('course-image');
-        if(fi.files.length>0) {
-            saveBtn.textContent = "Uploading Cover...";
-            const fn = `c_img_${Date.now()}.${fi.files[0].name.split('.').pop()}`;
-            await sb.storage.from('course_images').upload(fn, fi.files[0]);
-            imgUrl = sb.storage.from('course_images').getPublicUrl(fn).data.publicUrl;
-        }
-        
+        if(fi.files.length>0) { saveBtn.textContent = "Uploading Cover..."; const fn = `c_img_${Date.now()}.${fi.files[0].name.split('.').pop()}`; await sb.storage.from('course_images').upload(fn, fi.files[0]); imgUrl = sb.storage.from('course_images').getPublicUrl(fn).data.publicUrl; }
         let cId = editId;
         const pL = { title, description: desc, price: Number(price), instructor_id: currentInstructorId, is_published: true, is_event_course: document.getElementById('is-event-course').value === 'true' };
         if(imgUrl) pL.image_url = imgUrl;
-
         if(editId) { await sb.from('courses').update(pL).eq('id', editId); await sb.from('course_sections').delete().eq('course_id', editId); }
         else { const { data } = await sb.from('courses').insert(pL).select().single(); cId = data.id; }
-        
         saveBtn.textContent = "Saving Curriculum...";
         const secs = document.querySelectorAll('.module-box');
         for(let i=0; i<secs.length; i++) {
             const sTitle = secs[i].querySelector('.section-title-input').value || `Section ${i+1}`;
             const { data: sD } = await sb.from('course_sections').insert({course_id: cId, title: sTitle, sequence_order: i+1}).select().single();
             const less = secs[i].querySelectorAll('.lesson-item');
-            for(let j=0; j<less.length; j++) {
-                const lTitle = less[j].querySelector('.lesson-title-input').value || `Lesson ${j+1}`;
-                let vUrl = less[j].querySelector('.lesson-url-input').value;
-                if(vUrl) await sb.from('course_lessons').insert({section_id: sD.id, title: lTitle, video_url: vUrl, sequence_order: j+1});
-            }
+            for(let j=0; j<less.length; j++) { const lTitle = less[j].querySelector('.lesson-title-input').value || `Lesson ${j+1}`; let vUrl = less[j].querySelector('.lesson-url-input').value; if(vUrl) await sb.from('course_lessons').insert({section_id: sD.id, title: lTitle, video_url: vUrl, sequence_order: j+1}); }
         }
         showToast("Course Saved!", "success"); window.cancelEdit();
     } catch(e) { showToast(e.message, "error"); } finally { saveBtn.disabled = false; }
