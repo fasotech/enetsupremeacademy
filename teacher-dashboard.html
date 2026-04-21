@@ -22,6 +22,7 @@
             --text-dark: #02014a; --text-muted: #8A98C9; --text-gray: #475467;
             --topbar-bg: rgba(244,247,254,0.92); --shadow-color: rgba(2,1,74,0.06);
             --event-color: #7c3aed; --event-light: rgba(124, 58, 237, 0.1); --event-border: rgba(124, 58, 237, 0.3);
+            --materials-color: #0ea5e9; --materials-light: rgba(14,165,233,0.08);
         }
         [data-theme="dark"] {
             --bg-light: #07080F; --surface: #13151F; --surface-hover: rgba(255,255,255,0.05);
@@ -46,8 +47,10 @@
         .nav-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 2rem;margin:.2rem 1rem;font-size:.95rem;font-weight:500;color:var(--text-gray);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
         .nav-item:hover{color:var(--accent-cyan);background:var(--surface-hover)}
         .nav-item.active{color:var(--brand-navy);font-weight:700;background:var(--surface-hover);border-left-color:var(--accent-cyan)}
+        [data-theme="dark"] .nav-item.active{color:#F0F0FF}
         .nav-item svg{flex-shrink:0;width:20px;height:20px;opacity:.8}
         .nav-item.active svg{opacity:1;color:var(--accent-cyan)}
+        .nav-badge{margin-left:auto;font-size:.68rem;font-weight:700;background:var(--accent-cyan);color:#fff;border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
         .sidebar-foot{margin-top:auto;padding:1.5rem 1.5rem 2rem}
         .logout-btn{display:flex;align-items:center;gap:.75rem;width:100%;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);padding:.85rem 1.25rem;border-radius:12px;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s}
         .logout-btn:hover{background:rgba(238,93,80,0.1);color:var(--danger);border-color:rgba(238,93,80,0.2)}
@@ -59,31 +62,26 @@
         .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--accent-cyan);box-shadow:0 2px 10px var(--shadow-color)}
         .welcome-text h1{font-family:'Poppins',sans-serif;font-size:1.75rem;font-weight:700;color:var(--text-dark);margin-bottom:.2rem}
         .welcome-text p{font-size:.9rem;color:var(--text-gray)}
-        
         .topbar-right{display:flex;align-items:center;gap:1rem}
         .icon-btn{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--border);transition:.2s;color:var(--text-muted);font-size:1.1rem}
         .icon-btn:hover{background:var(--bg-light);color:var(--accent-cyan);transform:translateY(-2px)}
         .content{padding:0 2.5rem 2.5rem;flex:1}
 
-        /* ── NOTIFICATION BELL ── */
+        /* NOTIFICATION BELL */
         .notif-wrap{position:relative}
         .notif-badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;background:var(--danger);color:#fff;font-size:.65rem;font-weight:800;border-radius:50px;display:none;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--topbar-bg);animation:popIn .3s ease;pointer-events:none;z-index:10}
         .notif-badge.show{display:flex}
         @keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
-
         .notif-panel{position:absolute;top:calc(100% + 12px);right:0;width:360px;background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.18);z-index:2000;overflow:hidden;display:none;animation:slideDown .25s ease}
         .notif-panel.show{display:block}
         @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-
         .notif-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg-light)}
         .notif-head h4{font-family:'Poppins';font-size:.95rem;font-weight:700;color:var(--text-dark)}
         .notif-mark-all{font-size:.75rem;font-weight:700;color:var(--accent-cyan);cursor:pointer;border:none;background:none;padding:4px 8px;border-radius:6px;transition:.2s}
         .notif-mark-all:hover{background:rgba(0,160,223,.1)}
-
         .notif-list{max-height:380px;overflow-y:auto}
         .notif-list::-webkit-scrollbar{width:4px}
         .notif-list::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:4px}
-
         .notif-item{display:flex;gap:12px;padding:.9rem 1.25rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;text-decoration:none;color:inherit}
         .notif-item:last-child{border-bottom:none}
         .notif-item:hover{background:var(--surface-hover)}
@@ -92,22 +90,18 @@
         .notif-item.unread.course{border-left-color:var(--success)}
         .notif-item.unread.blog{border-left-color:var(--brand-yellow)}
         .notif-item.unread.assign{border-left-color:var(--danger)}
-
         .notif-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
         .notif-icon.comm{background:rgba(0,160,223,.12);color:var(--accent-cyan)}
         .notif-icon.course{background:rgba(5,205,153,.12);color:var(--success)}
         .notif-icon.blog{background:rgba(252,209,22,.18);color:#a07800}
         .notif-icon.assign{background:rgba(238,93,80,.12);color:var(--danger)}
-
         .notif-text{flex:1;min-width:0}
         .notif-text strong{display:block;font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .notif-text span{font-size:.75rem;color:var(--text-muted)}
         .notif-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-cyan);flex-shrink:0;margin-top:6px}
-
         .notif-empty{padding:2.5rem 1.25rem;text-align:center;color:var(--text-muted);font-size:.85rem}
         .notif-footer{padding:.75rem 1.25rem;border-top:1px solid var(--border);background:var(--bg-light);text-align:center}
         .notif-footer a{font-size:.8rem;font-weight:700;color:var(--accent-cyan);text-decoration:none}
-        .notif-footer a:hover{text-decoration:underline}
 
         /* STATS */
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem;margin-top:2rem}
@@ -116,7 +110,7 @@
         .stat-card.brand-blue{background:var(--brand-navy);color:#fff}
         .stat-card.brand-orange{background:var(--accent-cyan);color:#fff}
         .stat-card.brand-yellow{background:var(--brand-yellow);color:var(--brand-navy)}
-        .stat-card.brand-surface{background:var(--surface);color:var(--brand-navy);border:1px solid var(--border);border-top:4px solid var(--danger)}
+        .stat-card.brand-surface{background:var(--surface);color:var(--brand-navy);border:1px solid var(--border);border-top:4px solid var(--materials-color)}
         .stat-lbl{font-size:.85rem;font-weight:500;opacity:.9;margin-bottom:.5rem}
         .stat-card.brand-surface .stat-lbl{color:var(--text-gray)}
         .stat-num{font-family:'Poppins',sans-serif;font-size:2.25rem;font-weight:700;line-height:1;margin-bottom:.25rem}
@@ -135,6 +129,66 @@
         .user-cell{display:flex;align-items:center;gap:1rem}
         .uav{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:.9rem;color:#fff;background:var(--accent-cyan);flex-shrink:0}
 
+        /* ── MATERIALS SECTION ─────────────────────── */
+        .materials-header-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem}
+        .materials-filter-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+        .mat-filter-select{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.85rem;color:var(--text-dark);outline:none;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color .2s}
+        .mat-filter-select:focus{border-color:var(--accent-cyan)}
+        .mat-search{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.85rem;color:var(--text-dark);outline:none;font-family:'DM Sans',sans-serif;width:200px;transition:border-color .2s}
+        .mat-search:focus{border-color:var(--accent-cyan)}
+
+        .materials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+        .material-card{background:var(--bg-light);border:1px solid var(--border);border-radius:16px;padding:1.25rem;display:flex;flex-direction:column;gap:.85rem;transition:border-color .2s,transform .2s,box-shadow .2s;animation:fadeUp .35s ease both}
+        .material-card:hover{border-color:var(--accent-cyan);transform:translateY(-2px);box-shadow:0 8px 24px var(--shadow-color)}
+        .mat-icon-row{display:flex;align-items:center;gap:.85rem}
+        .mat-type-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+        .mat-type-icon.pdf{background:rgba(238,93,80,.12);color:var(--danger)}
+        .mat-type-icon.video{background:rgba(0,160,223,.12);color:var(--accent-cyan)}
+        .mat-type-icon.doc{background:rgba(2,1,74,.08);color:var(--brand-navy)}
+        .mat-type-icon.sheet{background:rgba(5,205,153,.12);color:var(--success)}
+        .mat-type-icon.ppt{background:rgba(255,122,0,.12);color:#ff7a00}
+        .mat-type-icon.audio{background:rgba(124,58,237,.12);color:#7c3aed}
+        .mat-type-icon.archive{background:rgba(252,209,22,.2);color:#8a6500}
+        .mat-type-icon.other{background:rgba(138,152,201,.12);color:var(--text-muted)}
+        .mat-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:.95rem;color:var(--text-dark);flex:1;line-height:1.3}
+        .mat-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+        .mat-badge{font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+        .mat-badge.course{background:rgba(0,160,223,.1);color:var(--accent-cyan);border:1px solid rgba(0,160,223,.2)}
+        .mat-badge.size{background:var(--surface);color:var(--text-muted);border:1px solid var(--border)}
+        .mat-desc{font-size:.82rem;color:var(--text-muted);line-height:1.5}
+        .mat-assigned-count{font-size:.78rem;font-weight:600;color:var(--success);display:flex;align-items:center;gap:4px}
+        .mat-actions{display:flex;gap:.5rem;margin-top:.25rem}
+
+        /* UPLOAD MODAL */
+        .upload-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:1rem}
+        .upload-modal-overlay.show{display:flex;animation:fadeIn .2s ease}
+        .upload-modal{background:var(--surface);border-radius:24px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .35s ease}
+        .upload-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
+        .upload-modal-head h3{font-family:'Poppins';font-weight:700;color:var(--text-dark);font-size:1.15rem}
+        .upload-modal-body{padding:1.5rem 2rem 2rem}
+        .form-group{margin-bottom:1.25rem}
+        .form-label{display:block;font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem}
+        .form-label span{font-weight:400;color:var(--text-muted)}
+        .form-input,.form-select,.form-textarea{width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-size:.9rem;color:var(--text-dark);outline:none;transition:.2s;font-family:'DM Sans',sans-serif}
+        .form-textarea{resize:vertical;min-height:80px}
+        .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent-cyan)}
+        .file-drop-zone{border:2px dashed var(--border);border-radius:12px;padding:2.5rem;text-align:center;cursor:pointer;transition:.2s;background:var(--bg-light);position:relative;overflow:hidden}
+        .file-drop-zone:hover,.file-drop-zone.drag-over{border-color:var(--accent-cyan);background:rgba(0,160,223,.04)}
+        .file-drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+        .file-drop-zone .drop-icon{font-size:2.5rem;margin-bottom:.75rem;color:var(--text-muted)}
+        .file-drop-zone p{font-size:.9rem;color:var(--text-muted)}
+        .file-drop-zone p strong{color:var(--accent-cyan)}
+        .selected-file-preview{background:var(--bg-light);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;display:flex;align-items:center;gap:.85rem;margin-top:.75rem}
+        .selected-file-icon{font-size:1.5rem;flex-shrink:0}
+        .selected-file-info{flex:1;min-width:0}
+        .selected-file-name{font-weight:700;color:var(--text-dark);font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .selected-file-size{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+        .progress-bar-outer{width:100%;background:var(--border);border-radius:10px;height:8px;overflow:hidden;margin-top:.75rem}
+        .progress-bar-inner{height:100%;background:linear-gradient(90deg,var(--accent-cyan),var(--success));border-radius:10px;transition:width .3s ease;width:0%}
+        .btn-upload-submit{width:100%;background:linear-gradient(135deg,var(--brand-navy),var(--accent-cyan));color:#fff;border:none;padding:.95rem;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;transition:.2s;margin-top:.5rem;font-family:'DM Sans',sans-serif}
+        .btn-upload-submit:disabled{opacity:.6;cursor:not-allowed}
+        .btn-upload-submit:not(:disabled):hover{opacity:.9;transform:translateY(-1px)}
+
         /* TOGGLES & BADGES */
         .course-type-selector{display:flex;gap:0;border-radius:12px;overflow:hidden;border:2px solid var(--border);background:var(--bg-light);margin-bottom:1.5rem}
         .course-type-btn{flex:1;padding:1rem 1.5rem;border:none;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;color:var(--text-muted);transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -148,13 +202,7 @@
 
         /* FORMS */
         .course-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
-        .form-group{margin-bottom:1.2rem}
         .form-group.full-width{grid-column:1/-1}
-        .form-group label{display:block;font-size:.85rem;font-weight:700;color:var(--text-dark);margin-bottom:.5rem}
-        .form-input, .form-group input, .form-group select, .form-group textarea{width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;color:var(--text-dark);font-size:.9rem;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
-        .form-textarea { resize: vertical; min-height: 80px; }
-        .form-input:focus, .form-textarea:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus{border-color:var(--accent-cyan)}
-        
         .curriculum-builder{background:var(--bg-light);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1rem}
         .module-box{background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 4px 6px rgba(0,0,0,0.02);animation:fadeUp .3s ease}
         .module-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
@@ -170,7 +218,7 @@
         .lesson-extras{display:flex;flex-wrap:wrap;gap:1rem;padding-left:26px;border-top:1px solid var(--border-bright);padding-top:10px;margin-top:5px}
         .lesson-extras textarea{flex:2;min-width:250px;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:.85rem;resize:vertical;min-height:80px;background:var(--surface);color:var(--text-dark)}
         .material-upload-box{flex:1;min-width:200px;display:flex;flex-direction:column;gap:6px;background:var(--surface);padding:10px;border-radius:8px;border:1px solid var(--border)}
-        
+
         /* QUIZ */
         .quiz-question-box{background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem;position:relative}
         .quiz-question-box input[type="text"]{width:100%;padding:8px 12px;margin-bottom:10px;border-radius:6px;border:1px solid var(--border);outline:none;font-size:.9rem;background:var(--surface);color:var(--text-dark)}
@@ -187,34 +235,28 @@
         .btn-outline:hover{background:rgba(0,160,223,0.1)}
         .btn-outline.danger{border-color:var(--danger);color:var(--danger)}
         .btn-outline.danger:hover{background:rgba(238,93,80,0.1)}
-        .btn-outline.success{border-color:var(--success);color:var(--success)}
-        .btn-outline.success:hover{background:rgba(5,205,153,0.1)}
-        
         .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;padding:12px 24px;border-radius:8px;cursor:pointer;transition:.2s;background:var(--accent-cyan);color:#fff;border:none}
         .btn-primary:hover{background:#0088bd}
         .btn-primary:disabled{opacity:0.6;cursor:not-allowed}
-        
         .btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;padding:12px 24px;border-radius:8px;cursor:pointer;transition:.2s;background:var(--surface);color:var(--text-gray);border:1px solid var(--border)}
         .btn-secondary:hover{background:var(--bg-light);color:var(--text-dark);border-color:var(--text-muted)}
+        .btn-materials{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;padding:10px 20px;border-radius:8px;cursor:pointer;transition:.2s;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;border:none}
+        .btn-materials:hover{opacity:.9;transform:translateY(-1px)}
 
         /* GRADING MODAL */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 3000; align-items: center; justify-content: center; padding: 1rem;}
-        .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
-        .review-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 600px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);z-index:3000;align-items:center;justify-content:center;padding:1rem}
+        .modal-overlay.show{display:flex;animation:fadeIn .2s ease}
+        .review-modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:600px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.3)}
 
         /* SETTINGS MODAL */
-        .settings-modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; animation: fadeUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
-        .settings-modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s;}
-        .settings-modal-close:hover { color: var(--danger); }
-        .set-form-group { margin-bottom: 1rem; text-align: left; }
-        .set-form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
-        .set-form-group input { width: 100%; background: var(--bg-light); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1rem; color: var(--text-dark); font-size: 0.95rem; outline: none; transition: 0.2s;}
-        .set-form-group input:focus { border-color: var(--accent-cyan); }
-        .avatar-upload-wrapper { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .avatar-preview { width: 70px; height: 70px; border-radius: 50%; background: var(--bg-light); border: 2px dashed var(--accent-cyan); object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; color: var(--text-muted);}
-        .upload-btn { background: var(--surface-hover); color: var(--accent-cyan); border: 1px solid var(--border-bright); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s;}
-        .upload-btn:hover { background: var(--accent-cyan); color: #fff;}
-        .upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .settings-modal-content{background:var(--surface);border:1px solid var(--border-bright);border-radius:24px;padding:2.5rem;width:100%;max-width:600px;box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative;animation:fadeUp .3s ease;max-height:90vh;overflow-y:auto}
+        .settings-modal-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer;transition:.2s}
+        .settings-modal-close:hover{color:var(--danger)}
+        .avatar-upload-wrapper{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+        .avatar-preview{width:70px;height:70px;border-radius:50%;background:var(--bg-light);border:2px dashed var(--accent-cyan);object-fit:cover}
+        .upload-btn{background:var(--surface-hover);color:var(--accent-cyan);border:1px solid var(--border-bright);padding:.5rem 1rem;border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;position:relative;overflow:hidden;transition:.2s}
+        .upload-btn:hover{background:var(--accent-cyan);color:#fff}
+        .upload-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
 
         /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
@@ -224,27 +266,32 @@
         .toast.info{border-left:4px solid var(--accent-cyan)}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
-        @keyframes fadeUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         @keyframes spin{to{transform:rotate(360deg)}}
-        
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-wrap { margin-left: 0; }
-            .mobile-toggle { display: flex; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .course-form-grid { grid-template-columns: 1fr; }
-            .notif-panel { width: 300px; right: -60px; }
+
+        /* EMPTY STATE */
+        .empty-state{text-align:center;padding:3rem 2rem;color:var(--text-muted)}
+        .empty-state .empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.5}
+        .empty-state h4{font-family:'Poppins';font-size:1rem;font-weight:700;color:var(--text-dark);margin-bottom:.35rem}
+        .empty-state p{font-size:.85rem}
+
+        @media(max-width:992px){
+            .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+            .main-wrap{margin-left:0}.mobile-toggle{display:flex}
+            .stats-grid{grid-template-columns:repeat(2,1fr)}
+            .course-form-grid{grid-template-columns:1fr}
+            .notif-panel{width:300px;right:-60px}
         }
-        @media (max-width: 576px) { 
-            .stats-grid { grid-template-columns: 1fr; } 
-            .lesson-inputs { flex-direction: column; align-items: stretch;} 
-            .delete-lesson-btn { width: 100%;} 
-            .lesson-extras { padding-left: 0; } 
-            .quiz-options { grid-template-columns: 1fr; }
-            .course-type-selector { flex-direction: column; }
-            .notif-panel { width: 280px; right: -80px; }
+        @media(max-width:576px){
+            .stats-grid{grid-template-columns:1fr}
+            .lesson-inputs{flex-direction:column;align-items:stretch}
+            .delete-lesson-btn{width:100%}
+            .lesson-extras{padding-left:0}
+            .quiz-options{grid-template-columns:1fr}
+            .course-type-selector{flex-direction:column}
+            .notif-panel{width:280px;right:-80px}
+            .materials-grid{grid-template-columns:1fr}
         }
     </style>
 </head>
@@ -266,19 +313,20 @@
     <a class="nav-item active" href="#" onclick="switchTab('dashboard-overview'); return false;" id="nav-dashboard">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard
     </a>
-    
     <a class="nav-item" href="#" onclick="startNewCourse(); return false;" id="nav-creator">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Course Creator
     </a>
-
+    <a class="nav-item" href="#" onclick="switchTab('materials-section'); return false;" id="nav-materials">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Learning Materials
+        <span class="nav-badge" id="nav-mat-count">0</span>
+    </a>
     <a class="nav-item" href="#" onclick="switchTab('students-section'); return false;" id="nav-students">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg> My Students
     </a>
-
     <a class="nav-item" href="#" onclick="switchTab('assignments-section'); return false;" id="nav-assignments">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg> Assignments
     </a>
-    
+
     <div class="nav-label">Resources</div>
     <a class="nav-item" href="community.html">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Community Hub
@@ -299,32 +347,22 @@
             </button>
             <div class="welcome-text">
                 <h1 id="welcome-msg">Welcome back, Instructor!</h1>
-                <p>Build, publish, and inspire students globally.</p>
+                <p>Build, publish, inspire — and upload materials for your students.</p>
             </div>
         </div>
         <div class="topbar-right">
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle Theme"><span id="theme-icon">💻</span></button>
-
-            <!-- NOTIFICATION BELL -->
             <div class="notif-wrap" id="notif-wrap">
-                <button class="icon-btn" id="notif-bell-btn" onclick="toggleNotifPanel()" title="Notifications" aria-label="Notifications">
+                <button class="icon-btn" id="notif-bell-btn" onclick="toggleNotifPanel()" title="Notifications">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                     <span class="notif-badge" id="notif-badge"></span>
                 </button>
                 <div class="notif-panel" id="notif-panel">
-                    <div class="notif-head">
-                        <h4>Notifications</h4>
-                        <button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>
-                    </div>
-                    <div class="notif-list" id="notif-list">
-                        <div class="notif-empty">Loading notifications...</div>
-                    </div>
-                    <div class="notif-footer">
-                        <a href="community.html">Go to Community Hub →</a>
-                    </div>
+                    <div class="notif-head"><h4>Notifications</h4><button class="notif-mark-all" onclick="markAllRead()">Mark all read</button></div>
+                    <div class="notif-list" id="notif-list"><div class="notif-empty">Loading...</div></div>
+                    <div class="notif-footer"><a href="community.html">Go to Community Hub →</a></div>
                 </div>
             </div>
-
             <button class="icon-btn" onclick="openSettings()" title="Profile Settings">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg>
             </button>
@@ -332,6 +370,7 @@
     </header>
 
     <main class="content">
+        <!-- DASHBOARD OVERVIEW -->
         <div id="dashboard-overview" class="view-section">
             <div class="stats-grid">
                 <div class="stat-card brand-blue" onclick="startNewCourse()">
@@ -343,113 +382,153 @@
                 <div class="stat-card brand-yellow">
                     <div class="stat-lbl">Course Revenue</div><div class="stat-num" id="stat-revenue">₦0</div>
                 </div>
-                <div class="stat-card brand-surface">
-                    <div class="stat-lbl">Avg. Rating</div><div class="stat-num" id="stat-rating">0.0 ★</div>
+                <div class="stat-card brand-surface" onclick="switchTab('materials-section')">
+                    <div class="stat-lbl">Learning Materials</div><div class="stat-num" id="stat-materials">0</div>
                 </div>
             </div>
-            
+
             <div class="panel">
                 <div class="panel-head">
                     <div class="panel-title">My Published Courses</div>
+                    <button class="btn-materials" onclick="switchTab('materials-section')">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Manage Materials
+                    </button>
                 </div>
                 <div class="panel-body" id="my-courses-list">
-                    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Fetching your courses...</p>
+                    <p style="color:var(--text-muted);text-align:center;padding:2rem;">Fetching your courses...</p>
                 </div>
             </div>
         </div>
 
-        <div class="panel view-section" id="students-section" style="display: none;">
+        <!-- LEARNING MATERIALS SECTION -->
+        <div class="panel view-section" id="materials-section" style="display:none;">
             <div class="panel-head">
-                <div class="panel-title">Student Roster & Analytics</div>
+                <div class="panel-title">Learning Materials</div>
+                <button class="btn-materials" onclick="openUploadModal()">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Upload Material
+                </button>
             </div>
+            <div class="panel-body">
+                <div style="background:rgba(14,165,233,.06);border:1px solid rgba(14,165,233,.2);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:.85rem;">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#0ea5e9" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div>
+                        <div style="font-family:'Poppins';font-weight:700;color:var(--text-dark);font-size:.9rem;margin-bottom:.2rem;">How Learning Materials Work</div>
+                        <div style="font-size:.82rem;color:var(--text-gray);line-height:1.6;">Upload PDFs, videos, presentations, and more linked to your courses. <strong>Materials are not visible to students until the Admin assigns them.</strong> After upload, contact your Admin to assign materials to the relevant enrolled students.</div>
+                    </div>
+                </div>
+                <div class="materials-header-bar">
+                    <div class="materials-filter-row">
+                        <select class="mat-filter-select" id="mat-filter-course" onchange="renderMaterials()">
+                            <option value="">All Courses</option>
+                        </select>
+                        <select class="mat-filter-select" id="mat-filter-type" onchange="renderMaterials()">
+                            <option value="">All Types</option>
+                            <option value="document">Document</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Audio</option>
+                            <option value="presentation">Presentation</option>
+                            <option value="spreadsheet">Spreadsheet</option>
+                            <option value="archive">Archive</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <input class="mat-search" id="mat-search" type="text" placeholder="Search materials..." oninput="renderMaterials()">
+                    </div>
+                    <div style="font-size:.82rem;color:var(--text-muted);" id="mat-count-label">Loading...</div>
+                </div>
+                <div class="materials-grid" id="materials-grid">
+                    <div class="empty-state"><div class="empty-icon">📂</div><h4>No materials yet</h4><p>Upload your first learning material above.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STUDENTS SECTION -->
+        <div class="panel view-section" id="students-section" style="display:none;">
+            <div class="panel-head"><div class="panel-title">Student Roster & Analytics</div></div>
             <div class="table-responsive">
                 <table class="data-tbl">
                     <thead><tr><th>Student Info</th><th>Enrolled Course</th><th>Enrollment Date</th></tr></thead>
                     <tbody id="students-table-body">
-                        <tr><td colspan="3"><p style="text-align:center; color: var(--text-muted); padding: 1rem;">Loading students...</p></td></tr>
+                        <tr><td colspan="3"><p style="text-align:center;color:var(--text-muted);padding:1rem;">Loading students...</p></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="panel view-section" id="assignments-section" style="display: none;">
-            <div class="panel-head">
-                <div class="panel-title">Student Assignments & Grading</div>
-            </div>
+        <!-- ASSIGNMENTS SECTION -->
+        <div class="panel view-section" id="assignments-section" style="display:none;">
+            <div class="panel-head"><div class="panel-title">Student Assignments & Grading</div></div>
             <div class="table-responsive">
                 <table class="data-tbl">
                     <thead><tr><th>Student</th><th>Course & Task</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody id="assignments-table-body">
-                        <tr><td colspan="5"><p style="text-align:center; color: var(--text-muted); padding: 1rem;">Loading assignments...</p></td></tr>
+                        <tr><td colspan="5"><p style="text-align:center;color:var(--text-muted);padding:1rem;">Loading assignments...</p></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="panel view-section" id="creator-section" style="display: none;">
-            <div class="panel-head">
-                <div class="panel-title" id="form-main-title">Course Creator & Manager</div>
-            </div>
+        <!-- COURSE CREATOR SECTION -->
+        <div class="panel view-section" id="creator-section" style="display:none;">
+            <div class="panel-head"><div class="panel-title" id="form-main-title">Course Creator & Manager</div></div>
             <div class="panel-body">
                 <div id="course-builder-form">
                     <input type="hidden" id="editing-course-id" value="">
                     <input type="hidden" id="is-event-course" value="false">
 
-                    <h4 style="color: var(--brand-navy); margin-bottom: 1rem; font-family: 'Poppins';">0. Course Type</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Choose whether this is a regular academy course or a special event course available free to approved members.</p>
+                    <h4 style="color:var(--brand-navy);margin-bottom:1rem;font-family:'Poppins'">0. Course Type</h4>
                     <div class="course-type-selector" id="course-type-selector">
                         <button type="button" class="course-type-btn active-main" id="btn-type-main" onclick="setCourseType('main')">
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                            Main Course <span style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">(Paid)</span>
+                            Main Course <span style="font-size:.75rem;opacity:.8;font-weight:500;">(Paid)</span>
                         </button>
                         <button type="button" class="course-type-btn" id="btn-type-event" onclick="setCourseType('event')">
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                            Event Course <span style="font-size: 0.75rem; opacity: 0.8; font-weight: 500;">(Free for Members)</span>
+                            Event Course <span style="font-size:.75rem;opacity:.8;font-weight:500;">(Free for Members)</span>
                         </button>
                     </div>
-
                     <div class="event-badge-form" id="event-info-banner">
                         <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <p><strong>Event Course:</strong> Visible to the public with a price, but enrolled members can claim it for FREE.</p>
                     </div>
 
-                    <h4 style="color: var(--brand-navy); margin-top: 1.5rem; margin-bottom: 1rem; font-family: 'Poppins';">1. Course Details</h4>
+                    <h4 style="color:var(--brand-navy);margin-top:1.5rem;margin-bottom:1rem;font-family:'Poppins'">1. Course Details</h4>
                     <div class="course-form-grid">
                         <div class="form-group"><label>Course Title *</label><input type="text" id="course-title" placeholder="e.g., Master Python"></div>
                         <div class="form-group"><label id="price-label">Price (₦) *</label><input type="number" id="course-price" placeholder="e.g., 0" min="0"></div>
-                        <div class="form-group full-width"><label>Course Description *</label><textarea id="course-desc" rows="4"></textarea></div>
+                        <div class="form-group full-width"><label>Course Description *</label><textarea id="course-desc" rows="4" style="width:100%;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;color:var(--text-dark);font-size:.9rem;outline:none;font-family:'DM Sans';resize:vertical;min-height:100px"></textarea></div>
                         <div class="form-group full-width">
                             <label>Course Cover Image <span id="cover-required-marker">*</span></label>
                             <input type="file" id="course-image" accept="image/*">
-                            <div id="edit-image-preview-container" style="display:none; margin-top: 10px;">
-                                <img id="edit-image-preview" src="" style="max-width: 200px; max-height: 120px; border-radius: 8px; border: 1px solid var(--border);">
+                            <div id="edit-image-preview-container" style="display:none;margin-top:10px;">
+                                <img id="edit-image-preview" src="" style="max-width:200px;max-height:120px;border-radius:8px;border:1px solid var(--border);">
                             </div>
                         </div>
                     </div>
 
-                    <h4 style="color: var(--brand-navy); margin-top: 2rem; margin-bottom: 1rem; font-family: 'Poppins';">2. Curriculum Builder</h4>
+                    <h4 style="color:var(--brand-navy);margin-top:2rem;margin-bottom:1rem;font-family:'Poppins'">2. Curriculum Builder</h4>
                     <div class="curriculum-builder" id="curriculum-container"></div>
-                    <button type="button" class="btn-outline" onclick="addSection()" style="width: 100%; padding: 12px; margin-top: 1rem; border-style: dashed;">+ Add New Section</button>
+                    <button type="button" class="btn-outline" onclick="addSection()" style="width:100%;padding:12px;margin-top:1rem;border-style:dashed;">+ Add New Section</button>
 
-                    <div class="form-group full-width" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 1.05rem; color: var(--brand-navy);">
-                            <input type="checkbox" id="require-quiz-toggle" onchange="toggleQuizBuilder()" style="width: 18px; height: 18px; cursor: pointer;"> Enable Final Quiz
+                    <div class="form-group full-width" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+                        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:1.05rem;color:var(--brand-navy);">
+                            <input type="checkbox" id="require-quiz-toggle" onchange="toggleQuizBuilder()" style="width:18px;height:18px;cursor:pointer;"> Enable Final Quiz
                         </label>
                     </div>
-
-                    <div id="quiz-builder-section" style="display: none; background: var(--surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-bright); margin-bottom: 2rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <h4 style="color: var(--brand-navy); font-family: 'Poppins'; margin: 0;">Quiz Builder</h4>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                    <div id="quiz-builder-section" style="display:none;background:var(--surface);padding:1.5rem;border-radius:12px;border:1px solid var(--border-bright);margin-bottom:2rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                            <h4 style="color:var(--brand-navy);font-family:'Poppins';margin:0;">Quiz Builder</h4>
+                            <div style="display:flex;align-items:center;gap:10px;">
                                 <div class="ai-status" id="ai-status-bar"><div class="ai-spinner"></div><span id="ai-status-text">Generating...</span></div>
                                 <button type="button" class="btn-outline" onclick="generateAIQuiz()" id="btn-ai-gen">Generate with AI</button>
                             </div>
                         </div>
                         <div id="quiz-questions-container"></div>
-                        <button type="button" class="btn-outline" onclick="addQuizQuestion()" style="width: 100%; padding: 10px; border-style: dashed; margin-top: 10px;">+ Add Question</button>
+                        <button type="button" class="btn-outline" onclick="addQuizQuestion()" style="width:100%;padding:10px;border-style:dashed;margin-top:10px;">+ Add Question</button>
                     </div>
 
-                    <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                    <div style="margin-top:2rem;display:flex;justify-content:flex-end;gap:1rem;border-top:1px solid var(--border);padding-top:1.5rem;">
                         <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Cancel</button>
                         <button type="button" class="btn-primary" id="save-btn" onclick="window.saveCourse()">Save & Publish Course</button>
                     </div>
@@ -459,27 +538,74 @@
     </main>
 </div>
 
+<!-- UPLOAD MATERIAL MODAL -->
+<div class="upload-modal-overlay" id="upload-modal">
+    <div class="upload-modal">
+        <div class="upload-modal-head">
+            <h3>Upload Learning Material</h3>
+            <button onclick="closeUploadModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted);">✕</button>
+        </div>
+        <div class="upload-modal-body">
+            <div class="form-group">
+                <label class="form-label">Linked Course <span>(required)</span></label>
+                <select class="form-select" id="mat-course-select">
+                    <option value="">Select a course...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Material Title <span>(required)</span></label>
+                <input type="text" class="form-input" id="mat-title" placeholder="e.g. Week 3 – Python Functions Reference">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description <span>(optional)</span></label>
+                <textarea class="form-textarea" id="mat-description" placeholder="Briefly describe what this material covers..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Upload File <span>(max 100MB — PDF, DOCX, XLSX, PPTX, MP4, MP3, ZIP…)</span></label>
+                <div class="file-drop-zone" id="mat-drop-zone">
+                    <input type="file" id="mat-file-input" accept=".pdf,.doc,.docx,.xlsx,.xls,.csv,.ppt,.pptx,.mp4,.mov,.mp3,.wav,.zip,.rar,.txt,.png,.jpg,.jpeg" onchange="handleMatFileSelect(this.files[0])">
+                    <div class="drop-icon">📁</div>
+                    <p><strong>Click or drag & drop</strong> your file here</p>
+                    <p style="font-size:.78rem;margin-top:.35rem;opacity:.7;">Supports PDF, Word, Excel, PowerPoint, MP4, ZIP and more</p>
+                </div>
+                <div id="mat-file-preview" style="display:none;" class="selected-file-preview">
+                    <span class="selected-file-icon" id="mat-file-icon">📄</span>
+                    <div class="selected-file-info">
+                        <div class="selected-file-name" id="mat-file-name">filename.pdf</div>
+                        <div class="selected-file-size" id="mat-file-size">0 KB</div>
+                    </div>
+                    <button onclick="clearMatFile()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;flex-shrink:0;">✕</button>
+                </div>
+                <div class="progress-bar-outer" id="mat-progress-outer" style="display:none;">
+                    <div class="progress-bar-inner" id="mat-progress-bar"></div>
+                </div>
+            </div>
+            <button class="btn-upload-submit" id="mat-upload-btn" onclick="uploadMaterial()">Upload Material</button>
+        </div>
+    </div>
+</div>
+
 <!-- GRADING MODAL -->
 <div class="modal-overlay" id="grading-modal">
-    <div class="review-modal" style="max-width: 600px; text-align: left;">
-        <h2 style="margin-bottom: 1rem; font-family: 'Poppins'; color: var(--text-dark);">Grade Submission</h2>
-        <div style="margin-bottom: 1rem;">
-            <strong style="color:var(--brand-navy); font-size: 1.1rem;" id="grade-student-name">Student Name</strong><br>
-            <span style="font-size: 0.9rem; color: var(--text-muted);" id="grade-task-title">Course - Task Title</span>
+    <div class="review-modal" style="max-width:600px;text-align:left;">
+        <h2 style="margin-bottom:1rem;font-family:'Poppins';color:var(--text-dark);">Grade Submission</h2>
+        <div style="margin-bottom:1rem;">
+            <strong style="color:var(--brand-navy);font-size:1.1rem;" id="grade-student-name">Student Name</strong><br>
+            <span style="font-size:.9rem;color:var(--text-muted);" id="grade-task-title">Course - Task Title</span>
         </div>
-        <div class="form-group" style="margin-bottom: 1rem;">
-            <label>Student's Submission Notes</label>
-            <div id="grade-student-desc" style="font-size:0.9rem; background: var(--bg-light); padding: 12px; border-radius: 8px; color: var(--text-gray); max-height: 120px; overflow-y: auto; border: 1px solid var(--border);">No notes.</div>
+        <div class="form-group" style="margin-bottom:1rem;">
+            <label class="form-label">Student's Submission Notes</label>
+            <div id="grade-student-desc" style="font-size:.9rem;background:var(--bg-light);padding:12px;border-radius:8px;color:var(--text-gray);max-height:120px;overflow-y:auto;border:1px solid var(--border);">No notes.</div>
         </div>
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-            <label>Attached Files</label>
-            <div id="grade-student-files" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+            <label class="form-label">Attached Files</label>
+            <div id="grade-student-files" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
         </div>
         <input type="hidden" id="grading-submission-id">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
             <div class="form-group">
-                <label>Grade (Letter)</label>
-                <select id="grade-letter" class="form-input">
+                <label class="form-label">Grade (Letter)</label>
+                <select id="grade-letter" class="form-select">
                     <option value="">Select Grade...</option>
                     <option value="A">A (Excellent)</option>
                     <option value="B">B (Good)</option>
@@ -489,15 +615,15 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Score (0-100)</label>
+                <label class="form-label">Score (0–100)</label>
                 <input type="number" id="grade-score" class="form-input" min="0" max="100" placeholder="e.g. 85">
             </div>
         </div>
         <div class="form-group">
-            <label>Instructor Feedback</label>
+            <label class="form-label">Instructor Feedback</label>
             <textarea id="grade-feedback" class="form-textarea" placeholder="Great job on this analysis..." rows="3"></textarea>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem;">
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:1.5rem;">
             <button class="btn-secondary" onclick="closeGradingModal()">Cancel</button>
             <button class="btn-primary" id="save-grade-btn" onclick="submitGrade()">Save Grade</button>
         </div>
@@ -505,35 +631,35 @@
 </div>
 
 <!-- SETTINGS MODAL -->
-<div class="modal-overlay" id="settings-modal" style="z-index: 4000;">
+<div class="modal-overlay" id="settings-modal" style="z-index:4000;">
     <div class="settings-modal-content">
         <button class="settings-modal-close" onclick="closeSettings()">✕</button>
-        <h3 style="margin-bottom: 1.5rem; font-family: 'Poppins'; color: var(--text-dark);">Profile Settings</h3>
+        <h3 style="margin-bottom:1.5rem;font-family:'Poppins';color:var(--text-dark);">Profile Settings</h3>
         <div class="avatar-upload-wrapper">
             <img id="set-avatar-preview" class="avatar-preview" src="" alt="Avatar">
             <div class="upload-btn">Upload Passport/Avatar<input type="file" accept="image/*" onchange="handleAvatarSelect(event)"></div>
         </div>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <div class="form-group" style="flex:1; min-width: 200px;"><label>First Name</label><input type="text" id="set-first"></div>
-            <div class="form-group" style="flex:1; min-width: 200px;"><label>Last Name</label><input type="text" id="set-last"></div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <div class="form-group" style="flex:1;min-width:200px;"><label>First Name</label><input type="text" id="set-first" class="form-input"></div>
+            <div class="form-group" style="flex:1;min-width:200px;"><label>Last Name</label><input type="text" id="set-last" class="form-input"></div>
         </div>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <div class="form-group" style="flex:1; min-width: 200px;"><label>Phone Number</label><input type="tel" id="set-phone"></div>
-            <div class="form-group" style="flex:1; min-width: 200px;"><label>Date of Birth</label><input type="date" id="set-dob"></div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <div class="form-group" style="flex:1;min-width:200px;"><label>Phone Number</label><input type="tel" id="set-phone" class="form-input"></div>
+            <div class="form-group" style="flex:1;min-width:200px;"><label>Date of Birth</label><input type="date" id="set-dob" class="form-input"></div>
         </div>
-        <div class="form-group"><label>Address</label><input type="text" id="set-address"></div>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <div class="form-group" style="flex:1; min-width: 200px;"><label>State / Province</label><input type="text" id="set-state" placeholder="e.g. Rivers State"></div>
-            <div class="form-group" style="flex:1; min-width: 200px;"><label>Country</label><input type="text" id="set-country" placeholder="e.g. Nigeria"></div>
+        <div class="form-group"><label>Address</label><input type="text" id="set-address" class="form-input"></div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+            <div class="form-group" style="flex:1;min-width:200px;"><label>State / Province</label><input type="text" id="set-state" class="form-input" placeholder="e.g. Rivers State"></div>
+            <div class="form-group" style="flex:1;min-width:200px;"><label>Country</label><input type="text" id="set-country" class="form-input" placeholder="e.g. Nigeria"></div>
         </div>
-        <div class="form-group"><label>Interests / Skills (Comma separated)</label><input type="text" id="set-interests" placeholder="e.g. Coding, Design, Data"></div>
-        <button class="btn-primary" style="width: 100%; margin-top: 1rem; border-radius: 12px; padding: 1rem;" onclick="saveSettings()" id="save-set-btn">Save Changes</button>
+        <div class="form-group"><label>Interests / Skills</label><input type="text" id="set-interests" class="form-input" placeholder="e.g. Coding, Design, Data"></div>
+        <button class="btn-primary" style="width:100%;margin-top:1rem;border-radius:12px;padding:1rem;" onclick="saveSettings()" id="save-set-btn">Save Changes</button>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ── THEME & UI ──
+// ── THEME & UI ──────────────────────────────────────────────
 const themes = ['system', 'light', 'dark'];
 const themeIcons = { 'system': '💻', 'light': '☀️', 'dark': '🌙' };
 function cycleTheme() { let c = localStorage.getItem('enet_theme') || 'system'; let n = themes[(themes.indexOf(c) + 1) % themes.length]; localStorage.setItem('enet_theme', n); applyTheme(n); }
@@ -545,39 +671,42 @@ function switchTab(sectionId) {
     document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
     document.getElementById(sectionId).style.display = 'block';
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if(sectionId === 'creator-section') document.getElementById('nav-creator').classList.add('active');
-    if(sectionId === 'students-section') { document.getElementById('nav-students').classList.add('active'); fetchMyStudents(); }
-    if(sectionId === 'assignments-section') { document.getElementById('nav-assignments').classList.add('active'); fetchAssignments(); }
-    if(sectionId === 'dashboard-overview') { document.getElementById('nav-dashboard').classList.add('active'); fetchMyCourses(); }
-    if(window.innerWidth <= 992) toggleSidebar();
+    const map = { 'creator-section': 'nav-creator', 'students-section': 'nav-students', 'assignments-section': 'nav-assignments', 'dashboard-overview': 'nav-dashboard', 'materials-section': 'nav-materials' };
+    if (map[sectionId]) document.getElementById(map[sectionId]).classList.add('active');
+    if (sectionId === 'students-section') fetchMyStudents();
+    if (sectionId === 'assignments-section') fetchAssignments();
+    if (sectionId === 'dashboard-overview') fetchMyCourses();
+    if (sectionId === 'materials-section') fetchMaterials();
+    if (window.innerWidth <= 992) toggleSidebar();
 }
 
 window.setCourseType = function(type) {
     const isEvent = type === 'event'; document.getElementById('is-event-course').value = String(isEvent);
     const bm = document.getElementById('btn-type-main'), be = document.getElementById('btn-type-event');
     bm.classList.remove('active-main', 'active-event'); be.classList.remove('active-main', 'active-event');
-    if (isEvent) { be.classList.add('active-event'); document.getElementById('event-info-banner').classList.add('visible'); document.getElementById('price-label').innerHTML = 'Public Price (₦) * <span style="font-weight:normal; color:var(--text-muted);">(Shown to non-members)</span>'; } 
-    else { bm.classList.add('active-main'); document.getElementById('event-info-banner').classList.remove('visible'); document.getElementById('price-label').innerHTML = 'Price (₦) * <span style="font-weight:normal; color:var(--text-muted);">(Set to 0 for FREE)</span>'; }
-}
+    if (isEvent) { be.classList.add('active-event'); document.getElementById('event-info-banner').classList.add('visible'); document.getElementById('price-label').innerHTML = 'Public Price (₦) * <span style="font-weight:normal;color:var(--text-muted);">(Non-members)</span>'; }
+    else { bm.classList.add('active-main'); document.getElementById('event-info-banner').classList.remove('visible'); document.getElementById('price-label').innerHTML = 'Price (₦) * <span style="font-weight:normal;color:var(--text-muted);">(0 = FREE)</span>'; }
+};
 
-// ── SUPABASE ──
+// ── SUPABASE ─────────────────────────────────────────────────
 const sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
 let currentInstructorId = null;
 let instructorSubmissions = [];
 let userProfile = null;
 let newAvatarFile = null;
+let myMaterials = [];
+let myCourses = [];
 
 window.addEventListener('load', async () => {
     applyTheme(localStorage.getItem('enet_theme') || 'system');
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = "login.html"; return; }
-    
     const ghostId = localStorage.getItem('enet_impersonate_id');
     if (ghostId) {
         currentInstructorId = ghostId;
         const { data: p } = await sb.from('profiles').select('*').eq('id', ghostId).single();
         userProfile = p;
-        if (p) document.getElementById('welcome-msg').innerHTML = `<span style="color: var(--danger);">[GHOST]</span> Viewing as ${p.first_name}`;
+        if (p) document.getElementById('welcome-msg').innerHTML = `<span style="color:var(--danger);">[GHOST]</span> Viewing as ${p.first_name}`;
         const lb = document.getElementById('logoutBtn');
         lb.innerHTML = `Exit Ghost Mode`; lb.onclick = () => { localStorage.removeItem('enet_impersonate_id'); window.close(); };
     } else {
@@ -588,290 +717,165 @@ window.addEventListener('load', async () => {
     }
     fetchMyCourses();
     loadNotifications();
-    setInterval(loadNotifications, 60000); // poll every 60s
+    setInterval(loadNotifications, 60000);
+
+    const zone = document.getElementById('mat-drop-zone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); if (e.dataTransfer.files[0]) handleMatFileSelect(e.dataTransfer.files[0]); });
 });
 
-// Close notif panel when clicking outside
 document.addEventListener('click', function(e) {
     const wrap = document.getElementById('notif-wrap');
-    if (wrap && !wrap.contains(e.target)) {
-        document.getElementById('notif-panel').classList.remove('show');
-    }
+    if (wrap && !wrap.contains(e.target)) document.getElementById('notif-panel').classList.remove('show');
 });
 
 window.forceLogout = async () => { try { await sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); window.location.href = 'index.html'; } };
 
-// ── NOTIFICATION SYSTEM ──
+// ── NOTIFICATIONS ──────────────────────────────────────────
 const NOTIF_STORAGE_KEY = 'enet_teacher_notif_seen';
-
-function getSeenState() {
-    try { return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}'); } catch { return {}; }
-}
-function saveSeenState(state) {
-    localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(state));
-}
-
-function timeAgo(dateStr) {
-    const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-    if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
-    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
+function getSeenState() { try { return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || '{}'); } catch { return {}; } }
+function saveSeenState(state) { localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(state)); }
+function timeAgo(dateStr) { const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000); if (diff < 60) return 'Just now'; if (diff < 3600) return Math.floor(diff / 60) + 'm ago'; if (diff < 86400) return Math.floor(diff / 3600) + 'h ago'; if (diff < 604800) return Math.floor(diff / 86400) + 'd ago'; return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
 async function loadNotifications() {
     try {
-        const seen = getSeenState();
-        const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(); // last 7 days
-
-        // Fetch in parallel: community posts, new courses, blog posts, new assignment submissions
+        const seen = getSeenState(); const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
         const [postsRes, coursesRes, blogsRes, subsRes] = await Promise.all([
             sb.from('posts').select('id, content, created_at, profiles(first_name, last_name)').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
-            sb.from('courses').select('id, title, created_at, updated_at, is_event_course').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
+            sb.from('courses').select('id, title, created_at, is_event_course').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
             sb.from('blog_posts').select('id, title, created_at').gte('created_at', cutoff).order('created_at', { ascending: false }).limit(10),
-            sb.from('assignment_submissions').select('id, title, submitted_at, student_id, profiles(first_name, last_name)').gte('submitted_at', cutoff).order('submitted_at', { ascending: false }).limit(20)
+            sb.from('assignment_submissions').select('id, title, submitted_at, profiles(first_name, last_name)').gte('submitted_at', cutoff).order('submitted_at', { ascending: false }).limit(20)
         ]);
-
         const notifications = [];
-
-        // Community posts
-        (postsRes.data || []).forEach(p => {
-            const id = 'comm_' + p.id;
-            const name = `${p.profiles?.first_name || ''} ${p.profiles?.last_name || ''}`.trim() || 'Someone';
-            const preview = (p.content || '').slice(0, 60) + ((p.content || '').length > 60 ? '...' : '');
-            notifications.push({
-                id, type: 'comm', icon: '💬',
-                title: `${name} posted in Community`,
-                sub: preview || 'Shared something new',
-                time: p.created_at,
-                href: 'community.html',
-                unread: !seen[id]
-            });
-        });
-
-        // New courses
-        (coursesRes.data || []).forEach(c => {
-            const id = 'course_' + c.id;
-            notifications.push({
-                id, type: 'course', icon: '📚',
-                title: `New Course: ${c.title}`,
-                sub: c.is_event_course ? 'Event course published' : 'Main course published',
-                time: c.created_at,
-                href: 'courses.html',
-                unread: !seen[id]
-            });
-        });
-
-        // Blog posts
-        (blogsRes.data || []).forEach(b => {
-            const id = 'blog_' + b.id;
-            notifications.push({
-                id, type: 'blog', icon: '📰',
-                title: `New Blog: ${b.title}`,
-                sub: 'New article published on the academy blog',
-                time: b.created_at,
-                href: 'blog.html',
-                unread: !seen[id]
-            });
-        });
-
-        // New assignment submissions (for this instructor's courses)
+        (postsRes.data || []).forEach(p => { const id = 'comm_' + p.id; const name = `${p.profiles?.first_name || ''} ${p.profiles?.last_name || ''}`.trim() || 'Someone'; notifications.push({ id, type: 'comm', icon: '💬', title: `${name} posted in Community`, sub: (p.content || '').slice(0, 60) || 'New community post', time: p.created_at, href: 'community.html', unread: !seen[id] }); });
+        (coursesRes.data || []).forEach(c => { const id = 'course_' + c.id; notifications.push({ id, type: 'course', icon: '📚', title: `New Course: ${c.title}`, sub: c.is_event_course ? 'Event course' : 'Main course', time: c.created_at, href: 'courses.html', unread: !seen[id] }); });
+        (blogsRes.data || []).forEach(b => { const id = 'blog_' + b.id; notifications.push({ id, type: 'blog', icon: '📰', title: `New Blog: ${b.title}`, sub: 'New academy article', time: b.created_at, href: 'blog.html', unread: !seen[id] }); });
         if (currentInstructorId) {
-            const { data: myCourses } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
-            const myCourseIds = (myCourses || []).map(c => c.id);
-            (subsRes.data || []).filter(s => myCourseIds.includes(s.course_id) || true).forEach(s => {
-                const id = 'assign_' + s.id;
-                const name = `${s.profiles?.first_name || ''} ${s.profiles?.last_name || ''}`.trim() || 'A student';
-                notifications.push({
-                    id, type: 'assign', icon: '📝',
-                    title: `Assignment submitted`,
-                    sub: `${name}: "${s.title || 'Untitled'}"`,
-                    time: s.submitted_at,
-                    href: '#',
-                    onclick: `switchTab('assignments-section')`,
-                    unread: !seen[id]
-                });
-            });
+            const { data: myCoursesList } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
+            const myCourseIds = (myCoursesList || []).map(c => c.id);
+            (subsRes.data || []).forEach(s => { const id = 'assign_' + s.id; const name = `${s.profiles?.first_name || ''} ${s.profiles?.last_name || ''}`.trim() || 'A student'; notifications.push({ id, type: 'assign', icon: '📝', title: `Assignment submitted`, sub: `${name}: "${s.title || 'Untitled'}"`, time: s.submitted_at, href: '#', onclick: `switchTab('assignments-section')`, unread: !seen[id] }); });
         }
-
-        // Sort by time descending
         notifications.sort((a, b) => new Date(b.time) - new Date(a.time));
-
         const unreadCount = notifications.filter(n => n.unread).length;
         const badge = document.getElementById('notif-badge');
-        badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-        badge.classList.toggle('show', unreadCount > 0);
-
+        badge.textContent = unreadCount > 9 ? '9+' : unreadCount; badge.classList.toggle('show', unreadCount > 0);
         renderNotifications(notifications);
-    } catch (err) {
-        console.error('Notification load error:', err);
-    }
+    } catch (err) { console.error('Notification error:', err); }
 }
-
 function renderNotifications(notifications) {
     const list = document.getElementById('notif-list');
-    if (!notifications.length) {
-        list.innerHTML = '<div class="notif-empty">🎉 You\'re all caught up!</div>';
-        return;
-    }
+    if (!notifications.length) { list.innerHTML = '<div class="notif-empty">🎉 All caught up!</div>'; return; }
     list.innerHTML = notifications.slice(0, 20).map(n => {
         const clickHandler = n.onclick ? `onclick="${n.onclick}; document.getElementById('notif-panel').classList.remove('show'); markOneRead('${n.id}');"` : `onclick="markOneRead('${n.id}')"`;
-        const tag = n.href && !n.onclick ? 'a' : 'div';
-        const hrefAttr = n.href && !n.onclick ? `href="${n.href}"` : '';
-        return `<${tag} class="notif-item ${n.unread ? 'unread ' + n.type : ''}" ${hrefAttr} ${clickHandler} data-id="${n.id}">
-            <div class="notif-icon ${n.type}">${n.icon}</div>
-            <div class="notif-text">
-                <strong>${escapeHtml(n.title)}</strong>
-                <span>${escapeHtml(n.sub)}</span>
-                <span style="display:block; margin-top:2px; font-size:.7rem; color:var(--text-muted);">${timeAgo(n.time)}</span>
-            </div>
-            ${n.unread ? '<div class="notif-dot"></div>' : ''}
-        </${tag}>`;
+        const tag = n.href && !n.onclick ? 'a' : 'div'; const hrefAttr = n.href && !n.onclick ? `href="${n.href}"` : '';
+        return `<${tag} class="notif-item ${n.unread ? 'unread ' + n.type : ''}" ${hrefAttr} ${clickHandler} data-id="${n.id}"><div class="notif-icon ${n.type}">${n.icon}</div><div class="notif-text"><strong>${escapeHtml(n.title)}</strong><span>${escapeHtml(n.sub)}</span><span style="display:block;margin-top:2px;font-size:.7rem;color:var(--text-muted);">${timeAgo(n.time)}</span></div>${n.unread ? '<div class="notif-dot"></div>' : ''}</${tag}>`;
     }).join('');
 }
+function toggleNotifPanel() { document.getElementById('notif-panel').classList.toggle('show'); }
+function markOneRead(id) { const seen = getSeenState(); seen[id] = true; saveSeenState(seen); const item = document.querySelector(`[data-id="${id}"]`); if (item) { item.classList.remove('unread', 'comm', 'course', 'blog', 'assign'); const dot = item.querySelector('.notif-dot'); if (dot) dot.remove(); } const unread = document.querySelectorAll('.notif-item.unread').length; const badge = document.getElementById('notif-badge'); badge.textContent = unread > 9 ? '9+' : unread; badge.classList.toggle('show', unread > 0); }
+function markAllRead() { const seen = getSeenState(); document.querySelectorAll('.notif-item[data-id]').forEach(item => { seen[item.dataset.id] = true; }); saveSeenState(seen); loadNotifications(); document.getElementById('notif-panel').classList.remove('show'); showToast('All notifications marked as read', 'success'); }
 
-function escapeHtml(str) { const d = document.createElement('div'); d.textContent = str || ''; return d.innerHTML; }
-
-function toggleNotifPanel() {
-    document.getElementById('notif-panel').classList.toggle('show');
-}
-
-function markOneRead(id) {
-    const seen = getSeenState();
-    seen[id] = true;
-    saveSeenState(seen);
-    // Update UI immediately
-    const item = document.querySelector(`[data-id="${id}"]`);
-    if (item) { item.classList.remove('unread', 'comm', 'course', 'blog', 'assign'); const dot = item.querySelector('.notif-dot'); if (dot) dot.remove(); }
-    // Recount
-    const unread = document.querySelectorAll('.notif-item.unread').length;
-    const badge = document.getElementById('notif-badge');
-    badge.textContent = unread > 9 ? '9+' : unread;
-    badge.classList.toggle('show', unread > 0);
-}
-
-function markAllRead() {
-    const seen = getSeenState();
-    document.querySelectorAll('.notif-item[data-id]').forEach(item => { seen[item.dataset.id] = true; });
-    saveSeenState(seen);
-    loadNotifications();
-    document.getElementById('notif-panel').classList.remove('show');
-    showToast('All notifications marked as read', 'success');
-}
-
-// ── PROFILE SETTINGS ──
-function openSettings() {
-    if (!userProfile) return;
-    document.getElementById('set-first').value = userProfile.first_name || '';
-    document.getElementById('set-last').value = userProfile.last_name || '';
-    document.getElementById('set-phone').value = userProfile.phone || '';
-    document.getElementById('set-address').value = userProfile.address || '';
-    document.getElementById('set-dob').value = userProfile.date_of_birth || '';
-    document.getElementById('set-state').value = userProfile.state || '';
-    document.getElementById('set-country').value = userProfile.country || '';
-    document.getElementById('set-interests').value = userProfile.interests ? userProfile.interests.join(', ') : '';
-    document.getElementById('set-avatar-preview').src = userProfile.avatar_url || 'https://ui-avatars.com/api/?name=' + (userProfile.first_name||'U') + '&background=02014a&color=fff';
-    document.getElementById('settings-modal').classList.add('show');
-}
+// ── PROFILE SETTINGS ───────────────────────────────────────
+function openSettings() { if (!userProfile) return; document.getElementById('set-first').value = userProfile.first_name || ''; document.getElementById('set-last').value = userProfile.last_name || ''; document.getElementById('set-phone').value = userProfile.phone || ''; document.getElementById('set-address').value = userProfile.address || ''; document.getElementById('set-dob').value = userProfile.date_of_birth || ''; document.getElementById('set-state').value = userProfile.state || ''; document.getElementById('set-country').value = userProfile.country || ''; document.getElementById('set-interests').value = userProfile.interests ? userProfile.interests.join(', ') : ''; document.getElementById('set-avatar-preview').src = userProfile.avatar_url || 'https://ui-avatars.com/api/?name=' + (userProfile.first_name || 'U') + '&background=02014a&color=fff'; document.getElementById('settings-modal').classList.add('show'); }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('show'); newAvatarFile = null; }
-function handleAvatarSelect(e) {
-    const file = e.target.files[0]; if (!file) return;
-    newAvatarFile = file; document.getElementById('set-avatar-preview').src = URL.createObjectURL(file);
-}
+function handleAvatarSelect(e) { const file = e.target.files[0]; if (!file) return; newAvatarFile = file; document.getElementById('set-avatar-preview').src = URL.createObjectURL(file); }
 async function saveSettings() {
     const btn = document.getElementById('save-set-btn'); btn.disabled = true; btn.textContent = 'Saving...';
     try {
         let avatarUrl = userProfile.avatar_url;
-        if (newAvatarFile) {
-            const fileName = `avatar_${currentInstructorId}_${Date.now()}`;
-            await sb.storage.from('community_images').upload(fileName, newAvatarFile, { upsert: true });
-            const { data } = sb.storage.from('community_images').getPublicUrl(fileName);
-            avatarUrl = data.publicUrl;
-        }
+        if (newAvatarFile) { const fileName = `avatar_${currentInstructorId}_${Date.now()}`; await sb.storage.from('community_images').upload(fileName, newAvatarFile, { upsert: true }); const { data } = sb.storage.from('community_images').getPublicUrl(fileName); avatarUrl = data.publicUrl; }
         const interestsStr = document.getElementById('set-interests').value.trim();
         const interestsArray = interestsStr ? interestsStr.split(',').map(i => i.trim()) : [];
         const updates = { first_name: document.getElementById('set-first').value.trim(), last_name: document.getElementById('set-last').value.trim(), phone: document.getElementById('set-phone').value.trim(), address: document.getElementById('set-address').value.trim(), date_of_birth: document.getElementById('set-dob').value || null, state: document.getElementById('set-state').value.trim(), country: document.getElementById('set-country').value.trim(), interests: interestsArray, avatar_url: avatarUrl };
         const { error } = await sb.from('profiles').update(updates).eq('id', currentInstructorId);
         if (error) throw error;
-        showToast('Profile updated successfully!');
-        Object.assign(userProfile, updates);
-        closeSettings();
-        if (!localStorage.getItem('enet_impersonate_id')) { document.getElementById('welcome-msg').textContent = `Welcome back, ${userProfile.first_name}!`; }
-    } catch(err) { alert(err.message); }
+        showToast('Profile updated!', 'success'); Object.assign(userProfile, updates); closeSettings();
+        if (!localStorage.getItem('enet_impersonate_id')) document.getElementById('welcome-msg').textContent = `Welcome back, ${userProfile.first_name}!`;
+    } catch (err) { alert(err.message); }
     btn.disabled = false; btn.textContent = 'Save Changes';
 }
 
-// ── STATS ──
+// ── STATS ──────────────────────────────────────────────────
 async function fetchInstructorStats(courseIds) {
-    if (!courseIds || courseIds.length === 0) { document.getElementById('stat-revenue').textContent = '₦0'; document.getElementById('stat-rating').textContent = '0.0 ★'; return; }
+    if (!courseIds || !courseIds.length) { document.getElementById('stat-revenue').textContent = '₦0'; return; }
     try {
         const { data: enrollments } = await sb.from('enrollments').select('course_id, enrollment_type, courses(price)').in('course_id', courseIds).neq('enrollment_type', 'member_perk');
         let totalRev = 0;
-        if (enrollments) { enrollments.forEach(en => { totalRev += Number(en.courses?.price || 0); }); }
+        if (enrollments) enrollments.forEach(en => { totalRev += Number(en.courses?.price || 0); });
         document.getElementById('stat-revenue').textContent = '₦' + totalRev.toLocaleString();
-        const { data: reviews } = await sb.from('course_reviews').select('rating').in('course_id', courseIds);
-        let avgRating = 0;
-        if (reviews && reviews.length > 0) { const sum = reviews.reduce((acc, curr) => acc + Number(curr.rating), 0); avgRating = (sum / reviews.length).toFixed(1); }
-        document.getElementById('stat-rating').textContent = avgRating + ' ★';
     } catch (err) { console.error('Stats error:', err); }
 }
 
+// ── MY COURSES ─────────────────────────────────────────────
 async function fetchMyCourses() {
     if (!currentInstructorId) return;
     try {
         const { data, error } = await sb.from('courses').select('*').eq('instructor_id', currentInstructorId).order('created_at', { ascending: false });
         if (error) throw error;
-        document.getElementById('stat-courses').textContent = data.length;
-        const courseIds = data.map(c => c.id);
+        myCourses = data || [];
+        document.getElementById('stat-courses').textContent = myCourses.length;
+        const courseIds = myCourses.map(c => c.id);
         fetchInstructorStats(courseIds);
+
+        // Populate course selects
+        const opts = myCourses.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+        document.getElementById('mat-course-select').innerHTML = '<option value="">Select a course...</option>' + opts;
+        document.getElementById('mat-filter-course').innerHTML = '<option value="">All Courses</option>' + opts;
+
         const list = document.getElementById('my-courses-list');
-        if (data.length === 0) { list.innerHTML = "<p style='text-align:center; color:var(--text-muted); padding:2rem;'>No courses published yet.</p>"; return; }
-        let html = '<div style="display:flex; flex-direction:column; gap:15px;">';
-        data.forEach(c => {
+        if (!myCourses.length) { list.innerHTML = "<p style='text-align:center;color:var(--text-muted);padding:2rem;'>No courses published yet.</p>"; return; }
+        list.innerHTML = '<div style="display:flex;flex-direction:column;gap:15px;">' + myCourses.map(c => {
             const p = Number(c.price) === 0 ? "FREE" : `₦${Number(c.price).toLocaleString()}`;
             const isEvent = c.is_event_course === true;
-            html += `<div style="display:flex; align-items:center; gap:15px; padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-light); flex-wrap: wrap; ${isEvent ? 'border-left: 4px solid var(--event-color);' : ''}">
-                <img src="${c.image_url || ''}" style="width:120px; height:80px; object-fit:cover; border-radius:8px; background: var(--border);">
-                <div style="flex:1; min-width: 200px;">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+            return `<div style="display:flex;align-items:center;gap:15px;padding:15px;border:1px solid var(--border);border-radius:12px;background:var(--bg-light);flex-wrap:wrap;${isEvent ? 'border-left:4px solid var(--event-color);' : ''}">
+                <img src="${c.image_url || ''}" style="width:120px;height:80px;object-fit:cover;border-radius:8px;background:var(--border);">
+                <div style="flex:1;min-width:200px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
                         <h4 style="color:var(--brand-navy);">${c.title}</h4>
-                        ${isEvent ? '<span class="pill-event">Event Course</span>' : '<span class="pill-main">Main Course</span>'}
+                        <span style="font-size:.7rem;font-weight:800;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:${isEvent ? 'rgba(124,58,237,0.12)' : 'rgba(0,160,223,0.12)'};color:${isEvent ? 'var(--event-color)' : 'var(--accent-cyan)'};">${isEvent ? 'Event' : 'Main'}</span>
                     </div>
-                    <span style="font-size:0.8rem; font-weight:bold; color:var(--accent-cyan); background: rgba(0, 160, 223, 0.1); padding: 2px 8px; border-radius: 4px;">${p}</span>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Published: ${new Date(c.created_at).toLocaleDateString()}</div>
+                    <span style="font-size:.8rem;font-weight:bold;color:var(--accent-cyan);background:rgba(0,160,223,.1);padding:2px 8px;border-radius:4px;">${p}</span>
                 </div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
                     <a href="learn.html?course=${c.id}" target="_blank" class="btn-outline">Preview</a>
                     <button class="btn-outline" onclick="editCourse('${c.id}')">Edit</button>
+                    <button class="btn-outline" style="border-color:var(--materials-color);color:var(--materials-color);" onclick="openUploadModalForCourse('${c.id}')">+ Material</button>
                     <button class="btn-outline danger" onclick="deleteCourse('${c.id}')">Delete</button>
                 </div>
             </div>`;
-        });
-        list.innerHTML = html + '</div>';
-    } catch(e) { document.getElementById('my-courses-list').innerHTML = "<p style='color:var(--danger);'>Failed to load courses.</p>"; }
+        }).join('') + '</div>';
+
+        // Fetch materials count
+        const { data: matData } = await sb.from('learning_materials').select('id').eq('instructor_id', currentInstructorId).eq('is_active', true);
+        const matCount = (matData || []).length;
+        document.getElementById('stat-materials').textContent = matCount;
+        document.getElementById('nav-mat-count').textContent = matCount;
+    } catch (e) { document.getElementById('my-courses-list').innerHTML = "<p style='color:var(--danger);'>Failed to load courses.</p>"; }
 }
 
+// ── STUDENTS ───────────────────────────────────────────────
 async function fetchMyStudents() {
     if (!currentInstructorId) return;
     try {
         const { data: courses } = await sb.from('courses').select('id, title').eq('instructor_id', currentInstructorId);
         const tbody = document.getElementById('students-table-body');
-        if (!courses || courses.length === 0) { document.getElementById('stat-students').textContent = '0'; tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No students yet.</td></tr>`; return; }
+        if (!courses || !courses.length) { document.getElementById('stat-students').textContent = '0'; tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No students yet.</td></tr>`; return; }
         const courseIds = courses.map(c => c.id);
         const { data: enrollments } = await sb.from('enrollments').select('enrolled_at, profiles(first_name, last_name, email), courses(title)').in('course_id', courseIds).order('enrolled_at', { ascending: false });
         document.getElementById('stat-students').textContent = enrollments ? enrollments.length : 0;
-        if (!enrollments || enrollments.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No students yet.</td></tr>`; return; }
-        tbody.innerHTML = enrollments.map(en => `<tr><td><div class="user-cell"><div class="uav">${(en.profiles?.first_name||'S')[0].toUpperCase()}</div><div><div class="uname">${en.profiles?.first_name||'Student'} ${en.profiles?.last_name||''}</div><div style="font-size: 0.75rem; color: var(--text-muted);">${en.profiles?.email || ''}</div></div></div></td><td style="font-weight: 500; color: var(--brand-navy);">${en.courses?.title || ''}</td><td>${new Date(en.enrolled_at).toLocaleDateString()}</td></tr>`).join('');
-    } catch(err) { console.error(err); }
+        if (!enrollments || !enrollments.length) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No students yet.</td></tr>`; return; }
+        tbody.innerHTML = enrollments.map(en => `<tr><td><div class="user-cell"><div class="uav">${(en.profiles?.first_name || 'S')[0].toUpperCase()}</div><div><div>${en.profiles?.first_name || 'Student'} ${en.profiles?.last_name || ''}</div><div style="font-size:.75rem;color:var(--text-muted);">${en.profiles?.email || ''}</div></div></div></td><td style="font-weight:500;color:var(--brand-navy);">${en.courses?.title || ''}</td><td>${new Date(en.enrolled_at).toLocaleDateString()}</td></tr>`).join('');
+    } catch (err) { console.error(err); }
 }
 
+// ── ASSIGNMENTS ────────────────────────────────────────────
 async function fetchAssignments() {
     if (!currentInstructorId) return;
     const tbody = document.getElementById('assignments-table-body');
     try {
         const { data: courses } = await sb.from('courses').select('id').eq('instructor_id', currentInstructorId);
-        if (!courses || courses.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`; return; }
+        if (!courses || !courses.length) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">No assignment submissions yet.</td></tr>`; return; }
         const courseIds = courses.map(c => c.id);
         const { data: subs, error } = await sb.from('assignment_submissions').select('*, courses(title)').in('course_id', courseIds).order('submitted_at', { ascending: false });
         if (error) throw error;
@@ -882,25 +886,25 @@ async function fetchAssignments() {
             subs.forEach(s => s.profiles = profMap[s.student_id]);
         }
         instructorSubmissions = subs || [];
-        if (instructorSubmissions.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No assignment submissions yet.</td></tr>`; return; }
+        if (!instructorSubmissions.length) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">No assignment submissions yet.</td></tr>`; return; }
         tbody.innerHTML = instructorSubmissions.map(s => {
             const fName = s.profiles?.first_name || 'Student'; const lName = s.profiles?.last_name || '';
             const date = new Date(s.submitted_at).toLocaleDateString();
-            const status = s.grade ? `<span style="color:var(--success); font-weight:bold; font-size:0.85rem; background:rgba(5,205,153,0.1); padding:4px 8px; border-radius:6px;">Graded (${s.grade})</span>` : `<span style="color:#b08800; font-weight:bold; font-size:0.85rem; background:rgba(255,193,7,0.15); padding:4px 8px; border-radius:6px;">Pending Review</span>`;
-            return `<tr><td><div class="user-cell"><div class="uav" style="background:var(--navy-light);">${fName.charAt(0).toUpperCase()}</div><div class="uname">${fName} ${lName}</div></div></td><td><div style="font-weight: 700; color: var(--brand-navy); margin-bottom:4px;">${s.title}</div><div style="font-size: 0.75rem; color: var(--text-muted);">${s.courses?.title}</div></td><td>${date}</td><td>${status}</td><td><button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? 'Edit Grade' : 'Grade Submission'}</button></td></tr>`;
+            const status = s.grade ? `<span style="color:var(--success);font-weight:bold;font-size:.85rem;background:rgba(5,205,153,.1);padding:4px 8px;border-radius:6px;">Graded (${s.grade})</span>` : `<span style="color:#b08800;font-weight:bold;font-size:.85rem;background:rgba(255,193,7,.15);padding:4px 8px;border-radius:6px;">Pending</span>`;
+            return `<tr><td><div class="user-cell"><div class="uav" style="background:var(--navy-light);">${fName.charAt(0).toUpperCase()}</div><div>${fName} ${lName}</div></div></td><td><div style="font-weight:700;color:var(--brand-navy);margin-bottom:4px;">${s.title}</div><div style="font-size:.75rem;color:var(--text-muted);">${s.courses?.title}</div></td><td>${date}</td><td>${status}</td><td><button class="btn-outline" onclick="openGradingModal('${s.id}')">${s.grade ? 'Edit Grade' : 'Grade'}</button></td></tr>`;
         }).join('');
-    } catch(e) { console.error("Error fetching assignments:", e); tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--danger);">Error loading assignments. Please refresh.</td></tr>`; }
+    } catch (e) { console.error("Error fetching assignments:", e); tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--danger);">Error loading assignments.</td></tr>`; }
 }
 
 window.openGradingModal = function(subId) {
-    const s = instructorSubmissions.find(x => x.id === subId); if(!s) return;
+    const s = instructorSubmissions.find(x => x.id === subId); if (!s) return;
     document.getElementById('grading-submission-id').value = s.id;
     document.getElementById('grade-student-name').textContent = `${s.profiles?.first_name || 'Student'} ${s.profiles?.last_name || ''}`;
     document.getElementById('grade-task-title').textContent = `${s.courses?.title || ''} — ${s.title}`;
-    document.getElementById('grade-student-desc').textContent = s.description || 'No additional notes provided by the student.';
+    document.getElementById('grade-student-desc').textContent = s.description || 'No notes.';
     const filesDiv = document.getElementById('grade-student-files');
-    if(s.file_urls && s.file_urls.length > 0) { filesDiv.innerHTML = s.file_urls.map(url => { const name = url.split('/').pop().split('?')[0] || 'Download File'; return `<a href="${url}" target="_blank" class="btn-outline success" style="font-size:0.8rem; text-decoration:none;">↓ ${name}</a>`; }).join(''); } 
-    else { filesDiv.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted);">No files attached to this submission.</span>'; }
+    if (s.file_urls && s.file_urls.length > 0) { filesDiv.innerHTML = s.file_urls.map(url => { const name = url.split('/').pop().split('?')[0] || 'File'; return `<a href="${url}" target="_blank" class="btn-outline" style="font-size:.8rem;text-decoration:none;border-color:var(--success);color:var(--success);">↓ ${name}</a>`; }).join(''); }
+    else { filesDiv.innerHTML = '<span style="font-size:.85rem;color:var(--text-muted);">No files attached.</span>'; }
     document.getElementById('grade-letter').value = s.grade || '';
     document.getElementById('grade-score').value = s.score || '';
     document.getElementById('grade-feedback').value = s.feedback || '';
@@ -912,40 +916,170 @@ window.submitGrade = async function() {
     const grade = document.getElementById('grade-letter').value;
     const score = document.getElementById('grade-score').value;
     const feedback = document.getElementById('grade-feedback').value.trim();
-    if(!grade) return showToast("Please select a letter grade.", "error");
+    if (!grade) return showToast("Please select a letter grade.", "error");
     const btn = document.getElementById('save-grade-btn'); btn.disabled = true; btn.textContent = "Saving...";
     try {
         const { error } = await sb.from('assignment_submissions').update({ grade, score: score ? Number(score) : null, feedback, graded_at: new Date().toISOString() }).eq('id', subId);
-        if(error) throw error;
-        showToast("Grade saved successfully!", "success"); closeGradingModal(); fetchAssignments();
-    } catch(e) { console.error(e); showToast("Failed to save grade.", "error"); }
+        if (error) throw error;
+        showToast("Grade saved!", "success"); closeGradingModal(); fetchAssignments();
+    } catch (e) { showToast("Failed to save grade.", "error"); }
     finally { btn.disabled = false; btn.textContent = "Save Grade"; }
 };
 
-// ── QUIZ BUILDER ──
-function toggleQuizBuilder() { const c = document.getElementById('require-quiz-toggle').checked; document.getElementById('quiz-builder-section').style.display = c ? 'block' : 'none'; if(c && document.getElementById('quiz-questions-container').children.length===0) window.addQuizQuestion(); }
-window.addQuizQuestion = function(qText='', optA='', optB='', optC='', optD='', cIdx=0) {
-    const qId = 'q_'+Date.now()+Math.floor(Math.random()*1000); const e = s=>String(s).replace(/"/g,'&quot;');
-    document.getElementById('quiz-questions-container').insertAdjacentHTML('beforeend', `<div class="quiz-question-box" id="${qId}"><button type="button" class="remove-q-btn" onclick="document.getElementById('${qId}').remove()">✕</button><input type="text" class="q-text" placeholder="Enter question..." value="${e(qText)}"><div class="quiz-options"><label class="quiz-option"><input type="radio" name="correct-${qId}" value="0" ${cIdx===0?'checked':''}><input type="text" class="q-opt" placeholder="Option A" value="${e(optA)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="1" ${cIdx===1?'checked':''}><input type="text" class="q-opt" placeholder="Option B" value="${e(optB)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="2" ${cIdx===2?'checked':''}><input type="text" class="q-opt" placeholder="Option C" value="${e(optC)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="3" ${cIdx===3?'checked':''}><input type="text" class="q-opt" placeholder="Option D" value="${e(optD)}"></label></div></div>`);
-};
+// ── LEARNING MATERIALS ─────────────────────────────────────
+const MAT_ICONS = { pdf:'📄', video:'🎬', audio:'🎵', document:'📝', spreadsheet:'📊', presentation:'📋', archive:'🗜️', other:'📁' };
+const MAT_EXTS = { pdf:'pdf', mp4:'video', mov:'video', mp3:'audio', wav:'audio', doc:'document', docx:'document', xlsx:'spreadsheet', xls:'spreadsheet', csv:'spreadsheet', ppt:'presentation', pptx:'presentation', zip:'archive', rar:'archive', txt:'document', png:'other', jpg:'other', jpeg:'other' };
 
-// ── COURSE BUILDER ──
+function getMatType(filename) { const ext = (filename.split('.').pop() || '').toLowerCase(); return MAT_EXTS[ext] || 'other'; }
+function getMatIcon(type) { return MAT_ICONS[type] || '📁'; }
+function getMatIconClass(type) { const m = { pdf:'pdf', video:'video', audio:'audio', document:'doc', spreadsheet:'sheet', presentation:'ppt', archive:'archive', other:'other' }; return m[type] || 'other'; }
+function formatFileSize(bytes) { if (!bytes) return ''; if (bytes < 1024) return bytes + ' B'; if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'; return (bytes / (1024 * 1024)).toFixed(1) + ' MB'; }
+
+let matSelectedFile = null;
+function handleMatFileSelect(file) {
+    if (!file) return;
+    if (file.size > 100 * 1024 * 1024) { showToast('File exceeds 100MB limit.', 'error'); return; }
+    matSelectedFile = file;
+    const type = getMatType(file.name);
+    document.getElementById('mat-file-icon').textContent = getMatIcon(type);
+    document.getElementById('mat-file-name').textContent = file.name;
+    document.getElementById('mat-file-size').textContent = formatFileSize(file.size);
+    document.getElementById('mat-file-preview').style.display = 'flex';
+}
+function clearMatFile() { matSelectedFile = null; document.getElementById('mat-file-input').value = ''; document.getElementById('mat-file-preview').style.display = 'none'; document.getElementById('mat-progress-outer').style.display = 'none'; document.getElementById('mat-progress-bar').style.width = '0%'; }
+
+function openUploadModal() { document.getElementById('upload-modal').classList.add('show'); }
+function openUploadModalForCourse(courseId) { document.getElementById('mat-course-select').value = courseId; openUploadModal(); }
+function closeUploadModal() { document.getElementById('upload-modal').classList.remove('show'); clearMatFile(); document.getElementById('mat-title').value = ''; document.getElementById('mat-description').value = ''; }
+
+async function uploadMaterial() {
+    const courseId = document.getElementById('mat-course-select').value;
+    const title = document.getElementById('mat-title').value.trim();
+    if (!courseId) { showToast('Please select a course.', 'error'); return; }
+    if (!title) { showToast('Please enter a material title.', 'error'); return; }
+    if (!matSelectedFile) { showToast('Please select a file to upload.', 'error'); return; }
+    const btn = document.getElementById('mat-upload-btn'); btn.disabled = true; btn.textContent = 'Uploading...';
+    const progressOuter = document.getElementById('mat-progress-outer'); progressOuter.style.display = 'block';
+    const progressBar = document.getElementById('mat-progress-bar');
+    try {
+        // Animate progress (simulated — Supabase storage doesn't give real progress)
+        let prog = 0; const progInterval = setInterval(() => { prog = Math.min(prog + Math.random() * 15, 85); progressBar.style.width = prog + '%'; }, 200);
+        const ext = matSelectedFile.name.split('.').pop();
+        const fileName = `materials/${currentInstructorId}/${Date.now()}_${Math.random().toString(36).substr(2, 6)}.${ext}`;
+        const { error: uploadErr } = await sb.storage.from('learning_materials').upload(fileName, matSelectedFile, { upsert: false });
+        if (uploadErr) throw new Error('Storage upload failed: ' + uploadErr.message);
+        const { data: urlData } = sb.storage.from('learning_materials').getPublicUrl(fileName);
+        const matType = getMatType(matSelectedFile.name);
+        const { error: insertErr } = await sb.from('learning_materials').insert({
+            course_id: courseId, instructor_id: currentInstructorId, title,
+            description: document.getElementById('mat-description').value.trim() || null,
+            file_url: urlData.publicUrl, file_name: matSelectedFile.name,
+            file_type: matSelectedFile.type, file_size_bytes: matSelectedFile.size,
+            material_type: matType, is_active: true
+        });
+        if (insertErr) throw insertErr;
+        clearInterval(progInterval); progressBar.style.width = '100%';
+        showToast('Material uploaded! Admin will assign it to relevant students.', 'success');
+        closeUploadModal();
+        fetchMaterials();
+        fetchMyCourses();
+    } catch (err) { console.error(err); showToast('Upload failed: ' + err.message, 'error'); }
+    finally { btn.disabled = false; btn.textContent = 'Upload Material'; }
+}
+
+async function fetchMaterials() {
+    if (!currentInstructorId) return;
+    try {
+        const { data, error } = await sb.from('learning_materials').select('*, courses(title)').eq('instructor_id', currentInstructorId).eq('is_active', true).order('created_at', { ascending: false });
+        if (error) throw error;
+        myMaterials = data || [];
+        document.getElementById('stat-materials').textContent = myMaterials.length;
+        document.getElementById('nav-mat-count').textContent = myMaterials.length;
+
+        // Fetch assignment counts for each material
+        if (myMaterials.length) {
+            const matIds = myMaterials.map(m => m.id);
+            const { data: assignData } = await sb.from('material_assignments').select('material_id').in('material_id', matIds);
+            const assignMap = {};
+            (assignData || []).forEach(a => { assignMap[a.material_id] = (assignMap[a.material_id] || 0) + 1; });
+            myMaterials.forEach(m => m._assignedCount = assignMap[m.id] || 0);
+        }
+        renderMaterials();
+    } catch (err) { console.error('Materials fetch error:', err); }
+}
+
+function renderMaterials() {
+    const courseFilter = document.getElementById('mat-filter-course').value;
+    const typeFilter = document.getElementById('mat-filter-type').value;
+    const search = (document.getElementById('mat-search').value || '').toLowerCase();
+    let filtered = myMaterials.filter(m => {
+        if (courseFilter && m.course_id !== courseFilter) return false;
+        if (typeFilter && m.material_type !== typeFilter) return false;
+        if (search && !m.title.toLowerCase().includes(search) && !(m.description || '').toLowerCase().includes(search)) return false;
+        return true;
+    });
+    document.getElementById('mat-count-label').textContent = `${filtered.length} material${filtered.length !== 1 ? 's' : ''}`;
+    const grid = document.getElementById('materials-grid');
+    if (!filtered.length) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📂</div><h4>${myMaterials.length ? 'No materials match your filter' : 'No materials uploaded yet'}</h4><p>${myMaterials.length ? 'Try clearing your filters.' : 'Click "Upload Material" to get started.'}</p></div>`;
+        return;
+    }
+    grid.innerHTML = filtered.map(m => {
+        const iconClass = getMatIconClass(m.material_type);
+        const icon = getMatIcon(m.material_type);
+        const course = m.courses?.title || 'Unknown Course';
+        const size = formatFileSize(m.file_size_bytes);
+        const date = new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const assignedText = m._assignedCount > 0 ? `✓ Assigned to ${m._assignedCount} student${m._assignedCount !== 1 ? 's' : ''}` : 'Not yet assigned to any student';
+        const assignedColor = m._assignedCount > 0 ? 'var(--success)' : 'var(--text-muted)';
+        return `<div class="material-card">
+            <div class="mat-icon-row">
+                <div class="mat-type-icon ${iconClass}">${icon}</div>
+                <div class="mat-title">${m.title}</div>
+            </div>
+            ${m.description ? `<div class="mat-desc">${m.description}</div>` : ''}
+            <div class="mat-meta">
+                <span class="mat-badge course">${course}</span>
+                ${size ? `<span class="mat-badge size">${size}</span>` : ''}
+            </div>
+            <div style="font-size:.75rem;color:${assignedColor};font-weight:600;display:flex;align-items:center;gap:4px;">${assignedText}</div>
+            <div style="font-size:.72rem;color:var(--text-muted);">Uploaded ${date}</div>
+            <div class="mat-actions">
+                <a href="${m.file_url}" target="_blank" class="btn-outline" style="flex:1;font-size:.8rem;">Preview</a>
+                <button class="btn-outline danger" style="font-size:.8rem;" onclick="deleteMaterial('${m.id}', '${m.file_name.replace(/'/g,"\\'")}')">Delete</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function deleteMaterial(matId, fileName) {
+    if (!confirm(`Delete "${fileName}"? This will also remove all student assignments for this material.`)) return;
+    try {
+        const { error } = await sb.from('learning_materials').update({ is_active: false }).eq('id', matId);
+        if (error) throw error;
+        showToast('Material deleted.', 'success');
+        fetchMaterials();
+        fetchMyCourses();
+    } catch (err) { showToast('Delete failed: ' + err.message, 'error'); }
+}
+
+// ── COURSE BUILDER ─────────────────────────────────────────
 let sectionCount = 0;
-window.addSection = function(defTitle="") {
+window.addSection = function(defTitle = "") {
     sectionCount++; const id = sectionCount;
     document.getElementById('curriculum-container').insertAdjacentHTML('beforeend', `<div class="module-box" id="section-${id}"><div class="module-header"><input type="text" class="section-title-input" placeholder="e.g. Section ${id}" value="${defTitle}"><button type="button" class="btn-outline danger" style="border:none;" onclick="document.getElementById('section-${id}').remove()">✕</button></div><ul class="lesson-list" id="lesson-list-${id}"></ul><button type="button" class="btn-outline" onclick="addLesson(${id})">+ Add Video</button></div>`);
     return id;
 };
-window.addLesson = function(secId, defTitle="", defUrl="") {
-    const lId = 'les_'+Date.now()+Math.floor(Math.random()*1000); const e = s=>String(s).replace(/"/g,'&quot;');
-    document.getElementById(`lesson-list-${secId}`).insertAdjacentHTML('beforeend', `<li class="lesson-item" id="${lId}"><div class="lesson-inputs"><input type="text" class="lesson-title-input" placeholder="Video Title..." value="${e(defTitle)}" style="flex: 2;"><select class="lesson-type-select" onchange="const p=this.closest('.lesson-inputs'); p.querySelector('.lesson-url-input').style.display=this.value==='url'?'block':'none'; p.querySelector('.lesson-file-input').style.display=this.value==='upload'?'block':'none';"><option value="url" selected>Link (YT/Drive/Vimeo)</option><option value="upload">Upload (MP4)</option></select><input type="url" class="lesson-url-input" placeholder="Paste Link..." value="${e(defUrl)}"><input type="file" class="lesson-file-input" accept="video/*" style="display:none;"><button type="button" class="btn-outline danger delete-lesson-btn" style="border:none;" onclick="document.getElementById('${lId}').remove()">✕</button></div><div class="lesson-extras"><textarea class="lesson-notes-input" placeholder="Add Instructor Notes..."></textarea><div class="material-upload-box"><label>Attach Handout (PDF)</label><input type="file" class="lesson-material-input" accept=".pdf,.doc,.docx,.zip"></div></div></li>`);
+window.addLesson = function(secId, defTitle = "", defUrl = "") {
+    const lId = 'les_' + Date.now() + Math.floor(Math.random() * 1000); const e = s => String(s).replace(/"/g, '&quot;');
+    document.getElementById(`lesson-list-${secId}`).insertAdjacentHTML('beforeend', `<li class="lesson-item" id="${lId}"><div class="lesson-inputs"><input type="text" class="lesson-title-input" placeholder="Video Title..." value="${e(defTitle)}" style="flex:2;"><select class="lesson-type-select" onchange="const p=this.closest('.lesson-inputs'); p.querySelector('.lesson-url-input').style.display=this.value==='url'?'block':'none'; p.querySelector('.lesson-file-input').style.display=this.value==='upload'?'block':'none';"><option value="url" selected>Link (YT/Drive/Vimeo)</option><option value="upload">Upload (MP4)</option></select><input type="url" class="lesson-url-input" placeholder="Paste Link..." value="${e(defUrl)}"><input type="file" class="lesson-file-input" accept="video/*" style="display:none;"><button type="button" class="btn-outline danger delete-lesson-btn" style="border:none;" onclick="document.getElementById('${lId}').remove()">✕</button></div><div class="lesson-extras"><textarea class="lesson-notes-input" placeholder="Add Instructor Notes..."></textarea><div class="material-upload-box"><label>Attach Handout (PDF)</label><input type="file" class="lesson-material-input" accept=".pdf,.doc,.docx,.zip"></div></div></li>`);
 };
 
 window.editCourse = async function(courseId) {
     showToast("Loading course...", "info");
     const { data: c } = await sb.from('courses').select('*').eq('id', courseId).single();
     const { data: s } = await sb.from('course_sections').select('*').eq('course_id', courseId).order('sequence_order');
-    const { data: l } = await sb.from('course_lessons').select('*').in('section_id', s.map(x=>x.id)).order('sequence_order');
+    const { data: l } = await sb.from('course_lessons').select('*').in('section_id', s.map(x => x.id)).order('sequence_order');
     document.getElementById('editing-course-id').value = c.id;
     document.getElementById('course-title').value = c.title; document.getElementById('course-price').value = c.price;
     document.getElementById('course-desc').value = c.description;
@@ -953,38 +1087,49 @@ window.editCourse = async function(courseId) {
     document.getElementById('edit-image-preview').src = c.image_url || '';
     document.getElementById('edit-image-preview-container').style.display = 'block'; document.getElementById('course-image').required = false;
     document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0;
-    s.forEach(sec => { const sId = window.addSection(sec.title); l.filter(x=>x.section_id===sec.id).forEach(les => window.addLesson(sId, les.title, les.video_url)); });
+    s.forEach(sec => { const sId = window.addSection(sec.title); l.filter(x => x.section_id === sec.id).forEach(les => window.addLesson(sId, les.title, les.video_url)); });
     document.getElementById('save-btn').textContent = "Save Updates"; document.getElementById('cancel-edit-btn').style.display = 'inline-flex';
     switchTab('creator-section');
 };
-window.startNewCourse = function() { document.getElementById('editing-course-id').value = ""; document.getElementById('course-title').value = ''; document.getElementById('course-price').value = ''; document.getElementById('course-desc').value = ''; document.getElementById('course-image').value = ''; document.getElementById('edit-image-preview-container').style.display = 'none'; document.getElementById('course-image').required = true; window.setCourseType('main'); document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0; window.addSection(); document.getElementById('save-btn').textContent = "Save & Publish Course"; document.getElementById('cancel-edit-btn').style.display = 'none'; switchTab('creator-section'); };
+window.startNewCourse = function() {
+    document.getElementById('editing-course-id').value = ""; document.getElementById('course-title').value = ''; document.getElementById('course-price').value = ''; document.getElementById('course-desc').value = ''; document.getElementById('course-image').value = ''; document.getElementById('edit-image-preview-container').style.display = 'none'; document.getElementById('course-image').required = true;
+    window.setCourseType('main'); document.getElementById('curriculum-container').innerHTML = ''; sectionCount = 0; window.addSection();
+    document.getElementById('save-btn').textContent = "Save & Publish Course"; document.getElementById('cancel-edit-btn').style.display = 'none'; switchTab('creator-section');
+};
 window.cancelEdit = function() { window.startNewCourse(); switchTab('dashboard-overview'); };
-window.deleteCourse = async function(id) { if(confirm("Delete this course permanently?")) { await sb.from('courses').delete().eq('id', id); showToast("Deleted", "success"); fetchMyCourses(); } };
+window.deleteCourse = async function(id) { if (confirm("Delete this course permanently?")) { await sb.from('courses').delete().eq('id', id); showToast("Deleted", "success"); fetchMyCourses(); } };
+
+// ── QUIZ BUILDER ───────────────────────────────────────────
+function toggleQuizBuilder() { const c = document.getElementById('require-quiz-toggle').checked; document.getElementById('quiz-builder-section').style.display = c ? 'block' : 'none'; if (c && document.getElementById('quiz-questions-container').children.length === 0) window.addQuizQuestion(); }
+window.addQuizQuestion = function(qText = '', optA = '', optB = '', optC = '', optD = '', cIdx = 0) {
+    const qId = 'q_' + Date.now() + Math.floor(Math.random() * 1000); const e = s => String(s).replace(/"/g, '&quot;');
+    document.getElementById('quiz-questions-container').insertAdjacentHTML('beforeend', `<div class="quiz-question-box" id="${qId}"><button type="button" class="remove-q-btn" onclick="document.getElementById('${qId}').remove()">✕</button><input type="text" class="q-text" placeholder="Enter question..." value="${e(qText)}"><div class="quiz-options"><label class="quiz-option"><input type="radio" name="correct-${qId}" value="0" ${cIdx === 0 ? 'checked' : ''}><input type="text" class="q-opt" placeholder="Option A" value="${e(optA)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="1" ${cIdx === 1 ? 'checked' : ''}><input type="text" class="q-opt" placeholder="Option B" value="${e(optB)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="2" ${cIdx === 2 ? 'checked' : ''}><input type="text" class="q-opt" placeholder="Option C" value="${e(optC)}"></label><label class="quiz-option"><input type="radio" name="correct-${qId}" value="3" ${cIdx === 3 ? 'checked' : ''}><input type="text" class="q-opt" placeholder="Option D" value="${e(optD)}"></label></div></div>`);
+};
 
 window.saveCourse = async function() {
     const editId = document.getElementById('editing-course-id').value;
     const title = document.getElementById('course-title').value, price = document.getElementById('course-price').value, desc = document.getElementById('course-desc').value;
-    if(!title || price==="" || !desc) return showToast("Fill all required fields", "error");
+    if (!title || price === "" || !desc) return showToast("Fill all required fields", "error");
     const saveBtn = document.getElementById('save-btn'); saveBtn.disabled = true;
     try {
         let imgUrl = undefined;
         const fi = document.getElementById('course-image');
-        if(fi.files.length>0) { saveBtn.textContent = "Uploading Cover..."; const fn = `c_img_${Date.now()}.${fi.files[0].name.split('.').pop()}`; await sb.storage.from('course_images').upload(fn, fi.files[0]); imgUrl = sb.storage.from('course_images').getPublicUrl(fn).data.publicUrl; }
+        if (fi.files.length > 0) { saveBtn.textContent = "Uploading Cover..."; const fn = `c_img_${Date.now()}.${fi.files[0].name.split('.').pop()}`; await sb.storage.from('course_images').upload(fn, fi.files[0]); imgUrl = sb.storage.from('course_images').getPublicUrl(fn).data.publicUrl; }
         let cId = editId;
         const pL = { title, description: desc, price: Number(price), instructor_id: currentInstructorId, is_published: true, is_event_course: document.getElementById('is-event-course').value === 'true' };
-        if(imgUrl) pL.image_url = imgUrl;
-        if(editId) { await sb.from('courses').update(pL).eq('id', editId); await sb.from('course_sections').delete().eq('course_id', editId); }
+        if (imgUrl) pL.image_url = imgUrl;
+        if (editId) { await sb.from('courses').update(pL).eq('id', editId); await sb.from('course_sections').delete().eq('course_id', editId); }
         else { const { data } = await sb.from('courses').insert(pL).select().single(); cId = data.id; }
         saveBtn.textContent = "Saving Curriculum...";
         const secs = document.querySelectorAll('.module-box');
-        for(let i=0; i<secs.length; i++) {
-            const sTitle = secs[i].querySelector('.section-title-input').value || `Section ${i+1}`;
-            const { data: sD } = await sb.from('course_sections').insert({course_id: cId, title: sTitle, sequence_order: i+1}).select().single();
+        for (let i = 0; i < secs.length; i++) {
+            const sTitle = secs[i].querySelector('.section-title-input').value || `Section ${i + 1}`;
+            const { data: sD } = await sb.from('course_sections').insert({ course_id: cId, title: sTitle, sequence_order: i + 1 }).select().single();
             const less = secs[i].querySelectorAll('.lesson-item');
-            for(let j=0; j<less.length; j++) { const lTitle = less[j].querySelector('.lesson-title-input').value || `Lesson ${j+1}`; let vUrl = less[j].querySelector('.lesson-url-input').value; if(vUrl) await sb.from('course_lessons').insert({section_id: sD.id, title: lTitle, video_url: vUrl, sequence_order: j+1}); }
+            for (let j = 0; j < less.length; j++) { const lTitle = less[j].querySelector('.lesson-title-input').value || `Lesson ${j + 1}`; let vUrl = less[j].querySelector('.lesson-url-input').value; if (vUrl) await sb.from('course_lessons').insert({ section_id: sD.id, title: lTitle, video_url: vUrl, sequence_order: j + 1 }); }
         }
         showToast("Course Saved!", "success"); window.cancelEdit();
-    } catch(e) { showToast(e.message, "error"); } finally { saveBtn.disabled = false; }
+    } catch (e) { showToast(e.message, "error"); } finally { saveBtn.disabled = false; }
 };
 </script>
 </body>
