@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const _st = localStorage.getItem('enet_theme') || 'system';
         document.documentElement.setAttribute('data-theme', _st === 'dark' || (_st === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
@@ -211,6 +211,20 @@
         @media(max-width:1200px){ .mat-assign-grid { grid-template-columns: 1fr; } .rev-stats-grid { grid-template-columns: repeat(2,1fr); } .analytics-two-col { grid-template-columns: 1fr; } }
         @media(max-width:992px){ .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-wrap{margin-left:0}.mobile-toggle{display:flex}.stats-grid{grid-template-columns:repeat(2,1fr)}.close-sidebar{display:block} }
         @media(max-width:576px){ .stats-grid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}.topbar-right{width:100%;justify-content:space-between;}.search-wrap{width:100%;margin-top:5px}.drawer{width:100vw} }
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .chart-container { background: var(--surface); padding: 1.5rem; border-radius: 24px; box-shadow: 0 10px 40px var(--shadow-color); }
+        .chart-title { font-family: 'Poppins'; font-weight: 700; margin-bottom: 1rem; color: var(--text-dark); }
+        .finance-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1.5rem 2rem; background: var(--bg-light); border-radius: 16px; margin: 0 2rem 2rem; border: 1px solid var(--border); }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.8rem; font-weight: 700; color: var(--text-dark); }
+        .form-group input, .form-group select { padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); outline: none; font-family: inherit; background: var(--surface); color: var(--text-dark); }
+        .finance-table-responsive { overflow-x: auto; padding: 0 2rem 2rem; }
+        .finance-table { width: 100%; border-collapse: collapse; }
+        .finance-table th { text-align: left; padding: 1rem; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg-light); }
+        .finance-table td { padding: 1rem; font-size: 0.9rem; color: var(--text-dark); border-bottom: 1px solid var(--border); }
+        .type-badge { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+        .type-income { background: rgba(5,205,153,0.1); color: var(--success); }
+        .type-expense { background: rgba(238,93,80,0.1); color: var(--danger); }
     </style>
 </head>
 <body>
@@ -463,6 +477,73 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- FINANCIAL TRACKER SECTION -->
+        <div class="panel" id="finance-section" style="margin-top: 2rem;">
+            <div class="panel-head">
+                <div class="panel-title">Financial Tracker <span class="panel-cnt" id="transaction-count">0</span></div>
+            </div>
+            
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">Income vs Expenses</h3>
+                    <canvas id="financeChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3 class="chart-title">Monthly Growth</h3>
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Manual Entry Form -->
+            <div class="finance-form">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="trans-type">
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Paid By / To</label>
+                    <input type="text" id="trans-party" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label>Amount (₦)</label>
+                    <input type="number" id="trans-amount" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="trans-date">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="trans-desc" placeholder="What was it for?">
+                </div>
+                <div class="form-group" style="justify-content: flex-end;">
+                    <button class="btn btn-primary" onclick="addTransaction()">Add Entry</button>
+                </div>
+            </div>
+
+            <div class="finance-table-responsive">
+                <table class="finance-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Party</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-list">
+                        <!-- Transactions will appear here -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -785,7 +866,9 @@ window.addEventListener('load', async () => {
     });
 
     initQuill();
+    initCharts();
     loadProfiles();
+    updateFinanceUI();
     subscribeRealtime();
 });
 
@@ -1024,6 +1107,115 @@ async function submitBlogPost(){
         showToast('Published'); loadBlogPosts(); cancelBlogForm();
     } catch(e){ showToast(e.message, 'error'); }
     btn.disabled=false; btn.textContent='Publish Post';
+}
+
+// ── FINANCIAL TRACKER ──
+let transactions = JSON.parse(localStorage.getItem('enet_transactions') || '[]');
+
+function updateFinanceUI() {
+    const list = document.getElementById('transaction-list');
+    list.innerHTML = '';
+    
+    let income = 0;
+    let expense = 0;
+
+    transactions.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach((t, index) => {
+        const row = document.createElement('tr');
+        const amt = Number(t.amount);
+        if(t.type === 'income') income += amt; else expense += amt;
+
+        row.innerHTML = `
+            <td>${new Date(t.date).toLocaleDateString()}</td>
+            <td><span class="type-badge type-${t.type}">${t.type.toUpperCase()}</span></td>
+            <td>${t.party}</td>
+            <td>${t.description}</td>
+            <td style="font-weight:700; color:${t.type === 'income' ? 'var(--success)' : 'var(--danger)'}">
+                ${t.type === 'income' ? '+' : '-'}₦${amt.toLocaleString()}
+            </td>
+            <td><button onclick="deleteTransaction(${index})" style="color:var(--danger); background:none; border:none; cursor:pointer; font-weight:700;">Delete</button></td>
+        `;
+        list.appendChild(row);
+    });
+
+    document.getElementById('rev-total').textContent = '₦' + (income + expense).toLocaleString();
+    document.getElementById('transaction-count').textContent = transactions.length;
+    updateCharts(income, expense);
+}
+
+function addTransaction() {
+    const type = document.getElementById('trans-type').value;
+    const party = document.getElementById('trans-party').value;
+    const amount = document.getElementById('trans-amount').value;
+    const date = document.getElementById('trans-date').value;
+    const description = document.getElementById('trans-desc').value;
+
+    if(!party || !amount || !date) {
+        showToast("Please fill in all required fields", 'error');
+        return;
+    }
+
+    const newTrans = { type, party, amount, date, description };
+    transactions.push(newTrans);
+    localStorage.setItem('enet_transactions', JSON.stringify(transactions));
+    
+    document.getElementById('trans-party').value = '';
+    document.getElementById('trans-amount').value = '';
+    document.getElementById('trans-desc').value = '';
+    
+    showToast('Transaction added successfully!', 'success');
+    updateFinanceUI();
+}
+
+function deleteTransaction(index) {
+    if(confirm("Delete this entry?")) {
+        transactions.splice(index, 1);
+        localStorage.setItem('enet_transactions', JSON.stringify(transactions));
+        showToast('Transaction deleted', 'info');
+        updateFinanceUI();
+    }
+}
+
+// ── CHARTS LOGIC ──
+let financeChart, growthChart;
+
+function initCharts() {
+    const ctx1 = document.getElementById('financeChart').getContext('2d');
+    financeChart = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: ['Income', 'Expenses'],
+            datasets: [{
+                data: [0, 0],
+                backgroundColor: ['#05CD99', '#EE5D50'],
+                borderWidth: 0
+            }]
+        },
+        options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
+    });
+
+    const ctx2 = document.getElementById('growthChart').getContext('2d');
+    growthChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Revenue',
+                data: [12000, 19000, 15000, 25000, 22000, 30000],
+                borderColor: '#00a0df',
+                tension: 0.4,
+                fill: true,
+                backgroundColor: 'rgba(0,160,223,0.1)'
+            }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+}
+
+function updateCharts(income, expense) {
+    if(financeChart) {
+        financeChart.data.datasets[0].data = [income, expense];
+        financeChart.update();
+    }
 }
 
 // ── ADS MANAGER ──
