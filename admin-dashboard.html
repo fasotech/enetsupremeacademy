@@ -46,8 +46,12 @@
         .nav-item.active svg{opacity:1;color:var(--accent-cyan)}
         .nav-badge{margin-left:auto;font-size:.7rem;font-weight:700;background:var(--brand-yellow);color:var(--brand-navy);border-radius:20px;padding:2px 8px;min-width:22px;text-align:center}
 
-        /* MAIN */
+        /* MAIN & VIEWS */
         .main-wrap{margin-left:260px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1;transition:margin-left .3s}
+        .view-section { display: none; animation: fadeUp .4s ease both; }
+        .view-section.active { display: block; }
+        @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
         .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:1.5rem 2.5rem;border-bottom:1px solid var(--border)}
         .topbar-left{display:flex;align-items:center;gap:1rem}
         .mobile-toggle{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;color:var(--accent-cyan);box-shadow:0 2px 10px var(--shadow-color)}
@@ -80,13 +84,12 @@
 
         .header-logout-btn { display: flex; align-items: center; gap: 6px; background: rgba(238,93,80,0.1); color: var(--danger); border: 1px solid rgba(238,93,80,0.2); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; font-family: 'DM Sans', sans-serif;}
         .header-logout-btn:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 10px rgba(238,93,80,0.3); transform: translateY(-2px);}
-        .logout-btn-mobile { display: none; color: var(--danger); border-color: rgba(238,93,80,0.2); background: rgba(238,93,80,0.1); }
 
-        .content{padding:0 2.5rem 2.5rem;flex:1}
+        .content{padding:2.5rem;flex:1}
 
         /* STATS */
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem}
-        .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);animation:fadeUp .4s ease both;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
+        .stat-card{border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:0 10px 30px var(--shadow-color);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
         .stat-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px var(--shadow-color)}
         .stat-card.brand-blue{background:var(--brand-navy);color:#fff}
         .stat-card.brand-orange{background:var(--accent-cyan);color:#fff}
@@ -98,7 +101,7 @@
 
         /* PANELS */
         .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
-        .panel{background:var(--surface);border-radius:24px;margin-bottom:2rem;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);animation:fadeUp .4s ease both;transition:background .3s}
+        .panel{background:var(--surface);border-radius:24px;margin-bottom:2rem;overflow:hidden;box-shadow:0 10px 40px var(--shadow-color);transition:background .3s}
         .panel-head{display:flex;align-items:center;justify-content:space-between;padding:1.75rem 2rem 1rem;flex-wrap:wrap;gap:.75rem}
         .panel-title{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-dark)}
         .panel-cnt{font-size:.75rem;font-weight:700;background:var(--bg-light);color:var(--accent-cyan);padding:4px 10px;border-radius:20px;margin-left:10px;vertical-align:middle;border:1px solid var(--border)}
@@ -122,30 +125,22 @@
         .uname{font-size:.95rem;font-weight:700;color:var(--text-dark);transition:color .2s}
         .uid{font-size:.7rem;color:var(--text-muted);margin-top:2px}
 
+        /* BUTTONS & BADGES */
         .role-badge{display:inline-flex;align-items:center;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
-        .role-badge.student{background:rgba(0,160,223,0.1);color:var(--accent-cyan)}
-        .role-badge.teacher,.role-badge.instructor{background:rgba(252,209,22,0.2);color:var(--brand-navy)}
-        .role-badge.admin{background:rgba(5,205,153,.1);color:var(--success)}
-
-        /* BUTTONS */
         .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
         .btn{display:inline-flex;align-items:center;gap:4px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
         .btn-approve{background:rgba(5,205,153,.1);color:var(--success);border-color:rgba(5,205,153,.2)}
-        .btn-approve:hover{background:var(--success);color:#fff}
         .btn-danger{background:rgba(238,93,80,.1);color:var(--danger);border-color:rgba(238,93,80,.2)}
-        .btn-danger:hover{background:var(--danger);color:#fff}
         .btn-admin{background:rgba(0,160,223,0.1);color:var(--accent-cyan);border-color:rgba(0,160,223,0.2)}
         .btn-primary{background:var(--accent-cyan);color:#fff;border-color:var(--accent-cyan);font-size:.95rem;padding:.75rem 2rem}
         .btn-secondary{background:var(--bg-light);color:var(--text-gray);border-color:var(--border);font-size:.95rem;padding:.75rem 2rem}
         
-        /* ── MATERIALS MANAGEMENT PANEL ── */
+        /* MATERIALS PANEL */
         .mat-assign-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 1.5rem 2rem 2rem; }
         .mat-list-panel, .mat-assign-panel { background: var(--bg-light); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
         .mat-sub-head { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); font-family: 'Poppins', sans-serif; font-size: .9rem; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
         .mat-sub-head .count-pill { font-size: .7rem; font-weight: 700; background: var(--accent-cyan); color: #fff; padding: 3px 10px; border-radius: 20px; }
         .mat-item-list { display: flex; flex-direction: column; max-height: 480px; overflow-y: auto; }
-        .mat-item-list::-webkit-scrollbar { width: 4px; }
-        .mat-item-list::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
         .mat-list-item { display: flex; align-items: center; gap: .85rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; position: relative; }
         .mat-list-item:hover { background: var(--surface-hover); }
         .mat-list-item.selected { background: rgba(0,160,223,.08); border-left: 3px solid var(--accent-cyan); }
@@ -153,40 +148,31 @@
         .mat-list-item-info { flex: 1; min-width: 0; }
         .mat-list-item-title { font-weight: 700; color: var(--text-dark); font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
         .mat-list-item-sub { font-size: .72rem; color: var(--text-muted); }
-        .mat-assigned-pill { font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: rgba(5,205,153,.1); color: var(--success); border: 1px solid rgba(5,205,153,.2); white-space: nowrap; flex-shrink: 0; }
-        .mat-unassigned-pill { font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: rgba(252,209,22,.15); color: #8a6500; border: 1px solid rgba(252,209,22,.3); white-space: nowrap; flex-shrink: 0; }
         .assign-placeholder { padding: 3rem 2rem; text-align: center; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 300px; }
-        .mat-detail-head { padding: 1.25rem; border-bottom: 1px solid var(--border); background: var(--surface); }
-        .mat-detail-title { font-family: 'Poppins'; font-weight: 700; color: var(--text-dark); font-size: 1rem; margin-bottom: .3rem; }
-        .mat-detail-badge { font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg-light); color: var(--text-muted); border: 1px solid var(--border); margin-right: 5px; display: inline-block; margin-top: 5px;}
-        .mat-assign-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .mat-assign-search { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .65rem .9rem; font-size: .85rem; color: var(--text-dark); outline: none; margin-bottom: .75rem; }
         .student-assign-list { display: flex; flex-direction: column; gap: .5rem; max-height: 340px; overflow-y: auto; padding-right: 4px; }
-        .student-assign-list::-webkit-scrollbar { width: 4px; }
-        .student-assign-list::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
         .student-assign-item { display: flex; align-items: center; gap: .85rem; padding: .75rem 1rem; background: var(--bg-light); border: 1px solid var(--border); border-radius: 10px; transition: border-color .15s; }
-        .student-assign-item.assigned { background: rgba(5,205,153,.04); border-color: rgba(5,205,153,.3); }
         .student-assign-avatar { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Poppins'; font-weight: 700; font-size: .85rem; color: #fff; background: var(--accent-cyan); flex-shrink: 0; }
-        .student-assign-name { font-weight: 700; color: var(--text-dark); font-size: .85rem; }
         .student-assign-toggle { font-size: .78rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; transition: all .2s; }
         .student-assign-toggle.assign-btn { background: var(--accent-cyan); color: #fff; }
         .student-assign-toggle.revoke-btn { background: rgba(238,93,80,.1); color: var(--danger); border: 1px solid rgba(238,93,80,.2); }
-        .mat-bulk-actions { display: flex; gap: .75rem; padding: .75rem 1.25rem; border-top: 1px solid var(--border); background: var(--surface); flex-wrap: wrap; align-items: center; }
 
         /* ANALYTICS CSS */
-        .analytics-section-header { display: flex; align-items: center; justify-content: space-between; padding: 2rem 0 1rem; flex-wrap: wrap; gap: 1rem; }
+        .analytics-section-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0 1rem; flex-wrap: wrap; gap: 1rem; }
         .analytics-section-title { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: .75rem; }
         .analytics-section-title::before { content: ''; width: 4px; height: 24px; background: linear-gradient(180deg, var(--accent-cyan), var(--brand-yellow)); border-radius: 4px; }
-        .analytics-badge { font-size: .7rem; font-weight: 700; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; background: rgba(0,160,223,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,160,223,0.2); }
         .rev-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
         .rev-card { background: var(--surface); border-radius: 18px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 6px 20px var(--shadow-color); position: relative; }
+        .rev-card-lbl { font-size: .85rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.5rem; }
         .rev-card-val { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
         .analytics-two-col { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-        
-        .empty-cell { padding: 4rem 2rem; text-align: center; }
-        .empty-ttl { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem; }
-        .empty-sub { font-size: 0.85rem; color: var(--text-muted); }
-        .empty-cell-large { padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* FINANCE CSS */
+        .finance-form { background: var(--bg-light); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 1.5rem; display: none; }
+        .finance-form.open { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        .finance-form input, .finance-form select { padding: .8rem; border-radius: 8px; border: 1px solid var(--border); outline: none; width: 100%; background: var(--surface); color: var(--text-dark); }
+        .type-badge { font-size: .75rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+        .type-income { background: rgba(5,205,153,.1); color: var(--success); }
+        .type-expense { background: rgba(238,93,80,.1); color: var(--danger); }
 
         /* MODALS & DRAWER */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
@@ -203,14 +189,11 @@
         /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
         .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
-        .toast.success{border-left:4px solid var(--success)}
-        .toast.error{border-left:4px solid var(--danger)}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
 
-        @media(max-width:1200px){ .mat-assign-grid { grid-template-columns: 1fr; } .rev-stats-grid { grid-template-columns: repeat(2,1fr); } .analytics-two-col { grid-template-columns: 1fr; } }
+        @media(max-width:1200px){ .mat-assign-grid { grid-template-columns: 1fr; } .rev-stats-grid { grid-template-columns: repeat(2,1fr); } .analytics-two-col { grid-template-columns: 1fr; } .finance-form.open{grid-template-columns: 1fr 1fr;} }
         @media(max-width:992px){ .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-wrap{margin-left:0}.mobile-toggle{display:flex}.stats-grid{grid-template-columns:repeat(2,1fr)}.close-sidebar{display:block} }
-        @media(max-width:576px){ .stats-grid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}.topbar-right{width:100%;justify-content:space-between;}.search-wrap{width:100%;margin-top:5px}.drawer{width:100vw} }
+        @media(max-width:576px){ .stats-grid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}.topbar-right{width:100%;justify-content:space-between;}.search-wrap{width:100%;margin-top:5px}.drawer{width:100vw} .finance-form.open{grid-template-columns: 1fr;} }
     </style>
 </head>
 <body>
@@ -243,41 +226,28 @@
     </div>
     
     <div class="nav-label">Main Menu</div>
-    <a class="nav-item active" href="admin-dashboard.html" id="nav-dashboard">
+    <a class="nav-item active" href="#" onclick="showView('view-dashboard'); return false;" id="nav-dashboard">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
     </a>
-    <a class="nav-item" href="#" onclick="quickNav('students');return false;" id="nav-students">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Students
-    </a>
-    <a class="nav-item" href="#" onclick="quickNav('teachers');return false;" id="nav-teachers">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Teachers
+    <a class="nav-item" href="#" onclick="showView('view-users'); switchTab('all'); return false;" id="nav-users">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>User Management
     </a>
     <a class="nav-item" href="community.html">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Community Hub
     </a>
-    <div class="nav-label">Analytics</div>
-    <a class="nav-item" href="#" onclick="scrollToAnalytics();return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Revenue & Analytics
-    </a>
-    <a class="nav-item" href="#" onclick="scrollToCourseAnalytics();return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Course Performance
-    </a>
+    
     <div class="nav-label">Management</div>
-    <a class="nav-item" href="#" onclick="scrollToMaterials();return false;">
+    <a class="nav-item" href="#" onclick="showView('view-content'); return false;" id="nav-content">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        Materials <span class="nav-badge" id="nav-mat-count">0</span>
+        Content Manager <span class="nav-badge" id="nav-mat-count">0</span>
     </a>
-    <a class="nav-item" href="#" onclick="scrollToBlog();return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Blog Manager <span class="nav-badge" id="nav-blog-count">0</span>
+    
+    <div class="nav-label">Analytics & Finance</div>
+    <a class="nav-item" href="#" onclick="showView('view-finance'); return false;" id="nav-finance">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Tracker
     </a>
-    <a class="nav-item" href="#" onclick="quickNav('admins');return false;" id="nav-admins">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admins
-    </a>
-    <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Pending <span class="nav-badge" id="nav-pcount">0</span>
-    </a>
-    <a class="nav-item" href="#" onclick="document.getElementById('ad-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Manage Ads
+    <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('analytics-section').scrollIntoView(); return false;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Revenue Analytics
     </a>
 </aside>
 
@@ -320,243 +290,238 @@
 
     <main class="content">
 
-        <div class="stats-grid">
-            <div class="stat-card brand-blue" id="card-students" onclick="statCardNav('students')">
-                <div class="stat-lbl">Total Students</div>
-                <div class="stat-num" id="stat-students">—</div>
-            </div>
-            <div class="stat-card brand-orange" id="card-teachers" onclick="statCardNav('teachers')">
-                <div class="stat-lbl">Active Teachers</div>
-                <div class="stat-num" id="stat-teachers">—</div>
-            </div>
-            <div class="stat-card brand-yellow" onclick="scrollToMaterials()">
-                <div class="stat-lbl">Learning Materials</div>
-                <div class="stat-num" id="stat-materials-box">—</div>
-            </div>
-            <div class="stat-card brand-surface pend" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'})">
-                <div class="stat-lbl">Pending Approvals</div>
-                <div class="stat-num" id="stat-pending">—</div>
-            </div>
-        </div>
-
-        <div class="panel pend">
-            <div class="panel-head">
-                <div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div>
-            </div>
-            <div class="table-responsive">
-                <table class="data-tbl">
-                    <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
-                    <tbody id="pending-users-list">
-                        <tr><td colspan="5"><p style="text-align:center;padding:2rem;">Loading...</p></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="panel users">
-            <div class="panel-head">
-                <div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div>
-            </div>
-            <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All</button>
-                <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
-                <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
-                <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
-            </div>
-            <div class="table-responsive">
-                <table class="data-tbl">
-                    <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
-                    <tbody id="all-users-list">
-                        <tr><td colspan="6"><p style="text-align:center;padding:2rem;">Loading...</p></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="panel activity">
-            <div class="panel-head"><div class="panel-title">Recent Activity</div></div>
-            <div class="activity-list" id="recent-activities-list">
-                <p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">Loading pulse of the academy...</p>
-            </div>
-        </div>
-
-        <div class="panel" id="materials-admin-section">
-            <div class="panel-head">
-                <div>
-                    <span class="panel-title">Learning Materials — Admin Assignment</span>
-                    <span class="panel-cnt" id="admin-mat-count">0 materials</span>
+        <div id="view-dashboard" class="view-section active">
+            <div class="stats-grid">
+                <div class="stat-card brand-blue" onclick="showView('view-users'); switchTab('students')">
+                    <div class="stat-lbl">Total Students</div>
+                    <div class="stat-num" id="stat-students">—</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
-                    <span style="font-size:.78rem;color:var(--text-muted);">Select a material on the left, then assign it to students.</span>
-                    <button onclick="fetchAllMaterials()" style="background:var(--accent-cyan);color:#fff;border:none;padding:6px 14px;border-radius:8px;font-weight:700;font-size:.82rem;cursor:pointer;">Refresh</button>
+                <div class="stat-card brand-orange" onclick="showView('view-users'); switchTab('teachers')">
+                    <div class="stat-lbl">Active Teachers</div>
+                    <div class="stat-num" id="stat-teachers">—</div>
+                </div>
+                <div class="stat-card brand-yellow" onclick="showView('view-content')">
+                    <div class="stat-lbl">Learning Materials</div>
+                    <div class="stat-num" id="stat-materials-box">—</div>
+                </div>
+                <div class="stat-card brand-surface" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'})">
+                    <div class="stat-lbl">Pending Approvals</div>
+                    <div class="stat-num" id="stat-pending">—</div>
                 </div>
             </div>
 
-            <div class="mat-assign-grid">
-                <div class="mat-list-panel">
-                    <div class="mat-sub-head">
-                        All Uploaded Materials
-                        <span class="count-pill" id="mat-list-count">0</span>
-                    </div>
-                    <div style="display:flex;gap:.65rem;padding:.75rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap;">
-                        <input type="text" id="admin-mat-search" placeholder="Search materials..." oninput="renderAdminMatList()" style="flex:1;min-width:120px;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.8rem;color:var(--text-dark);outline:none;">
-                        <select id="admin-mat-course-filter" onchange="renderAdminMatList()" style="background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.8rem;color:var(--text-dark);outline:none;cursor:pointer;">
-                            <option value="">All Courses</option>
-                        </select>
-                    </div>
-                    <div class="mat-item-list" id="admin-mat-item-list">
-                        <div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem;">Loading materials...</div>
-                    </div>
+            <div class="panel pend">
+                <div class="panel-head">
+                    <div class="panel-title">Pending Approvals <span class="panel-cnt" id="pend-badge">0</span></div>
                 </div>
-
-                <div class="mat-assign-panel" id="mat-assign-right-panel">
-                    <div class="assign-placeholder" id="mat-assign-placeholder">
-                        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="opacity:.3;margin-bottom:1rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
-                        <p style="font-size:.9rem;">Select a material from the list<br>to manage student assignments</p>
-                    </div>
-                    <div id="mat-assign-active" style="display:none;height:100%;flex-direction:column;">
-                        <div class="mat-detail-head" id="mat-detail-head" style="padding:1.25rem 1.25rem .75rem;border-bottom:1px solid var(--border);background:var(--surface);"></div>
-                        <div class="mat-assign-body" style="padding:1.25rem;flex:1;overflow:hidden;display:flex;flex-direction:column;">
-                            <input type="text" id="mat-student-search" placeholder="Search enrolled students..." oninput="renderStudentAssignList()" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-size:.85rem;color:var(--text-dark);outline:none;margin-bottom:.75rem;">
-                            <div class="student-assign-list" id="student-assign-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:340px;overflow-y:auto;">
-                                <div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem;">Loading students...</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:.75rem;padding:.75rem 1.25rem;border-top:1px solid var(--border);background:var(--surface);flex-wrap:wrap;align-items:center;">
-                            <span id="mat-assign-summary" style="font-size:.78rem;color:var(--text-muted);flex:1;">0 of 0 students assigned</span>
-                            <button style="font-size:.8rem;background:rgba(5,205,153,.1);color:var(--success);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px;font-weight:600;cursor:pointer;" onclick="assignToAll()">Assign to All</button>
-                            <button style="font-size:.8rem;background:rgba(238,93,80,.1);color:var(--danger);border:1px solid rgba(238,93,80,.2);padding:6px 12px;border-radius:8px;font-weight:600;cursor:pointer;" onclick="revokeFromAll()">Revoke All</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="analytics-section" style="margin-top: 2rem;">
-            <div class="analytics-section-header">
-                <div class="analytics-section-title">Revenue & Analytics</div>
-            </div>
-            <div class="rev-stats-grid">
-                <div class="rev-card"><div class="rev-card-lbl">Total Revenue</div><div class="rev-card-val" id="rev-total">₦0</div></div>
-                <div class="rev-card"><div class="rev-card-lbl">Monthly Revenue</div><div class="rev-card-val" id="rev-month">₦0</div></div>
-                <div class="rev-card"><div class="rev-card-lbl">Estimated Profit</div><div class="rev-card-val" id="rev-profit">₦0</div></div>
-                <div class="rev-card"><div class="rev-card-lbl">Course Sales Count</div><div class="rev-card-val" id="rev-sales">0</div></div>
-            </div>
-            <div class="analytics-two-col">
-                <div class="chart-panel" style="margin-bottom:0;">
-                    <div class="chart-panel-head"><div class="chart-panel-title">Student Insights</div></div>
-                    <div class="insight-cards">
-                        <div class="insight-card"><div class="insight-card-label">New Today</div><div class="insight-card-value" id="ins-new-today">0</div></div>
-                        <div class="insight-card"><div class="insight-card-label">New This Week</div><div class="insight-card-value" id="ins-new-week">0</div></div>
-                        <div class="insight-card"><div class="insight-card-label">Active Students</div><div class="insight-card-value" id="ins-active">0</div></div>
-                        <div class="insight-card"><div class="insight-card-label">Engagement Rate</div><div class="insight-card-value" id="ins-engagement">0%</div></div>
-                    </div>
-                </div>
-                <div class="chart-panel" style="margin-bottom:0;">
-                    <div class="chart-panel-head"><div class="chart-panel-title">Conversion Funnel</div></div>
-                    <div class="funnel-wrap">
-                        <div class="funnel-steps" id="funnel-steps">
-                            <div class="funnel-step"><div class="funnel-step-name">Visitors</div><div class="funnel-step-count" id="fc-visitors">—</div></div>
-                            <div class="funnel-step"><div class="funnel-step-name">Signups</div><div class="funnel-step-count" id="fc-signups">—</div></div>
-                            <div class="funnel-step"><div class="funnel-step-name">Enrollments</div><div class="funnel-step-count" id="fc-enrolled">—</div></div>
-                            <div class="funnel-step"><div class="funnel-step-name">Active Learners</div><div class="funnel-step-count" id="fc-active">—</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="course-analytics-section" style="margin-top: 2rem;">
-            <div class="analytics-section-header">
-                <div class="analytics-section-title">Course & Instructor Analytics</div>
-            </div>
-            <div class="analytics-two-col">
-                <div class="chart-panel" style="margin-bottom:0;">
-                    <div class="chart-panel-head"><div class="chart-panel-title">Course Performance</div></div>
-                    <div style="overflow-x:auto;">
-                        <table class="analytics-tbl" style="min-width:500px;">
-                            <thead><tr><th>Course</th><th>Enrolled</th><th>Revenue</th></tr></thead>
-                            <tbody id="course-analytics-tbody"><tr><td colspan="3" style="text-align:center;padding:2rem;">Loading...</td></tr></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="chart-panel" style="margin-bottom:0;">
-                    <div class="chart-panel-head"><div class="chart-panel-title">Instructor Performance</div></div>
-                    <div style="overflow-x:auto;padding-bottom:1rem;">
-                        <table class="instructor-perf-tbl" style="min-width:300px;">
-                            <thead><tr><th>Instructor</th><th>Courses</th><th>Students</th></tr></thead>
-                            <tbody id="instructor-perf-tbody"><tr><td colspan="3" style="text-align:center;padding:2rem;">Loading...</td></tr></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel" id="blog-management-section">
-            <div class="panel-head">
-                <div>
-                    <span class="panel-title">Blog Manager</span>
-                    <span class="panel-cnt" id="blog-post-count">0 posts</span>
-                </div>
-                <button class="btn btn-primary" onclick="startNewPost()" id="new-post-btn" style="padding:.6rem 1.25rem;font-size:.85rem">
-                    Write New Post
-                </button>
-            </div>
-            <div class="blog-manager-section" id="blog-list-section">
                 <div class="table-responsive">
-                    <table class="blog-tbl" id="blog-posts-table">
-                        <thead><tr><th>Post</th><th>Published</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
-                        <tbody id="blog-posts-list">
-                            <tr><td colspan="4"><div class="empty-cell"><div class="empty-ttl">Loading posts...</div></div></td></tr>
+                    <table class="data-tbl">
+                        <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
+                        <tbody id="pending-users-list">
+                            <tr><td colspan="5"><p style="text-align:center;padding:2rem;">Loading...</p></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="blog-manager-section" id="blog-form-section" style="display:none">
-                <div style="background:var(--bg-light);padding:2rem;border-radius:16px;border:1px solid var(--border)">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;">
-                        <h3 id="blog-form-title" style="font-family:'Poppins';font-size:1.1rem;font-weight:700;">Write New Post</h3>
-                    </div>
-                    <input type="hidden" id="edit-post-id">
-                    <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Title *</label><input type="text" id="blog-title" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;"></div>
-                    <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Short Excerpt</label><input type="text" id="blog-excerpt" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;"></div>
-                    <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Content *</label><div id="editor-container" style="background:var(--surface);min-height:280px;border-radius:0 0 10px 10px;border:1px solid var(--border);"></div></div>
-                    <div style="display:flex;gap:.85rem;margin-top:1.5rem;">
-                        <button class="btn btn-primary" onclick="submitBlogPost()" id="publish-blog-btn">Publish Post</button>
-                        <button class="btn btn-secondary" onclick="cancelBlogForm()">Cancel</button>
-                    </div>
+
+            <div class="panel activity">
+                <div class="panel-head"><div class="panel-title">Recent Activity</div></div>
+                <div class="activity-list" id="recent-activities-list">
+                    <p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">Loading pulse of the academy...</p>
                 </div>
             </div>
         </div>
 
-        <div class="panel" id="ad-management-section">
-            <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1rem 2rem 2rem;">
-                <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
-                    <h4 style="font-family:'Poppins'">Ad Slot 1</h4>
-                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,1)">
-                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-1" alt="Preview 1">
-                    <textarea placeholder="Ad Copy Text..." id="copy-1" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
-                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-1" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
-                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(1)">Save Slot 1</button>
+        <div id="view-users" class="view-section">
+            <div class="panel users">
+                <div class="panel-head">
+                    <div class="panel-title">User Management <span class="panel-cnt" id="users-badge">0</span></div>
                 </div>
-                <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
-                    <h4 style="font-family:'Poppins'">Ad Slot 2</h4>
-                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,2)">
-                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-2" alt="Preview 2">
-                    <textarea placeholder="Ad Copy Text..." id="copy-2" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
-                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-2" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
-                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(2)">Save Slot 2</button>
+                <div class="tab-bar">
+                    <button class="tab-btn active" onclick="switchTab('all')" id="tab-all">All</button>
+                    <button class="tab-btn" onclick="switchTab('students')" id="tab-students">Students</button>
+                    <button class="tab-btn" onclick="switchTab('teachers')" id="tab-teachers">Teachers</button>
+                    <button class="tab-btn" onclick="switchTab('admins')" id="tab-admins">Admins</button>
                 </div>
-                <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
-                    <h4 style="font-family:'Poppins'">Ad Slot 3</h4>
-                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,3)">
-                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-3" alt="Preview 3">
-                    <textarea placeholder="Ad Copy Text..." id="copy-3" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
-                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-3" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
-                    <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(3)">Save Slot 3</button>
+                <div class="table-responsive">
+                    <table class="data-tbl">
+                        <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+                        <tbody id="all-users-list">
+                            <tr><td colspan="6"><p style="text-align:center;padding:2rem;">Loading...</p></td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+
+        <div id="view-content" class="view-section">
+            
+            <div class="panel" id="materials-admin-section">
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-title">Learning Materials</span>
+                        <span class="panel-cnt" id="admin-mat-count">0 materials</span>
+                    </div>
+                    <button onclick="fetchAllMaterials()" style="background:var(--accent-cyan);color:#fff;border:none;padding:6px 14px;border-radius:8px;font-weight:700;font-size:.82rem;cursor:pointer;">Refresh</button>
+                </div>
+
+                <div class="mat-assign-grid">
+                    <div class="mat-list-panel">
+                        <div class="mat-sub-head">All Uploaded Materials<span class="count-pill" id="mat-list-count">0</span></div>
+                        <div style="display:flex;gap:.65rem;padding:.75rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap;">
+                            <input type="text" id="admin-mat-search" placeholder="Search materials..." oninput="renderAdminMatList()" style="flex:1;min-width:120px;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.8rem;color:var(--text-dark);outline:none;">
+                            <select id="admin-mat-course-filter" onchange="renderAdminMatList()" style="background:var(--bg-light);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;font-size:.8rem;color:var(--text-dark);outline:none;cursor:pointer;">
+                                <option value="">All Courses</option>
+                            </select>
+                        </div>
+                        <div class="mat-item-list" id="admin-mat-item-list">
+                            <div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem;">Loading materials...</div>
+                        </div>
+                    </div>
+
+                    <div class="mat-assign-panel" id="mat-assign-right-panel">
+                        <div class="assign-placeholder" id="mat-assign-placeholder">
+                            <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="opacity:.3;margin-bottom:1rem;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
+                            <p style="font-size:.9rem;">Select a material from the list<br>to manage student assignments</p>
+                        </div>
+                        <div id="mat-assign-active" style="display:none;height:100%;flex-direction:column;">
+                            <div class="mat-detail-head" id="mat-detail-head" style="padding:1.25rem 1.25rem .75rem;border-bottom:1px solid var(--border);background:var(--surface);"></div>
+                            <div class="mat-assign-body" style="padding:1.25rem;flex:1;overflow:hidden;display:flex;flex-direction:column;">
+                                <input type="text" id="mat-student-search" placeholder="Search enrolled students..." oninput="renderStudentAssignList()" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-size:.85rem;color:var(--text-dark);outline:none;margin-bottom:.75rem;">
+                                <div class="student-assign-list" id="student-assign-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:340px;overflow-y:auto;"></div>
+                            </div>
+                            <div style="display:flex;gap:.75rem;padding:.75rem 1.25rem;border-top:1px solid var(--border);background:var(--surface);flex-wrap:wrap;align-items:center;">
+                                <span id="mat-assign-summary" style="font-size:.78rem;color:var(--text-muted);flex:1;">0 of 0 students assigned</span>
+                                <button style="font-size:.8rem;background:rgba(5,205,153,.1);color:var(--success);border:1px solid rgba(5,205,153,.2);padding:6px 12px;border-radius:8px;font-weight:600;cursor:pointer;" onclick="assignToAll()">Assign to All</button>
+                                <button style="font-size:.8rem;background:rgba(238,93,80,.1);color:var(--danger);border:1px solid rgba(238,93,80,.2);padding:6px 12px;border-radius:8px;font-weight:600;cursor:pointer;" onclick="revokeFromAll()">Revoke All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" id="blog-management-section">
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-title">Blog Manager</span>
+                        <span class="panel-cnt" id="blog-post-count">0 posts</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="startNewPost()" id="new-post-btn" style="padding:.6rem 1.25rem;font-size:.85rem">Write New Post</button>
+                </div>
+                <div class="blog-manager-section" id="blog-list-section">
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="blog-posts-table">
+                            <thead><tr><th>Post</th><th>Published</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
+                            <tbody id="blog-posts-list">
+                                <tr><td colspan="4"><div style="padding:2rem;text-align:center;color:var(--text-muted)">Loading posts...</div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="blog-manager-section" id="blog-form-section" style="display:none; padding: 2rem;">
+                    <div style="background:var(--bg-light);padding:2rem;border-radius:16px;border:1px solid var(--border)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;">
+                            <h3 id="blog-form-title" style="font-family:'Poppins';font-size:1.1rem;font-weight:700;">Write New Post</h3>
+                        </div>
+                        <input type="hidden" id="edit-post-id">
+                        <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Title *</label><input type="text" id="blog-title" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;"></div>
+                        <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Short Excerpt</label><input type="text" id="blog-excerpt" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;"></div>
+                        <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Content *</label><div id="editor-container" style="background:var(--surface);min-height:280px;border-radius:0 0 10px 10px;border:1px solid var(--border);"></div></div>
+                        <div style="display:flex;gap:.85rem;margin-top:1.5rem;">
+                            <button class="btn btn-primary" onclick="submitBlogPost()" id="publish-blog-btn">Publish Post</button>
+                            <button class="btn btn-secondary" onclick="cancelBlogForm()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" id="ad-management-section">
+                <div class="panel-head"><div class="panel-title">Manage Community Ads (3 Slots)</div></div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1.5rem;padding:1rem 2rem 2rem;">
+                    <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
+                        <h4 style="font-family:'Poppins'">Ad Slot 1</h4>
+                        <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,1)">
+                        <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-1" alt="Preview 1" style="width:100%;border-radius:8px;">
+                        <textarea placeholder="Ad Copy Text..." id="copy-1" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
+                        <input type="url" placeholder="Advertiser Link (https://...)" id="link-1" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
+                        <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(1)">Save Slot 1</button>
+                    </div>
+                    <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
+                        <h4 style="font-family:'Poppins'">Ad Slot 2</h4>
+                        <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,2)">
+                        <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-2" alt="Preview 2" style="width:100%;border-radius:8px;">
+                        <textarea placeholder="Ad Copy Text..." id="copy-2" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
+                        <input type="url" placeholder="Advertiser Link (https://...)" id="link-2" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
+                        <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(2)">Save Slot 2</button>
+                    </div>
+                    <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
+                        <h4 style="font-family:'Poppins'">Ad Slot 3</h4>
+                        <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,3)">
+                        <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-3" alt="Preview 3" style="width:100%;border-radius:8px;">
+                        <textarea placeholder="Ad Copy Text..." id="copy-3" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
+                        <input type="url" placeholder="Advertiser Link (https://...)" id="link-3" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
+                        <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(3)">Save Slot 3</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="view-finance" class="view-section">
+            
+            <div class="panel" id="financial-tracker-section">
+                <div class="panel-head">
+                    <div class="panel-title">Financial Tracker</div>
+                    <button class="btn btn-primary" onclick="toggleFinanceForm()">+ Add Record</button>
+                </div>
+                
+                <div class="finance-form" id="finance-form">
+                    <input type="date" id="fin-date" required>
+                    <select id="fin-type">
+                        <option value="Income">Income (+)</option>
+                        <option value="Expense">Expense (-)</option>
+                    </select>
+                    <input type="number" id="fin-amount" placeholder="Amount (₦)" required>
+                    <input type="text" id="fin-party" placeholder="Party (Paid By/To)" required>
+                    <input type="text" id="fin-purpose" placeholder="Purpose of Transaction" style="grid-column: 1 / -1;" required>
+                    <button class="btn btn-primary" style="grid-column: 1 / -1; justify-content: center;" onclick="saveFinanceRecord()">Save Record</button>
+                </div>
+
+                <div class="rev-stats-grid" style="padding: 0 2rem;">
+                    <div class="rev-card"><div class="rev-card-lbl">Total Income</div><div class="rev-card-val" id="track-income" style="color:var(--success)">₦0</div></div>
+                    <div class="rev-card"><div class="rev-card-lbl">Total Expenses</div><div class="rev-card-val" id="track-expense" style="color:var(--danger)">₦0</div></div>
+                    <div class="rev-card"><div class="rev-card-lbl">Net Balance</div><div class="rev-card-val" id="track-net">₦0</div></div>
+                </div>
+
+                <div class="table-responsive" style="margin-top: 1rem;">
+                    <table class="data-tbl">
+                        <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Party</th><th>Purpose</th></tr></thead>
+                        <tbody id="finance-list">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel" id="analytics-section">
+                <div class="panel-head"><div class="panel-title">Revenue & Analytics Overview</div></div>
+                <div class="rev-stats-grid" style="padding: 0 2rem;">
+                    <div class="rev-card"><div class="rev-card-lbl">Total Course Revenue</div><div class="rev-card-val" id="rev-total">₦0</div></div>
+                    <div class="rev-card"><div class="rev-card-lbl">Monthly Revenue</div><div class="rev-card-val" id="rev-month">₦0</div></div>
+                    <div class="rev-card"><div class="rev-card-lbl">Estimated Profit</div><div class="rev-card-val" id="rev-profit">₦0</div></div>
+                    <div class="rev-card"><div class="rev-card-lbl">Course Sales Count</div><div class="rev-card-val" id="rev-sales">0</div></div>
+                </div>
+            </div>
+
+            <div class="panel" id="course-analytics-section">
+                <div class="panel-head"><div class="panel-title">Course Performance</div></div>
+                <div class="table-responsive">
+                    <table class="data-tbl">
+                        <thead><tr><th>Course</th><th>Enrolled</th><th>Revenue</th></tr></thead>
+                        <tbody id="course-analytics-tbody"><tr><td colspan="3" style="text-align:center;padding:2rem;">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
     </main>
@@ -577,6 +542,21 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+// ── VIEW NAVIGATION ──
+function showView(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    
+    // Highlight the correct sidebar link based on the view
+    if(viewId === 'view-dashboard') document.getElementById('nav-dashboard').classList.add('active');
+    if(viewId === 'view-users') document.getElementById('nav-users').classList.add('active');
+    if(viewId === 'view-content') document.getElementById('nav-content').classList.add('active');
+    if(viewId === 'view-finance') document.getElementById('nav-finance').classList.add('active');
+    
+    closeSidebar();
+}
+
 // ── THEME & UI ──
 const themes=['system','light','dark']; const themeIcons={system:'💻',light:'☀️',dark:'🌙'};
 function cycleTheme(){const cur=localStorage.getItem('enet_theme')||'system';const next=themes[(themes.indexOf(cur)+1)%themes.length];localStorage.setItem('enet_theme',next);applyTheme(next);}
@@ -596,7 +576,8 @@ function showToast(msg, type='success', link=null){
 
 let _deleteCallback=null;
 function openDeleteModal(msg,cb){document.getElementById('deleteModal-msg').textContent=msg;_deleteCallback=cb;document.getElementById('deleteModal').classList.add('open');}
-function closeDeleteModal(){document.getElementById('deleteModal').classList.remove('open');_deleteCallback=null;}
+function closeDeleteModal(){document.getElementById('deleteModal').classList.remove('open');if(typeof _deleteCallback==='function')_deleteCallback();_deleteCallback=null;}
+document.getElementById('deleteModal-confirm').addEventListener('click', () => { closeDeleteModal(); });
 
 const GRADS=['linear-gradient(135deg,#02014a,#0d2a8f)','linear-gradient(135deg,#fcd116,#e0b800)','linear-gradient(135deg,#00a0df,#0088bd)'];
 function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length];}
@@ -604,12 +585,6 @@ function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString();}
 function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d);}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
-function emptyRow(msg,cols){return`<tr><td colspan="${cols}"><div style="padding: 3rem 2rem; text-align: center;"><div style="font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem;">${msg}</div><div style="font-size: 0.85rem; color: var(--text-muted);">No new data to display.</div></div></td></tr>`;}
-
-function scrollToMaterials(){document.getElementById('materials-admin-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
-function scrollToAnalytics(){document.getElementById('analytics-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
-function scrollToCourseAnalytics(){document.getElementById('course-analytics-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
-function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
 let _sb, _data=[], _tab='all', _allCourses=[];
 const ROLE_ICONS={student:'S',teacher:'T',instructor:'T',admin:'A'};
@@ -710,13 +685,10 @@ function closeDrawer(){document.getElementById('drawerBg').classList.remove('ope
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
 
 // ── TABLES & STATS ──
-window.statCardNav = function(tab){ switchTab(tab); setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50); };
-window.quickNav = function(tab){ closeSidebar(); switchTab(tab); setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300); };
-
 function renderPending(data){
     const pending=data.filter(u=>u.status==='pending'); const pc=pending.length;
     document.getElementById('pend-badge').textContent=pc; document.getElementById('stat-pending').textContent=pc;
-    if(!pc) { document.getElementById('pending-users-list').innerHTML=emptyRow('All caught up!',5); return; }
+    if(!pc) { document.getElementById('pending-users-list').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:2rem;">All caught up! No pending approvals.</td></tr>`; return; }
     document.getElementById('pending-users-list').innerHTML=pending.map(u=>{const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();const r=getRole(u);return `<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div></div></div></td><td>${u.email||'N/A'}</td><td><span style="font-size:0.7rem;font-weight:bold;text-transform:uppercase;background:rgba(0,160,223,0.1);color:var(--accent-cyan);padding:4px 8px;border-radius:4px;">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><button style="padding:6px 12px;background:rgba(5,205,153,.1);color:var(--success);border:none;border-radius:8px;cursor:pointer;font-weight:bold;" onclick="approveUser('${u.id}')">Approve</button></td></tr>`;}).join('');
 }
 
@@ -733,13 +705,13 @@ function renderUsers(data,tab){
     else if(tab==='admins')rows=rows.filter(u=>getRole(u)==='admin');
     if(q)rows=rows.filter(u=>((u.first_name||'')+' '+(u.last_name||'')).toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));
     document.getElementById('users-badge').textContent=rows.length;
-    if(!rows.length) { document.getElementById('all-users-list').innerHTML=emptyRow('No users found',6); return; }
+    if(!rows.length) { document.getElementById('all-users-list').innerHTML=`<tr><td colspan="6" style="text-align:center;padding:2rem;">No users found.</td></tr>`; return; }
     document.getElementById('all-users-list').innerHTML=rows.map(u=>{const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();const r=getRole(u);const isInactive=u.status==='inactive';return `<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)};${isInactive?'filter:grayscale(1);opacity:.55':''}">${inits(u.first_name,u.last_name)}</div><div><div class="uname" style="${isInactive?'color:var(--text-muted)':''}">${nm}</div></div></div></td><td>${u.email||'N/A'}</td><td><span style="font-size:0.7rem;font-weight:bold;text-transform:uppercase;">${r}</span></td><td><span style="font-size:0.7rem;font-weight:bold;color:${isInactive?'var(--danger)':'var(--success)'}">${isInactive?'Suspended':'Active'}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><button style="padding:6px 12px;background:var(--bg-light);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-weight:bold;color:var(--text-gray);" onclick="toggleUserStatus('${u.id}','${isInactive?'approved':'inactive'}')">${isInactive?'Activate':'Suspend'}</button></td></tr>`;}).join('');
 }
 
 function renderAll(){renderPending(_data);renderStats(_data);renderUsers(_data,_tab);}
 window.switchTab=function(tab){_tab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');renderUsers(_data,tab);};
-window.filterUsers=function(){renderUsers(_data,_tab);};
+window.filterUsers=function(){if(document.getElementById('view-users').classList.contains('active')) { renderUsers(_data,_tab); } else { showView('view-users'); switchTab('all'); renderUsers(_data, 'all'); }};
 
 async function mutate(userId,updates){const idx=_data.findIndex(u=>u.id===userId);if(idx!==-1)Object.assign(_data[idx],updates);renderAll();const{error}=await _sb.from('profiles').update(updates).eq('id',userId);if(error){showToast('Save failed','error');loadProfiles();}}
 window.approveUser=async function(userId){await mutate(userId,{status:'approved'});showToast('User approved!','success');};
@@ -767,7 +739,7 @@ async function loadGlobalActivity() {
         const badge = document.getElementById('bell-badge');
         if(badge) badge.textContent = pendingCount>0 ? pendingCount : topNotifs.length;
         
-        let actHtml=''; activities.slice(0,8).forEach(act=>{actHtml+=`<div class="activity-item"><div class="act-av">${act.icon}</div><div class="act-text"><p>${act.msg}</p><span class="act-time">${timeAgo(act.time)}</span></div></div>`;});
+        let actHtml=''; activities.slice(0,8).forEach(act=>{actHtml+=`<div style="display:flex;gap:12px;align-items:center;padding:10px 15px;border-bottom:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:50%;background:var(--bg-light);display:flex;align-items:center;justify-content:center;font-weight:bold;color:var(--accent-cyan);">${act.icon}</div><div><p style="font-size:0.85rem;color:var(--text-dark);margin-bottom:4px;">${act.msg}</p><span style="font-size:0.7rem;color:var(--text-muted);">${timeAgo(act.time)}</span></div></div>`;});
         document.getElementById('recent-activities-list').innerHTML=actHtml||'<p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">No recent activity.</p>';
     } catch(err){console.error("Failed to load global activity radar:",err);}
 }
@@ -787,6 +759,7 @@ window.addEventListener('load', async () => {
     initQuill();
     loadProfiles();
     subscribeRealtime();
+    loadFinanceRecords(); // Initialize local finance tracker
 });
 
 window.forceLogout = async () => { try { await _sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; } };
@@ -860,10 +833,8 @@ async function fetchAllMaterials() {
 function renderAdminMatList() {
     const search = (document.getElementById('admin-mat-search').value || '').toLowerCase();
     const courseF = document.getElementById('admin-mat-course-filter').value;
-    const typeF = document.getElementById('admin-mat-type-filter').value;
     let filtered = _allMaterials.filter(m => {
         if (courseF && m.course_id !== courseF) return false;
-        if (typeF && m.material_type !== typeF) return false;
         if (search && !m.title.toLowerCase().includes(search) && !(m.file_name || '').toLowerCase().includes(search)) return false;
         return true;
     });
@@ -872,7 +843,7 @@ function renderAdminMatList() {
     if (!filtered.length) { container.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem;">No materials found.</div>`; return; }
     container.innerHTML = filtered.map(m => {
         const assigned = (_matAssignments[m.id] || new Set()).size;
-        const statusPill = assigned > 0 ? `<span class="mat-assigned-pill">✓ ${assigned}</span>` : `<span class="mat-unassigned-pill">Unassigned</span>`;
+        const statusPill = assigned > 0 ? `<span style="font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: rgba(5,205,153,.1); color: var(--success); border: 1px solid rgba(5,205,153,.2);">✓ ${assigned}</span>` : `<span style="font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: rgba(252,209,22,.15); color: #8a6500; border: 1px solid rgba(252,209,22,.3);">Unassigned</span>`;
         const instrName = `${m.profiles?.first_name || ''} ${m.profiles?.last_name || ''}`.trim() || 'Instructor';
         return `<div class="mat-list-item ${_selectedMaterialId === m.id ? 'selected' : ''}" onclick="selectMaterial('${m.id}')">
             <div class="mat-type-icon-sm ${adminMatTypeClass(m.file_name)}">${adminMatIcon(m.file_name)}</div>
@@ -888,7 +859,7 @@ async function selectMaterial(matId) {
     document.getElementById('mat-assign-placeholder').style.display = 'none';
     const ap = document.getElementById('mat-assign-active'); ap.style.display = 'flex';
     const instrName = `${mat.profiles?.first_name || ''} ${mat.profiles?.last_name || ''}`.trim() || 'Instructor';
-    document.getElementById('mat-detail-head').innerHTML = `<div class="mat-detail-title">${mat.title}</div><div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem;">By ${instrName} · ${new Date(mat.created_at).toLocaleDateString()}</div><div class="mat-detail-meta"><span class="mat-detail-badge course">${mat.courses?.title || ''}</span>${mat.file_size_bytes ? `<span class="mat-detail-badge size">${adminFormatSize(mat.file_size_bytes)}</span>` : ''}<a href="${mat.file_url}" target="_blank" style="font-size:.72rem;font-weight:700;color:var(--accent-cyan);text-decoration:none;">↗ Preview</a></div>`;
+    document.getElementById('mat-detail-head').innerHTML = `<div style="font-family:'Poppins'; font-weight:700; font-size:1rem; margin-bottom:.3rem;">${mat.title}</div><div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem;">By ${instrName} · ${new Date(mat.created_at).toLocaleDateString()}</div><div><span style="font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg-light); color: var(--text-muted); border: 1px solid var(--border); margin-right: 5px;">${mat.courses?.title || ''}</span><a href="${mat.file_url}" target="_blank" style="font-size:.72rem;font-weight:700;color:var(--accent-cyan);text-decoration:none;">↗ Preview</a></div>`;
     document.getElementById('mat-student-search').value = ''; renderStudentAssignList();
 }
 
@@ -907,7 +878,7 @@ function renderStudentAssignList() {
         const isAssigned = assignedSet.has(student.id);
         return `<div class="student-assign-item ${isAssigned ? 'assigned' : ''}" id="sai-${student.id}">
             <div class="student-assign-avatar">${((student.first_name || 'S')[0] + (student.last_name || '?')[0]).toUpperCase()}</div>
-            <div class="student-assign-info"><div class="student-assign-name">${student.first_name || ''} ${student.last_name || ''}</div><div class="student-assign-course">${student.email || ''}</div></div>
+            <div style="flex:1"><div style="font-weight: 700; font-size: .85rem;">${student.first_name || ''} ${student.last_name || ''}</div><div style="font-size: .72rem; color: var(--text-muted);">${student.email || ''}</div></div>
             ${isAssigned ? `<button class="student-assign-toggle revoke-btn" id="btn-${student.id}" onclick="toggleAssignment('${student.id}', '${_selectedMaterialId}', false)">Revoke</button>` : `<button class="student-assign-toggle assign-btn" id="btn-${student.id}" onclick="toggleAssignment('${student.id}', '${_selectedMaterialId}', true)">Assign</button>`}
         </div>`;
     }).join('');
@@ -967,7 +938,6 @@ async function loadAnalytics(){
         const certs = certRes.data || [];
         const courses = _allCourses || [];
 
-        // Build price map safely
         const priceMap = {};
         const isEventMap = {};
         courses.forEach(c => { priceMap[c.id] = Number(c.price || 0); isEventMap[c.id] = c.is_event_course; });
@@ -984,12 +954,87 @@ async function loadAnalytics(){
         document.getElementById('rev-profit').textContent = '₦'+Math.round(total*0.85).toLocaleString();
         document.getElementById('rev-sales').textContent = sales.toLocaleString();
 
-        // Course Perf
         const enrollMap={}; enrollments.forEach(en=>{enrollMap[en.course_id]=(enrollMap[en.course_id]||0)+1;});
         const sorted=[...courses].sort((a,b)=>(enrollMap[b.id]||0)-(enrollMap[a.id]||0));
         document.getElementById('course-analytics-tbody').innerHTML = sorted.slice(0,5).map(c => `<tr><td>${c.title}</td><td>${enrollMap[c.id]||0}</td><td>₦${(Number(c.price||0)*(enrollMap[c.id]||0)).toLocaleString()}</td></tr>`).join('');
     } catch(e){}
 }
+
+// ── FINANCIAL TRACKER ENGINE ──
+let _financeRecords = [];
+function toggleFinanceForm() {
+    const f = document.getElementById('finance-form');
+    f.classList.toggle('open');
+}
+
+function loadFinanceRecords() {
+    const data = localStorage.getItem('enet_finance_records');
+    _financeRecords = data ? JSON.parse(data) : [];
+    renderFinanceTracker();
+}
+
+function saveFinanceRecord() {
+    const fDate = document.getElementById('fin-date').value;
+    const fType = document.getElementById('fin-type').value;
+    const fAmount = parseFloat(document.getElementById('fin-amount').value);
+    const fParty = document.getElementById('fin-party').value;
+    const fPurpose = document.getElementById('fin-purpose').value;
+    
+    if(!fDate || !fAmount || !fParty || !fPurpose) {
+        showToast("Please fill all finance fields", "error");
+        return;
+    }
+
+    _financeRecords.push({
+        id: Date.now(),
+        date: fDate,
+        type: fType,
+        amount: fAmount,
+        party: fParty,
+        purpose: fPurpose
+    });
+    
+    // Using local storage for now to keep DB intact, can connect to a new Supabase table later.
+    localStorage.setItem('enet_finance_records', JSON.stringify(_financeRecords));
+    
+    // Clear form
+    document.getElementById('fin-amount').value = '';
+    document.getElementById('fin-party').value = '';
+    document.getElementById('fin-purpose').value = '';
+    
+    renderFinanceTracker();
+    showToast("Record added successfully");
+}
+
+function renderFinanceTracker() {
+    let totIn = 0, totEx = 0;
+    
+    // Sort descending by date
+    _financeRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    const html = _financeRecords.map(r => {
+        if(r.type === 'Income') totIn += r.amount; else totEx += r.amount;
+        const badgeClass = r.type === 'Income' ? 'type-income' : 'type-expense';
+        return `<tr>
+            <td>${fmtDate(r.date)}</td>
+            <td><span class="type-badge ${badgeClass}">${r.type}</span></td>
+            <td style="font-weight:bold;">₦${r.amount.toLocaleString()}</td>
+            <td>${r.party}</td>
+            <td>${r.purpose}</td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('finance-list').innerHTML = html || `<tr><td colspan="5" style="text-align:center;padding:2rem;">No financial records found.</td></tr>`;
+    
+    document.getElementById('track-income').textContent = '₦' + totIn.toLocaleString();
+    document.getElementById('track-expense').textContent = '₦' + totEx.toLocaleString();
+    
+    const net = totIn - totEx;
+    const netEl = document.getElementById('track-net');
+    netEl.textContent = '₦' + net.toLocaleString();
+    netEl.style.color = net >= 0 ? 'var(--success)' : 'var(--danger)';
+}
+
 
 // ── BLOG MANAGER ──
 let quillEditor, _isEditMode=false, _removeCoverOnSave=false;
@@ -997,26 +1042,18 @@ function initQuill(){if(quillEditor)return;quillEditor=new Quill('#editor-contai
 async function loadBlogPosts(){
     const {data} = await _sb.from('blog_posts').select('*').order('created_at',{ascending:false});
     document.getElementById('blog-post-count').textContent = (data||[]).length + ' posts';
-    document.getElementById('nav-blog-count').textContent = (data||[]).length;
     document.getElementById('blog-posts-list').innerHTML = (data||[]).map(p => `<tr><td>${p.title}</td><td>${new Date(p.created_at).toLocaleDateString()}</td><td>Published</td><td style="text-align:right"><button style="padding:6px 12px;background:rgba(238,93,80,.1);color:var(--danger);border:none;border-radius:8px;cursor:pointer;font-weight:bold;" onclick="deleteBlogPost('${p.id}')">Delete</button></td></tr>`).join('');
 }
 function startNewPost(){ _isEditMode=false; document.getElementById('blog-title').value=''; document.getElementById('blog-excerpt').value=''; quillEditor.root.innerHTML=''; document.getElementById('blog-list-section').style.display='none'; document.getElementById('blog-form-section').style.display='block'; }
 function cancelBlogForm(){ document.getElementById('blog-list-section').style.display='block'; document.getElementById('blog-form-section').style.display='none'; }
 async function deleteBlogPost(id) { await _sb.from('blog_posts').delete().eq('id', id); loadBlogPosts(); showToast('Deleted'); }
-function previewCover(event){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const p=document.getElementById('cover-preview');p.src=e.target.result;p.classList.add('show');_removeCoverOnSave=false;};r.readAsDataURL(f);}
-function removeCover(){const p=document.getElementById('cover-preview');p.src='';p.classList.remove('show');document.getElementById('blog-cover').value='';_removeCoverOnSave=true;}
+
 async function submitBlogPost(){
-    const title=document.getElementById('blog-title').value.trim(); const excerpt=document.getElementById('blog-excerpt').value.trim(); const content=quillEditor.root.innerHTML; const fileInput=document.getElementById('blog-cover');
+    const title=document.getElementById('blog-title').value.trim(); const excerpt=document.getElementById('blog-excerpt').value.trim(); const content=quillEditor.root.innerHTML;
     if(!title) return showToast('Title required', 'error');
     const btn=document.getElementById('publish-blog-btn'); btn.disabled=true; btn.textContent='Publishing...';
     try {
-        let coverUrl=undefined;
-        if(_removeCoverOnSave) coverUrl=null;
-        else if(fileInput.files.length>0){const f=fileInput.files[0];const fn=`blog_${Date.now()}.${f.name.split('.').pop()}`;await _sb.storage.from('blog_images').upload(fn,f);coverUrl=_sb.storage.from('blog_images').getPublicUrl(fn).data.publicUrl;}
-        
         const insertData={title, excerpt, content};
-        if(coverUrl!==undefined) insertData.cover_image=coverUrl;
-        
         const {data: userData} = await _sb.auth.getUser();
         if(userData.user) insertData.author_id=userData.user.id;
         
