@@ -9,8 +9,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script>
         const _st = localStorage.getItem('enet_theme') || 'system';
-        document.documentElement.setAttribute('data-theme',
-            _st === 'dark' || (_st === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', _st === 'dark' || (_st === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
     </script>
     <style>
         :root {
@@ -81,6 +80,7 @@
 
         .header-logout-btn { display: flex; align-items: center; gap: 6px; background: rgba(238,93,80,0.1); color: var(--danger); border: 1px solid rgba(238,93,80,0.2); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; font-family: 'DM Sans', sans-serif;}
         .header-logout-btn:hover { background: var(--danger); color: #fff; box-shadow: 0 4px 10px rgba(238,93,80,0.3); transform: translateY(-2px);}
+        .logout-btn-mobile { display: none; color: var(--danger); border-color: rgba(238,93,80,0.2); background: rgba(238,93,80,0.1); }
 
         .content{padding:0 2.5rem 2.5rem;flex:1}
 
@@ -95,7 +95,6 @@
         .stat-lbl{font-size:.85rem;font-weight:500;opacity:.9;margin-bottom:.5rem}
         .stat-card.brand-surface .stat-lbl{color:var(--text-gray)}
         .stat-num{font-family:'Poppins',sans-serif;font-size:2.25rem;font-weight:700;line-height:1;margin-bottom:.25rem}
-        .stat-card.brand-surface .stat-num{color:var(--text-dark)}
 
         /* PANELS */
         .dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
@@ -150,7 +149,6 @@
         .mat-list-item { display: flex; align-items: center; gap: .85rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; position: relative; }
         .mat-list-item:hover { background: var(--surface-hover); }
         .mat-list-item.selected { background: rgba(0,160,223,.08); border-left: 3px solid var(--accent-cyan); }
-        .mat-list-item:last-child { border-bottom: none; }
         .mat-list-item .mat-type-icon-sm { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; background: var(--border-bright);}
         .mat-list-item-info { flex: 1; min-width: 0; }
         .mat-list-item-title { font-weight: 700; color: var(--text-dark); font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
@@ -173,6 +171,7 @@
         .student-assign-toggle { font-size: .78rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; transition: all .2s; }
         .student-assign-toggle.assign-btn { background: var(--accent-cyan); color: #fff; }
         .student-assign-toggle.revoke-btn { background: rgba(238,93,80,.1); color: var(--danger); border: 1px solid rgba(238,93,80,.2); }
+        .mat-bulk-actions { display: flex; gap: .75rem; padding: .75rem 1.25rem; border-top: 1px solid var(--border); background: var(--surface); flex-wrap: wrap; align-items: center; }
 
         /* ANALYTICS CSS */
         .analytics-section-header { display: flex; align-items: center; justify-content: space-between; padding: 2rem 0 1rem; flex-wrap: wrap; gap: 1rem; }
@@ -189,30 +188,29 @@
         .empty-sub { font-size: 0.85rem; color: var(--text-muted); }
         .empty-cell-large { padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* MODALS */
+        /* MODALS & DRAWER */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.show { display: flex; }
-        .modal-content { background: var(--surface); border: 1px solid var(--border-bright); border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; max-height: 90vh; overflow-y: auto;}
         
-        /* DRAWER */
         .drawer-backdrop{position:fixed;inset:0;background:rgba(2,1,74,0.5);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
         .drawer-backdrop.open{opacity:1;pointer-events:all}
-        .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+        .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
         .drawer.open{transform:translateX(0)}
         .drawer-header{padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-light)}
         .drawer-close{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:1.1rem; z-index: 10;}
+        .drawer-body{flex:1;overflow-y:auto;padding:1.75rem; z-index: 5;}
 
         /* TOAST */
         .toast-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
-        .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;}
-
+        .toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--success);border-radius:14px;padding:1rem 1.5rem;box-shadow:0 10px 40px var(--shadow-color);font-size:.9rem;font-weight:600;color:var(--text-dark);pointer-events:all;animation:toastIn .3s ease;max-width:360px}
+        .toast.success{border-left:4px solid var(--success)}
+        .toast.error{border-left:4px solid var(--danger)}
         @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(12px)}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
         @media(max-width:1200px){ .mat-assign-grid { grid-template-columns: 1fr; } .rev-stats-grid { grid-template-columns: repeat(2,1fr); } .analytics-two-col { grid-template-columns: 1fr; } }
-        @media(max-width:992px){ .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-wrap{margin-left:0}.mobile-toggle{display:flex}.stats-grid{grid-template-columns:repeat(2,1fr)} }
-        @media(max-width:576px){ .stats-grid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}.drawer{width:100vw} }
+        @media(max-width:992px){ .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-wrap{margin-left:0}.mobile-toggle{display:flex}.stats-grid{grid-template-columns:repeat(2,1fr)}.close-sidebar{display:block} }
+        @media(max-width:576px){ .stats-grid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.2rem}.topbar-right{width:100%;justify-content:space-between;}.search-wrap{width:100%;margin-top:5px}.drawer{width:100vw} }
     </style>
 </head>
 <body>
@@ -245,13 +243,13 @@
     </div>
     
     <div class="nav-label">Main Menu</div>
-    <a class="nav-item active" href="admin-dashboard.html">
+    <a class="nav-item active" href="admin-dashboard.html" id="nav-dashboard">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
     </a>
-    <a class="nav-item" href="#" onclick="quickNav('students');return false;">
+    <a class="nav-item" href="#" onclick="quickNav('students');return false;" id="nav-students">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Students
     </a>
-    <a class="nav-item" href="#" onclick="quickNav('teachers');return false;">
+    <a class="nav-item" href="#" onclick="quickNav('teachers');return false;" id="nav-teachers">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Teachers
     </a>
     <a class="nav-item" href="community.html">
@@ -272,7 +270,7 @@
     <a class="nav-item" href="#" onclick="scrollToBlog();return false;">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Blog Manager <span class="nav-badge" id="nav-blog-count">0</span>
     </a>
-    <a class="nav-item" href="#" onclick="quickNav('admins');return false;">
+    <a class="nav-item" href="#" onclick="quickNav('admins');return false;" id="nav-admins">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admins
     </a>
     <a class="nav-item" href="#" onclick="document.querySelector('.pend').scrollIntoView({behavior:'smooth'});closeSidebar();return false;">
@@ -301,6 +299,18 @@
             </div>
             <div class="live-dot" title="Real-time sync active">LIVE</div>
             <button class="icon-btn" onclick="cycleTheme()" title="Toggle theme"><span id="theme-icon">💻</span></button>
+            
+            <div class="notification-wrapper">
+                <div class="icon-btn" onclick="toggleNotifications()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <div class="bell-badge" id="bell-badge">0</div>
+                </div>
+                <div class="notification-dropdown" id="notif-dropdown">
+                    <div class="notif-header"><h4>Academy Activity</h4><span id="notif-count">0 Recent</span></div>
+                    <div class="notif-body" id="notif-list"><div class="notif-empty">Loading...</div></div>
+                </div>
+            </div>
+
             <button class="header-logout-btn" onclick="forceLogout()" title="Log Out">
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Log Out
@@ -311,11 +321,11 @@
     <main class="content">
 
         <div class="stats-grid">
-            <div class="stat-card brand-blue" onclick="statCardNav('students')">
+            <div class="stat-card brand-blue" id="card-students" onclick="statCardNav('students')">
                 <div class="stat-lbl">Total Students</div>
                 <div class="stat-num" id="stat-students">—</div>
             </div>
-            <div class="stat-card brand-orange" onclick="statCardNav('teachers')">
+            <div class="stat-card brand-orange" id="card-teachers" onclick="statCardNav('teachers')">
                 <div class="stat-lbl">Active Teachers</div>
                 <div class="stat-num" id="stat-teachers">—</div>
             </div>
@@ -360,6 +370,13 @@
                         <tr><td colspan="6"><p style="text-align:center;padding:2rem;">Loading...</p></td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="panel activity">
+            <div class="panel-head"><div class="panel-title">Recent Activity</div></div>
+            <div class="activity-list" id="recent-activities-list">
+                <p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">Loading pulse of the academy...</p>
             </div>
         </div>
 
@@ -517,17 +534,26 @@
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:1rem 2rem 2rem;">
                 <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
                     <h4 style="font-family:'Poppins'">Ad Slot 1</h4>
-                    <input type="url" placeholder="Advertiser Link" id="link-1" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,1)">
+                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-1" alt="Preview 1">
+                    <textarea placeholder="Ad Copy Text..." id="copy-1" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
+                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-1" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
                     <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(1)">Save Slot 1</button>
                 </div>
                 <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
                     <h4 style="font-family:'Poppins'">Ad Slot 2</h4>
-                    <input type="url" placeholder="Advertiser Link" id="link-2" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,2)">
+                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-2" alt="Preview 2">
+                    <textarea placeholder="Ad Copy Text..." id="copy-2" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
+                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-2" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
                     <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(2)">Save Slot 2</button>
                 </div>
                 <div style="background:var(--bg-light);padding:1.5rem;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;">
                     <h4 style="font-family:'Poppins'">Ad Slot 3</h4>
-                    <input type="url" placeholder="Advertiser Link" id="link-3" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
+                    <input type="file" class="ad-image-input" accept="image/*" onchange="previewAdImage(event,3)">
+                    <img src="https://via.placeholder.com/300x150?text=Upload+Ad+Image" class="ad-preview-img" id="preview-3" alt="Preview 3">
+                    <textarea placeholder="Ad Copy Text..." id="copy-3" style="width:100%;height:80px;padding:.8rem;border-radius:8px;border:1px solid var(--border);resize:none;outline:none"></textarea>
+                    <input type="url" placeholder="Advertiser Link (https://...)" id="link-3" style="padding:.8rem;border-radius:8px;border:1px solid var(--border);outline:none;width:100%;">
                     <button class="btn btn-admin" style="width:100%;justify-content:center;padding:.8rem" onclick="saveAd(3)">Save Slot 3</button>
                 </div>
             </div>
@@ -552,9 +578,21 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
 // ── THEME & UI ──
-function cycleTheme() { let c = localStorage.getItem('enet_theme') || 'system'; let n = ['system','light','dark'][(['system','light','dark'].indexOf(c)+1)%3]; localStorage.setItem('enet_theme', n); document.documentElement.setAttribute('data-theme', n==='dark'||(n==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'); }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('show'); }
-function showToast(msg, type='success'){ const w=document.getElementById('toast-wrap'); const t=document.createElement('div'); t.className=`toast ${type}`; t.innerHTML=`<span>${type==='error'?'✕':'✓'}</span><span>${msg}</span>`; t.style.display="flex"; t.style.alignItems="center"; t.style.gap=".75rem"; t.style.background="var(--surface)"; t.style.border="1px solid var(--border)"; t.style.borderRadius="14px"; t.style.padding="1rem 1.5rem"; t.style.boxShadow="0 10px 40px var(--shadow-color)"; t.style.fontSize=".9rem"; t.style.fontWeight="600"; t.style.color="var(--text-dark)"; t.style.pointerEvents="all"; t.style.borderLeft=`4px solid ${type==='error'?'var(--danger)':'var(--success)'}`; w.appendChild(t); setTimeout(()=>t.remove(),4000); }
+const themes=['system','light','dark']; const themeIcons={system:'💻',light:'☀️',dark:'🌙'};
+function cycleTheme(){const cur=localStorage.getItem('enet_theme')||'system';const next=themes[(themes.indexOf(cur)+1)%themes.length];localStorage.setItem('enet_theme',next);applyTheme(next);}
+function applyTheme(t){const el=document.getElementById('theme-icon');if(el)el.textContent=themeIcons[t];document.documentElement.setAttribute('data-theme',t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':t);}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('enet_theme')==='system')document.documentElement.setAttribute('data-theme',e.matches?'dark':'light');});
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show');}
+
+function showToast(msg, type='success', link=null){
+    const wrap = document.getElementById('toast-wrap');
+    const t = document.createElement('div'); t.className = `toast ${type}`;
+    let icon = type === 'error' ? '✕' : type === 'info' ? '🔔' : '✓';
+    if(link && type === 'info') { t.style.cursor = 'pointer'; t.onclick = () => window.location.href = link; t.innerHTML = `<span>${icon}</span><span>${msg} <br><span style="font-size:0.75rem; color:var(--text-muted); text-decoration:underline;">Click to view</span></span>`; } 
+    else { t.innerHTML = `<span>${icon}</span><span>${msg}</span>`; }
+    wrap.appendChild(t); setTimeout(()=>{ t.style.animation = 'toastOut .3s ease forwards'; setTimeout(()=>t.remove(), 320); }, 5000);
+}
 
 let _deleteCallback=null;
 function openDeleteModal(msg,cb){document.getElementById('deleteModal-msg').textContent=msg;_deleteCallback=cb;document.getElementById('deleteModal').classList.add('open');}
@@ -564,14 +602,16 @@ const GRADS=['linear-gradient(135deg,#02014a,#0d2a8f)','linear-gradient(135deg,#
 function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length];}
 function inits(f,l){return((f||'U')[0]+(l||'?')[0]).toUpperCase();}
 function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString();}
+function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return fmtDate(d);}
 function getRole(u){return(u.role||'').trim().toLowerCase()||'student';}
 function emptyRow(msg,cols){return`<tr><td colspan="${cols}"><div style="padding: 3rem 2rem; text-align: center;"><div style="font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem;">${msg}</div><div style="font-size: 0.85rem; color: var(--text-muted);">No new data to display.</div></div></td></tr>`;}
 
 function scrollToMaterials(){document.getElementById('materials-admin-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 function scrollToAnalytics(){document.getElementById('analytics-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
+function scrollToCourseAnalytics(){document.getElementById('course-analytics-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 function scrollToBlog(){document.getElementById('blog-management-section').scrollIntoView({behavior:'smooth'});closeSidebar();}
 
-let _data=[], _tab='all', _sb, _allCourses=[];
+let _sb, _data=[], _tab='all', _allCourses=[];
 const ROLE_ICONS={student:'S',teacher:'T',instructor:'T',admin:'A'};
 
 // ── USER DRAWER (WITH GHOST LOGIN & COURSE ENROLLMENT) ──
@@ -625,7 +665,6 @@ function openDrawer(userId){
     }
     else {
         actions=`<button style="padding:8px 12px;background:rgba(0,160,223,0.1);color:var(--accent-cyan);border:none;border-radius:8px;cursor:pointer;font-weight:bold;" onclick="makeAdmin('${u.id}');closeDrawer()">Make Admin</button>${isInactive?`<button style="padding:8px 12px;background:rgba(5,205,153,.1);color:var(--success);border:none;border-radius:8px;cursor:pointer;font-weight:bold;" onclick="toggleUserStatus('${u.id}','approved');closeDrawer()">Activate</button>`:`<button style="padding:8px 12px;background:var(--bg-light);color:var(--text-gray);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-weight:bold;" onclick="toggleUserStatus('${u.id}','inactive');closeDrawer()">Suspend</button>`}`;
-        // GHOST MODE BUTTON
         actions+=`<button style="grid-column:span 2;padding:12px;background:var(--brand-navy);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px;" onclick="impersonateUser('${u.id}', '${displayRole}')">Ghost Login as ${u.first_name || 'User'}</button>`;
     }
     
@@ -670,7 +709,7 @@ function openDrawer(userId){
 function closeDrawer(){document.getElementById('drawerBg').classList.remove('open');document.getElementById('userDrawer').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
 
-// ── TABLES & TABS ──
+// ── TABLES & STATS ──
 window.statCardNav = function(tab){ switchTab(tab); setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth',block:'start'}),50); };
 window.quickNav = function(tab){ closeSidebar(); switchTab(tab); setTimeout(()=>document.querySelector('.users').scrollIntoView({behavior:'smooth'}),300); };
 
@@ -709,6 +748,30 @@ window.makeAdmin=async function(userId){openDeleteModal('Grant admin privileges?
 window.removeAdmin=async function(userId){openDeleteModal('Remove admin privileges?',async()=>{await mutate(userId,{role:'student'});showToast('Admin removed','info');});};
 window.toggleUserStatus=async function(userId,newStatus){openDeleteModal(newStatus==='inactive'?'Suspend this account?':'Reactivate account?',async()=>{await mutate(userId,{status:newStatus});showToast(newStatus==='inactive'?'Suspended':'Activated','info');});};
 
+// ── GLOBAL ACTIVITY RADAR ──
+async function loadGlobalActivity() {
+    try {
+        const activities=[];const pendingCount=_data.filter(u=>u.status==='pending').length;
+        const{data:users}=await _sb.from('profiles').select('first_name, last_name, role, created_at').order('created_at',{ascending:false}).limit(5);
+        if(users)users.forEach(u=>activities.push({type:'user',time:u.created_at,icon:'U',msg:`<strong>${u.first_name} ${u.last_name||''}</strong> registered as a ${u.role}.`}));
+        const{data:courses}=await _sb.from('courses').select('title, created_at, profiles(first_name, last_name)').eq('is_published',true).order('created_at',{ascending:false}).limit(5);
+        if(courses)courses.forEach(c=>activities.push({type:'course',time:c.created_at,icon:'C',msg:`<strong>${c.profiles?.first_name||'A Teacher'}</strong> published the course: "${c.title}".`}));
+        const{data:certs}=await _sb.from('certificates').select('issued_at, profiles(first_name, last_name), courses(title)').order('issued_at',{ascending:false}).limit(5);
+        if(certs)certs.forEach(c=>activities.push({type:'cert',time:c.issued_at,icon:'A',msg:`<strong>${c.profiles?.first_name||'A Student'}</strong> completed the course: "${c.courses?.title}".`}));
+        const{data:posts}=await _sb.from('posts').select('created_at, profiles(first_name, last_name)').order('created_at',{ascending:false}).limit(5);
+        if(posts)posts.forEach(p=>activities.push({type:'post',time:p.created_at,icon:'P',msg:`<strong>${p.profiles?.first_name||'Someone'}</strong> posted in the Community Hub.`}));
+        
+        activities.sort((a,b)=>new Date(b.time)-new Date(a.time));
+        const topNotifs=activities.slice(0,15);
+        
+        const badge = document.getElementById('bell-badge');
+        if(badge) badge.textContent = pendingCount>0 ? pendingCount : topNotifs.length;
+        
+        let actHtml=''; activities.slice(0,8).forEach(act=>{actHtml+=`<div class="activity-item"><div class="act-av">${act.icon}</div><div class="act-text"><p>${act.msg}</p><span class="act-time">${timeAgo(act.time)}</span></div></div>`;});
+        document.getElementById('recent-activities-list').innerHTML=actHtml||'<p style="text-align:center;color:var(--text-muted);font-size:.85rem;padding:1rem">No recent activity.</p>';
+    } catch(err){console.error("Failed to load global activity radar:",err);}
+}
+
 // ── INIT & LOAD ──
 window.addEventListener('load', async () => {
     const t = localStorage.getItem('enet_theme') || 'system'; applyTheme(t);
@@ -717,13 +780,13 @@ window.addEventListener('load', async () => {
     const { data: { session } } = await _sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
     
-    // Safety check - force clear ghost mode if admin logs out normally
     _sb.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT' || !session) { localStorage.removeItem('enet_impersonate_id'); window.location.href = 'login.html'; }
     });
 
-    loadProfiles();
     initQuill();
+    loadProfiles();
+    subscribeRealtime();
 });
 
 window.forceLogout = async () => { try { await _sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; } };
@@ -733,20 +796,33 @@ async function loadProfiles(){
         const{data,error}=await _sb.from('profiles').select('*').order('created_at',{ascending:false}).limit(500);
         if(error)throw error;_data=data||[];
         renderAll();
-        const{data:courses}=await _sb.from('courses').select('id,title,is_event_course').eq('is_published',true).order('title',{ascending:true});
+        const{data:courses}=await _sb.from('courses').select('id,title,price,is_event_course,instructor_id,is_published,created_at,profiles(first_name,last_name)').eq('is_published',true).order('title',{ascending:true});
         _allCourses=courses||[];
         
+        loadGlobalActivity();
         loadAnalytics();
         fetchAllMaterials();
         loadBlogPosts();
+        loadExistingAds();
     }catch(err){console.error(err);}
 }
 
+function subscribeRealtime(){
+    _sb.channel('db-changes')
+        .on('postgres_changes',{event:'*',schema:'public',table:'profiles'},p=>{loadProfiles();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'courses'},p=>{loadGlobalActivity();loadAnalytics();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'certificates'},p=>{loadGlobalActivity();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'posts'},p=>{loadGlobalActivity();})
+        .on('postgres_changes',{event:'INSERT',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
+        .on('postgres_changes',{event:'UPDATE',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
+        .on('postgres_changes',{event:'DELETE',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'learning_materials'}, p => { fetchAllMaterials(); })
+        .on('postgres_changes',{event:'*',schema:'public',table:'material_assignments'}, p => { fetchAllMaterials(); })
+        .subscribe();
+}
+
 // ── MATERIALS ADMIN ENGINE ──
-let _allMaterials = [];
-let _matEnrollments = {};
-let _matAssignments = {};
-let _selectedMaterialId = null;
+let _allMaterials = []; let _matEnrollments = {}; let _matAssignments = {}; let _selectedMaterialId = null;
 
 function adminMatIcon(filename) { const ext = (filename || '').split('.').pop().toLowerCase(); const map = {pdf:'📄',mp4:'🎬',docx:'📝',xlsx:'📊',pptx:'📋',zip:'🗜️'}; return map[ext] || '📁'; }
 function adminMatTypeClass(filename) { const ext = (filename || '').split('.').pop().toLowerCase(); const map = {pdf:'pdf',mp4:'video',docx:'document',xlsx:'spreadsheet',pptx:'presentation',zip:'archive'}; return map[ext] || 'other'; }
@@ -756,25 +832,19 @@ async function fetchAllMaterials() {
     try {
         const { data: materials, error } = await _sb.from('learning_materials').select('*, courses(id, title), profiles(first_name, last_name)').eq('is_active', true).order('created_at', { ascending: false });
         if (error) throw error; _allMaterials = materials || [];
-
         if (_allMaterials.length) {
             const matIds = _allMaterials.map(m => m.id);
             const { data: assignments } = await _sb.from('material_assignments').select('material_id, student_id').in('material_id', matIds);
             _matAssignments = {};
-            (assignments || []).forEach(a => {
-                if (!_matAssignments[a.material_id]) _matAssignments[a.material_id] = new Set();
-                _matAssignments[a.material_id].add(a.student_id);
-            });
+            (assignments || []).forEach(a => { if (!_matAssignments[a.material_id]) _matAssignments[a.material_id] = new Set(); _matAssignments[a.material_id].add(a.student_id); });
         }
-
         const cnt = _allMaterials.length;
         document.getElementById('admin-mat-count').textContent = cnt + ' materials';
         document.getElementById('nav-mat-count').textContent = cnt;
         document.getElementById('stat-materials-box').textContent = cnt;
 
         const courseMap = {}; _allMaterials.forEach(m => { if (m.courses) courseMap[m.courses.id] = m.courses.title; });
-        const courseFilter = document.getElementById('admin-mat-course-filter');
-        courseFilter.innerHTML = '<option value="">All Courses</option>' + Object.entries(courseMap).map(([id, title]) => `<option value="${id}">${title}</option>`).join('');
+        document.getElementById('admin-mat-course-filter').innerHTML = '<option value="">All Courses</option>' + Object.entries(courseMap).map(([id, title]) => `<option value="${id}">${title}</option>`).join('');
 
         renderAdminMatList();
 
@@ -782,10 +852,7 @@ async function fetchAllMaterials() {
         if (allCourseIds.length) {
             const { data: enrData } = await _sb.from('enrollments').select('course_id, student_id, profiles(id, first_name, last_name, email)').in('course_id', allCourseIds);
             _matEnrollments = {};
-            (enrData || []).forEach(en => {
-                if (!_matEnrollments[en.course_id]) _matEnrollments[en.course_id] = [];
-                if (en.profiles) _matEnrollments[en.course_id].push(en.profiles);
-            });
+            (enrData || []).forEach(en => { if (!_matEnrollments[en.course_id]) _matEnrollments[en.course_id] = []; if (en.profiles) _matEnrollments[en.course_id].push(en.profiles); });
         }
     } catch (err) {}
 }
@@ -794,19 +861,15 @@ function renderAdminMatList() {
     const search = (document.getElementById('admin-mat-search').value || '').toLowerCase();
     const courseF = document.getElementById('admin-mat-course-filter').value;
     const typeF = document.getElementById('admin-mat-type-filter').value;
-
     let filtered = _allMaterials.filter(m => {
         if (courseF && m.course_id !== courseF) return false;
         if (typeF && m.material_type !== typeF) return false;
         if (search && !m.title.toLowerCase().includes(search) && !(m.file_name || '').toLowerCase().includes(search)) return false;
         return true;
     });
-
     document.getElementById('mat-list-count').textContent = filtered.length;
     const container = document.getElementById('admin-mat-item-list');
-
     if (!filtered.length) { container.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem;">No materials found.</div>`; return; }
-
     container.innerHTML = filtered.map(m => {
         const assigned = (_matAssignments[m.id] || new Set()).size;
         const statusPill = assigned > 0 ? `<span class="mat-assigned-pill">✓ ${assigned}</span>` : `<span class="mat-unassigned-pill">Unassigned</span>`;
@@ -894,48 +957,82 @@ async function revokeFromAll() {
 // ── ANALYTICS ENGINE ──
 async function loadAnalytics(){
     try {
-        const [enRes, crRes, certRes] = await Promise.all([
-            _sb.from('enrollments').select('id,enrolled_at,enrollment_type,courses(title,price,is_event_course)').order('enrolled_at',{ascending:false}),
-            _sb.from('courses').select('id,title,price,is_event_course,is_published,profiles(first_name,last_name)').eq('is_published',true),
+        const [enRes, certRes] = await Promise.all([
+            _sb.from('enrollments').select('id,enrolled_at,enrollment_type,course_id').order('enrolled_at',{ascending:false}),
             _sb.from('certificates').select('id,course_id')
         ]);
         
         let total=0, monthly=0, sales=0; const now=new Date(); const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
-        (enRes.data||[]).forEach(en=>{
-            if(en.enrollment_type!=='member_perk' && en.courses && !en.courses.is_event_course) {
-                const p = Number(en.courses.price||0);
-                if(p>0){ total+=p; sales++; if(new Date(en.enrolled_at)>=monthStart) monthly+=p; }
+        const enrollments = enRes.data || [];
+        const certs = certRes.data || [];
+        const courses = _allCourses || [];
+
+        // Build price map safely
+        const priceMap = {};
+        const isEventMap = {};
+        courses.forEach(c => { priceMap[c.id] = Number(c.price || 0); isEventMap[c.id] = c.is_event_course; });
+
+        enrollments.forEach(en => {
+            if(en.enrollment_type!=='member_perk' && !isEventMap[en.course_id]) {
+                const p = priceMap[en.course_id] || 0;
+                if(p > 0){ total+=p; sales++; if(new Date(en.enrolled_at)>=monthStart) monthly+=p; }
             }
         });
+
         document.getElementById('rev-total').textContent = '₦'+total.toLocaleString();
         document.getElementById('rev-month').textContent = '₦'+monthly.toLocaleString();
         document.getElementById('rev-profit').textContent = '₦'+Math.round(total*0.85).toLocaleString();
         document.getElementById('rev-sales').textContent = sales.toLocaleString();
 
         // Course Perf
-        const enrollMap={}; (enRes.data||[]).forEach(en=>{enrollMap[en.course_id]=(enrollMap[en.course_id]||0)+1;});
-        const sorted=[...(crRes.data||[])].sort((a,b)=>(enrollMap[b.id]||0)-(enrollMap[a.id]||0));
+        const enrollMap={}; enrollments.forEach(en=>{enrollMap[en.course_id]=(enrollMap[en.course_id]||0)+1;});
+        const sorted=[...courses].sort((a,b)=>(enrollMap[b.id]||0)-(enrollMap[a.id]||0));
         document.getElementById('course-analytics-tbody').innerHTML = sorted.slice(0,5).map(c => `<tr><td>${c.title}</td><td>${enrollMap[c.id]||0}</td><td>₦${(Number(c.price||0)*(enrollMap[c.id]||0)).toLocaleString()}</td></tr>`).join('');
     } catch(e){}
 }
 
 // ── BLOG MANAGER ──
-let quillEditor, _isEditMode=false;
+let quillEditor, _isEditMode=false, _removeCoverOnSave=false;
 function initQuill(){if(quillEditor)return;quillEditor=new Quill('#editor-container',{theme:'snow'});}
 async function loadBlogPosts(){
     const {data} = await _sb.from('blog_posts').select('*').order('created_at',{ascending:false});
     document.getElementById('blog-post-count').textContent = (data||[]).length + ' posts';
     document.getElementById('nav-blog-count').textContent = (data||[]).length;
-    document.getElementById('blog-posts-list').innerHTML = (data||[]).map(p => `<tr><td>${p.title}</td><td>${new Date(p.created_at).toLocaleDateString()}</td><td>Published</td><td style="text-align:right"><button class="btn-secondary" onclick="deleteBlogPost('${p.id}')">Delete</button></td></tr>`).join('');
+    document.getElementById('blog-posts-list').innerHTML = (data||[]).map(p => `<tr><td>${p.title}</td><td>${new Date(p.created_at).toLocaleDateString()}</td><td>Published</td><td style="text-align:right"><button style="padding:6px 12px;background:rgba(238,93,80,.1);color:var(--danger);border:none;border-radius:8px;cursor:pointer;font-weight:bold;" onclick="deleteBlogPost('${p.id}')">Delete</button></td></tr>`).join('');
 }
 function startNewPost(){ _isEditMode=false; document.getElementById('blog-title').value=''; document.getElementById('blog-excerpt').value=''; quillEditor.root.innerHTML=''; document.getElementById('blog-list-section').style.display='none'; document.getElementById('blog-form-section').style.display='block'; }
 function cancelBlogForm(){ document.getElementById('blog-list-section').style.display='block'; document.getElementById('blog-form-section').style.display='none'; }
 async function deleteBlogPost(id) { await _sb.from('blog_posts').delete().eq('id', id); loadBlogPosts(); showToast('Deleted'); }
+function previewCover(event){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const p=document.getElementById('cover-preview');p.src=e.target.result;p.classList.add('show');_removeCoverOnSave=false;};r.readAsDataURL(f);}
+function removeCover(){const p=document.getElementById('cover-preview');p.src='';p.classList.remove('show');document.getElementById('blog-cover').value='';_removeCoverOnSave=true;}
 async function submitBlogPost(){
-    const title=document.getElementById('blog-title').value; const excerpt=document.getElementById('blog-excerpt').value; const content=quillEditor.root.innerHTML;
+    const title=document.getElementById('blog-title').value.trim(); const excerpt=document.getElementById('blog-excerpt').value.trim(); const content=quillEditor.root.innerHTML; const fileInput=document.getElementById('blog-cover');
     if(!title) return showToast('Title required', 'error');
-    await _sb.from('blog_posts').insert({title, excerpt, content});
-    showToast('Published'); loadBlogPosts(); cancelBlogForm();
+    const btn=document.getElementById('publish-blog-btn'); btn.disabled=true; btn.textContent='Publishing...';
+    try {
+        let coverUrl=undefined;
+        if(_removeCoverOnSave) coverUrl=null;
+        else if(fileInput.files.length>0){const f=fileInput.files[0];const fn=`blog_${Date.now()}.${f.name.split('.').pop()}`;await _sb.storage.from('blog_images').upload(fn,f);coverUrl=_sb.storage.from('blog_images').getPublicUrl(fn).data.publicUrl;}
+        
+        const insertData={title, excerpt, content};
+        if(coverUrl!==undefined) insertData.cover_image=coverUrl;
+        
+        const {data: userData} = await _sb.auth.getUser();
+        if(userData.user) insertData.author_id=userData.user.id;
+        
+        await _sb.from('blog_posts').insert([insertData]);
+        showToast('Published'); loadBlogPosts(); cancelBlogForm();
+    } catch(e){ showToast(e.message, 'error'); }
+    btn.disabled=false; btn.textContent='Publish Post';
+}
+
+// ── ADS MANAGER ──
+function previewAdImage(event,slot){const f=event.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>document.getElementById(`preview-${slot}`).src=e.target.result;r.readAsDataURL(f);}
+async function loadExistingAds(){try{const{data:ads}=await _sb.from('ads').select('*').order('slot_id');if(ads){ads.forEach(ad=>{const p=document.getElementById(`preview-${ad.slot_id}`);const c=document.getElementById(`copy-${ad.slot_id}`);const l=document.getElementById(`link-${ad.slot_id}`);if(p)p.src=ad.image_url;if(c)c.value=ad.ads_copy||'';if(l)l.value=ad.advertiser_link||'';});}}catch(err){}}
+async function saveAd(slotId){
+    const fi=document.querySelector(`#slot-${slotId} .ad-image-input`);const adCopy=document.getElementById(`copy-${slotId}`).value;const adLink=document.getElementById(`link-${slotId}`).value;let imageUrl=document.getElementById(`preview-${slotId}`).src;
+    if(fi&&fi.files.length>0){const file=fi.files[0];const name=`ad_slot_${slotId}_${Date.now()}.${file.name.split('.').pop()}`;await _sb.storage.from('community_images').upload(name,file,{upsert:true});imageUrl=_sb.storage.from('community_images').getPublicUrl(name).data.publicUrl;}
+    await _sb.from('ads').upsert({slot_id:slotId,image_url:imageUrl,ads_copy:adCopy,advertiser_link:adLink},{onConflict:'slot_id'});showToast(`Ad Slot ${slotId} saved!`);
 }
 </script>
 </body>
