@@ -38,7 +38,16 @@
         .brand span { color: var(--brand-yellow); }
         .badge-admin { display: inline-block; margin-top: 0.2rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--success); }
         .close-sidebar{display:none;background:none;border:none;font-size:1.5rem;color:var(--text-muted);cursor:pointer}
-        .nav-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:1.5rem 2rem .5rem}
+        
+        /* COLLAPSIBLE SIDEBAR GROUPS */
+        .nav-group { margin-bottom: 0.5rem; }
+        .nav-label { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); padding: 1.5rem 2rem .5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: color 0.2s; }
+        .nav-label:hover { color: var(--accent-cyan); }
+        .nav-label svg { width: 14px; height: 14px; transition: transform 0.3s ease; }
+        .nav-group:not(.active) .nav-label svg { transform: rotate(-90deg); }
+        .nav-group-content { max-height: 600px; overflow: hidden; transition: max-height 0.35s ease-in-out; }
+        .nav-group:not(.active) .nav-group-content { max-height: 0; }
+
         .nav-item{display:flex;align-items:center;gap:.85rem;padding:.85rem 2rem;margin:.2rem 1rem;font-size:.95rem;font-weight:500;color:var(--text-gray);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
         .nav-item:hover{color:var(--accent-cyan);background:var(--surface-hover)}
         .nav-item.active{color:var(--brand-navy);font-weight:700;background:var(--surface-hover);border-left-color:var(--accent-cyan)}
@@ -225,30 +234,69 @@
         <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
     </div>
     
-    <div class="nav-label">Main Menu</div>
     <a class="nav-item active" href="#" onclick="showView('view-dashboard'); return false;" id="nav-dashboard">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
     </a>
-    <a class="nav-item" href="#" onclick="showView('view-users'); switchTab('all'); return false;" id="nav-users">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>User Management
-    </a>
-    <a class="nav-item" href="community.html">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Community Hub
-    </a>
+
+    <div class="nav-group active">
+        <div class="nav-label" onclick="toggleNavGroup(this)">
+            Main Menu
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        <div class="nav-group-content">
+            <a class="nav-item" href="#" onclick="showView('view-users'); switchTab('students'); return false;" id="nav-students">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Students
+            </a>
+            <a class="nav-item" href="#" onclick="showView('view-users'); switchTab('teachers'); return false;" id="nav-teachers">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Teachers
+            </a>
+            <a class="nav-item" href="community.html">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Community Hub
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-group active">
+        <div class="nav-label" onclick="toggleNavGroup(this)">
+            Analytics
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        <div class="nav-group-content">
+            <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('analytics-section').scrollIntoView(); return false;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Revenue & Analytics
+            </a>
+            <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('course-analytics-section').scrollIntoView(); return false;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Course Performance
+            </a>
+        </div>
+    </div>
+
+    <div class="nav-group active">
+        <div class="nav-label" onclick="toggleNavGroup(this)">
+            Management
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+        </div>
+        <div class="nav-group-content">
+            <a class="nav-item" href="#" onclick="showView('view-content'); document.getElementById('materials-admin-section').scrollIntoView(); return false;" id="nav-content">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Materials <span class="nav-badge" id="nav-mat-count">0</span>
+            </a>
+            <a class="nav-item" href="#" onclick="showView('view-content'); document.getElementById('blog-management-section').scrollIntoView(); return false;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Blog Manager <span class="nav-badge" id="nav-blog-count">0</span>
+            </a>
+            <a class="nav-item" href="#" onclick="showView('view-users'); switchTab('admins'); return false;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admins
+            </a>
+            <a class="nav-item" href="#" onclick="showView('view-dashboard'); document.querySelector('.pend').scrollIntoView({behavior:'smooth'}); return false;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Pending <span class="nav-badge" id="nav-pcount">0</span>
+            </a>
+            <a class="nav-item" href="#" onclick="showView('view-content'); document.getElementById('ad-management-section').scrollIntoView(); return false;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Manage Ads
+            </a>
+        </div>
+    </div>
     
-    <div class="nav-label">Management</div>
-    <a class="nav-item" href="#" onclick="showView('view-content'); return false;" id="nav-content">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        Content Manager <span class="nav-badge" id="nav-mat-count">0</span>
-    </a>
-    
-    <div class="nav-label">Analytics & Finance</div>
-    <a class="nav-item" href="#" onclick="showView('view-finance'); return false;" id="nav-finance">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Tracker
-    </a>
-    <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('analytics-section').scrollIntoView(); return false;">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Revenue Analytics
-    </a>
 </aside>
 
 <div class="main-wrap">
@@ -424,9 +472,22 @@
                             <h3 id="blog-form-title" style="font-family:'Poppins';font-size:1.1rem;font-weight:700;">Write New Post</h3>
                         </div>
                         <input type="hidden" id="edit-post-id">
-                        <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Title *</label><input type="text" id="blog-title" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;"></div>
-                        <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Short Excerpt</label><input type="text" id="blog-excerpt" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;"></div>
-                        <div style="margin-bottom:1.25rem;"><label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Content *</label><div id="editor-container" style="background:var(--surface);min-height:280px;border-radius:0 0 10px 10px;border:1px solid var(--border);"></div></div>
+                        <div style="margin-bottom:1.25rem;">
+                            <label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Title *</label>
+                            <input type="text" id="blog-title" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;background:var(--surface);">
+                        </div>
+                        <div style="margin-bottom:1.25rem;">
+                            <label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Short Excerpt</label>
+                            <input type="text" id="blog-excerpt" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;background:var(--surface);">
+                        </div>
+                        <div style="margin-bottom:1.25rem;">
+                            <label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Cover Image</label>
+                            <input type="file" id="blog-cover" accept="image/*" style="width:100%;padding:.85rem 1rem;border-radius:10px;border:1.5px solid var(--border);outline:none;background:var(--surface);">
+                        </div>
+                        <div style="margin-bottom:1.25rem;">
+                            <label style="display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;">Post Content *</label>
+                            <div id="editor-container" style="background:var(--surface);min-height:280px;border-radius:0 0 10px 10px;border:1px solid var(--border);"></div>
+                        </div>
                         <div style="display:flex;gap:.85rem;margin-top:1.5rem;">
                             <button class="btn btn-primary" onclick="submitBlogPost()" id="publish-blog-btn">Publish Post</button>
                             <button class="btn btn-secondary" onclick="cancelBlogForm()">Cancel</button>
@@ -542,6 +603,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+// ── SIDEBAR COLLAPSE ENGINE ──
+window.toggleNavGroup = function(element) {
+    element.parentElement.classList.toggle('active');
+};
+
 // ── VIEW NAVIGATION ──
 function showView(viewId) {
     document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -550,9 +616,6 @@ function showView(viewId) {
     
     // Highlight the correct sidebar link based on the view
     if(viewId === 'view-dashboard') document.getElementById('nav-dashboard').classList.add('active');
-    if(viewId === 'view-users') document.getElementById('nav-users').classList.add('active');
-    if(viewId === 'view-content') document.getElementById('nav-content').classList.add('active');
-    if(viewId === 'view-finance') document.getElementById('nav-finance').classList.add('active');
     
     closeSidebar();
 }
@@ -759,7 +822,7 @@ window.addEventListener('load', async () => {
     initQuill();
     loadProfiles();
     subscribeRealtime();
-    loadFinanceRecords(); // Initialize local finance tracker
+    loadFinanceRecords(); 
 });
 
 window.forceLogout = async () => { try { await _sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; } };
@@ -994,10 +1057,8 @@ function saveFinanceRecord() {
         purpose: fPurpose
     });
     
-    // Using local storage for now to keep DB intact, can connect to a new Supabase table later.
     localStorage.setItem('enet_finance_records', JSON.stringify(_financeRecords));
     
-    // Clear form
     document.getElementById('fin-amount').value = '';
     document.getElementById('fin-party').value = '';
     document.getElementById('fin-purpose').value = '';
@@ -1009,7 +1070,6 @@ function saveFinanceRecord() {
 function renderFinanceTracker() {
     let totIn = 0, totEx = 0;
     
-    // Sort descending by date
     _financeRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
 
     const html = _financeRecords.map(r => {
@@ -1050,10 +1110,25 @@ async function deleteBlogPost(id) { await _sb.from('blog_posts').delete().eq('id
 
 async function submitBlogPost(){
     const title=document.getElementById('blog-title').value.trim(); const excerpt=document.getElementById('blog-excerpt').value.trim(); const content=quillEditor.root.innerHTML;
+    
+    const fileInput = document.getElementById('blog-cover'); // Fixed: Input now exists
+    
     if(!title) return showToast('Title required', 'error');
     const btn=document.getElementById('publish-blog-btn'); btn.disabled=true; btn.textContent='Publishing...';
+    
     try {
+        let coverUrl=null;
+        // Check if an image was selected
+        if(fileInput.files && fileInput.files.length > 0){
+            const f=fileInput.files[0];
+            const fn=`blog_${Date.now()}.${f.name.split('.').pop()}`;
+            await _sb.storage.from('blog_images').upload(fn,f);
+            coverUrl=_sb.storage.from('blog_images').getPublicUrl(fn).data.publicUrl;
+        }
+        
         const insertData={title, excerpt, content};
+        if (coverUrl) insertData.cover_image = coverUrl;
+
         const {data: userData} = await _sb.auth.getUser();
         if(userData.user) insertData.author_id=userData.user.id;
         
