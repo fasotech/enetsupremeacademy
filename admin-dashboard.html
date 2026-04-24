@@ -807,6 +807,34 @@ window.grantCourseAccess = async function(userId) {
         if(existing) { showToast("Student is already enrolled."); if(btn){btn.disabled=false;btn.textContent='Enroll Student';}return; }
         await _sb.from('enrollments').insert({ student_id: userId, course_id: courseId, enrollment_type: 'admin_granted' });
         const user = _data.find(u => u.id === userId);
+        
+        // Automatically log in financial tracker
+        const courseObj = _allCourses.find(c => String(c.id) === String(courseId));
+        if (courseObj && user) {
+            const cPrice = courseObj.price ? Number(courseObj.price) : 0;
+            const studentName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email || 'Student';
+            
+            _finRecords.push({
+                id: Date.now(),
+                recordClass: 'transaction',
+                type: 'Income',
+                amount: cPrice,
+                category: 'Course Payment',
+                date: new Date().toISOString().split('T')[0],
+                party: studentName,
+                course: courseObj.title,
+                method: 'Other',
+                status: 'Completed',
+                refNum: 'ADMIN-GRANT-' + Date.now(),
+                purpose: 'Admin Granted Enrollment',
+                notes: 'Auto-generated from user drawer enrollment.',
+                addedBy: _currentAdminName,
+                timestamp: Date.now()
+            });
+            if(typeof saveFinLocal === 'function') saveFinLocal();
+            if(typeof loadFinRecords === 'function') loadFinRecords();
+        }
+        
         if(user && user.status !== 'approved') {
             await _sb.from('profiles').update({ status: 'approved' }).eq('id', userId);
             user.status='approved'; renderAll(); showToast("Course granted & account approved!");
@@ -964,7 +992,6 @@ window.addEventListener('load', async () => {
     loadProfiles();
     subscribeRealtime();
     
-    // Ensure years populate
     const curY = new Date().getFullYear();
     const ys = document.getElementById('filt-year-select');
     if(ys) {
@@ -987,7 +1014,6 @@ async function loadProfiles(){
         _allCourses=courses||[];
         
         loadGlobalActivity();
-        // loadAnalytics(); replaced by updateDashProfit inside the new finance module
         fetchAllMaterials();
         loadBlogPosts();
         loadExistingAds();
@@ -1155,7 +1181,7 @@ async function deleteBlogPost(id) { await _sb.from('blog_posts').delete().eq('id
 async function submitBlogPost(){
     const title=document.getElementById('blog-title').value.trim(); const excerpt=document.getElementById('blog-excerpt').value.trim(); const content=quillEditor.root.innerHTML;
     
-    const fileInput = document.getElementById('blog-cover');
+    const fileInput = document.getElementById('blog-cover'); 
     
     if(!title) return showToast('Title required', 'error');
     const btn=document.getElementById('publish-blog-btn'); btn.disabled=true; btn.textContent='Publishing...';
@@ -1215,7 +1241,6 @@ function setFinType(rc) {
     const ref = document.getElementById('fin-ref');
     const purpose = document.getElementById('fin-purpose');
 
-    // Reset visibility
     [typeSel, party, course, method, status, ref, purpose].forEach(el => el.style.display = 'block');
 
     if(rc === 'transaction') {
@@ -1238,7 +1263,7 @@ function setFinType(rc) {
         status.style.display = 'none';
         ref.style.display = 'none';
         purpose.placeholder = "Budget Period Note (e.g., 'Q3 Limit')";
-        updateFinCategories(true); // show all expense categories
+        updateFinCategories(true); 
     }
     else if(rc === 'refund') {
         typeSel.value = 'Expense'; typeSel.style.display = 'none';
@@ -1300,7 +1325,6 @@ function addFinRecord() {
     saveFinLocal();
     showToast("Record added to ledger.");
     
-    // Clear
     document.getElementById('fin-amount').value = '';
     document.getElementById('fin-party').value = '';
     document.getElementById('fin-course').value = '';
@@ -1348,7 +1372,7 @@ function renderFinSummary() {
     const currMonthStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
 
     _finRecords.forEach(r => {
-        if(r.recordClass === 'budget') return; // Ignore budgets in cashflow math
+        if(r.recordClass === 'budget') return; 
         
         if(r.status === 'Pending') {
             if(r.type === 'Income') pend += r.amount;
@@ -1501,12 +1525,10 @@ function renderFinTable(tab) {
         const d = new Date();
         const mFilt = document.getElementById('filt-budget-month')?.value || `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
         
-        // Find budgets for this month
         let buds = _finRecords.filter(r => r.recordClass === 'budget' && r.date.startsWith(mFilt));
         let bMap = {};
         buds.forEach(b => { bMap[b.category] = b.amount; });
         
-        // Calculate actuals
         let actMap = {};
         _finRecords.forEach(r => {
             if(r.recordClass !== 'budget' && r.type === 'Expense' && r.status === 'Completed' && r.date.startsWith(mFilt)) {
@@ -1514,7 +1536,6 @@ function renderFinTable(tab) {
             }
         });
         
-        // Merge keys
         const allCats = [...new Set([...Object.keys(bMap), ...Object.keys(actMap)])];
         const html = allCats.map(c => {
             const bud = bMap[c] || 0;
@@ -1574,7 +1595,6 @@ function exportFinCSV(tableId, filename) {
 
 // ── UPDATED DASHBOARD ANALYTICS & CHARTS ──
 function updateDashProfit() {
-    // Also updates the main analytics cards
     let tInc=0, tExp=0, cSales=0;
     
     _finRecords.forEach(r => {
@@ -1586,11 +1606,9 @@ function updateDashProfit() {
 
     const net = tInc - tExp;
     document.getElementById('rev-total').textContent = '₦' + tInc.toLocaleString();
-    // Reusing logic for month from earlier, or just generic profit
     document.getElementById('rev-profit').textContent = '₦' + net.toLocaleString();
     document.getElementById('rev-sales').textContent = cSales.toLocaleString();
 
-    // Rebuild Charts
     const cMap = {};
     _finRecords.filter(r => r.category === 'Course Payment' && r.status === 'Completed').forEach(r => {
         const cn = r.course || 'Unknown';
