@@ -175,13 +175,23 @@
         .rev-card-val { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
         .chart-container-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; padding: 0 2rem 2rem; }
 
-        /* FINANCE CSS */
+        /* FINANCE CSS EXTENSIONS */
         .finance-form { background: var(--bg-light); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 1.5rem; display: none; }
-        .finance-form.open { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
-        .finance-form input, .finance-form select { padding: .8rem; border-radius: 8px; border: 1px solid var(--border); outline: none; width: 100%; background: var(--surface); color: var(--text-dark); }
+        .finance-form.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .finance-form input, .finance-form select, .finance-form textarea { padding: .8rem; border-radius: 8px; border: 1px solid var(--border); outline: none; width: 100%; background: var(--surface); color: var(--text-dark); font-family: 'DM Sans', sans-serif; }
+        .finance-form textarea { resize: vertical; min-height: 80px; }
         .type-badge { font-size: .75rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
         .type-income { background: rgba(5,205,153,.1); color: var(--success); }
         .type-expense { background: rgba(238,93,80,.1); color: var(--danger); }
+        .fin-tab-content { display: none; animation: fadeUp .3s ease forwards; }
+        .fin-tab-content.active { display: block; }
+        .filter-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; padding: 0 2rem; flex-wrap: wrap; align-items: center; }
+        .filter-bar input, .filter-bar select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dark); outline: none; font-size: .85rem; }
+        .fin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; padding: 0 2rem 1.5rem; }
+        .export-btn { margin-left: auto; font-size: .8rem; padding: 6px 12px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--text-gray); }
+        .export-btn:hover { background: var(--accent-cyan); color: #fff; border-color: var(--accent-cyan); }
+        .fin-status-pending { color: #f2994a; background: rgba(242, 153, 74, 0.1); padding: 3px 8px; border-radius: 12px; font-size: .7rem; font-weight: bold; }
+        .fin-status-completed { color: var(--success); background: rgba(5,205,153,.1); padding: 3px 8px; border-radius: 12px; font-size: .7rem; font-weight: bold; }
 
         /* MODALS & DRAWER */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
@@ -262,8 +272,8 @@
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
         </div>
         <div class="nav-group-content">
-            <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('analytics-section').scrollIntoView(); return false;">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Revenue & Analytics
+            <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('analytics-section').scrollIntoView(); return false;" id="nav-finance">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Revenue & Finance
             </a>
             <a class="nav-item" href="#" onclick="showView('view-finance'); document.getElementById('course-analytics-section').scrollIntoView(); return false;">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Course Performance
@@ -532,66 +542,177 @@
             
             <div class="panel" id="financial-tracker-section">
                 <div class="panel-head">
-                    <div class="panel-title">Financial Tracker</div>
-                    <button class="btn btn-primary" onclick="toggleFinanceForm()">+ Add Record</button>
+                    <div class="panel-title">Financial Tracker & Analytics</div>
+                    <button class="btn btn-primary" onclick="toggleFinanceForm()">+ Add Finance Record</button>
                 </div>
                 
                 <div class="finance-form" id="finance-form">
-                    <input type="date" id="fin-date" required>
-                    <select id="fin-type">
+                    <select id="fin-recordClass" onchange="setFinType(this.value)">
+                        <option value="transaction">Standard Transaction</option>
+                        <option value="payroll">Payroll / Commission</option>
+                        <option value="budget">Monthly Budget Set</option>
+                        <option value="refund">Student Refund</option>
+                    </select>
+                    
+                    <select id="fin-type" onchange="updateFinCategories()">
                         <option value="Income">Income (+)</option>
                         <option value="Expense">Expense (-)</option>
                     </select>
+
+                    <input type="date" id="fin-date" required>
                     <input type="number" id="fin-amount" placeholder="Amount (₦)" required>
-                    <input type="text" id="fin-party" placeholder="Party (Paid By/To)" required>
-                    <input type="text" id="fin-purpose" placeholder="Purpose of Transaction" style="grid-column: 1 / -1;" required>
-                    <button class="btn btn-primary" style="grid-column: 1 / -1; justify-content: center;" onclick="saveFinanceRecord()">Save Record</button>
+                    
+                    <select id="fin-category">
+                        <option value="">Select Category</option>
+                        </select>
+                    
+                    <input type="text" id="fin-party" placeholder="Paid By / Paid To">
+                    <input type="text" id="fin-course" placeholder="Course Name (if applicable)">
+                    
+                    <select id="fin-method">
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Card">Card / Stripe / Paystack</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    
+                    <select id="fin-status">
+                        <option value="Completed">Completed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                    
+                    <input type="text" id="fin-ref" placeholder="Reference Number">
+                    <input type="text" id="fin-purpose" placeholder="Purpose / Description">
+                    <textarea id="fin-notes" placeholder="Additional Notes..." style="grid-column: 1 / -1;"></textarea>
+
+                    <button class="btn btn-primary" style="grid-column: 1 / -1; justify-content: center;" onclick="addFinRecord()">Save Record</button>
                 </div>
 
-                <div class="rev-stats-grid" style="padding: 0 2rem;">
-                    <div class="rev-card"><div class="rev-card-lbl">Total Income</div><div class="rev-card-val" id="track-income" style="color:var(--success)">₦0</div></div>
-                    <div class="rev-card"><div class="rev-card-lbl">Total Expenses</div><div class="rev-card-val" id="track-expense" style="color:var(--danger)">₦0</div></div>
-                    <div class="rev-card"><div class="rev-card-lbl">Net Balance</div><div class="rev-card-val" id="track-net">₦0</div></div>
+                <div class="tab-bar" style="border-bottom: 1px solid var(--border); padding-bottom: 0;">
+                    <button class="tab-btn active" onclick="switchFinTab('summary')" id="ftab-summary">Summary Dashboard</button>
+                    <button class="tab-btn" onclick="switchFinTab('transactions')" id="ftab-transactions">Transactions</button>
+                    <button class="tab-btn" onclick="switchFinTab('courses')" id="ftab-courses">Course Revenue</button>
+                    <button class="tab-btn" onclick="switchFinTab('students')" id="ftab-students">Student Payments</button>
+                    <button class="tab-btn" onclick="switchFinTab('yearly')" id="ftab-yearly">Yearly Overview</button>
+                    <button class="tab-btn" onclick="switchFinTab('payroll')" id="ftab-payroll">Payroll Log</button>
+                    <button class="tab-btn" onclick="switchFinTab('budget')" id="ftab-budget">Budget Planner</button>
+                    <button class="tab-btn" onclick="switchFinTab('refunds')" id="ftab-refunds">Refunds</button>
                 </div>
 
-                <div class="table-responsive" style="margin-top: 1rem;">
-                    <table class="data-tbl">
-                        <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Party</th><th>Purpose</th></tr></thead>
-                        <tbody id="finance-list">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="panel" id="analytics-section">
-                <div class="panel-head"><div class="panel-title">Revenue & Analytics Overview</div></div>
-                <div class="rev-stats-grid" style="padding: 0 2rem;">
-                    <div class="rev-card"><div class="rev-card-lbl">Total Course Revenue</div><div class="rev-card-val" id="rev-total">₦0</div></div>
-                    <div class="rev-card"><div class="rev-card-lbl">Monthly Revenue</div><div class="rev-card-val" id="rev-month">₦0</div></div>
-                    <div class="rev-card"><div class="rev-card-lbl">Estimated Profit</div><div class="rev-card-val" id="rev-profit">₦0</div></div>
-                    <div class="rev-card"><div class="rev-card-lbl">Course Sales Count</div><div class="rev-card-val" id="rev-sales">0</div></div>
-                </div>
-                
-                <div class="chart-container-grid">
-                    <div style="background:var(--bg-light); border:1px solid var(--border); border-radius:16px; padding:1.5rem; height: 320px;">
-                        <h4 style="font-family:'Poppins'; margin-bottom:1rem; font-size:1rem; color:var(--text-dark);">Top Courses Revenue</h4>
-                        <canvas id="revenueBarChart"></canvas>
+                <div id="fview-summary" class="fin-tab-content active" style="padding-top: 1.5rem;">
+                    <div class="fin-stat-grid">
+                        <div class="rev-card"><div class="rev-card-lbl">Total Income</div><div class="rev-card-val" id="sum-total-income" style="color:var(--success)">₦0</div></div>
+                        <div class="rev-card"><div class="rev-card-lbl">Total Expenses</div><div class="rev-card-val" id="sum-total-expense" style="color:var(--danger)">₦0</div></div>
+                        <div class="rev-card"><div class="rev-card-lbl">Net Profit / Loss</div><div class="rev-card-val" id="sum-net">₦0</div></div>
+                        <div class="rev-card"><div class="rev-card-lbl">Pending Payments</div><div class="rev-card-val" id="sum-pending" style="color:#f2994a">₦0</div></div>
+                        <div class="rev-card"><div class="rev-card-lbl">This Month Income</div><div class="rev-card-val" id="sum-month-income">₦0</div></div>
+                        <div class="rev-card"><div class="rev-card-lbl">This Month Expenses</div><div class="rev-card-val" id="sum-month-expense">₦0</div></div>
                     </div>
-                    <div style="background:var(--bg-light); border:1px solid var(--border); border-radius:16px; padding:1.5rem; height: 320px;">
-                        <h4 style="font-family:'Poppins'; margin-bottom:1rem; font-size:1rem; color:var(--text-dark);">Sales Distribution</h4>
-                        <canvas id="salesDoughnutChart"></canvas>
+                    
+                    <div class="chart-container-grid">
+                        <div style="background:var(--bg-light); border:1px solid var(--border); border-radius:16px; padding:1.5rem; height: 320px;">
+                            <h4 style="font-family:'Poppins'; margin-bottom:1rem; font-size:1rem; color:var(--text-dark);">Top Courses Revenue</h4>
+                            <canvas id="revenueBarChart"></canvas>
+                        </div>
+                        <div style="background:var(--bg-light); border:1px solid var(--border); border-radius:16px; padding:1.5rem; height: 320px;">
+                            <h4 style="font-family:'Poppins'; margin-bottom:1rem; font-size:1rem; color:var(--text-dark);">Sales Distribution</h4>
+                            <canvas id="salesDoughnutChart"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel" id="course-analytics-section">
-                <div class="panel-head"><div class="panel-title">Course Performance</div></div>
-                <div class="table-responsive">
-                    <table class="data-tbl">
-                        <thead><tr><th>Course</th><th>Enrolled</th><th>Revenue</th></tr></thead>
-                        <tbody id="course-analytics-tbody"><tr><td colspan="3" style="text-align:center;padding:2rem;">Loading...</td></tr></tbody>
-                    </table>
+                <div id="fview-transactions" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <input type="month" id="filt-txn-month" onchange="renderFinTable('transactions')">
+                        <select id="filt-txn-type" onchange="renderFinTable('transactions')"><option value="All">All Types</option><option value="Income">Income</option><option value="Expense">Expense</option></select>
+                        <select id="filt-txn-status" onchange="renderFinTable('transactions')"><option value="All">All Statuses</option><option value="Completed">Completed</option><option value="Pending">Pending</option></select>
+                        <button class="export-btn" onclick="exportFinCSV('tbl-transactions', 'Transactions_Log')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-transactions">
+                            <thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th><th>Party</th><th>Purpose</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="tbody-transactions"></tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <div id="fview-courses" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <button class="export-btn" onclick="exportFinCSV('tbl-courses', 'Course_Revenue')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-courses">
+                            <thead><tr><th>Course Name</th><th>Paid Enrollees</th><th>Total Revenue</th><th>Commission Expected</th><th>Net Course Profit</th></tr></thead>
+                            <tbody id="tbody-courses"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fview-students" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <input type="text" id="filt-stu-search" placeholder="Search student or course..." oninput="renderFinTable('students')">
+                        <button class="export-btn" onclick="exportFinCSV('tbl-students', 'Student_Payments')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-students">
+                            <thead><tr><th>Student Name</th><th>Course</th><th>Amount Paid</th><th>Date</th><th>Method</th><th>Status</th></tr></thead>
+                            <tbody id="tbody-students"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fview-yearly" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <select id="filt-year-select" onchange="renderFinTable('yearly')"></select>
+                        <button class="export-btn" onclick="exportFinCSV('tbl-yearly', 'Yearly_Overview')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-yearly">
+                            <thead><tr><th>Month</th><th>Total Income</th><th>Total Expense</th><th>Net Balance</th></tr></thead>
+                            <tbody id="tbody-yearly"></tbody>
+                            <tfoot id="tfoot-yearly" style="font-weight: bold; background: var(--bg-light);"></tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fview-payroll" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <button class="export-btn" onclick="exportFinCSV('tbl-payroll', 'Payroll_Log')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-payroll">
+                            <thead><tr><th>Instructor</th><th>Course Taught</th><th>Amount Paid</th><th>Date</th><th>Status</th><th>Audit (By)</th></tr></thead>
+                            <tbody id="tbody-payroll"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fview-budget" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <input type="month" id="filt-budget-month" onchange="renderFinTable('budget')">
+                        <button class="export-btn" onclick="exportFinCSV('tbl-budget', 'Budget_Planner')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-budget">
+                            <thead><tr><th>Category</th><th>Budgeted (₦)</th><th>Actual Spend (₦)</th><th>Variance</th><th>Status</th></tr></thead>
+                            <tbody id="tbody-budget"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fview-refunds" class="fin-tab-content" style="padding-top: 1.5rem;">
+                    <div class="filter-bar">
+                        <button class="export-btn" onclick="exportFinCSV('tbl-refunds', 'Refund_Tracker')">Export CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-tbl" id="tbl-refunds">
+                            <thead><tr><th>Student Name</th><th>Course</th><th>Amount Refunded</th><th>Reason</th><th>Date</th><th>Audit</th></tr></thead>
+                            <tbody id="tbody-refunds"></tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -626,7 +747,6 @@ function showView(viewId) {
     document.getElementById(viewId).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     
-    // Highlight the correct sidebar link based on the view
     if(viewId === 'view-dashboard') document.getElementById('nav-dashboard').classList.add('active');
     
     closeSidebar();
@@ -639,7 +759,7 @@ function applyTheme(t){
     const el=document.getElementById('theme-icon');
     if(el)el.textContent=themeIcons[t];
     document.documentElement.setAttribute('data-theme',t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':t);
-    if(window.revChart || window.salesChart) loadAnalytics(); // re-render charts for theme colors
+    if(window.revChart || window.salesChart) updateDashProfit(); 
 }
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{if(localStorage.getItem('enet_theme')==='system')document.documentElement.setAttribute('data-theme',e.matches?'dark':'light');});
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show');}
@@ -825,6 +945,8 @@ async function loadGlobalActivity() {
 }
 
 // ── INIT & LOAD ──
+let _currentAdminName = 'Admin';
+
 window.addEventListener('load', async () => {
     const t = localStorage.getItem('enet_theme') || 'system'; applyTheme(t);
     _sb = window.supabase.createClient('https://lskwzcvexyxjncttvimf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E');
@@ -832,6 +954,8 @@ window.addEventListener('load', async () => {
     const { data: { session } } = await _sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
     
+    if(session.user && session.user.email) _currentAdminName = session.user.email.split('@')[0];
+
     _sb.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_OUT' || !session) { localStorage.removeItem('enet_impersonate_id'); window.location.href = 'login.html'; }
     });
@@ -839,7 +963,17 @@ window.addEventListener('load', async () => {
     initQuill();
     loadProfiles();
     subscribeRealtime();
-    loadFinanceRecords(); 
+    
+    // Ensure years populate
+    const curY = new Date().getFullYear();
+    const ys = document.getElementById('filt-year-select');
+    if(ys) {
+        for(let i=curY-2; i<=curY; i++) {
+            ys.innerHTML += `<option value="${i}" ${i===curY?'selected':''}>${i}</option>`;
+        }
+    }
+    
+    loadFinLocal(); 
 });
 
 window.forceLogout = async () => { try { await _sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; } };
@@ -853,7 +987,7 @@ async function loadProfiles(){
         _allCourses=courses||[];
         
         loadGlobalActivity();
-        loadAnalytics();
+        // loadAnalytics(); replaced by updateDashProfit inside the new finance module
         fetchAllMaterials();
         loadBlogPosts();
         loadExistingAds();
@@ -863,7 +997,7 @@ async function loadProfiles(){
 function subscribeRealtime(){
     _sb.channel('db-changes')
         .on('postgres_changes',{event:'*',schema:'public',table:'profiles'},p=>{loadProfiles();})
-        .on('postgres_changes',{event:'*',schema:'public',table:'courses'},p=>{loadGlobalActivity();loadAnalytics();})
+        .on('postgres_changes',{event:'*',schema:'public',table:'courses'},p=>{loadGlobalActivity();})
         .on('postgres_changes',{event:'*',schema:'public',table:'certificates'},p=>{loadGlobalActivity();})
         .on('postgres_changes',{event:'*',schema:'public',table:'posts'},p=>{loadGlobalActivity();})
         .on('postgres_changes',{event:'INSERT',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
@@ -1005,181 +1139,6 @@ async function revokeFromAll() {
     } catch (err) { showToast(err.message, 'error'); }
 }
 
-// ── ANALYTICS & CHARTS ENGINE ──
-async function loadAnalytics(){
-    try {
-        const [enRes, certRes] = await Promise.all([
-            _sb.from('enrollments').select('id,enrolled_at,enrollment_type,course_id').order('enrolled_at',{ascending:false}),
-            _sb.from('certificates').select('id,course_id')
-        ]);
-        
-        let total=0, monthly=0, sales=0; const now=new Date(); const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
-        const enrollments = enRes.data || [];
-        const certs = certRes.data || [];
-        const courses = _allCourses || [];
-
-        const priceMap = {};
-        const isEventMap = {};
-        courses.forEach(c => { priceMap[c.id] = Number(c.price || 0); isEventMap[c.id] = c.is_event_course; });
-
-        enrollments.forEach(en => {
-            if(en.enrollment_type!=='member_perk' && !isEventMap[en.course_id]) {
-                const p = priceMap[en.course_id] || 0;
-                if(p > 0){ total+=p; sales++; if(new Date(en.enrolled_at)>=monthStart) monthly+=p; }
-            }
-        });
-
-        document.getElementById('rev-total').textContent = '₦'+total.toLocaleString();
-        document.getElementById('rev-month').textContent = '₦'+monthly.toLocaleString();
-        document.getElementById('rev-profit').textContent = '₦'+Math.round(total*0.85).toLocaleString();
-        document.getElementById('rev-sales').textContent = sales.toLocaleString();
-
-        const enrollMap={}; enrollments.forEach(en=>{enrollMap[en.course_id]=(enrollMap[en.course_id]||0)+1;});
-        const sorted=[...courses].sort((a,b)=>(enrollMap[b.id]||0)-(enrollMap[a.id]||0));
-        
-        document.getElementById('course-analytics-tbody').innerHTML = sorted.slice(0,5).map(c => `<tr><td>${c.title}</td><td>${enrollMap[c.id]||0}</td><td>₦${(Number(c.price||0)*(enrollMap[c.id]||0)).toLocaleString()}</td></tr>`).join('');
-
-        // Prepare Data for Charts
-        const courseNames = [];
-        const courseRevenues = [];
-        const courseSales = [];
-
-        sorted.slice(0, 5).forEach(c => {
-            courseNames.push(c.title.length > 20 ? c.title.substring(0, 20) + '...' : c.title);
-            courseSales.push(enrollMap[c.id] || 0);
-            courseRevenues.push((Number(c.price || 0) * (enrollMap[c.id] || 0)));
-        });
-
-        if(window.revChart) window.revChart.destroy();
-        if(window.salesChart) window.salesChart.destroy();
-
-        const rootStyles = getComputedStyle(document.documentElement);
-        const accentCyan = rootStyles.getPropertyValue('--accent-cyan').trim() || '#00a0df';
-        const brandYellow = rootStyles.getPropertyValue('--brand-yellow').trim() || '#fcd116';
-        const brandNavy = rootStyles.getPropertyValue('--brand-navy').trim() || '#02014a';
-        const textColor = rootStyles.getPropertyValue('--text-gray').trim() || '#475467';
-        const gridColor = rootStyles.getPropertyValue('--border').trim() || '#E9EDF7';
-
-        Chart.defaults.color = textColor;
-        Chart.defaults.font.family = "'DM Sans', sans-serif";
-
-        const ctxBar = document.getElementById('revenueBarChart').getContext('2d');
-        window.revChart = new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: courseNames,
-                datasets: [{
-                    label: 'Revenue (₦)',
-                    data: courseRevenues,
-                    backgroundColor: accentCyan,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: { 
-                    y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } }, 
-                    x: { grid: { display: false }, ticks: { color: textColor } } 
-                },
-                plugins: { legend: { display: false } }
-            }
-        });
-
-        const ctxDoughnut = document.getElementById('salesDoughnutChart').getContext('2d');
-        window.salesChart = new Chart(ctxDoughnut, {
-            type: 'doughnut',
-            data: {
-                labels: courseNames,
-                datasets: [{
-                    data: courseSales,
-                    backgroundColor: [accentCyan, brandYellow, brandNavy, '#EE5D50', '#05CD99'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 20 } } },
-                cutout: '65%'
-            }
-        });
-
-    } catch(e){}
-}
-
-// ── FINANCIAL TRACKER ENGINE ──
-let _financeRecords = [];
-function toggleFinanceForm() {
-    const f = document.getElementById('finance-form');
-    f.classList.toggle('open');
-}
-
-function loadFinanceRecords() {
-    const data = localStorage.getItem('enet_finance_records');
-    _financeRecords = data ? JSON.parse(data) : [];
-    renderFinanceTracker();
-}
-
-function saveFinanceRecord() {
-    const fDate = document.getElementById('fin-date').value;
-    const fType = document.getElementById('fin-type').value;
-    const fAmount = parseFloat(document.getElementById('fin-amount').value);
-    const fParty = document.getElementById('fin-party').value;
-    const fPurpose = document.getElementById('fin-purpose').value;
-    
-    if(!fDate || !fAmount || !fParty || !fPurpose) {
-        showToast("Please fill all finance fields", "error");
-        return;
-    }
-
-    _financeRecords.push({
-        id: Date.now(),
-        date: fDate,
-        type: fType,
-        amount: fAmount,
-        party: fParty,
-        purpose: fPurpose
-    });
-    
-    localStorage.setItem('enet_finance_records', JSON.stringify(_financeRecords));
-    
-    document.getElementById('fin-amount').value = '';
-    document.getElementById('fin-party').value = '';
-    document.getElementById('fin-purpose').value = '';
-    
-    renderFinanceTracker();
-    showToast("Record added successfully");
-}
-
-function renderFinanceTracker() {
-    let totIn = 0, totEx = 0;
-    
-    _financeRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
-
-    const html = _financeRecords.map(r => {
-        if(r.type === 'Income') totIn += r.amount; else totEx += r.amount;
-        const badgeClass = r.type === 'Income' ? 'type-income' : 'type-expense';
-        return `<tr>
-            <td>${fmtDate(r.date)}</td>
-            <td><span class="type-badge ${badgeClass}">${r.type}</span></td>
-            <td style="font-weight:bold;">₦${r.amount.toLocaleString()}</td>
-            <td>${r.party}</td>
-            <td>${r.purpose}</td>
-        </tr>`;
-    }).join('');
-
-    document.getElementById('finance-list').innerHTML = html || `<tr><td colspan="5" style="text-align:center;padding:2rem;">No financial records found.</td></tr>`;
-    
-    document.getElementById('track-income').textContent = '₦' + totIn.toLocaleString();
-    document.getElementById('track-expense').textContent = '₦' + totEx.toLocaleString();
-    
-    const net = totIn - totEx;
-    const netEl = document.getElementById('track-net');
-    netEl.textContent = '₦' + net.toLocaleString();
-    netEl.style.color = net >= 0 ? 'var(--success)' : 'var(--danger)';
-}
-
 
 // ── BLOG MANAGER ──
 let quillEditor, _isEditMode=false, _removeCoverOnSave=false;
@@ -1229,6 +1188,452 @@ async function saveAd(slotId){
     const fi=document.querySelector(`#slot-${slotId} .ad-image-input`);const adCopy=document.getElementById(`copy-${slotId}`).value;const adLink=document.getElementById(`link-${slotId}`).value;let imageUrl=document.getElementById(`preview-${slotId}`).src;
     if(fi&&fi.files.length>0){const file=fi.files[0];const name=`ad_slot_${slotId}_${Date.now()}.${file.name.split('.').pop()}`;await _sb.storage.from('community_images').upload(name,file,{upsert:true});imageUrl=_sb.storage.from('community_images').getPublicUrl(name).data.publicUrl;}
     await _sb.from('ads').upsert({slot_id:slotId,image_url:imageUrl,ads_copy:adCopy,advertiser_link:adLink},{onConflict:'slot_id'});showToast(`Ad Slot ${slotId} saved!`);
+}
+
+
+// ── ADVANCED FINANCIAL TRACKER ENGINE ──
+let _finRecords = [];
+let _finType = 'transaction'; 
+
+const INC_CATS = ['Course Payment', 'Event/Workshop', 'Subscription', 'Consulting', 'Referral', 'Other Income'];
+const EXP_CATS = ['Instructor Salary/Commission', 'Hosting/Tech', 'Marketing/Ads', 'Equipment', 'Utilities', 'Platform Fees', 'Administrative', 'Other Expense'];
+
+function toggleFinanceForm() {
+    const f = document.getElementById('finance-form');
+    f.classList.toggle('open');
+    if(f.classList.contains('open')) setFinType(document.getElementById('fin-recordClass').value);
+}
+
+function setFinType(rc) {
+    _finType = rc;
+    
+    const typeSel = document.getElementById('fin-type');
+    const party = document.getElementById('fin-party');
+    const course = document.getElementById('fin-course');
+    const method = document.getElementById('fin-method');
+    const status = document.getElementById('fin-status');
+    const ref = document.getElementById('fin-ref');
+    const purpose = document.getElementById('fin-purpose');
+
+    // Reset visibility
+    [typeSel, party, course, method, status, ref, purpose].forEach(el => el.style.display = 'block');
+
+    if(rc === 'transaction') {
+        party.placeholder = "Paid By / Paid To";
+        course.style.display = 'block';
+        updateFinCategories();
+    } 
+    else if(rc === 'payroll') {
+        typeSel.value = 'Expense'; typeSel.style.display = 'none';
+        party.placeholder = "Instructor Name";
+        course.placeholder = "Course Taught";
+        purpose.placeholder = "Commission % / Base Pay Info";
+        updateFinCategories(); document.getElementById('fin-category').value = 'Instructor Salary/Commission';
+    } 
+    else if(rc === 'budget') {
+        typeSel.style.display = 'none';
+        party.style.display = 'none';
+        course.style.display = 'none';
+        method.style.display = 'none';
+        status.style.display = 'none';
+        ref.style.display = 'none';
+        purpose.placeholder = "Budget Period Note (e.g., 'Q3 Limit')";
+        updateFinCategories(true); // show all expense categories
+    }
+    else if(rc === 'refund') {
+        typeSel.value = 'Expense'; typeSel.style.display = 'none';
+        party.placeholder = "Student Name";
+        course.placeholder = "Course Refunded";
+        purpose.placeholder = "Reason for Refund";
+        updateFinCategories();
+    }
+}
+
+function updateFinCategories(forceExpense = false) {
+    const isInc = document.getElementById('fin-type').value === 'Income';
+    const catSel = document.getElementById('fin-category');
+    
+    let opts = '<option value="">Select Category</option>';
+    let arr = (forceExpense || !isInc) ? EXP_CATS : INC_CATS;
+    
+    arr.forEach(c => opts += `<option value="${c}">${c}</option>`);
+    catSel.innerHTML = opts;
+}
+
+function loadFinLocal() {
+    const data = localStorage.getItem('enet_finance_records');
+    _finRecords = data ? JSON.parse(data) : [];
+    loadFinRecords(); 
+}
+
+function saveFinLocal() {
+    localStorage.setItem('enet_finance_records', JSON.stringify(_finRecords));
+}
+
+function addFinRecord() {
+    const fDate = document.getElementById('fin-date').value;
+    const fType = document.getElementById('fin-type').value;
+    const fAmount = parseFloat(document.getElementById('fin-amount').value);
+    const fCat = document.getElementById('fin-category').value;
+    
+    if(!fDate || !fAmount || !fCat) { showToast("Date, Amount, and Category are required.", "error"); return; }
+
+    const rec = {
+        id: Date.now(),
+        recordClass: document.getElementById('fin-recordClass').value,
+        type: _finType === 'budget' ? 'Budget' : fType,
+        amount: fAmount,
+        category: fCat,
+        date: fDate,
+        party: document.getElementById('fin-party').value || '',
+        course: document.getElementById('fin-course').value || '',
+        method: document.getElementById('fin-method').value || '',
+        status: document.getElementById('fin-status').value || 'Completed',
+        refNum: document.getElementById('fin-ref').value || '',
+        purpose: document.getElementById('fin-purpose').value || '',
+        notes: document.getElementById('fin-notes').value || '',
+        addedBy: _currentAdminName,
+        timestamp: Date.now()
+    };
+
+    _finRecords.push(rec);
+    saveFinLocal();
+    showToast("Record added to ledger.");
+    
+    // Clear
+    document.getElementById('fin-amount').value = '';
+    document.getElementById('fin-party').value = '';
+    document.getElementById('fin-course').value = '';
+    document.getElementById('fin-purpose').value = '';
+    document.getElementById('fin-notes').value = '';
+    document.getElementById('fin-ref').value = '';
+
+    loadFinRecords();
+}
+
+function deleteFinRecord(id) {
+    openDeleteModal("Delete this financial record permanently?", () => {
+        _finRecords = _finRecords.filter(r => r.id !== id);
+        saveFinLocal();
+        showToast("Record deleted.");
+        loadFinRecords();
+    });
+}
+
+function loadFinRecords() {
+    renderFinSummary();
+    renderFinTable('transactions');
+    renderFinTable('courses');
+    renderFinTable('students');
+    renderFinTable('yearly');
+    renderFinTable('payroll');
+    renderFinTable('budget');
+    renderFinTable('refunds');
+    updateDashProfit(); 
+}
+
+function switchFinTab(tab) {
+    document.querySelectorAll('.fin-tab-content').forEach(e => e.classList.remove('active'));
+    document.getElementById('fview-' + tab).classList.add('active');
+    
+    document.querySelectorAll('#financial-tracker-section .tab-btn').forEach(e => e.classList.remove('active'));
+    document.getElementById('ftab-' + tab).classList.add('active');
+}
+
+function renderFinSummary() {
+    let totInc = 0, totExp = 0, pend = 0;
+    let currMInc = 0, currMExp = 0;
+    
+    const now = new Date();
+    const currMonthStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+
+    _finRecords.forEach(r => {
+        if(r.recordClass === 'budget') return; // Ignore budgets in cashflow math
+        
+        if(r.status === 'Pending') {
+            if(r.type === 'Income') pend += r.amount;
+        } else if (r.status === 'Completed') {
+            if(r.type === 'Income') totInc += r.amount;
+            if(r.type === 'Expense') totExp += r.amount;
+            
+            const rMonth = r.date.substring(0, 7);
+            if(rMonth === currMonthStr) {
+                if(r.type === 'Income') currMInc += r.amount;
+                if(r.type === 'Expense') currMExp += r.amount;
+            }
+        }
+    });
+
+    document.getElementById('sum-total-income').textContent = '₦' + totInc.toLocaleString();
+    document.getElementById('sum-total-expense').textContent = '₦' + totExp.toLocaleString();
+    
+    const net = totInc - totExp;
+    const nEl = document.getElementById('sum-net');
+    nEl.textContent = '₦' + net.toLocaleString();
+    nEl.style.color = net >= 0 ? 'var(--success)' : 'var(--danger)';
+
+    document.getElementById('sum-pending').textContent = '₦' + pend.toLocaleString();
+    document.getElementById('sum-month-income').textContent = '₦' + currMInc.toLocaleString();
+    document.getElementById('sum-month-expense').textContent = '₦' + currMExp.toLocaleString();
+}
+
+function renderFinTable(tab) {
+    const formatCurrency = (n) => '₦' + (n||0).toLocaleString();
+    const getStatBadge = (s) => `<span class="${s==='Pending'?'fin-status-pending':'fin-status-completed'}">${s}</span>`;
+    const getTypeBadge = (t) => `<span class="type-badge ${t==='Income'?'type-income':'type-expense'}">${t}</span>`;
+
+    if(tab === 'transactions') {
+        const mFilt = document.getElementById('filt-txn-month')?.value;
+        const tFilt = document.getElementById('filt-txn-type')?.value || 'All';
+        const sFilt = document.getElementById('filt-txn-status')?.value || 'All';
+        
+        let txns = _finRecords.filter(r => r.recordClass === 'transaction');
+        if(mFilt) txns = txns.filter(r => r.date.startsWith(mFilt));
+        if(tFilt !== 'All') txns = txns.filter(r => r.type === tFilt);
+        if(sFilt !== 'All') txns = txns.filter(r => r.status === sFilt);
+        
+        txns.sort((a,b) => new Date(b.date) - new Date(a.date));
+        
+        const html = txns.map(r => `<tr>
+            <td><div style="white-space:nowrap">${fmtDate(r.date)}</div><div style="font-size:.65rem;color:var(--text-muted)">by ${r.addedBy}</div></td>
+            <td>${getTypeBadge(r.type)}</td>
+            <td>${r.category}</td>
+            <td style="font-weight:700;">${formatCurrency(r.amount)}</td>
+            <td>${r.party || '-'}</td>
+            <td>${r.purpose || '-'}<br><span style="font-size:0.65rem;color:var(--text-muted)">${r.method} | Ref: ${r.refNum||'-'}</span></td>
+            <td>${getStatBadge(r.status)}</td>
+            <td><button onclick="deleteFinRecord(${r.id})" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;">🗑</button></td>
+        </tr>`).join('');
+        document.getElementById('tbody-transactions').innerHTML = html || `<tr><td colspan="8" style="text-align:center;padding:2rem;">No transactions found.</td></tr>`;
+    }
+    
+    else if(tab === 'courses') {
+        const cMap = {};
+        _finRecords.filter(r => r.category === 'Course Payment' && r.status === 'Completed').forEach(r => {
+            const cn = r.course || 'Unknown Course';
+            if(!cMap[cn]) cMap[cn] = { enrolled: 0, revenue: 0, comm: 0 };
+            cMap[cn].enrolled += 1;
+            cMap[cn].revenue += r.amount;
+        });
+        
+        _finRecords.filter(r => r.recordClass === 'payroll' && r.status === 'Completed').forEach(r => {
+            const cn = r.course || 'Unknown Course';
+            if(cMap[cn]) cMap[cn].comm += r.amount;
+        });
+
+        const html = Object.entries(cMap).map(([cn, d]) => `<tr>
+            <td style="font-weight:600;">${cn}</td>
+            <td>${d.enrolled} students</td>
+            <td style="color:var(--success); font-weight:700;">${formatCurrency(d.revenue)}</td>
+            <td style="color:var(--danger);">${formatCurrency(d.comm)}</td>
+            <td style="font-weight:700;">${formatCurrency(d.revenue - d.comm)}</td>
+        </tr>`).join('');
+        document.getElementById('tbody-courses').innerHTML = html || `<tr><td colspan="5" style="text-align:center;padding:2rem;">No course revenue data.</td></tr>`;
+    }
+    
+    else if(tab === 'students') {
+        const q = (document.getElementById('filt-stu-search')?.value || '').toLowerCase();
+        let stus = _finRecords.filter(r => r.category === 'Course Payment' && r.recordClass === 'transaction');
+        if(q) stus = stus.filter(r => (r.party||'').toLowerCase().includes(q) || (r.course||'').toLowerCase().includes(q));
+        
+        stus.sort((a,b) => new Date(b.date) - new Date(a.date));
+        
+        const html = stus.map(r => `<tr>
+            <td style="font-weight:600;">${r.party || '-'}</td>
+            <td>${r.course || '-'}</td>
+            <td style="font-weight:700;">${formatCurrency(r.amount)}</td>
+            <td>${fmtDate(r.date)}</td>
+            <td><span style="font-size:0.75rem;background:var(--bg-light);padding:3px 8px;border-radius:4px;border:1px solid var(--border);">${r.method||'Unknown'}</span></td>
+            <td>${getStatBadge(r.status)}</td>
+        </tr>`).join('');
+        document.getElementById('tbody-students').innerHTML = html || `<tr><td colspan="6" style="text-align:center;padding:2rem;">No student payments found.</td></tr>`;
+    }
+    
+    else if(tab === 'yearly') {
+        const yFilt = document.getElementById('filt-year-select')?.value || new Date().getFullYear().toString();
+        const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+        const mNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        
+        let tInc=0, tExp=0;
+        let html = '';
+        
+        months.forEach((m, idx) => {
+            const prefix = `${yFilt}-${m}`;
+            let mI=0, mE=0;
+            _finRecords.forEach(r => {
+                if(r.recordClass!=='budget' && r.status==='Completed' && r.date.startsWith(prefix)) {
+                    if(r.type==='Income') mI+=r.amount; else mE+=r.amount;
+                }
+            });
+            tInc+=mI; tExp+=mE;
+            
+            html += `<tr>
+                <td style="font-weight:600;">${mNames[idx]} ${yFilt}</td>
+                <td style="color:var(--success)">${formatCurrency(mI)}</td>
+                <td style="color:var(--danger)">${formatCurrency(mE)}</td>
+                <td style="font-weight:700; color:${(mI-mE)>=0?'var(--success)':'var(--danger)'}">${formatCurrency(mI-mE)}</td>
+            </tr>`;
+        });
+        
+        document.getElementById('tbody-yearly').innerHTML = html;
+        document.getElementById('tfoot-yearly').innerHTML = `<tr>
+            <td>YEAR TOTAL</td>
+            <td style="color:var(--success)">${formatCurrency(tInc)}</td>
+            <td style="color:var(--danger)">${formatCurrency(tExp)}</td>
+            <td style="color:${(tInc-tExp)>=0?'var(--success)':'var(--danger)'}">${formatCurrency(tInc-tExp)}</td>
+        </tr>`;
+    }
+    
+    else if(tab === 'payroll') {
+        let pros = _finRecords.filter(r => r.recordClass === 'payroll').sort((a,b) => new Date(b.date) - new Date(a.date));
+        const html = pros.map(r => `<tr>
+            <td style="font-weight:600;">${r.party || '-'}</td>
+            <td>${r.course || '-'}</td>
+            <td style="font-weight:700;">${formatCurrency(r.amount)} <br><span style="font-size:0.65rem;font-weight:normal;color:var(--text-muted)">${r.purpose||''}</span></td>
+            <td>${fmtDate(r.date)}</td>
+            <td>${getStatBadge(r.status)}</td>
+            <td style="font-size:0.75rem;color:var(--text-muted);">${r.addedBy}</td>
+        </tr>`).join('');
+        document.getElementById('tbody-payroll').innerHTML = html || `<tr><td colspan="6" style="text-align:center;padding:2rem;">No payroll records.</td></tr>`;
+    }
+    
+    else if(tab === 'budget') {
+        const d = new Date();
+        const mFilt = document.getElementById('filt-budget-month')?.value || `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        
+        // Find budgets for this month
+        let buds = _finRecords.filter(r => r.recordClass === 'budget' && r.date.startsWith(mFilt));
+        let bMap = {};
+        buds.forEach(b => { bMap[b.category] = b.amount; });
+        
+        // Calculate actuals
+        let actMap = {};
+        _finRecords.forEach(r => {
+            if(r.recordClass !== 'budget' && r.type === 'Expense' && r.status === 'Completed' && r.date.startsWith(mFilt)) {
+                actMap[r.category] = (actMap[r.category] || 0) + r.amount;
+            }
+        });
+        
+        // Merge keys
+        const allCats = [...new Set([...Object.keys(bMap), ...Object.keys(actMap)])];
+        const html = allCats.map(c => {
+            const bud = bMap[c] || 0;
+            const act = actMap[c] || 0;
+            const diff = bud - act;
+            const isOver = diff < 0 && bud > 0;
+            return `<tr>
+                <td style="font-weight:600;">${c}</td>
+                <td>${formatCurrency(bud)}</td>
+                <td>${formatCurrency(act)}</td>
+                <td style="font-weight:700; color:${isOver ? 'var(--danger)' : 'var(--success)'}">${bud > 0 ? formatCurrency(diff) : '-'}</td>
+                <td>${isOver ? '<span class="fin-status-pending" style="color:var(--danger);background:rgba(238,93,80,.1)">Over Budget</span>' : '<span class="fin-status-completed">On Track</span>'}</td>
+            </tr>`;
+        }).join('');
+        document.getElementById('tbody-budget').innerHTML = html || `<tr><td colspan="5" style="text-align:center;padding:2rem;">No budget data for selected month.</td></tr>`;
+    }
+    
+    else if(tab === 'refunds') {
+        let refs = _finRecords.filter(r => r.recordClass === 'refund').sort((a,b) => new Date(b.date) - new Date(a.date));
+        const html = refs.map(r => `<tr>
+            <td style="font-weight:600;">${r.party || '-'}</td>
+            <td>${r.course || '-'}</td>
+            <td style="color:var(--danger); font-weight:700;">-${formatCurrency(r.amount)}</td>
+            <td>${r.purpose || '-'}</td>
+            <td>${fmtDate(r.date)}</td>
+            <td style="font-size:0.75rem;color:var(--text-muted);">${r.addedBy}</td>
+        </tr>`).join('');
+        document.getElementById('tbody-refunds').innerHTML = html || `<tr><td colspan="6" style="text-align:center;padding:2rem;">No refunds recorded.</td></tr>`;
+    }
+}
+
+// ── EXPORT TO CSV ──
+function exportFinCSV(tableId, filename) {
+    const table = document.getElementById(tableId);
+    let csv = [];
+    const rows = table.querySelectorAll("tr");
+    
+    for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length; j++) {
+            let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").trim();
+            data = data.replace(/"/g, '""');
+            row.push('"' + data + '"');
+        }
+        if(row.length > 0 && row.join('') !== '""') csv.push(row.join(","));
+    }
+
+    const csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+    const downloadLink = document.createElement("a");
+    downloadLink.download = filename + '_' + Date.now() + '.csv';
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
+// ── UPDATED DASHBOARD ANALYTICS & CHARTS ──
+function updateDashProfit() {
+    // Also updates the main analytics cards
+    let tInc=0, tExp=0, cSales=0;
+    
+    _finRecords.forEach(r => {
+        if(r.recordClass !== 'budget' && r.status === 'Completed') {
+            if(r.type === 'Income') { tInc += r.amount; if(r.category==='Course Payment') cSales++; }
+            if(r.type === 'Expense') tExp += r.amount;
+        }
+    });
+
+    const net = tInc - tExp;
+    document.getElementById('rev-total').textContent = '₦' + tInc.toLocaleString();
+    // Reusing logic for month from earlier, or just generic profit
+    document.getElementById('rev-profit').textContent = '₦' + net.toLocaleString();
+    document.getElementById('rev-sales').textContent = cSales.toLocaleString();
+
+    // Rebuild Charts
+    const cMap = {};
+    _finRecords.filter(r => r.category === 'Course Payment' && r.status === 'Completed').forEach(r => {
+        const cn = r.course || 'Unknown';
+        if(!cMap[cn]) cMap[cn] = { enrolled: 0, revenue: 0 };
+        cMap[cn].enrolled += 1;
+        cMap[cn].revenue += r.amount;
+    });
+    
+    const sorted = Object.entries(cMap).sort((a,b) => b[1].revenue - a[1].revenue).slice(0,5);
+    const courseNames = sorted.map(c => c[0].length > 20 ? c[0].substring(0, 20) + '...' : c[0]);
+    const courseRevs = sorted.map(c => c[1].revenue);
+    const courseSales = sorted.map(c => c[1].enrolled);
+
+    if(window.revChart) window.revChart.destroy();
+    if(window.salesChart) window.salesChart.destroy();
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const accentCyan = rootStyles.getPropertyValue('--accent-cyan').trim() || '#00a0df';
+    const brandYellow = rootStyles.getPropertyValue('--brand-yellow').trim() || '#fcd116';
+    const brandNavy = rootStyles.getPropertyValue('--brand-navy').trim() || '#02014a';
+    const textColor = rootStyles.getPropertyValue('--text-gray').trim() || '#475467';
+    const gridColor = rootStyles.getPropertyValue('--border').trim() || '#E9EDF7';
+
+    Chart.defaults.color = textColor;
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+    const ctxBar = document.getElementById('revenueBarChart');
+    if(ctxBar) {
+        window.revChart = new Chart(ctxBar.getContext('2d'), {
+            type: 'bar',
+            data: { labels: courseNames, datasets: [{ label: 'Revenue (₦)', data: courseRevs, backgroundColor: accentCyan, borderRadius: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } }, x: { grid: { display: false }, ticks: { color: textColor } } }, plugins: { legend: { display: false } } }
+        });
+    }
+
+    const ctxDoughnut = document.getElementById('salesDoughnutChart');
+    if(ctxDoughnut) {
+        window.salesChart = new Chart(ctxDoughnut.getContext('2d'), {
+            type: 'doughnut',
+            data: { labels: courseNames, datasets: [{ data: courseSales, backgroundColor: [accentCyan, brandYellow, brandNavy, '#EE5D50', '#05CD99'], borderWidth: 0 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 20 } } }, cutout: '65%' }
+        });
+    }
 }
 </script>
 </body>
