@@ -323,6 +323,17 @@
                 <p>Executing data fetch protocol.</p>
             </div>
         </div>
+        
+        <div class="share-section" id="share-box" style="display:none; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border);">
+            <h4 style="font-size: 1.1rem; color: var(--navy-blue); margin-bottom: 1rem; text-transform: uppercase;">Share this article</h4>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="#" id="share-fb" target="_blank" style="background: #1877F2; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: transform 0.2s;">Facebook</a>
+                <a href="#" id="share-x" target="_blank" style="background: #000000; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: transform 0.2s;">X (Twitter)</a>
+                <a href="#" id="share-wa" target="_blank" style="background: #25D366; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: transform 0.2s;">WhatsApp</a>
+                <button onclick="copyArticleLink()" id="share-link-btn" style="background: var(--navy-light); color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: transform 0.2s;">🔗 Copy Article Link</button>
+            </div>
+        </div>
+
     </article>
 
     <aside class="blog-sidebar">
@@ -740,7 +751,38 @@
             <h1 class="post-title">${post.title}</h1>
             <div class="post-meta">By <span style="text-transform: uppercase;">Academy Admin</span> &nbsp;•&nbsp; ${date}</div>
             <div class="post-content">${post.content}</div>`;
+            
+        // --- NEW LOGIC: Setup Share Links ---
+        const baseUrl = 'https://enetsupremeacademy.vercel.app/blog.html'; 
+        const postUrl = baseUrl + '?id=' + post.id;
+        const encodedUrl = encodeURIComponent(postUrl);
+        const encodedTitle = encodeURIComponent(post.title);
+
+        document.getElementById('share-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+        document.getElementById('share-x').href = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+        document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`;
+        document.getElementById('share-link-btn').setAttribute('data-link', postUrl);
+        
+        document.getElementById('share-box').style.display = 'block';
     }
+
+    // --- NEW LOGIC: Copy Link Button ---
+    window.copyArticleLink = function() {
+        const btn = document.getElementById('share-link-btn');
+        const link = btn.getAttribute('data-link');
+        navigator.clipboard.writeText(link).then(() => {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Copied!';
+            btn.style.background = '#05CD99';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'var(--navy-light)';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy link: ', err);
+            alert('Failed to copy link.');
+        });
+    };
 </script>
 </body>
 </html>
