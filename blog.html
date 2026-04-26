@@ -134,6 +134,22 @@
         .post-title { font-size: 2.2rem; color: var(--navy-blue); margin-bottom: 0.5rem; line-height: 1.3; font-weight: 800; }
         .post-meta { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
         .post-meta span { color: var(--accent-cyan); font-weight: bold; }
+        
+        /* === READ MORE LOGIC === */
+        .post-content-wrapper { position: relative; max-height: 400px; overflow: hidden; }
+        .post-content-wrapper.expanded { max-height: none; }
+        .read-more-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 150px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+            display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px;
+        }
+        .post-content-wrapper.expanded .read-more-overlay { display: none; }
+        .read-more-btn {
+            background: var(--navy-blue); color: var(--white); border: 2px solid var(--accent-cyan);
+            padding: 10px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .read-more-btn:hover { background: var(--brand-yellow); color: var(--navy-blue); border-color: var(--brand-yellow); }
+
         .post-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-main); }
         .post-content p { margin-bottom: 1.5rem; }
         .post-content h1, .post-content h2, .post-content h3 { color: var(--navy-blue); margin: 2rem 0 1rem 0; font-weight: bold; }
@@ -517,8 +533,9 @@
             const urlParams = new URLSearchParams(window.location.search);
             const postIdFromUrl = urlParams.get('id');
 
+            // FIX: Convert both to strings to ensure matching numbers and string ids
             if (postIdFromUrl) {
-                const targetPost = data.find(p => p.id === postIdFromUrl);
+                const targetPost = data.find(p => String(p.id) === String(postIdFromUrl));
                 renderFullArticle(targetPost || data[0]);
             } else {
                 renderFullArticle(data[0]);
@@ -677,8 +694,8 @@
         closeSearchDropdown();
         clearSearch();
 
-        // Find in cache or navigate to URL
-        const post = allPostsCache.find(p => p.id === postId);
+        // Find in cache or navigate to URL (FIX: Type comparison issue fixed)
+        const post = allPostsCache.find(p => String(p.id) === String(postId));
         if (post) {
             renderFullArticle(post);
             window.history.pushState({}, '', `?id=${postId}`);
@@ -733,6 +750,10 @@
         return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    window.expandArticle = function(wrapperId) {
+        document.getElementById(wrapperId).classList.add('expanded');
+    };
+
     function renderFullArticle(post) {
         const container = document.getElementById('article-container');
         const coverImg = document.getElementById('article-cover');
@@ -747,10 +768,27 @@
         }
 
         const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        // --- NEW LOGIC: Truncate long rich-text posts ---
+        const plainTextLength = (post.content || '').replace(/<[^>]*>/g, '').length;
+        let contentHtml = '';
+        
+        if (plainTextLength > 800) { 
+            contentHtml = `
+                <div class="post-content-wrapper" id="post-wrapper-${post.id}">
+                    <div class="post-content">${post.content}</div>
+                    <div class="read-more-overlay">
+                        <button class="read-more-btn" onclick="expandArticle('post-wrapper-${post.id}')">Read Full Article ↓</button>
+                    </div>
+                </div>`;
+        } else {
+            contentHtml = `<div class="post-content">${post.content}</div>`;
+        }
+
         container.innerHTML = `
             <h1 class="post-title">${post.title}</h1>
             <div class="post-meta">By <span style="text-transform: uppercase;">Academy Admin</span> &nbsp;•&nbsp; ${date}</div>
-            <div class="post-content">${post.content}</div>`;
+            ${contentHtml}`;
             
         // --- NEW LOGIC: Setup Share Links ---
         const baseUrl = 'https://enetsupremeacademy.vercel.app/blog.html'; 
