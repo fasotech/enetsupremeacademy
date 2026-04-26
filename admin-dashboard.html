@@ -775,9 +775,19 @@ function showToast(msg, type='success', link=null){
 }
 
 let _deleteCallback=null;
-function openDeleteModal(msg,cb){document.getElementById('deleteModal-msg').textContent=msg;_deleteCallback=cb;document.getElementById('deleteModal').classList.add('open');}
-function closeDeleteModal(){document.getElementById('deleteModal').classList.remove('open');if(typeof _deleteCallback==='function')_deleteCallback();_deleteCallback=null;}
-document.getElementById('deleteModal-confirm').addEventListener('click', () => { closeDeleteModal(); });
+function openDeleteModal(msg,cb){
+    document.getElementById('deleteModal-msg').textContent=msg;
+    _deleteCallback=cb;
+    document.getElementById('deleteModal').classList.add('open');
+}
+function closeDeleteModal(){
+    document.getElementById('deleteModal').classList.remove('open');
+    _deleteCallback=null; // Clear callback without executing
+}
+document.getElementById('deleteModal-confirm').addEventListener('click', () => { 
+    if(typeof _deleteCallback==='function') _deleteCallback();
+    closeDeleteModal(); 
+});
 
 const GRADS=['linear-gradient(135deg,#02014a,#0d2a8f)','linear-gradient(135deg,#fcd116,#e0b800)','linear-gradient(135deg,#00a0df,#0088bd)'];
 function grad(s){let h=0;for(let i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h);return GRADS[Math.abs(h)%GRADS.length];}
@@ -913,7 +923,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
 // ── TABLES & STATS ──
 function renderPending(data){
     const pending=data.filter(u=>u.status==='pending'); const pc=pending.length;
-    document.getElementById('pend-badge').textContent=pc; document.getElementById('stat-pending').textContent=pc;
+    document.getElementById('pend-badge').textContent=pc; 
+    document.getElementById('stat-pending').textContent=pc;
+    const navP = document.getElementById('nav-pcount'); if(navP) navP.textContent = pc;
+    
     if(!pc) { document.getElementById('pending-users-list').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:2rem;">All caught up! No pending approvals.</td></tr>`; return; }
     document.getElementById('pending-users-list').innerHTML=pending.map(u=>{const nm=`${u.first_name||'User'} ${u.last_name||''}`.trim();const r=getRole(u);return `<tr class="clickable" onclick="openDrawer('${u.id}')"><td><div class="user-cell"><div class="uav" style="background:${grad(u.id||nm)}">${inits(u.first_name,u.last_name)}</div><div><div class="uname">${nm}</div></div></div></td><td>${u.email||'N/A'}</td><td><span style="font-size:0.7rem;font-weight:bold;text-transform:uppercase;background:rgba(0,160,223,0.1);color:var(--accent-cyan);padding:4px 8px;border-radius:4px;">${r}</span></td><td>${fmtDate(u.created_at)}</td><td onclick="event.stopPropagation()"><button style="padding:6px 12px;background:rgba(5,205,153,.1);color:var(--success);border:none;border-radius:8px;cursor:pointer;font-weight:bold;" onclick="approveUser('${u.id}')">Approve</button></td></tr>`;}).join('');
 }
@@ -1038,6 +1051,7 @@ function subscribeRealtime(){
         .on('postgres_changes',{event:'DELETE',schema:'public',table:'blog_posts'},p=>{loadBlogPosts();})
         .on('postgres_changes',{event:'*',schema:'public',table:'learning_materials'}, p => { fetchAllMaterials(); })
         .on('postgres_changes',{event:'*',schema:'public',table:'material_assignments'}, p => { fetchAllMaterials(); })
+        .on('postgres_changes',{event:'*',schema:'public',table:'finance_records'}, p => { fetchFinRecordsFromDB(); })
         .subscribe();
 }
 
@@ -1296,16 +1310,27 @@ function updateFinCategories(forceExpense = false) {
 async function fetchFinRecordsFromDB() {
     try {
         const { data, error } = await _sb.from('finance_records').select('*').order('record_date', { ascending: false });
-        if (error) throw error;
         
+        if (error) {
+            showToast("DB Error: " + error.message, "error");
+            console.error("Supabase Error:", error);
+            return;
+        }
+        
+        if (!data) {
+            _finRecords = [];
+            loadFinRecords();
+            return;
+        }
+
         // Map the DB columns back to your frontend array structure
         _finRecords = data.map(dbRow => ({
             id: dbRow.id,
             recordClass: dbRow.record_class,
             type: dbRow.record_type,
-            amount: Number(dbRow.amount),
-            category: dbRow.category,
-            date: dbRow.record_date,
+            amount: Number(dbRow.amount) || 0,
+            category: dbRow.category || 'Uncategorized',
+            date: dbRow.record_date || new Date().toISOString().split('T')[0],
             party: dbRow.party || '',
             course: dbRow.course || '',
             method: dbRow.payment_method || '',
@@ -1314,13 +1339,12 @@ async function fetchFinRecordsFromDB() {
             purpose: dbRow.purpose || '',
             notes: dbRow.notes || '',
             addedBy: dbRow.added_by || 'Admin',
-            timestamp: new Date(dbRow.created_at).getTime()
+            timestamp: dbRow.created_at ? new Date(dbRow.created_at).getTime() : Date.now()
         }));
         
         loadFinRecords(); // Re-render tables and charts
     } catch (err) {
-        console.error("Error fetching finance records:", err);
-        showToast("Failed to load financial records from database.", "error");
+        showToast("System Error: " + err.message, "error");
     }
 }
 
@@ -1650,9 +1674,15 @@ function updateDashProfit() {
     });
 
     const net = tInc - tExp;
-    document.getElementById('rev-total').textContent = '₦' + tInc.toLocaleString();
-    document.getElementById('rev-profit').textContent = '₦' + net.toLocaleString();
-    document.getElementById('rev-sales').textContent = cSales.toLocaleString();
+    
+    const revTotalEl = document.getElementById('rev-total');
+    if (revTotalEl) revTotalEl.textContent = '₦' + tInc.toLocaleString();
+    
+    const revProfitEl = document.getElementById('rev-profit');
+    if (revProfitEl) revProfitEl.textContent = '₦' + net.toLocaleString();
+    
+    const revSalesEl = document.getElementById('rev-sales');
+    if (revSalesEl) revSalesEl.textContent = cSales.toLocaleString();
 
     const cMap = {};
     _finRecords.filter(r => r.category === 'Course Payment' && r.status === 'Completed').forEach(r => {
