@@ -1003,7 +1003,15 @@ window.addEventListener('load', async () => {
     loadFinLocal(); 
 });
 
-window.forceLogout = async () => { try { await _sb.auth.signOut(); } catch (e) {} finally { localStorage.clear(); sessionStorage.clear(); window.location.href = 'index.html'; } };
+window.forceLogout = async () => { 
+    try { await _sb.auth.signOut(); } catch (e) {} 
+    finally { 
+        localStorage.removeItem('enet_impersonate_id'); 
+        // We purposely omit localStorage.clear() to preserve your financial records!
+        sessionStorage.clear(); 
+        window.location.href = 'index.html'; 
+    } 
+};
 
 async function loadProfiles(){
     try{
