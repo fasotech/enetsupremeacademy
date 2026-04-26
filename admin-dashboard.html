@@ -808,31 +808,29 @@ window.grantCourseAccess = async function(userId) {
         await _sb.from('enrollments').insert({ student_id: userId, course_id: courseId, enrollment_type: 'admin_granted' });
         const user = _data.find(u => u.id === userId);
         
-        // Automatically log in financial tracker
+        // Automatically log in financial tracker (Database Version)
         const courseObj = _allCourses.find(c => String(c.id) === String(courseId));
         if (courseObj && user) {
             const cPrice = courseObj.price ? Number(courseObj.price) : 0;
             const studentName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email || 'Student';
             
-            _finRecords.push({
-                id: Date.now(),
-                recordClass: 'transaction',
-                type: 'Income',
+            await _sb.from('finance_records').insert([{
+                record_class: 'transaction',
+                record_type: 'Income',
                 amount: cPrice,
                 category: 'Course Payment',
-                date: new Date().toISOString().split('T')[0],
+                record_date: new Date().toISOString().split('T')[0],
                 party: studentName,
                 course: courseObj.title,
-                method: 'Other',
+                payment_method: 'Other',
                 status: 'Completed',
-                refNum: 'ADMIN-GRANT-' + Date.now(),
+                ref_num: 'ADMIN-GRANT-' + Date.now(),
                 purpose: 'Admin Granted Enrollment',
                 notes: 'Auto-generated from user drawer enrollment.',
-                addedBy: _currentAdminName,
-                timestamp: Date.now()
-            });
-            if(typeof saveFinLocal === 'function') saveFinLocal();
-            if(typeof loadFinRecords === 'function') loadFinRecords();
+                added_by: _currentAdminName
+            }]);
+            
+            fetchFinRecordsFromDB();
         }
         
         if(user && user.status !== 'approved') {
@@ -1000,7 +998,8 @@ window.addEventListener('load', async () => {
         }
     }
     
-    loadFinLocal(); 
+    // NEW: Fetch from Supabase DB instead of Local Storage
+    fetchFinRecordsFromDB(); 
 });
 
 window.forceLogout = async () => { 
@@ -1293,17 +1292,40 @@ function updateFinCategories(forceExpense = false) {
     catSel.innerHTML = opts;
 }
 
-function loadFinLocal() {
-    const data = localStorage.getItem('enet_finance_records');
-    _finRecords = data ? JSON.parse(data) : [];
-    loadFinRecords(); 
+// ── NEW SUPABASE FETCH FUNCTION ──
+async function fetchFinRecordsFromDB() {
+    try {
+        const { data, error } = await _sb.from('finance_records').select('*').order('record_date', { ascending: false });
+        if (error) throw error;
+        
+        // Map the DB columns back to your frontend array structure
+        _finRecords = data.map(dbRow => ({
+            id: dbRow.id,
+            recordClass: dbRow.record_class,
+            type: dbRow.record_type,
+            amount: Number(dbRow.amount),
+            category: dbRow.category,
+            date: dbRow.record_date,
+            party: dbRow.party || '',
+            course: dbRow.course || '',
+            method: dbRow.payment_method || '',
+            status: dbRow.status || 'Completed',
+            refNum: dbRow.ref_num || '',
+            purpose: dbRow.purpose || '',
+            notes: dbRow.notes || '',
+            addedBy: dbRow.added_by || 'Admin',
+            timestamp: new Date(dbRow.created_at).getTime()
+        }));
+        
+        loadFinRecords(); // Re-render tables and charts
+    } catch (err) {
+        console.error("Error fetching finance records:", err);
+        showToast("Failed to load financial records from database.", "error");
+    }
 }
 
-function saveFinLocal() {
-    localStorage.setItem('enet_finance_records', JSON.stringify(_finRecords));
-}
-
-function addFinRecord() {
+// ── NEW SUPABASE ADD FUNCTION ──
+async function addFinRecord() {
     const fDate = document.getElementById('fin-date').value;
     const fType = document.getElementById('fin-type').value;
     const fAmount = parseFloat(document.getElementById('fin-amount').value);
@@ -1311,44 +1333,59 @@ function addFinRecord() {
     
     if(!fDate || !fAmount || !fCat) { showToast("Date, Amount, and Category are required.", "error"); return; }
 
-    const rec = {
-        id: Date.now(),
-        recordClass: document.getElementById('fin-recordClass').value,
-        type: _finType === 'budget' ? 'Budget' : fType,
+    // Structure the data for the Supabase columns
+    const dbRecord = {
+        record_class: document.getElementById('fin-recordClass').value,
+        record_type: _finType === 'budget' ? 'Budget' : fType,
         amount: fAmount,
         category: fCat,
-        date: fDate,
+        record_date: fDate,
         party: document.getElementById('fin-party').value || '',
         course: document.getElementById('fin-course').value || '',
-        method: document.getElementById('fin-method').value || '',
+        payment_method: document.getElementById('fin-method').value || '',
         status: document.getElementById('fin-status').value || 'Completed',
-        refNum: document.getElementById('fin-ref').value || '',
+        ref_num: document.getElementById('fin-ref').value || '',
         purpose: document.getElementById('fin-purpose').value || '',
         notes: document.getElementById('fin-notes').value || '',
-        addedBy: _currentAdminName,
-        timestamp: Date.now()
+        added_by: _currentAdminName
     };
 
-    _finRecords.push(rec);
-    saveFinLocal();
-    showToast("Record added to ledger.");
-    
-    document.getElementById('fin-amount').value = '';
-    document.getElementById('fin-party').value = '';
-    document.getElementById('fin-course').value = '';
-    document.getElementById('fin-purpose').value = '';
-    document.getElementById('fin-notes').value = '';
-    document.getElementById('fin-ref').value = '';
+    try {
+        const { error } = await _sb.from('finance_records').insert([dbRecord]);
+        if (error) throw error;
+        
+        showToast("Record securely added to database.");
+        
+        // Clear the form
+        document.getElementById('fin-amount').value = '';
+        document.getElementById('fin-party').value = '';
+        document.getElementById('fin-course').value = '';
+        document.getElementById('fin-purpose').value = '';
+        document.getElementById('fin-notes').value = '';
+        document.getElementById('fin-ref').value = '';
 
-    loadFinRecords();
+        // Refresh data from DB
+        fetchFinRecordsFromDB();
+        
+    } catch (err) {
+        console.error("Error adding record:", err);
+        showToast(err.message, "error");
+    }
 }
 
+// ── NEW SUPABASE DELETE FUNCTION ──
 function deleteFinRecord(id) {
-    openDeleteModal("Delete this financial record permanently?", () => {
-        _finRecords = _finRecords.filter(r => r.id !== id);
-        saveFinLocal();
-        showToast("Record deleted.");
-        loadFinRecords();
+    openDeleteModal("Delete this financial record permanently?", async () => {
+        try {
+            const { error } = await _sb.from('finance_records').delete().eq('id', id);
+            if (error) throw error;
+            
+            showToast("Record deleted from database.");
+            fetchFinRecordsFromDB(); // Refresh the list
+        } catch (err) {
+            console.error("Error deleting record:", err);
+            showToast(err.message, "error");
+        }
     });
 }
 
