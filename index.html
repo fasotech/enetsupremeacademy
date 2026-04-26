@@ -143,7 +143,7 @@
         .blob-bg { position: absolute; width: 85%; height: 85%; background-color: var(--accent-cyan); opacity: 0.15; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; z-index: 1; transform: rotate(-5deg); }
         .main-image { position: relative; z-index: 2; width: 90%; height: auto; max-height: 650px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); object-fit: contain; background-color: white; padding: 2rem; border-bottom: 5px solid var(--brand-yellow); }
 
-        /* === STORE === */
+        /* === STORE / BLOG SECTION SHARED STYLES === */
         .store-section { background-color: var(--background); padding: 5rem 1.5rem; border-top: 1px solid var(--light-gray); }
         .container { max-width: 1200px; margin: 0 auto; }
         .section-header-title { font-size: 2rem; color: var(--navy-blue); font-weight: 800; margin-bottom: 2rem; text-align: left;}
@@ -193,42 +193,11 @@
         .whatsapp-btn:hover { background-color: #1ebc5a; transform: translateY(-3px); }
 
         /* === Calendly Modal === */
-        .calendly-modal-inner {
-            max-width: 850px;
-            height: 85vh;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border-radius: 16px;
-        }
-        .calendly-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            background: var(--white);
-            flex-shrink: 0;
-            border-radius: 16px 16px 0 0;
-        }
-        .calendly-modal-header h2 {
-            font-size: 1.3rem;
-            color: var(--navy-blue);
-            margin: 0;
-            font-weight: 800;
-            text-align: left;
-        }
-        .calendly-modal-header .modal-close {
-            position: static;
-            font-size: 1.4rem;
-        }
-        .calendly-widget-wrapper {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            background: var(--white);
-        }
+        .calendly-modal-inner { max-width: 850px; height: 85vh; padding: 0; display: flex; flex-direction: column; overflow: hidden; border-radius: 16px; }
+        .calendly-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--white); flex-shrink: 0; border-radius: 16px 16px 0 0; }
+        .calendly-modal-header h2 { font-size: 1.3rem; color: var(--navy-blue); margin: 0; font-weight: 800; text-align: left; }
+        .calendly-modal-header .modal-close { position: static; font-size: 1.4rem; }
+        .calendly-widget-wrapper { flex: 1; width: 100%; height: 100%; background: var(--white); }
 
         /* === REASONS & STATS === */
         .reasons-section { background-color: var(--white); padding: 5rem 1.5rem; }
@@ -267,7 +236,7 @@
         .preview-body h5 { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
         .preview-body p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.45; }
 
-        /* === CORRECTED ENET SUPREME BRANDED FOOTER === */
+        /* === FOOTER === */
         .site-footer { background-color: var(--navy-blue); color: #fff; padding-top: 4rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: auto; border-top: 4px solid var(--brand-yellow); }
         .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
         
@@ -379,7 +348,7 @@
                 </svg>
             </button>
 
-            <a href="login.html" id="nav-login-btn">Log In / Academy</a>
+            <a href="login.html" id="nav-login-btn">Sign in/Register</a>
         </div>
     </nav>
 </header>
@@ -428,7 +397,6 @@
     </div>
 </section>
 
-<!-- ========== CALENDLY MODAL ========== -->
 <div class="modal-overlay" id="calendlyOverlay">
     <div class="custom-modal calendly-modal-inner" onclick="event.stopPropagation()">
         <div class="calendly-modal-header">
@@ -448,7 +416,6 @@
     </div>
 </div>
 
-<!-- ========== PAYMENT MODAL ========== -->
 <div class="modal-overlay" id="paymentOverlay" onclick="closePaymentModal(event)">
     <div class="custom-modal" onclick="event.stopPropagation()">
         <button class="modal-close" onclick="togglePaymentModal()">✕</button>
@@ -507,6 +474,18 @@
         <div class="stat-item"><div class="stat-number">15+</div><div class="stat-label">Global Mentors</div></div>
         <div class="stat-item"><div class="stat-number">10+</div><div class="stat-label">Premium Tracks</div></div>
         <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Community Support</div></div>
+    </div>
+</section>
+
+<section class="store-section" id="blog" style="background-color: var(--white);">
+    <div class="container">
+        <h2 class="section-header-title">Latest from Our Blog</h2>
+        <div class="course-grid" id="home-blog-container">
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                <p style="color: var(--text-gray); font-weight: bold;">Fetching latest articles...</p>
+            </div>
+        </div>
+        <a href="blog.html" class="view-all-btn">Read All Articles ➔</a>
     </div>
 </section>
 
@@ -1003,6 +982,53 @@
         }
     }
 
+    async function renderLatestBlogPosts() {
+        const container = document.getElementById('home-blog-container');
+        if (!container) return;
+
+        try {
+            const { data: posts, error } = await supabase
+                .from('blog_posts')
+                .select('id, title, cover_image, created_at, content')
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (error) throw error;
+            container.innerHTML = '';
+
+            if (!posts || posts.length === 0) {
+                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;">No articles available at the moment.</p>';
+                return;
+            }
+
+            posts.forEach(post => {
+                const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                
+                let snippet = (post.content || '').replace(/<[^>]*>/g, '');
+                snippet = snippet.length > 100 ? snippet.substring(0, 100) + '...' : snippet;
+
+                const imgHtml = post.cover_image 
+                    ? `<img src="${post.cover_image}" alt="${post.title}" class="course-img">`
+                    : `<div class="course-img" style="background:var(--navy-blue);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;">ENET Blog</div>`;
+
+                const card = document.createElement('div');
+                card.className = 'course-card';
+                card.onclick = () => window.location.href = `blog.html?id=${post.id}`;
+                card.innerHTML = `
+                    ${imgHtml}
+                    <div class="course-content">
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 0.5rem;">${date}</div>
+                        <h3 class="course-title">${post.title}</h3>
+                        <p class="course-desc">${snippet}</p>
+                        <span style="color: var(--navy-blue); font-weight: bold; font-size: 0.9rem; margin-top: auto; padding-top: 1rem;">Read Article ➔</span>
+                    </div>`;
+                container.appendChild(card);
+            });
+        } catch (err) {
+            container.innerHTML = '<p style="text-align:center;color:#dc2626;grid-column:1/-1;">Failed to load blog posts.</p>';
+        }
+    }
+
     async function claimEventCourse(courseId, courseTitle) {
         if (!activeSession) { window.location.href = 'login.html?redirect=index.html'; return; }
 
@@ -1109,6 +1135,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
         await checkSession();   
         renderCourses();        
+        renderLatestBlogPosts(); 
         fetchLiveCommunityFeed();
     });
 </script>
