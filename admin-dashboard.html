@@ -1064,20 +1064,42 @@ function adminFormatSize(bytes) { if (!bytes) return ''; if (bytes < 1048576) re
 
 async function fetchAllMaterials() {
     try {
-        const { data: materials, error } = await _sb.from('learning_materials').select('*, courses(id, title), profiles(first_name, last_name)').eq('is_active', true).order('created_at', { ascending: false });
-        if (error) throw error; _allMaterials = materials || [];
+        let { data: materials, error } = await _sb.from('learning_materials')
+            .select('*, courses(id, title), profiles(first_name, last_name)')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false });
+
+        // Fallback mode: If the database "links" (foreign keys) are missing, just pull the raw materials!
+        if (error && error.message.includes('relationship')) {
+            const fallback = await _sb.from('learning_materials')
+                .select('*')
+                .eq('is_active', true)
+                .order('created_at', { ascending: false });
+            if (fallback.error) throw fallback.error;
+            materials = fallback.data || [];
+        } else if (error) {
+            throw error;
+        }
+
+        _allMaterials = materials || [];
+        
         if (_allMaterials.length) {
             const matIds = _allMaterials.map(m => m.id);
             const { data: assignments } = await _sb.from('material_assignments').select('material_id, student_id').in('material_id', matIds);
             _matAssignments = {};
             (assignments || []).forEach(a => { if (!_matAssignments[a.material_id]) _matAssignments[a.material_id] = new Set(); _matAssignments[a.material_id].add(a.student_id); });
         }
+        
         const cnt = _allMaterials.length;
         document.getElementById('admin-mat-count').textContent = cnt + ' materials';
         document.getElementById('nav-mat-count').textContent = cnt;
         document.getElementById('stat-materials-box').textContent = cnt;
 
-        const courseMap = {}; _allMaterials.forEach(m => { if (m.courses) courseMap[m.courses.id] = m.courses.title; });
+        const courseMap = {}; 
+        _allMaterials.forEach(m => { 
+            if (m.courses && m.courses.id) courseMap[m.courses.id] = m.courses.title; 
+        });
+        
         document.getElementById('admin-mat-course-filter').innerHTML = '<option value="">All Courses</option>' + Object.entries(courseMap).map(([id, title]) => `<option value="${id}">${title}</option>`).join('');
 
         renderAdminMatList();
@@ -1088,7 +1110,9 @@ async function fetchAllMaterials() {
             _matEnrollments = {};
             (enrData || []).forEach(en => { if (!_matEnrollments[en.course_id]) _matEnrollments[en.course_id] = []; if (en.profiles) _matEnrollments[en.course_id].push(en.profiles); });
         }
-    } catch (err) {}
+    } catch (err) {
+        console.error("Material Fetch Error:", err);
+    }
 }
 
 function renderAdminMatList() {
@@ -1108,7 +1132,7 @@ function renderAdminMatList() {
         const instrName = `${m.profiles?.first_name || ''} ${m.profiles?.last_name || ''}`.trim() || 'Instructor';
         return `<div class="mat-list-item ${_selectedMaterialId === m.id ? 'selected' : ''}" onclick="selectMaterial('${m.id}')">
             <div class="mat-type-icon-sm ${adminMatTypeClass(m.file_name)}">${adminMatIcon(m.file_name)}</div>
-            <div class="mat-list-item-info"><div class="mat-list-item-title">${m.title}</div><div class="mat-list-item-sub">${m.courses?.title || ''} · ${instrName}</div></div>
+            <div class="mat-list-item-info"><div class="mat-list-item-title">${m.title}</div><div class="mat-list-item-sub">${m.courses?.title || 'General / Unknown Course'} · ${instrName}</div></div>
             ${statusPill}
         </div>`;
     }).join('');
@@ -1120,7 +1144,7 @@ async function selectMaterial(matId) {
     document.getElementById('mat-assign-placeholder').style.display = 'none';
     const ap = document.getElementById('mat-assign-active'); ap.style.display = 'flex';
     const instrName = `${mat.profiles?.first_name || ''} ${mat.profiles?.last_name || ''}`.trim() || 'Instructor';
-    document.getElementById('mat-detail-head').innerHTML = `<div style="font-family:'Poppins'; font-weight:700; font-size:1rem; margin-bottom:.3rem;">${mat.title}</div><div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem;">By ${instrName} · ${new Date(mat.created_at).toLocaleDateString()}</div><div><span style="font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg-light); color: var(--text-muted); border: 1px solid var(--border); margin-right: 5px;">${mat.courses?.title || ''}</span><a href="${mat.file_url}" target="_blank" style="font-size:.72rem;font-weight:700;color:var(--accent-cyan);text-decoration:none;">↗ Preview</a></div>`;
+    document.getElementById('mat-detail-head').innerHTML = `<div style="font-family:'Poppins'; font-weight:700; font-size:1rem; margin-bottom:.3rem;">${mat.title}</div><div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem;">By ${instrName} · ${new Date(mat.created_at).toLocaleDateString()}</div><div><span style="font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg-light); color: var(--text-muted); border: 1px solid var(--border); margin-right: 5px;">${mat.courses?.title || 'General Course'}</span><a href="${mat.file_url}" target="_blank" style="font-size:.72rem;font-weight:700;color:var(--accent-cyan);text-decoration:none;">↗ Preview</a></div>`;
     document.getElementById('mat-student-search').value = ''; renderStudentAssignList();
 }
 
