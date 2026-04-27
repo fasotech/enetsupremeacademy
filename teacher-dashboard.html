@@ -370,7 +370,6 @@
     </header>
 
     <main class="content">
-        <!-- DASHBOARD OVERVIEW -->
         <div id="dashboard-overview" class="view-section">
             <div class="stats-grid">
                 <div class="stat-card brand-blue" onclick="startNewCourse()">
@@ -401,7 +400,6 @@
             </div>
         </div>
 
-        <!-- LEARNING MATERIALS SECTION -->
         <div class="panel view-section" id="materials-section" style="display:none;">
             <div class="panel-head">
                 <div class="panel-title">Learning Materials</div>
@@ -443,7 +441,6 @@
             </div>
         </div>
 
-        <!-- STUDENTS SECTION -->
         <div class="panel view-section" id="students-section" style="display:none;">
             <div class="panel-head"><div class="panel-title">Student Roster & Analytics</div></div>
             <div class="table-responsive">
@@ -456,7 +453,6 @@
             </div>
         </div>
 
-        <!-- ASSIGNMENTS SECTION -->
         <div class="panel view-section" id="assignments-section" style="display:none;">
             <div class="panel-head"><div class="panel-title">Student Assignments & Grading</div></div>
             <div class="table-responsive">
@@ -469,7 +465,6 @@
             </div>
         </div>
 
-        <!-- COURSE CREATOR SECTION -->
         <div class="panel view-section" id="creator-section" style="display:none;">
             <div class="panel-head"><div class="panel-title" id="form-main-title">Course Creator & Manager</div></div>
             <div class="panel-body">
@@ -538,7 +533,6 @@
     </main>
 </div>
 
-<!-- UPLOAD MATERIAL MODAL -->
 <div class="upload-modal-overlay" id="upload-modal">
     <div class="upload-modal">
         <div class="upload-modal-head">
@@ -585,7 +579,6 @@
     </div>
 </div>
 
-<!-- GRADING MODAL -->
 <div class="modal-overlay" id="grading-modal">
     <div class="review-modal" style="max-width:600px;text-align:left;">
         <h2 style="margin-bottom:1rem;font-family:'Poppins';color:var(--text-dark);">Grade Submission</h2>
@@ -630,7 +623,6 @@
     </div>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settings-modal" style="z-index:4000;">
     <div class="settings-modal-content">
         <button class="settings-modal-close" onclick="closeSettings()">✕</button>
@@ -990,8 +982,26 @@ async function uploadMaterial() {
 async function fetchMaterials() {
     if (!currentInstructorId) return;
     try {
-        const { data, error } = await sb.from('learning_materials').select('*, courses(title)').eq('instructor_id', currentInstructorId).eq('is_active', true).order('created_at', { ascending: false });
-        if (error) throw error;
+        // We use a let variable here and a try/catch fallback to prevent silent crashes
+        let { data, error } = await sb.from('learning_materials')
+            .select('*, courses(title)')
+            .eq('instructor_id', currentInstructorId)
+            .eq('is_active', true)
+            .order('created_at', { ascending: false });
+        
+        // If the foreign key to courses is missing, this catches the error and pulls the raw data anyway
+        if (error && error.message.includes('relationship')) {
+            const fallback = await sb.from('learning_materials')
+                .select('*')
+                .eq('instructor_id', currentInstructorId)
+                .eq('is_active', true)
+                .order('created_at', { ascending: false });
+            if (fallback.error) throw fallback.error;
+            data = fallback.data || [];
+        } else if (error) {
+            throw error;
+        }
+
         myMaterials = data || [];
         document.getElementById('stat-materials').textContent = myMaterials.length;
         document.getElementById('nav-mat-count').textContent = myMaterials.length;
@@ -1005,7 +1015,10 @@ async function fetchMaterials() {
             myMaterials.forEach(m => m._assignedCount = assignMap[m.id] || 0);
         }
         renderMaterials();
-    } catch (err) { console.error('Materials fetch error:', err); }
+    } catch (err) { 
+        console.error('Materials fetch error:', err);
+        showToast('Failed to load materials: ' + err.message, 'error');
+    }
 }
 
 function renderMaterials() {
@@ -1027,7 +1040,7 @@ function renderMaterials() {
     grid.innerHTML = filtered.map(m => {
         const iconClass = getMatIconClass(m.material_type);
         const icon = getMatIcon(m.material_type);
-        const course = m.courses?.title || 'Unknown Course';
+        const course = m.courses?.title || 'General / Unknown Course';
         const size = formatFileSize(m.file_size_bytes);
         const date = new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const assignedText = m._assignedCount > 0 ? `✓ Assigned to ${m._assignedCount} student${m._assignedCount !== 1 ? 's' : ''}` : 'Not yet assigned to any student';
