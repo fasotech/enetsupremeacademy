@@ -196,7 +196,21 @@
         /* MODALS & DRAWER */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.show { display: flex; }
-        
+
+        /* EDIT FINANCE MODAL */
+        #editFinModal { z-index: 6000; }
+        #editFinModal .modal-box { background: var(--surface); border-radius: 24px; padding: 2rem; max-width: 680px; width: 95%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px var(--shadow-color); border: 1px solid var(--border); }
+        #editFinModal .modal-title { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: .6rem; }
+        #editFinModal .modal-title span { font-size: 1.2rem; }
+        .edit-fin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; }
+        .edit-fin-grid input, .edit-fin-grid select, .edit-fin-grid textarea { padding: .8rem; border-radius: 8px; border: 1.5px solid var(--border); outline: none; width: 100%; background: var(--bg-light); color: var(--text-dark); font-family: 'DM Sans', sans-serif; font-size: .88rem; transition: border-color .2s; }
+        .edit-fin-grid input:focus, .edit-fin-grid select:focus, .edit-fin-grid textarea:focus { border-color: var(--accent-cyan); background: var(--surface); }
+        .edit-fin-grid textarea { resize: vertical; min-height: 70px; }
+        .edit-fin-grid label { display: block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); margin-bottom: .35rem; }
+        .edit-field { display: flex; flex-direction: column; }
+        .edit-field.full { grid-column: 1 / -1; }
+        .edit-fin-actions { display: flex; gap: .85rem; margin-top: 1.5rem; justify-content: flex-end; }
+
         .drawer-backdrop{position:fixed;inset:0;background:rgba(2,1,74,0.5);backdrop-filter:blur(5px);z-index:200;opacity:0;pointer-events:none;transition:opacity .28s}
         .drawer-backdrop.open{opacity:1;pointer-events:all}
         .drawer{position:fixed;right:0;top:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);z-index:201;box-shadow:-10px 0 50px var(--shadow-color);border-left:1px solid var(--border);transform:translateX(105%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
@@ -219,6 +233,7 @@
 
 <div class="toast-wrap" id="toast-wrap"></div>
 
+<!-- CONFIRM / DELETE MODAL -->
 <div class="modal-overlay" id="deleteModal" style="z-index: 5000;">
     <div style="background:var(--surface); border-radius:24px; padding:2.5rem; max-width:420px; width:90%; text-align:center; box-shadow:0 20px 60px var(--shadow-color); border:1px solid var(--border);">
         <div style="font-size:2rem; margin-bottom:1rem; color:var(--danger);">⚠️</div>
@@ -227,6 +242,87 @@
         <div style="display:flex; gap:1rem; justify-content:center;">
             <button class="btn btn-secondary" onclick="closeDeleteModal()" style="padding:.8rem 2rem;">Cancel</button>
             <button class="btn btn-danger" id="deleteModal-confirm" style="padding:.8rem 2rem; border-radius: 8px; border:none; color:#fff; background:var(--danger); cursor:pointer;">Yes, Proceed</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── EDIT FINANCE RECORD MODAL (NEW) ── -->
+<div class="modal-overlay" id="editFinModal">
+    <div class="modal-box">
+        <div class="modal-title"><span>✏️</span> Edit Finance Record</div>
+        <input type="hidden" id="edit-fin-id">
+        <div class="edit-fin-grid">
+            <div class="edit-field">
+                <label>Record Class</label>
+                <select id="edit-fin-recordClass">
+                    <option value="transaction">Standard Transaction</option>
+                    <option value="payroll">Payroll / Commission</option>
+                    <option value="budget">Monthly Budget Set</option>
+                    <option value="refund">Student Refund</option>
+                </select>
+            </div>
+            <div class="edit-field">
+                <label>Type</label>
+                <select id="edit-fin-type" onchange="updateEditFinCategories()">
+                    <option value="Income">Income (+)</option>
+                    <option value="Expense">Expense (-)</option>
+                </select>
+            </div>
+            <div class="edit-field">
+                <label>Date</label>
+                <input type="date" id="edit-fin-date">
+            </div>
+            <div class="edit-field">
+                <label>Amount (₦)</label>
+                <input type="number" id="edit-fin-amount" placeholder="0.00">
+            </div>
+            <div class="edit-field">
+                <label>Category</label>
+                <select id="edit-fin-category"></select>
+            </div>
+            <div class="edit-field">
+                <label>Paid By / Paid To</label>
+                <input type="text" id="edit-fin-party" placeholder="Party name">
+            </div>
+            <div class="edit-field">
+                <label>Course Name</label>
+                <input type="text" id="edit-fin-course" placeholder="Course (if applicable)">
+            </div>
+            <div class="edit-field">
+                <label>Payment Method</label>
+                <select id="edit-fin-method">
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Card">Card / Stripe / Paystack</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="edit-field">
+                <label>Status</label>
+                <select id="edit-fin-status">
+                    <option value="Completed">Completed</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="edit-field">
+                <label>Reference Number</label>
+                <input type="text" id="edit-fin-ref" placeholder="Ref #">
+            </div>
+            <div class="edit-field">
+                <label>Purpose / Description</label>
+                <input type="text" id="edit-fin-purpose" placeholder="Purpose">
+            </div>
+            <div class="edit-field full">
+                <label>Additional Notes</label>
+                <textarea id="edit-fin-notes" placeholder="Notes..."></textarea>
+            </div>
+        </div>
+        <div class="edit-fin-actions">
+            <button class="btn btn-secondary" onclick="closeEditFinModal()" style="padding:.8rem 1.75rem;">Cancel</button>
+            <button class="btn btn-primary" onclick="saveEditedFinRecord()" id="edit-fin-save-btn" style="padding:.8rem 1.75rem;">
+                Save Changes
+            </button>
         </div>
     </div>
 </div>
@@ -782,7 +878,7 @@ function openDeleteModal(msg,cb){
 }
 function closeDeleteModal(){
     document.getElementById('deleteModal').classList.remove('open');
-    _deleteCallback=null; // Clear callback without executing
+    _deleteCallback=null;
 }
 document.getElementById('deleteModal-confirm').addEventListener('click', () => { 
     if(typeof _deleteCallback==='function') _deleteCallback();
@@ -818,7 +914,6 @@ window.grantCourseAccess = async function(userId) {
         await _sb.from('enrollments').insert({ student_id: userId, course_id: courseId, enrollment_type: 'admin_granted' });
         const user = _data.find(u => u.id === userId);
         
-        // Automatically log in financial tracker (Database Version)
         const courseObj = _allCourses.find(c => String(c.id) === String(courseId));
         if (courseObj && user) {
             const cPrice = courseObj.price ? Number(courseObj.price) : 0;
@@ -918,7 +1013,7 @@ function openDrawer(userId){
 }
 
 function closeDrawer(){document.getElementById('drawerBg').classList.remove('open');document.getElementById('userDrawer').classList.remove('open');}
-document.addEventListener('keydown',e=>{if(e.key==='Escape') closeDrawer();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){ closeDrawer(); closeEditFinModal(); }});
 
 // ── TABLES & STATS ──
 function renderPending(data){
@@ -1011,7 +1106,6 @@ window.addEventListener('load', async () => {
         }
     }
     
-    // NEW: Fetch from Supabase DB instead of Local Storage
     fetchFinRecordsFromDB(); 
 });
 
@@ -1019,7 +1113,6 @@ window.forceLogout = async () => {
     try { await _sb.auth.signOut(); } catch (e) {} 
     finally { 
         localStorage.removeItem('enet_impersonate_id'); 
-        // We purposely omit localStorage.clear() to preserve your financial records!
         sessionStorage.clear(); 
         window.location.href = 'index.html'; 
     } 
@@ -1069,7 +1162,6 @@ async function fetchAllMaterials() {
             .eq('is_active', true)
             .order('created_at', { ascending: false });
 
-        // Fallback mode: If the database "links" (foreign keys) are missing, just pull the raw materials!
         if (error && error.message.includes('relationship')) {
             const fallback = await _sb.from('learning_materials')
                 .select('*')
@@ -1225,12 +1317,9 @@ async function deleteBlogPost(id) { await _sb.from('blog_posts').delete().eq('id
 
 async function submitBlogPost(){
     const title=document.getElementById('blog-title').value.trim(); const excerpt=document.getElementById('blog-excerpt').value.trim(); const content=quillEditor.root.innerHTML;
-    
     const fileInput = document.getElementById('blog-cover'); 
-    
     if(!title) return showToast('Title required', 'error');
     const btn=document.getElementById('publish-blog-btn'); btn.disabled=true; btn.textContent='Publishing...';
-    
     try {
         let coverUrl=null;
         if(fileInput.files && fileInput.files.length > 0){
@@ -1239,13 +1328,10 @@ async function submitBlogPost(){
             await _sb.storage.from('blog_images').upload(fn,f);
             coverUrl=_sb.storage.from('blog_images').getPublicUrl(fn).data.publicUrl;
         }
-        
         const insertData={title, excerpt, content};
         if (coverUrl) insertData.cover_image = coverUrl;
-
         const {data: userData} = await _sb.auth.getUser();
         if(userData.user) insertData.author_id=userData.user.id;
-        
         await _sb.from('blog_posts').insert([insertData]);
         showToast('Published'); loadBlogPosts(); cancelBlogForm();
     } catch(e){ showToast(e.message, 'error'); }
@@ -1277,7 +1363,6 @@ function toggleFinanceForm() {
 
 function setFinType(rc) {
     _finType = rc;
-    
     const typeSel = document.getElementById('fin-type');
     const party = document.getElementById('fin-party');
     const course = document.getElementById('fin-course');
@@ -1322,15 +1407,106 @@ function setFinType(rc) {
 function updateFinCategories(forceExpense = false) {
     const isInc = document.getElementById('fin-type').value === 'Income';
     const catSel = document.getElementById('fin-category');
-    
     let opts = '<option value="">Select Category</option>';
     let arr = (forceExpense || !isInc) ? EXP_CATS : INC_CATS;
-    
     arr.forEach(c => opts += `<option value="${c}">${c}</option>`);
     catSel.innerHTML = opts;
 }
 
-// ── NEW SUPABASE FETCH FUNCTION ──
+// ── EDIT FINANCE RECORD MODAL FUNCTIONS (NEW) ──
+function updateEditFinCategories() {
+    const isInc = document.getElementById('edit-fin-type').value === 'Income';
+    const catSel = document.getElementById('edit-fin-category');
+    let opts = '';
+    const arr = isInc ? INC_CATS : EXP_CATS;
+    arr.forEach(c => opts += `<option value="${c}">${c}</option>`);
+    catSel.innerHTML = opts;
+}
+
+function openEditFinModal(recordId) {
+    const r = _finRecords.find(x => String(x.id) === String(recordId));
+    if (!r) return showToast('Record not found.', 'error');
+
+    document.getElementById('edit-fin-id').value = r.id;
+    document.getElementById('edit-fin-recordClass').value = r.recordClass || 'transaction';
+    document.getElementById('edit-fin-type').value = r.type || 'Income';
+    document.getElementById('edit-fin-date').value = r.date || '';
+    document.getElementById('edit-fin-amount').value = r.amount || '';
+    document.getElementById('edit-fin-party').value = r.party || '';
+    document.getElementById('edit-fin-course').value = r.course || '';
+    document.getElementById('edit-fin-method').value = r.method || 'Bank Transfer';
+    document.getElementById('edit-fin-status').value = r.status || 'Completed';
+    document.getElementById('edit-fin-ref').value = r.refNum || '';
+    document.getElementById('edit-fin-purpose').value = r.purpose || '';
+    document.getElementById('edit-fin-notes').value = r.notes || '';
+
+    // Populate category dropdown then set the value
+    updateEditFinCategories();
+    // Add current category as option if it's not in the list (custom/legacy)
+    const catSel = document.getElementById('edit-fin-category');
+    const exists = [...catSel.options].some(o => o.value === r.category);
+    if (!exists && r.category) {
+        const opt = document.createElement('option');
+        opt.value = r.category;
+        opt.textContent = r.category;
+        catSel.insertBefore(opt, catSel.firstChild);
+    }
+    catSel.value = r.category || '';
+
+    document.getElementById('editFinModal').classList.add('show');
+}
+
+function closeEditFinModal() {
+    document.getElementById('editFinModal').classList.remove('show');
+}
+
+async function saveEditedFinRecord() {
+    const id = document.getElementById('edit-fin-id').value;
+    const fDate = document.getElementById('edit-fin-date').value;
+    const fAmount = parseFloat(document.getElementById('edit-fin-amount').value);
+    const fCat = document.getElementById('edit-fin-category').value;
+
+    if (!fDate || !fAmount || !fCat) {
+        return showToast('Date, Amount, and Category are required.', 'error');
+    }
+
+    const btn = document.getElementById('edit-fin-save-btn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+
+    const dbRecord = {
+        record_class: document.getElementById('edit-fin-recordClass').value,
+        record_type: document.getElementById('edit-fin-type').value,
+        amount: fAmount,
+        category: fCat,
+        record_date: fDate,
+        party: document.getElementById('edit-fin-party').value || '',
+        course: document.getElementById('edit-fin-course').value || '',
+        payment_method: document.getElementById('edit-fin-method').value || '',
+        status: document.getElementById('edit-fin-status').value || 'Completed',
+        ref_num: document.getElementById('edit-fin-ref').value || '',
+        purpose: document.getElementById('edit-fin-purpose').value || '',
+        notes: document.getElementById('edit-fin-notes').value || '',
+    };
+
+    try {
+        const { error } = await _sb.from('finance_records').update(dbRecord).eq('id', id);
+        if (error) throw error;
+        showToast('Record updated successfully!', 'success');
+        closeEditFinModal();
+        fetchFinRecordsFromDB();
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
+
+    btn.disabled = false; btn.textContent = 'Save Changes';
+}
+
+// Close edit modal when clicking backdrop
+document.getElementById('editFinModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditFinModal();
+});
+
+// ── SUPABASE FETCH FUNCTION ──
 async function fetchFinRecordsFromDB() {
     try {
         const { data, error } = await _sb.from('finance_records').select('*').order('record_date', { ascending: false });
@@ -1347,7 +1523,6 @@ async function fetchFinRecordsFromDB() {
             return;
         }
 
-        // Map the DB columns back to your frontend array structure
         _finRecords = data.map(dbRow => ({
             id: dbRow.id,
             recordClass: dbRow.record_class,
@@ -1366,13 +1541,13 @@ async function fetchFinRecordsFromDB() {
             timestamp: dbRow.created_at ? new Date(dbRow.created_at).getTime() : Date.now()
         }));
         
-        loadFinRecords(); // Re-render tables and charts
+        loadFinRecords();
     } catch (err) {
         showToast("System Error: " + err.message, "error");
     }
 }
 
-// ── NEW SUPABASE ADD FUNCTION ──
+// ── SUPABASE ADD FUNCTION ──
 async function addFinRecord() {
     const fDate = document.getElementById('fin-date').value;
     const fType = document.getElementById('fin-type').value;
@@ -1381,7 +1556,6 @@ async function addFinRecord() {
     
     if(!fDate || !fAmount || !fCat) { showToast("Date, Amount, and Category are required.", "error"); return; }
 
-    // Structure the data for the Supabase columns
     const dbRecord = {
         record_class: document.getElementById('fin-recordClass').value,
         record_type: _finType === 'budget' ? 'Budget' : fType,
@@ -1404,7 +1578,6 @@ async function addFinRecord() {
         
         showToast("Record securely added to database.");
         
-        // Clear the form
         document.getElementById('fin-amount').value = '';
         document.getElementById('fin-party').value = '';
         document.getElementById('fin-course').value = '';
@@ -1412,7 +1585,6 @@ async function addFinRecord() {
         document.getElementById('fin-notes').value = '';
         document.getElementById('fin-ref').value = '';
 
-        // Refresh data from DB
         fetchFinRecordsFromDB();
         
     } catch (err) {
@@ -1421,15 +1593,14 @@ async function addFinRecord() {
     }
 }
 
-// ── NEW SUPABASE DELETE FUNCTION ──
+// ── SUPABASE DELETE FUNCTION ──
 function deleteFinRecord(id) {
     openDeleteModal("Delete this financial record permanently?", async () => {
         try {
             const { error } = await _sb.from('finance_records').delete().eq('id', id);
             if (error) throw error;
-            
             showToast("Record deleted from database.");
-            fetchFinRecordsFromDB(); // Refresh the list
+            fetchFinRecordsFromDB();
         } catch (err) {
             console.error("Error deleting record:", err);
             showToast(err.message, "error");
@@ -1452,7 +1623,6 @@ function loadFinRecords() {
 function switchFinTab(tab) {
     document.querySelectorAll('.fin-tab-content').forEach(e => e.classList.remove('active'));
     document.getElementById('fview-' + tab).classList.add('active');
-    
     document.querySelectorAll('#financial-tracker-section .tab-btn').forEach(e => e.classList.remove('active'));
     document.getElementById('ftab-' + tab).classList.add('active');
 }
@@ -1519,7 +1689,12 @@ function renderFinTable(tab) {
             <td>${r.party || '-'}</td>
             <td>${r.purpose || '-'}<br><span style="font-size:0.65rem;color:var(--text-muted)">${r.method} | Ref: ${r.refNum||'-'}</span></td>
             <td>${getStatBadge(r.status)}</td>
-            <td><button onclick="deleteFinRecord(${r.id})" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;">🗑</button></td>
+            <td>
+                <div style="display:flex;gap:.4rem;align-items:center;">
+                    <button onclick="openEditFinModal('${r.id}')" title="Edit Record" style="background:rgba(0,160,223,0.1);border:1px solid rgba(0,160,223,0.2);color:var(--accent-cyan);border-radius:6px;padding:5px 9px;cursor:pointer;font-size:1rem;line-height:1;" >✏️</button>
+                    <button onclick="deleteFinRecord(${r.id})" title="Delete Record" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;">🗑</button>
+                </div>
+            </td>
         </tr>`).join('');
         document.getElementById('tbody-transactions').innerHTML = html || `<tr><td colspan="8" style="text-align:center;padding:2rem;">No transactions found.</td></tr>`;
     }
@@ -1686,7 +1861,7 @@ function exportFinCSV(tableId, filename) {
     document.body.removeChild(downloadLink);
 }
 
-// ── UPDATED DASHBOARD ANALYTICS & CHARTS ──
+// ── DASHBOARD ANALYTICS & CHARTS ──
 function updateDashProfit() {
     let tInc=0, tExp=0, cSales=0;
     
