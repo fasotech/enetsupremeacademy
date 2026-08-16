@@ -121,11 +121,15 @@
         var SUPA_URL = 'https://lskwzcvexyxjncttvimf.supabase.co';
         var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxza3d6Y3ZleHl4am5jdHR2aW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMTIzNjEsImV4cCI6MjA4ODU4ODM2MX0.W8sEQ2ZtmBe-oqsznCX_UinJ2Jz2NNe0LuQct33VP2E';
 
+        var _supabaseClient = null;
         function getSupabase() {
             if (typeof window.supabase === 'undefined') {
                 throw new Error("Cannot connect to the database. Please check your internet connection or disable any adblockers.");
             }
-            return window.supabase.createClient(SUPA_URL, SUPA_KEY);
+            if (!_supabaseClient) {
+                _supabaseClient = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+            }
+            return _supabaseClient;
         }
 
         // ── UI HELPERS ─────────────────────────────────────────────────────────
@@ -157,6 +161,17 @@
 
         // ── CHECK IF RETURNING FROM PASSWORD RECOVERY EMAIL ────────────────────
         window.addEventListener('DOMContentLoaded', function() {
+            try {
+                var supabase = getSupabase();
+                supabase.auth.onAuthStateChange(function(event, session) {
+                    if (event === 'PASSWORD_RECOVERY') {
+                        showSection('update-section');
+                    }
+                });
+            } catch (e) {
+                console.error("Supabase init error:", e);
+            }
+
             if (window.location.hash && window.location.hash.includes('type=recovery')) {
                 showSection('update-section');
             }
