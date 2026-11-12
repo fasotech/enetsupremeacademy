@@ -14,6 +14,7 @@
         /* === ENET SUPREME BRANDING === */
         :root {
             --navy-blue: #02014a;     
+            --cds-color-blue-25: #f0f6ff;
             --navy-light: #0d2a8f;    
             --brand-yellow: #fcd116;  
             --yellow-hover: #e0b800;
@@ -38,27 +39,27 @@
         .skiptranslate { display: none !important; }
 
         /* === HEADER === */
-        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
+        header { background-color: var(--cds-color-blue-25); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 0.5rem;}
         
-        .logo { display: flex; align-items: center; gap: 12px; color: var(--white); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo .logo-text span { color: var(--brand-yellow); }
+        .logo { display: flex; align-items: center; gap: 12px; color: var(--navy-blue); font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo .logo-text span { color: var(--navy-blue); }
         .main-logo-img { height: 45px; width: auto; object-fit: contain; display: block; }
         
-        .mobile-menu-btn { display: none; background: transparent; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--navy-blue); font-size: 1.8rem; cursor: pointer; }
 
         .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-        .nav-links a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--accent-cyan); }
-        .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
+        .nav-links a { color: var(--navy-blue); text-decoration: none; font-weight: 600; font-size: 0.95rem; padding: 0.45rem 0.9rem; border-radius: 8px; transition: background-color 0.3s, color 0.3s; }
+        .nav-links a:hover { background-color: var(--brand-yellow); color: var(--navy-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+        .nav-links a.active { background-color: var(--brand-yellow); color: var(--navy-blue); font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
 
         .nav-community {
             display: flex; align-items: center; gap: 6px; justify-content: center;
             background: rgba(0,160,223,0.15); border: 1px solid rgba(0,160,223,0.3);
-            padding: 5px 14px; border-radius: 50px;
+            padding: 5px 14px !important; border-radius: 50px !important;
             color: var(--accent-cyan) !important; font-weight: 700 !important; transition: all 0.3s !important;
         }
-        .nav-community:hover { background: rgba(0,160,223,0.28) !important; color: white !important; }
+        .nav-community:hover { background: rgba(0,160,223,0.28) !important; color: var(--navy-blue) !important; }
         .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
