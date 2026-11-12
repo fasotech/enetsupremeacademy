@@ -72,6 +72,12 @@
         .nav-community .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-cyan); animation: blink 1.6s infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+        /* === TERMS NOTICE === */
+        .terms-notice { background-color: var(--brand-yellow); color: var(--navy-blue); display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 0.7rem 5%; font-size: 0.95rem; font-weight: 600; text-align: center; }
+        .terms-notice a { color: var(--navy-blue); font-weight: 800; text-decoration: underline; }
+        .terms-notice a:hover { color: var(--navy-light); }
+        .terms-notice-close { background: transparent; border: none; color: var(--navy-blue); font-size: 1.4rem; line-height: 1; cursor: pointer; font-weight: 700; padding: 0 0.25rem; flex-shrink: 0; }
+
         /* === TRANSLATOR BUTTON === */
         .translator-btn {
             display: flex; align-items: center; gap: 7px;
@@ -360,6 +366,12 @@
     </nav>
 </header>
 
+<!-- Terms & Conditions notice: shown on the home page so visitors know that registering or logging in means agreeing to the terms. -->
+<div class="terms-notice" id="termsNotice" role="note">
+    <p>By registering or logging in to our portal, you agree to our <a href="terms.html">Terms and Conditions</a>.</p>
+    <button class="terms-notice-close" onclick="document.getElementById('termsNotice').style.display='none'" aria-label="Dismiss notice">&times;</button>
+</div>
+
 <section class="hero-container">
     <div class="hero-content">
         <div class="trust-badge">
@@ -549,6 +561,7 @@
                 <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
                 <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
                 <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
+                <li><a href="login.html"><span class="check-icon">✓</span> Login</a></li>
             </ul>
         </div>
 
