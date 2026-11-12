@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENET SUPREME ACADEMY | Terms and Conditions</title>
+    <style>
+        :root { --navy-blue: #02014a; --navy-light: #0d2a8f; --brand-yellow: #fcd116; --accent-cyan: #00a0df; --text-main: #333333; --text-gray: #475467; --background: #F8F9FA; --border: #E5E7EB; --danger: #EE5D50; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header { background-color: var(--navy-blue); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 3px solid var(--brand-yellow); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; text-transform: uppercase; }
+        .logo span { color: var(--brand-yellow); }
+        .main-logo-img { height: 45px; width: auto; object-fit: contain; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent-cyan); }
+        .nav-links a.active { color: var(--brand-yellow); font-weight: bold; }
+
+        .terms-hero { background: linear-gradient(135deg, var(--navy-blue), var(--navy-light)); padding: 6rem 5%; text-align: center; color: #fff; }
+        .terms-hero h1 { font-size: 3rem; margin-bottom: 1rem; color: var(--brand-yellow); }
+        .terms-hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; color: #d1d7dc; }
+
+        .terms-content { max-width: 1000px; margin: 4rem auto; padding: 0 5%; flex: 1; }
+        .terms-content h2 { font-size: 1.6rem; color: var(--navy-blue); margin: 2.5rem 0 1rem; }
+        .terms-content h2:first-child { margin-top: 0; }
+        .terms-content p { font-size: 1.05rem; color: var(--text-gray); line-height: 1.8; margin-bottom: 1rem; }
+        .terms-updated { font-size: 0.95rem; color: var(--text-gray); margin-bottom: 2rem; }
+
+        /* FOOTER */
+        .site-footer { background-color: var(--navy-blue); color: #fff; padding-top: 4rem; border-top: 4px solid var(--brand-yellow); margin-top: auto; }
+        .footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 3rem; padding: 0 5%; padding-bottom: 3rem; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 1.5rem; font-weight: 800; text-decoration: none; }
+        .footer-logo span { color: var(--brand-yellow); }
+        .footer-logo-img { height: 45px; object-fit: contain; }
+        .footer-info-block { margin-bottom: 1.5rem; }
+        .footer-info-block h4 { font-size: 1.1rem; color: #fff; margin-bottom: 0.4rem; }
+        .footer-info-block p { color: #d1d7dc; }
+        .footer-heading { font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-heading::after { content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 40px; background: var(--brand-yellow); }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links li a { color: #d1d7dc; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: color 0.3s;}
+        .footer-links li a:hover { color: var(--brand-yellow); }
+        .check-icon { color: var(--danger); border: 2px solid var(--danger); border-radius: 3px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
+        .social-icons { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .soc-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; transition: transform 0.2s;}
+        .soc-icon:hover { transform: translateY(-3px); }
+        .soc-icon.fb { background: #3b5998; } .soc-icon.ig { background: #E1306C; } .soc-icon.x { background: #000; border: 1px solid #333;} .soc-icon.yt { background: #ff0000; } .soc-icon.g { background: #db4a39; }
+        .footer-email-btn { background: var(--danger); color: #fff; padding: 12px 24px; border-radius: 6px; font-weight: 700; text-decoration: none; display: inline-block; transition: background 0.3s; border: 1px solid transparent;}
+        .footer-email-btn:hover { background: #d32f2f; color: #fff; }
+        .footer-bottom { background: var(--navy-light); padding: 1.5rem 5%; text-align: center; color: #fff; }
+
+        @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 2.5rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="mainlogo.png" alt="Logo" class="main-logo-img" onerror="this.style.display='none'">
+                <span class="logo-text">ENET SUPREME <span>ACADEMY</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="courses.html">Courses</a>
+                <a href="community.html">Community</a>
+                <a href="login.html">Log In / Academy</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="terms-hero">
+        <h1>Terms and Conditions</h1>
+        <p>Please read these terms carefully before using our portal.</p>
+    </div>
+
+    <!-- PLACEHOLDER TERMS: this page holds general terms until the academy supplies its final wording. Replace the sections below with the final terms when ready. -->
+    <div class="terms-content">
+        <p class="terms-updated">Last updated: 12 November 2026</p>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>By registering for an account or logging in to the E-Net Supreme Academy portal, you agree to these Terms and Conditions. If you do not agree with any part of these terms, please do not use the portal.</p>
+
+        <h2>2. Your Account</h2>
+        <p>You agree to provide accurate details when registering, to keep your login details private, and to take responsibility for all activity under your account. If you notice any unauthorised use of your account, please contact us at once.</p>
+
+        <h2>3. Courses and Learning Materials</h2>
+        <p>Course access is provided to enrolled students for personal learning only. Course videos, notes and other materials must not be shared, copied, resold or redistributed without the academy's permission.</p>
+
+        <h2>4. Payments and Fees</h2>
+        <p>Course fees are as shown on our pricing page at the time of enrolment. Payment confirms your enrolment. If you have any question about a payment, please contact us and we will help you resolve it.</p>
+
+        <h2>5. Community Conduct</h2>
+        <p>Our community is a place for learning and encouragement. Be respectful to fellow learners, mentors and staff. Abusive, harmful or misleading content is not allowed, and the academy may remove content or suspend accounts that break these rules.</p>
+
+        <h2>6. Privacy</h2>
+        <p>The details you provide when registering are used to run your account and deliver your courses. We do not sell your personal information to third parties.</p>
+
+        <h2>7. Changes to These Terms</h2>
+        <p>We may update these terms from time to time. When we do, the updated terms will be posted on this page with a new last-updated date. Continuing to use the portal after an update means you accept the updated terms.</p>
+
+        <h2>8. Contact Us</h2>
+        <p>If you have any questions about these terms, reach us on 08162337303, 07060837925 or 0816 997 4244, or visit us at Suite 58 Georgewill/Clifford Plaza, Choba Junction, Port Harcourt, Rivers State, Nigeria.</p>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-col">
+                <a href="index.html" class="footer-logo">
+                    <img src="mainlogo.png" alt="Logo" class="footer-logo-img" onerror="this.style.display='none'">
+                    <div>ENET SUPREME <span style="color: var(--brand-yellow);">ACADEMY</span></div>
+                </a>
+                <div class="footer-info-block">
+                    <h4>Working Days & Hours:</h4>
+                    <p>Monday - Friday: 10:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
+                </div>
+                <div class="footer-info-block">
+                    <h4>Contact Us:</h4>
+                    <p>08162337303, 07060837925, 0816 997 4244</p>
+                </div>
+                <div class="footer-info-block"><p>Suite 58 Georgewill/Clifford Plaza<br>Choba Junction, Port Harcourt<br>Rivers State, Nigeria.</p></div>
+            </div>
+            <div class="footer-col">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><span class="check-icon">✓</span> Home</a></li>
+                    <li><a href="about.html"><span class="check-icon">✓</span> About Us</a></li>
+                    <li><a href="courses.html"><span class="check-icon">✓</span> Courses</a></li>
+                    <li><a href="community.html"><span class="check-icon">✓</span> Community</a></li>
+                    <li><a href="blog.html"><span class="check-icon">✓</span> Blog</a></li>
+                    <li><a href="contact.html"><span class="check-icon">✓</span> Contact</a></li>
+                    <li><a href="login.html"><span class="check-icon">✓</span> Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3 class="footer-heading">Follow Us</h3>
+                <p style="font-size: 0.95rem; color: #d1d7dc; margin-bottom: 1rem;">Like, follow and join our social media platforms below:</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com/enetsupremeacademy" target="_blank" class="soc-icon fb">f</a>
+                    <a href="#" class="soc-icon ig">📷</a>
+                    <a href="#" class="soc-icon x">X</a>
+                    <a href="#" class="soc-icon yt">▶</a>
+                    <a href="#" class="soc-icon g">G+</a>
+                </div>
+                <h3 class="footer-heading" style="margin-top: 2.5rem;">Send Us Email Now</h3>
+                <a href="contact.html#contact-form" class="footer-email-btn">Submit Your Request Here</a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>Copyright @ E-Net Supreme Academy - All Right Reserved.</p></div>
+    </footer>
+</body>
+</html>
